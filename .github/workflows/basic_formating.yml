@@ -10,6 +10,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
             - name: Use Node.js
               uses: actions/setup-node@v4
@@ -17,16 +19,16 @@ jobs:
                   node-version: 20
 
             - name: Install dependencies
-              run: npm i
+              run: npm ci
 
             - name: Validate commits
-              run: commitlint --from=origin/main --to=HEAD
+              run: npx commitlint --from=origin/main --to=HEAD
 
             - name: Validate TypeScript rules
-              run: tsc --noEmit
+              run: npx tsc --noEmit
 
             - name: Validate Prettier
               run: npx prettier . --check
 
             - name: Validate ESLint
-              run: eslint .
+              run: npx eslint .
