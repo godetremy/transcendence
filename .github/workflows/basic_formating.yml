@@ -20,13 +20,13 @@ jobs:
               run: npm ci
 
             - name: Validate commits
-              run: commitlint --from=origin/main --to=HEAD
+              run: npx commitlint --from=origin/main --to=HEAD
 
             - name: Validate TypeScript rules
-              run: tsc --noEmit
+              run: npx tsc --noEmit
 
             - name: Validate Prettier
               run: npx prettier . --check
 
             - name: Validate ESLint
-              run: eslint .
+              run: npx eslint .
