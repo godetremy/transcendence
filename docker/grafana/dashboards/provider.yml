@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: docker-stack
+    orgId: 1
+    folder: Docker Stack
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/json

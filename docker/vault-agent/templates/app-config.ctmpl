@@ -1,0 +1,13 @@
+{{ with secret "secret/data/app" }}
+APP_SECRET={{ .Data.data.app_secret }}
+GRAFANA_ADMIN_PASSWORD={{ .Data.data.grafana_admin_password }}
+ELASTIC_PASSWORD={{ .Data.data.elastic_password }}
+ELASTICSEARCH_PASSWORD={{ .Data.data.elasticsearch_password }}
+KIBANA_ENCRYPTION_KEY={{ .Data.data.kibana_encryption_key }}
+{{ else }}
+APP_SECRET=not-set
+GRAFANA_ADMIN_PASSWORD=not-set
+ELASTIC_PASSWORD=not-set
+ELASTICSEARCH_PASSWORD=not-set
+KIBANA_ENCRYPTION_KEY=not-set
+{{ end }}

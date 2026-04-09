@@ -1,0 +1,29 @@
+groups:
+  - name: infrastructure-alerts
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.job }} target is down"
+          description: "Prometheus cannot scrape {{ $labels.instance }} for more than 2 minutes."
+
+      - alert: NodeAppHigh5xxRate
+        expr: sum(rate(node_http_requests_total{job="node-app",status=~"5.."}[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Node app has elevated 5xx errors"
+          description: "The node-app 5xx request rate is above 0.1 req/s for 5 minutes."
+
+      - alert: NodeAppLowAvailability
+        expr: (sum(rate(node_http_requests_total{job="node-app",status=~"2.."}[5m])) / clamp_min(sum(rate(node_http_requests_total{job="node-app"}[5m])), 1e-9)) < 0.95
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Node app availability dropped below 95%"
+          description: "2xx ratio for node-app is below 95% over 10 minutes."
