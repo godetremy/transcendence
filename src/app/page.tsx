@@ -1,14 +1,11 @@
 import './page.css';
 import Image from 'next/image';
-import eyes from '../../public/login/eyes_icon.svg';
-import bg from '../../public/login/bg.png';
-import logo from '../../public/login/42.png';
 
 export default function Home() {
 	return (
 		<div className="main">
 			<div className="login">
-				<Image src={eyes} alt="eyes icon" />
+				<Image src="/login/eyes_icon.svg" alt="eyes icon" width={73} height={70} />
 
 				<div>
 					<h1>CONNEXION</h1>
@@ -18,7 +15,7 @@ export default function Home() {
 				<div className="login-btn">
 					<div>
 						<a className="login-42">
-							<Image src={logo} alt="logo 42"></Image>
+							<Image src="/login/42.png" alt="logo 42" width={28} height={15}></Image>
 							<p>Continuer avec 42</p>
 						</a>
 					</div>
@@ -29,7 +26,9 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
-			<Image src={bg} alt="the image background" className="img-bg" />
+			<div className="image-container">
+				<Image src="/login/bg.png" alt="the image background" className="img-bg" width={640} height={832} />
+			</div>
 		</div>
 	);
 }
