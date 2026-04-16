@@ -1,26 +1,22 @@
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: postgres
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: motdepasse123
-      POSTGRES_DB: data
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - main
-    restart: on-failure
-
-
+    postgres:
+        image: postgres:15-alpine
+        container_name: postgres
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: motdepasse123
+            POSTGRES_DB: data
+        ports:
+            - '5432:5432'
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - main
+        restart: on-failure
 
 volumes:
-  postgres_data:
-
-
+    postgres_data:
 
 networks:
-  main:
-    driver: bridge
+    main:
+        driver: bridge
