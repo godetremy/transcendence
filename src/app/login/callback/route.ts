@@ -11,7 +11,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 		const authorization = await getFortyTwoOauthToken(code);
 		const me = await getFortyTwoMe(authorization.access_token);
 		console.log(me);
-		return new NextResponse(`${me.display} is connected`);
+		return new NextResponse(`${me.displayname} is connected`);
 	} catch (err: unknown) {
 		console.log(err);
 		return new NextResponse(`Failed to login. Please try again later.`, {
