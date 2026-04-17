@@ -1,5 +1,5 @@
 export interface FortyTwoCursusSkill {
-    id: number;
-    name: string;
-    level: number;
+	id: number;
+	name: string;
+	level: number;
 }

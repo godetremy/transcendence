@@ -1,9 +1,9 @@
 export interface FortyTwoUserImage {
-    link: string;
-    versions: {
-        large: string;
-        medium: string;
-        small: string;
-        micro: string;
-    }
+	link: string;
+	versions: {
+		large: string;
+		medium: string;
+		small: string;
+		micro: string;
+	};
 }
