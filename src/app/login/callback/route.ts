@@ -10,7 +10,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 	try {
 		const authorization = await getFortyTwoOauthToken(code);
 		const me = await getFortyTwoMe(authorization.access_token);
-		console.log(me);
 		return new NextResponse(`${me.displayname} is connected`);
 	} catch (err: unknown) {
 		console.log(err);
