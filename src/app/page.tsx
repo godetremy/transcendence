@@ -21,7 +21,7 @@ export default function Home() {
 						</a>
 					</div>
 					<div className="other-btn">
-						<a>
+						<a href="/login/agents/">
 							<p>Vous êtes un agents extérieur ?</p>
 						</a>
 					</div>
