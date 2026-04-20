@@ -1,0 +1,25 @@
+cluster.name: elasticsearch
+node.name: node-1
+path.data: /usr/share/elasticsearch/data
+
+# Réseau
+network.host: 0.0.0.0
+http.port: 9200
+
+# Nœud unique (pas de clustering)
+discovery.type: single-node
+
+# Sécurité
+xpack.security.enabled: true
+xpack.security.enrollment.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: certs/elastic-stack-ca.p12
+xpack.security.transport.ssl.truststore.path: certs/elastic-stack-ca.p12
+
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.keystore.path: certs/elastic-stack-ca.p12
+xpack.security.http.ssl.truststore.path: certs/elastic-stack-ca.p12
+
+# Limits
+action.destructive_requires_name: true

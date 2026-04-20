@@ -1,0 +1,17 @@
+server.name: kibana
+server.host: 0.0.0.0
+server.port: 5601
+
+# Elasticsearch connection
+elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+elasticsearch.username: elastic
+elasticsearch.password: ${ELASTIC_PASSWORD}
+
+# Kibana internals
+kibana.defaultAppId: home
+
+# Limits
+server.maxPayloadBytes: 1048576
+
+# Logging
+logging.level: info
