@@ -10,7 +10,7 @@ export function generateFortyTwoAuthorizationUrl(): string {
 		throw new Error('Missing key NEXT_PUBLIC_OAUTH_42_CLIENTID in environement');
 
 	url.searchParams.set('client_id', process.env.NEXT_PUBLIC_OAUTH_42_CLIENTID);
-	url.searchParams.set('redirect_uri', 'http://localhost:3000/login/callback');
+	url.searchParams.set('redirect_uri', 'http://localhost:3000/app/api/auth/oauth/fortytwo/authorize');
 	url.searchParams.set('response_type', 'code');
 
 	return url.toString();
@@ -24,7 +24,7 @@ export async function getFortyTwoOauthToken(code: string): Promise<FortyTwoOauth
 			client_id: process.env.NEXT_PUBLIC_OAUTH_42_CLIENTID,
 			client_secret: process.env.OAUTH_42_SECRET,
 			code: code,
-			redirect_uri: 'http://localhost:3000/login/callback',
+			redirect_uri: 'http://localhost:3000/app/api/auth/oauth/fortytwo/authorize',
 		}),
 		headers: {
 			'Content-Type': 'application/json',
