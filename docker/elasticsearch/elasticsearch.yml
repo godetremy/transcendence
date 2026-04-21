@@ -14,12 +14,12 @@ xpack.security.enabled: true
 xpack.security.enrollment.enabled: true
 xpack.security.transport.ssl.enabled: true
 xpack.security.transport.ssl.verification_mode: certificate
-xpack.security.transport.ssl.keystore.path: certs/elastic-stack-ca.p12
-xpack.security.transport.ssl.truststore.path: certs/elastic-stack-ca.p12
+xpack.security.transport.ssl.keystore.path: certs/elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: certs/elastic-certificates.p12
 
 xpack.security.http.ssl.enabled: true
-xpack.security.http.ssl.keystore.path: certs/elastic-stack-ca.p12
-xpack.security.http.ssl.truststore.path: certs/elastic-stack-ca.p12
+xpack.security.http.ssl.keystore.path: certs/elastic-certificates.p12
+xpack.security.http.ssl.truststore.path: certs/elastic-certificates.p12
 
 # Limits
 action.destructive_requires_name: true

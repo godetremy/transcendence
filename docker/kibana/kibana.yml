@@ -3,15 +3,16 @@ server.host: 0.0.0.0
 server.port: 5601
 
 # Elasticsearch connection
-elasticsearch.hosts: [ "http://elasticsearch:9200" ]
-elasticsearch.username: elastic
-elasticsearch.password: ${ELASTIC_PASSWORD}
-
-# Kibana internals
-kibana.defaultAppId: home
+elasticsearch.hosts: [ "https://elasticsearch:9200" ]
+elasticsearch.username: kibana_system
+elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
+elasticsearch.ssl.verificationMode: none
+xpack.encryptedSavedObjects.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+xpack.security.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+xpack.reporting.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
 
 # Limits
-server.maxPayloadBytes: 1048576
+server.maxPayload: 1048576
 
 # Logging
-logging.level: info
+logging.root.level: info
