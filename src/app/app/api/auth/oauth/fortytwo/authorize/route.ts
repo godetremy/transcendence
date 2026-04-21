@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { redirect } from 'next/navigation';
 import { getFortyTwoMe, getFortyTwoOauthToken } from '@/rest/fortytwo';
 import { upsertUser } from '@/database/users/upsertUser';
+import { cookies } from 'next/headers';
+import { createSession } from '@/lib/session';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
 	const params: URLSearchParams = request.nextUrl.searchParams;
@@ -11,19 +13,24 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 	try {
 		const authorization = await getFortyTwoOauthToken(code);
 		const me = await getFortyTwoMe(authorization.access_token);
-		try {
-			await upsertUser(me, authorization);
-		} catch (err: unknown) {
-			console.error(err);
-			return new NextResponse(`Failed to create or update user in database. Please try again later.`, {
-				status: 500,
-			});
-		}
-		return new NextResponse(`${me.displayname} is connected`);
+
+		const user_id = await upsertUser(me, authorization);
+		const session = await createSession({ user_id });
+
+		const cookieStore = await cookies();
+
+		cookieStore.set('session', session.body, {
+			httpOnly: true,
+			secure: true,
+			expires: session.expirationDate,
+			sameSite: 'lax',
+			path: '/',
+		});
 	} catch (err: unknown) {
 		console.log(err);
 		return new NextResponse(`Failed to login. Please try again later.`, {
 			status: 500,
 		});
 	}
+	return redirect('/app/home');
 }

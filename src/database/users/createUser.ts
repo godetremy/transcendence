@@ -1,6 +1,6 @@
 import { prisma } from '@/database/prisma/prisma';
-import { FortyTwoCursusUserDetails } from '@/types/FortyTwoCursusUserDetails';
-import { FortyTwoOauthToken } from '@/types/FortyTwoOauthToken';
+import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
+import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 
 export async function createUser(me: FortyTwoCursusUserDetails, authorization: FortyTwoOauthToken) {
 	await prisma.users.create({
