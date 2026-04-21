@@ -88,6 +88,7 @@ export type Oauth_fortytwoScalarFieldEnum =
 
 export const UsersScalarFieldEnum = {
 	id: 'id',
+	fortytwo_user_id: 'fortytwo_user_id',
 	oauth_fortytwo_id: 'oauth_fortytwo_id',
 	memberships_id: 'memberships_id',
 	is_agent: 'is_agent',

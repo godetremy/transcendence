@@ -29,10 +29,11 @@ model oauth_fortytwo {
 
 model users {
   id                String          @id @default(uuid())
+  fortytwo_user_id  Int             @unique
   oauth_fortytwo_id String
-  oauth_fortytwo oauth_fortytwo  @relation(fields: [oauth_fortytwo_id], references: [id])
+  oauth_fortytwo oauth_fortytwo     @relation(fields: [oauth_fortytwo_id], references: [id])
   memberships_id    String
-  memberships    memberships     @relation(fields: [memberships_id], references: [id])
+  memberships    memberships        @relation(fields: [memberships_id], references: [id])
   is_agent          Boolean         @default(false)
   mail              String          @unique
   password          String?

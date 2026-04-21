@@ -19,12 +19,23 @@ export type usersModel = runtime.Types.Result.DefaultSelection<Prisma.$usersPayl
 
 export type AggregateUsers = {
 	_count: UsersCountAggregateOutputType | null;
+	_avg: UsersAvgAggregateOutputType | null;
+	_sum: UsersSumAggregateOutputType | null;
 	_min: UsersMinAggregateOutputType | null;
 	_max: UsersMaxAggregateOutputType | null;
 };
 
+export type UsersAvgAggregateOutputType = {
+	fortytwo_user_id: number | null;
+};
+
+export type UsersSumAggregateOutputType = {
+	fortytwo_user_id: number | null;
+};
+
 export type UsersMinAggregateOutputType = {
 	id: string | null;
+	fortytwo_user_id: number | null;
 	oauth_fortytwo_id: string | null;
 	memberships_id: string | null;
 	is_agent: boolean | null;
@@ -39,6 +50,7 @@ export type UsersMinAggregateOutputType = {
 
 export type UsersMaxAggregateOutputType = {
 	id: string | null;
+	fortytwo_user_id: number | null;
 	oauth_fortytwo_id: string | null;
 	memberships_id: string | null;
 	is_agent: boolean | null;
@@ -53,6 +65,7 @@ export type UsersMaxAggregateOutputType = {
 
 export type UsersCountAggregateOutputType = {
 	id: number;
+	fortytwo_user_id: number;
 	oauth_fortytwo_id: number;
 	memberships_id: number;
 	is_agent: number;
@@ -66,8 +79,17 @@ export type UsersCountAggregateOutputType = {
 	_all: number;
 };
 
+export type UsersAvgAggregateInputType = {
+	fortytwo_user_id?: true;
+};
+
+export type UsersSumAggregateInputType = {
+	fortytwo_user_id?: true;
+};
+
 export type UsersMinAggregateInputType = {
 	id?: true;
+	fortytwo_user_id?: true;
 	oauth_fortytwo_id?: true;
 	memberships_id?: true;
 	is_agent?: true;
@@ -82,6 +104,7 @@ export type UsersMinAggregateInputType = {
 
 export type UsersMaxAggregateInputType = {
 	id?: true;
+	fortytwo_user_id?: true;
 	oauth_fortytwo_id?: true;
 	memberships_id?: true;
 	is_agent?: true;
@@ -96,6 +119,7 @@ export type UsersMaxAggregateInputType = {
 
 export type UsersCountAggregateInputType = {
 	id?: true;
+	fortytwo_user_id?: true;
 	oauth_fortytwo_id?: true;
 	memberships_id?: true;
 	is_agent?: true;
@@ -149,6 +173,18 @@ export type UsersAggregateArgs<
 	/**
 	 * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
 	 *
+	 * Select which fields to average
+	 **/
+	_avg?: UsersAvgAggregateInputType;
+	/**
+	 * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+	 *
+	 * Select which fields to sum
+	 **/
+	_sum?: UsersSumAggregateInputType;
+	/**
+	 * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+	 *
 	 * Select which fields to find the minimum value
 	 **/
 	_min?: UsersMinAggregateInputType;
@@ -178,12 +214,15 @@ export type usersGroupByArgs<
 	take?: number;
 	skip?: number;
 	_count?: UsersCountAggregateInputType | true;
+	_avg?: UsersAvgAggregateInputType;
+	_sum?: UsersSumAggregateInputType;
 	_min?: UsersMinAggregateInputType;
 	_max?: UsersMaxAggregateInputType;
 };
 
 export type UsersGroupByOutputType = {
 	id: string;
+	fortytwo_user_id: number;
 	oauth_fortytwo_id: string;
 	memberships_id: string;
 	is_agent: boolean;
@@ -195,6 +234,8 @@ export type UsersGroupByOutputType = {
 	create_at: Date;
 	update_at: Date;
 	_count: UsersCountAggregateOutputType | null;
+	_avg: UsersAvgAggregateOutputType | null;
+	_sum: UsersSumAggregateOutputType | null;
 	_min: UsersMinAggregateOutputType | null;
 	_max: UsersMaxAggregateOutputType | null;
 };
@@ -216,6 +257,7 @@ export type usersWhereInput = {
 	OR?: Prisma.usersWhereInput[];
 	NOT?: Prisma.usersWhereInput | Prisma.usersWhereInput[];
 	id?: Prisma.StringFilter<'users'> | string;
+	fortytwo_user_id?: Prisma.IntFilter<'users'> | number;
 	oauth_fortytwo_id?: Prisma.StringFilter<'users'> | string;
 	memberships_id?: Prisma.StringFilter<'users'> | string;
 	is_agent?: Prisma.BoolFilter<'users'> | boolean;
@@ -232,6 +274,7 @@ export type usersWhereInput = {
 
 export type usersOrderByWithRelationInput = {
 	id?: Prisma.SortOrder;
+	fortytwo_user_id?: Prisma.SortOrder;
 	oauth_fortytwo_id?: Prisma.SortOrder;
 	memberships_id?: Prisma.SortOrder;
 	is_agent?: Prisma.SortOrder;
@@ -249,6 +292,7 @@ export type usersOrderByWithRelationInput = {
 export type usersWhereUniqueInput = Prisma.AtLeast<
 	{
 		id?: string;
+		fortytwo_user_id?: number;
 		mail?: string;
 		AND?: Prisma.usersWhereInput | Prisma.usersWhereInput[];
 		OR?: Prisma.usersWhereInput[];
@@ -265,11 +309,12 @@ export type usersWhereUniqueInput = Prisma.AtLeast<
 		oauth_fortytwo?: Prisma.XOR<Prisma.Oauth_fortytwoScalarRelationFilter, Prisma.oauth_fortytwoWhereInput>;
 		memberships?: Prisma.XOR<Prisma.MembershipsScalarRelationFilter, Prisma.membershipsWhereInput>;
 	},
-	'id' | 'mail'
+	'id' | 'fortytwo_user_id' | 'mail'
 >;
 
 export type usersOrderByWithAggregationInput = {
 	id?: Prisma.SortOrder;
+	fortytwo_user_id?: Prisma.SortOrder;
 	oauth_fortytwo_id?: Prisma.SortOrder;
 	memberships_id?: Prisma.SortOrder;
 	is_agent?: Prisma.SortOrder;
@@ -281,8 +326,10 @@ export type usersOrderByWithAggregationInput = {
 	create_at?: Prisma.SortOrder;
 	update_at?: Prisma.SortOrder;
 	_count?: Prisma.usersCountOrderByAggregateInput;
+	_avg?: Prisma.usersAvgOrderByAggregateInput;
 	_max?: Prisma.usersMaxOrderByAggregateInput;
 	_min?: Prisma.usersMinOrderByAggregateInput;
+	_sum?: Prisma.usersSumOrderByAggregateInput;
 };
 
 export type usersScalarWhereWithAggregatesInput = {
@@ -290,6 +337,7 @@ export type usersScalarWhereWithAggregatesInput = {
 	OR?: Prisma.usersScalarWhereWithAggregatesInput[];
 	NOT?: Prisma.usersScalarWhereWithAggregatesInput | Prisma.usersScalarWhereWithAggregatesInput[];
 	id?: Prisma.StringWithAggregatesFilter<'users'> | string;
+	fortytwo_user_id?: Prisma.IntWithAggregatesFilter<'users'> | number;
 	oauth_fortytwo_id?: Prisma.StringWithAggregatesFilter<'users'> | string;
 	memberships_id?: Prisma.StringWithAggregatesFilter<'users'> | string;
 	is_agent?: Prisma.BoolWithAggregatesFilter<'users'> | boolean;
@@ -304,6 +352,7 @@ export type usersScalarWhereWithAggregatesInput = {
 
 export type usersCreateInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	is_agent?: boolean;
 	mail: string;
 	password?: string | null;
@@ -318,6 +367,7 @@ export type usersCreateInput = {
 
 export type usersUncheckedCreateInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	oauth_fortytwo_id: string;
 	memberships_id: string;
 	is_agent?: boolean;
@@ -332,6 +382,7 @@ export type usersUncheckedCreateInput = {
 
 export type usersUpdateInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
 	password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -346,6 +397,7 @@ export type usersUpdateInput = {
 
 export type usersUncheckedUpdateInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	oauth_fortytwo_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	memberships_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -360,6 +412,7 @@ export type usersUncheckedUpdateInput = {
 
 export type usersCreateManyInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	oauth_fortytwo_id: string;
 	memberships_id: string;
 	is_agent?: boolean;
@@ -374,6 +427,7 @@ export type usersCreateManyInput = {
 
 export type usersUpdateManyMutationInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
 	password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -386,6 +440,7 @@ export type usersUpdateManyMutationInput = {
 
 export type usersUncheckedUpdateManyInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	oauth_fortytwo_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	memberships_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -410,6 +465,7 @@ export type usersOrderByRelationAggregateInput = {
 
 export type usersCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
+	fortytwo_user_id?: Prisma.SortOrder;
 	oauth_fortytwo_id?: Prisma.SortOrder;
 	memberships_id?: Prisma.SortOrder;
 	is_agent?: Prisma.SortOrder;
@@ -422,8 +478,13 @@ export type usersCountOrderByAggregateInput = {
 	update_at?: Prisma.SortOrder;
 };
 
+export type usersAvgOrderByAggregateInput = {
+	fortytwo_user_id?: Prisma.SortOrder;
+};
+
 export type usersMaxOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
+	fortytwo_user_id?: Prisma.SortOrder;
 	oauth_fortytwo_id?: Prisma.SortOrder;
 	memberships_id?: Prisma.SortOrder;
 	is_agent?: Prisma.SortOrder;
@@ -438,6 +499,7 @@ export type usersMaxOrderByAggregateInput = {
 
 export type usersMinOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
+	fortytwo_user_id?: Prisma.SortOrder;
 	oauth_fortytwo_id?: Prisma.SortOrder;
 	memberships_id?: Prisma.SortOrder;
 	is_agent?: Prisma.SortOrder;
@@ -448,6 +510,10 @@ export type usersMinOrderByAggregateInput = {
 	full_name?: Prisma.SortOrder;
 	create_at?: Prisma.SortOrder;
 	update_at?: Prisma.SortOrder;
+};
+
+export type usersSumOrderByAggregateInput = {
+	fortytwo_user_id?: Prisma.SortOrder;
 };
 
 export type usersCreateNestedManyWithoutMembershipsInput = {
@@ -610,12 +676,21 @@ export type usersUncheckedUpdateManyWithoutOauth_fortytwoNestedInput = {
 	deleteMany?: Prisma.usersScalarWhereInput | Prisma.usersScalarWhereInput[];
 };
 
+export type IntFieldUpdateOperationsInput = {
+	set?: number;
+	increment?: number;
+	decrement?: number;
+	multiply?: number;
+	divide?: number;
+};
+
 export type BoolFieldUpdateOperationsInput = {
 	set?: boolean;
 };
 
 export type usersCreateWithoutMembershipsInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	is_agent?: boolean;
 	mail: string;
 	password?: string | null;
@@ -629,6 +704,7 @@ export type usersCreateWithoutMembershipsInput = {
 
 export type usersUncheckedCreateWithoutMembershipsInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	oauth_fortytwo_id: string;
 	is_agent?: boolean;
 	mail: string;
@@ -671,6 +747,7 @@ export type usersScalarWhereInput = {
 	OR?: Prisma.usersScalarWhereInput[];
 	NOT?: Prisma.usersScalarWhereInput | Prisma.usersScalarWhereInput[];
 	id?: Prisma.StringFilter<'users'> | string;
+	fortytwo_user_id?: Prisma.IntFilter<'users'> | number;
 	oauth_fortytwo_id?: Prisma.StringFilter<'users'> | string;
 	memberships_id?: Prisma.StringFilter<'users'> | string;
 	is_agent?: Prisma.BoolFilter<'users'> | boolean;
@@ -685,6 +762,7 @@ export type usersScalarWhereInput = {
 
 export type usersCreateWithoutOauth_fortytwoInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	is_agent?: boolean;
 	mail: string;
 	password?: string | null;
@@ -698,6 +776,7 @@ export type usersCreateWithoutOauth_fortytwoInput = {
 
 export type usersUncheckedCreateWithoutOauth_fortytwoInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	memberships_id: string;
 	is_agent?: boolean;
 	mail: string;
@@ -749,6 +828,7 @@ export type usersUpdateManyWithWhereWithoutOauth_fortytwoInput = {
 
 export type usersCreateManyMembershipsInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	oauth_fortytwo_id: string;
 	is_agent?: boolean;
 	mail: string;
@@ -762,6 +842,7 @@ export type usersCreateManyMembershipsInput = {
 
 export type usersUpdateWithoutMembershipsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
 	password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -775,6 +856,7 @@ export type usersUpdateWithoutMembershipsInput = {
 
 export type usersUncheckedUpdateWithoutMembershipsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	oauth_fortytwo_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -788,6 +870,7 @@ export type usersUncheckedUpdateWithoutMembershipsInput = {
 
 export type usersUncheckedUpdateManyWithoutMembershipsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	oauth_fortytwo_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -801,6 +884,7 @@ export type usersUncheckedUpdateManyWithoutMembershipsInput = {
 
 export type usersCreateManyOauth_fortytwoInput = {
 	id?: string;
+	fortytwo_user_id: number;
 	memberships_id: string;
 	is_agent?: boolean;
 	mail: string;
@@ -814,6 +898,7 @@ export type usersCreateManyOauth_fortytwoInput = {
 
 export type usersUpdateWithoutOauth_fortytwoInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
 	password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -827,6 +912,7 @@ export type usersUpdateWithoutOauth_fortytwoInput = {
 
 export type usersUncheckedUpdateWithoutOauth_fortytwoInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	memberships_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -840,6 +926,7 @@ export type usersUncheckedUpdateWithoutOauth_fortytwoInput = {
 
 export type usersUncheckedUpdateManyWithoutOauth_fortytwoInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number;
 	memberships_id?: Prisma.StringFieldUpdateOperationsInput | string;
 	is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	mail?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -855,6 +942,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 	runtime.Types.Extensions.GetSelect<
 		{
 			id?: boolean;
+			fortytwo_user_id?: boolean;
 			oauth_fortytwo_id?: boolean;
 			memberships_id?: boolean;
 			is_agent?: boolean;
@@ -876,6 +964,7 @@ export type usersSelectCreateManyAndReturn<
 > = runtime.Types.Extensions.GetSelect<
 	{
 		id?: boolean;
+		fortytwo_user_id?: boolean;
 		oauth_fortytwo_id?: boolean;
 		memberships_id?: boolean;
 		is_agent?: boolean;
@@ -897,6 +986,7 @@ export type usersSelectUpdateManyAndReturn<
 > = runtime.Types.Extensions.GetSelect<
 	{
 		id?: boolean;
+		fortytwo_user_id?: boolean;
 		oauth_fortytwo_id?: boolean;
 		memberships_id?: boolean;
 		is_agent?: boolean;
@@ -915,6 +1005,7 @@ export type usersSelectUpdateManyAndReturn<
 
 export type usersSelectScalar = {
 	id?: boolean;
+	fortytwo_user_id?: boolean;
 	oauth_fortytwo_id?: boolean;
 	memberships_id?: boolean;
 	is_agent?: boolean;
@@ -930,6 +1021,7 @@ export type usersSelectScalar = {
 export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
 	runtime.Types.Extensions.GetOmit<
 		| 'id'
+		| 'fortytwo_user_id'
 		| 'oauth_fortytwo_id'
 		| 'memberships_id'
 		| 'is_agent'
@@ -971,6 +1063,7 @@ export type $usersPayload<
 	scalars: runtime.Types.Extensions.GetPayloadResult<
 		{
 			id: string;
+			fortytwo_user_id: number;
 			oauth_fortytwo_id: string;
 			memberships_id: string;
 			is_agent: boolean;
@@ -1516,6 +1609,7 @@ export interface Prisma__usersClient<
  */
 export interface usersFieldRefs {
 	readonly id: Prisma.FieldRef<'users', 'String'>;
+	readonly fortytwo_user_id: Prisma.FieldRef<'users', 'Int'>;
 	readonly oauth_fortytwo_id: Prisma.FieldRef<'users', 'String'>;
 	readonly memberships_id: Prisma.FieldRef<'users', 'String'>;
 	readonly is_agent: Prisma.FieldRef<'users', 'Boolean'>;
