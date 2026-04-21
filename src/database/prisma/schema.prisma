@@ -16,7 +16,7 @@ model memberships {
   id            String    @id @default(uuid())
   start_at      DateTime  @default(now())
   end_at        DateTime  @default(now())
-  users         users[]
+  MemberUsers   users[]
 }
 
 model oauth_fortytwo {
@@ -24,22 +24,22 @@ model oauth_fortytwo {
   access_token  String
   refresh_token String?
   valid_until   DateTime  @default(now())
-  users         users[]
+  MemberUsers   users[]
 }
 
 model users {
   id                String          @id @default(uuid())
   fortytwo_user_id  Int             @unique
-  oauth_fortytwo_id String
-  oauth_fortytwo oauth_fortytwo     @relation(fields: [oauth_fortytwo_id], references: [id])
-  memberships_id    String
-  memberships    memberships        @relation(fields: [memberships_id], references: [id])
+  oauth_fortytwo_id String?
+  oauth_fortytwo oauth_fortytwo?     @relation(fields: [oauth_fortytwo_id], references: [id])
+  memberships_id    String?
+  memberships    memberships?       @relation(fields: [memberships_id], references: [id])
   is_agent          Boolean         @default(false)
   mail              String          @unique
   password          String?
   first_name        String
   last_name         String
   full_name         String
-  create_at         DateTime        @default(now())
-  update_at         DateTime        @default(now())
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @default(now())
 }

@@ -174,7 +174,7 @@ export type oauth_fortytwoWhereInput = {
   access_token?: Prisma.StringFilter<"oauth_fortytwo"> | string
   refresh_token?: Prisma.StringNullableFilter<"oauth_fortytwo"> | string | null
   valid_until?: Prisma.DateTimeFilter<"oauth_fortytwo"> | Date | string
-  users?: Prisma.UsersListRelationFilter
+  MemberUsers?: Prisma.UsersListRelationFilter
 }
 
 export type oauth_fortytwoOrderByWithRelationInput = {
@@ -182,7 +182,7 @@ export type oauth_fortytwoOrderByWithRelationInput = {
   access_token?: Prisma.SortOrder
   refresh_token?: Prisma.SortOrderInput | Prisma.SortOrder
   valid_until?: Prisma.SortOrder
-  users?: Prisma.usersOrderByRelationAggregateInput
+  MemberUsers?: Prisma.usersOrderByRelationAggregateInput
 }
 
 export type oauth_fortytwoWhereUniqueInput = Prisma.AtLeast<{
@@ -193,7 +193,7 @@ export type oauth_fortytwoWhereUniqueInput = Prisma.AtLeast<{
   access_token?: Prisma.StringFilter<"oauth_fortytwo"> | string
   refresh_token?: Prisma.StringNullableFilter<"oauth_fortytwo"> | string | null
   valid_until?: Prisma.DateTimeFilter<"oauth_fortytwo"> | Date | string
-  users?: Prisma.UsersListRelationFilter
+  MemberUsers?: Prisma.UsersListRelationFilter
 }, "id">
 
 export type oauth_fortytwoOrderByWithAggregationInput = {
@@ -221,7 +221,7 @@ export type oauth_fortytwoCreateInput = {
   access_token: string
   refresh_token?: string | null
   valid_until?: Date | string
-  users?: Prisma.usersCreateNestedManyWithoutOauth_fortytwoInput
+  MemberUsers?: Prisma.usersCreateNestedManyWithoutOauth_fortytwoInput
 }
 
 export type oauth_fortytwoUncheckedCreateInput = {
@@ -229,7 +229,7 @@ export type oauth_fortytwoUncheckedCreateInput = {
   access_token: string
   refresh_token?: string | null
   valid_until?: Date | string
-  users?: Prisma.usersUncheckedCreateNestedManyWithoutOauth_fortytwoInput
+  MemberUsers?: Prisma.usersUncheckedCreateNestedManyWithoutOauth_fortytwoInput
 }
 
 export type oauth_fortytwoUpdateInput = {
@@ -237,7 +237,7 @@ export type oauth_fortytwoUpdateInput = {
   access_token?: Prisma.StringFieldUpdateOperationsInput | string
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   valid_until?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.usersUpdateManyWithoutOauth_fortytwoNestedInput
+  MemberUsers?: Prisma.usersUpdateManyWithoutOauth_fortytwoNestedInput
 }
 
 export type oauth_fortytwoUncheckedUpdateInput = {
@@ -245,7 +245,7 @@ export type oauth_fortytwoUncheckedUpdateInput = {
   access_token?: Prisma.StringFieldUpdateOperationsInput | string
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   valid_until?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.usersUncheckedUpdateManyWithoutOauth_fortytwoNestedInput
+  MemberUsers?: Prisma.usersUncheckedUpdateManyWithoutOauth_fortytwoNestedInput
 }
 
 export type oauth_fortytwoCreateManyInput = {
@@ -299,58 +299,58 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type oauth_fortytwoCreateNestedOneWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutUsersInput>
-  connectOrCreate?: Prisma.oauth_fortytwoCreateOrConnectWithoutUsersInput
+export type oauth_fortytwoCreateNestedOneWithoutMemberUsersInput = {
+  create?: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutMemberUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutMemberUsersInput>
+  connectOrCreate?: Prisma.oauth_fortytwoCreateOrConnectWithoutMemberUsersInput
   connect?: Prisma.oauth_fortytwoWhereUniqueInput
 }
 
-export type oauth_fortytwoUpdateOneRequiredWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutUsersInput>
-  connectOrCreate?: Prisma.oauth_fortytwoCreateOrConnectWithoutUsersInput
-  upsert?: Prisma.oauth_fortytwoUpsertWithoutUsersInput
+export type oauth_fortytwoUpdateOneRequiredWithoutMemberUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutMemberUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutMemberUsersInput>
+  connectOrCreate?: Prisma.oauth_fortytwoCreateOrConnectWithoutMemberUsersInput
+  upsert?: Prisma.oauth_fortytwoUpsertWithoutMemberUsersInput
   connect?: Prisma.oauth_fortytwoWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.oauth_fortytwoUpdateToOneWithWhereWithoutUsersInput, Prisma.oauth_fortytwoUpdateWithoutUsersInput>, Prisma.oauth_fortytwoUncheckedUpdateWithoutUsersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.oauth_fortytwoUpdateToOneWithWhereWithoutMemberUsersInput, Prisma.oauth_fortytwoUpdateWithoutMemberUsersInput>, Prisma.oauth_fortytwoUncheckedUpdateWithoutMemberUsersInput>
 }
 
-export type oauth_fortytwoCreateWithoutUsersInput = {
+export type oauth_fortytwoCreateWithoutMemberUsersInput = {
   id?: string
   access_token: string
   refresh_token?: string | null
   valid_until?: Date | string
 }
 
-export type oauth_fortytwoUncheckedCreateWithoutUsersInput = {
+export type oauth_fortytwoUncheckedCreateWithoutMemberUsersInput = {
   id?: string
   access_token: string
   refresh_token?: string | null
   valid_until?: Date | string
 }
 
-export type oauth_fortytwoCreateOrConnectWithoutUsersInput = {
+export type oauth_fortytwoCreateOrConnectWithoutMemberUsersInput = {
   where: Prisma.oauth_fortytwoWhereUniqueInput
-  create: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutMemberUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutMemberUsersInput>
 }
 
-export type oauth_fortytwoUpsertWithoutUsersInput = {
-  update: Prisma.XOR<Prisma.oauth_fortytwoUpdateWithoutUsersInput, Prisma.oauth_fortytwoUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutUsersInput>
+export type oauth_fortytwoUpsertWithoutMemberUsersInput = {
+  update: Prisma.XOR<Prisma.oauth_fortytwoUpdateWithoutMemberUsersInput, Prisma.oauth_fortytwoUncheckedUpdateWithoutMemberUsersInput>
+  create: Prisma.XOR<Prisma.oauth_fortytwoCreateWithoutMemberUsersInput, Prisma.oauth_fortytwoUncheckedCreateWithoutMemberUsersInput>
   where?: Prisma.oauth_fortytwoWhereInput
 }
 
-export type oauth_fortytwoUpdateToOneWithWhereWithoutUsersInput = {
+export type oauth_fortytwoUpdateToOneWithWhereWithoutMemberUsersInput = {
   where?: Prisma.oauth_fortytwoWhereInput
-  data: Prisma.XOR<Prisma.oauth_fortytwoUpdateWithoutUsersInput, Prisma.oauth_fortytwoUncheckedUpdateWithoutUsersInput>
+  data: Prisma.XOR<Prisma.oauth_fortytwoUpdateWithoutMemberUsersInput, Prisma.oauth_fortytwoUncheckedUpdateWithoutMemberUsersInput>
 }
 
-export type oauth_fortytwoUpdateWithoutUsersInput = {
+export type oauth_fortytwoUpdateWithoutMemberUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   access_token?: Prisma.StringFieldUpdateOperationsInput | string
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   valid_until?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type oauth_fortytwoUncheckedUpdateWithoutUsersInput = {
+export type oauth_fortytwoUncheckedUpdateWithoutMemberUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   access_token?: Prisma.StringFieldUpdateOperationsInput | string
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -363,11 +363,11 @@ export type oauth_fortytwoUncheckedUpdateWithoutUsersInput = {
  */
 
 export type Oauth_fortytwoCountOutputType = {
-  users: number
+  MemberUsers: number
 }
 
 export type Oauth_fortytwoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Oauth_fortytwoCountOutputTypeCountUsersArgs
+  MemberUsers?: boolean | Oauth_fortytwoCountOutputTypeCountMemberUsersArgs
 }
 
 /**
@@ -383,7 +383,7 @@ export type Oauth_fortytwoCountOutputTypeDefaultArgs<ExtArgs extends runtime.Typ
 /**
  * Oauth_fortytwoCountOutputType without action
  */
-export type Oauth_fortytwoCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Oauth_fortytwoCountOutputTypeCountMemberUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.usersWhereInput
 }
 
@@ -393,7 +393,7 @@ export type oauth_fortytwoSelect<ExtArgs extends runtime.Types.Extensions.Intern
   access_token?: boolean
   refresh_token?: boolean
   valid_until?: boolean
-  users?: boolean | Prisma.oauth_fortytwo$usersArgs<ExtArgs>
+  MemberUsers?: boolean | Prisma.oauth_fortytwo$MemberUsersArgs<ExtArgs>
   _count?: boolean | Prisma.Oauth_fortytwoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["oauth_fortytwo"]>
 
@@ -420,7 +420,7 @@ export type oauth_fortytwoSelectScalar = {
 
 export type oauth_fortytwoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "access_token" | "refresh_token" | "valid_until", ExtArgs["result"]["oauth_fortytwo"]>
 export type oauth_fortytwoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.oauth_fortytwo$usersArgs<ExtArgs>
+  MemberUsers?: boolean | Prisma.oauth_fortytwo$MemberUsersArgs<ExtArgs>
   _count?: boolean | Prisma.Oauth_fortytwoCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type oauth_fortytwoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -429,7 +429,7 @@ export type oauth_fortytwoIncludeUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type $oauth_fortytwoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "oauth_fortytwo"
   objects: {
-    users: Prisma.$usersPayload<ExtArgs>[]
+    MemberUsers: Prisma.$usersPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -830,7 +830,7 @@ readonly fields: oauth_fortytwoFieldRefs;
  */
 export interface Prisma__oauth_fortytwoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  users<T extends Prisma.oauth_fortytwo$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.oauth_fortytwo$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  MemberUsers<T extends Prisma.oauth_fortytwo$MemberUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.oauth_fortytwo$MemberUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1257,9 +1257,9 @@ export type oauth_fortytwoDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * oauth_fortytwo.users
+ * oauth_fortytwo.MemberUsers
  */
-export type oauth_fortytwo$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type oauth_fortytwo$MemberUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the users
    */
