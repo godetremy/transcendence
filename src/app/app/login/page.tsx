@@ -21,8 +21,8 @@ export default function Page() {
 						</a>
 					</div>
 					<div className="other-btn">
-						<a>
-							<p>Vous êtes un agents extérieur ?</p>
+						<a href='/app/login/agents/'>
+							Vous êtes un agents extérieur ?
 						</a>
 					</div>
 				</div>

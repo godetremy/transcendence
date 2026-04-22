@@ -166,14 +166,14 @@ export type membershipsWhereInput = {
   id?: Prisma.StringFilter<"memberships"> | string
   start_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
   end_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
-  MemberUsers?: Prisma.UsersListRelationFilter
+  MemberUsers?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
 }
 
 export type membershipsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
-  MemberUsers?: Prisma.usersOrderByRelationAggregateInput
+  MemberUsers?: Prisma.usersOrderByWithRelationInput
 }
 
 export type membershipsWhereUniqueInput = Prisma.AtLeast<{
@@ -183,7 +183,7 @@ export type membershipsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.membershipsWhereInput | Prisma.membershipsWhereInput[]
   start_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
   end_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
-  MemberUsers?: Prisma.UsersListRelationFilter
+  MemberUsers?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
 }, "id">
 
 export type membershipsOrderByWithAggregationInput = {
@@ -208,28 +208,28 @@ export type membershipsCreateInput = {
   id?: string
   start_at?: Date | string
   end_at?: Date | string
-  MemberUsers?: Prisma.usersCreateNestedManyWithoutMembershipsInput
+  MemberUsers?: Prisma.usersCreateNestedOneWithoutMembershipsInput
 }
 
 export type membershipsUncheckedCreateInput = {
   id?: string
   start_at?: Date | string
   end_at?: Date | string
-  MemberUsers?: Prisma.usersUncheckedCreateNestedManyWithoutMembershipsInput
+  MemberUsers?: Prisma.usersUncheckedCreateNestedOneWithoutMembershipsInput
 }
 
 export type membershipsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  MemberUsers?: Prisma.usersUpdateManyWithoutMembershipsNestedInput
+  MemberUsers?: Prisma.usersUpdateOneWithoutMembershipsNestedInput
 }
 
 export type membershipsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  MemberUsers?: Prisma.usersUncheckedUpdateManyWithoutMembershipsNestedInput
+  MemberUsers?: Prisma.usersUncheckedUpdateOneWithoutMembershipsNestedInput
 }
 
 export type membershipsCreateManyInput = {
@@ -338,42 +338,12 @@ export type membershipsUncheckedUpdateWithoutMemberUsersInput = {
 }
 
 
-/**
- * Count Type MembershipsCountOutputType
- */
-
-export type MembershipsCountOutputType = {
-  MemberUsers: number
-}
-
-export type MembershipsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  MemberUsers?: boolean | MembershipsCountOutputTypeCountMemberUsersArgs
-}
-
-/**
- * MembershipsCountOutputType without action
- */
-export type MembershipsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MembershipsCountOutputType
-   */
-  select?: Prisma.MembershipsCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * MembershipsCountOutputType without action
- */
-export type MembershipsCountOutputTypeCountMemberUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.usersWhereInput
-}
-
 
 export type membershipsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   start_at?: boolean
   end_at?: boolean
   MemberUsers?: boolean | Prisma.memberships$MemberUsersArgs<ExtArgs>
-  _count?: boolean | Prisma.MembershipsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["memberships"]>
 
 export type membershipsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -397,7 +367,6 @@ export type membershipsSelectScalar = {
 export type membershipsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "start_at" | "end_at", ExtArgs["result"]["memberships"]>
 export type membershipsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   MemberUsers?: boolean | Prisma.memberships$MemberUsersArgs<ExtArgs>
-  _count?: boolean | Prisma.MembershipsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type membershipsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 export type membershipsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -405,7 +374,7 @@ export type membershipsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type $membershipsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "memberships"
   objects: {
-    MemberUsers: Prisma.$usersPayload<ExtArgs>[]
+    MemberUsers: Prisma.$usersPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -805,7 +774,7 @@ readonly fields: membershipsFieldRefs;
  */
 export interface Prisma__membershipsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  MemberUsers<T extends Prisma.memberships$MemberUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.memberships$MemberUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  MemberUsers<T extends Prisma.memberships$MemberUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.memberships$MemberUsersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1247,11 +1216,6 @@ export type memberships$MemberUsersArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.usersInclude<ExtArgs> | null
   where?: Prisma.usersWhereInput
-  orderBy?: Prisma.usersOrderByWithRelationInput | Prisma.usersOrderByWithRelationInput[]
-  cursor?: Prisma.usersWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.UsersScalarFieldEnum | Prisma.UsersScalarFieldEnum[]
 }
 
 /**

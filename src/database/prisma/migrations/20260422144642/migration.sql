@@ -20,9 +20,9 @@ CREATE TABLE "oauth_fortytwo" (
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
+    "oauth_fortytwo_id" TEXT DEFAULT 'id',
+    "memberships_id" TEXT DEFAULT 'id',
     "fortytwo_user_id" INTEGER NOT NULL,
-    "oauth_fortytwo_id" TEXT NOT NULL,
-    "memberships_id" TEXT,
     "is_agent" BOOLEAN NOT NULL DEFAULT false,
     "mail" TEXT NOT NULL,
     "password" TEXT,
@@ -36,13 +36,19 @@ CREATE TABLE "users" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_oauth_fortytwo_id_key" ON "users"("oauth_fortytwo_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_memberships_id_key" ON "users"("memberships_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_fortytwo_user_id_key" ON "users"("fortytwo_user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_mail_key" ON "users"("mail");
 
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_oauth_fortytwo_id_fkey" FOREIGN KEY ("oauth_fortytwo_id") REFERENCES "oauth_fortytwo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "users" ADD CONSTRAINT "users_oauth_fortytwo_id_fkey" FOREIGN KEY ("oauth_fortytwo_id") REFERENCES "oauth_fortytwo"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_memberships_id_fkey" FOREIGN KEY ("memberships_id") REFERENCES "memberships"("id") ON DELETE SET NULL ON UPDATE CASCADE;
