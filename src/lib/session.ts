@@ -27,6 +27,5 @@ export async function createSession(payload: SessionPayload): Promise<{ body: st
 		iss: 'BDE-42',
 		...payload,
 	});
-
 	return { body, expirationDate };
 }

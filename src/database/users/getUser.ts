@@ -8,6 +8,7 @@ export async function getUserByFortyTwoUserId(id: string): Promise<memberships |
 		},
 		include: {
 			memberships: true,
+			oauth_fortytwo: true,
 		},
 	});
 	if (row != null) {
@@ -18,6 +19,7 @@ export async function getUserByFortyTwoUserId(id: string): Promise<memberships |
 			last_name: row.last_name,
 			full_name: row.full_name,
 			is_agent: row.is_agent,
+			oauth_fortytwo_id: row.oauth_fortytwo_id,
 			memberships_id: row.memberships_id,
 			start_at: row.memberships?.start_at.getDate(),
 			end_at: row.memberships?.end_at.getDate(),

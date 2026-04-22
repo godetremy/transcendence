@@ -20,9 +20,9 @@ CREATE TABLE "oauth_fortytwo" (
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
-    "oauth_fortytwo_id" TEXT DEFAULT 'id',
-    "memberships_id" TEXT DEFAULT 'id',
     "fortytwo_user_id" INTEGER NOT NULL,
+    "oauth_fortytwo_id" TEXT,
+    "memberships_id" TEXT,
     "is_agent" BOOLEAN NOT NULL DEFAULT false,
     "mail" TEXT NOT NULL,
     "password" TEXT,
@@ -34,12 +34,6 @@ CREATE TABLE "users" (
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "users_oauth_fortytwo_id_key" ON "users"("oauth_fortytwo_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "users_memberships_id_key" ON "users"("memberships_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_fortytwo_user_id_key" ON "users"("fortytwo_user_id");

@@ -6,4 +6,5 @@ export interface User {
 	full_name: string;
 	is_agent: boolean;
 	memberships_id: string | null;
+	oauth_fortytwo_id: string | null;
 }

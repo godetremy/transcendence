@@ -17,8 +17,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 		const user_id = await upsertUser(me, authorization);
 		const session = await createSession({ user_id });
 
-		await createCookie('session', session.body, session.expirationDate); 
-
+		await createCookie('session', session.body, session.expirationDate);
 	} catch (err: unknown) {
 		console.log(err);
 		return new NextResponse(`Failed to login. Please try again later.`, {
