@@ -1,35 +1,40 @@
-import { generateFortyTwoAuthorizationUrl } from '@/rest/fortytwo';
-import '../../page.css';
+'use client';
+import './page.scss';
+import { useState } from 'react';
 import Image from 'next/image';
+import { StudentLoginPagesImages } from '@/const/StudentLoginPagesImages';
+import { generateFortyTwoAuthorizationUrl } from '@/rest/fortytwo';
+import { Eyes } from '@/components/stickers/eyes/Eyes';
+import { FortyTwo } from '@/components/stickers/FortyTwo/FortyTwo';
 
 export default function Page() {
-	return (
-		<div className="main">
-			<div className="login">
-				<Image src="/login/eyes_icon.svg" alt="eyes icon" width={73} height={70} />
+	const [image] = useState(() => {
+		return StudentLoginPagesImages[Math.floor(Math.random() * StudentLoginPagesImages.length)];
+	});
 
-				<div>
-					<h1>CONNEXION</h1>
+	return (
+		<main>
+			<section className={'content'}>
+				<Eyes className={'stickers'} />
+
+				<div className={'text'}>
+					<h1>Connexion</h1>
 					<p>Pour accéder à tes services connecte toi avec 42.</p>
 				</div>
 
-				<div className="login-btn">
-					<div>
-						<a className="login-42" href={generateFortyTwoAuthorizationUrl()}>
-							<Image src="/login/42.png" alt="logo 42" width={28} height={15}></Image>
-							<p>Continuer avec 42</p>
-						</a>
-					</div>
-					<div className="other-btn">
-						<a>
-							<p>Vous êtes un agents extérieur ?</p>
-						</a>
-					</div>
+				<div className={'actions'}>
+					<a href={generateFortyTwoAuthorizationUrl()} className={'primary'}>
+						<FortyTwo className={'icon'} />
+						Connexion avec 42
+					</a>
+					<a href={'/app/login/agents'} className={'secondary'}>
+						Vous êtes un agents extérieur ?
+					</a>
 				</div>
-			</div>
-			<div className="image-container">
-				<Image src="/login/bg.png" alt="the image background" className="img-bg" width={640} height={832} />
-			</div>
-		</div>
+			</section>
+			<section className={'background'}>
+				<Image src={image.source} alt={image.alt} className={'background_img'} fill />
+			</section>
+		</main>
 	);
 }

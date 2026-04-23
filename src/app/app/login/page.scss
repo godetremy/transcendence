@@ -1,0 +1,123 @@
+@use '../../supports';
+
+main {
+  height: 100vh;
+  position: relative;
+  display: flex;
+
+  section {
+	flex: 1;
+	position: relative;
+  }
+
+  section.background {
+	.background_img {
+	  object-fit: cover;
+	}
+  }
+
+  section.content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	padding: 20px;
+	gap: 30px;
+
+	.stickers {
+	  height: 130px;
+	}
+
+	.text {
+	  display: flex;
+	  flex-direction: column;
+
+	  h1 {
+		text-transform: uppercase;
+		font-size: 58px;
+		margin-bottom: -10px;
+	  }
+
+	  p {
+		font-size: 16px;
+		opacity: .7;
+	  }
+	}
+
+	.actions {
+	  width: 100%;
+	  display: flex;
+	  flex-direction: column;
+	  gap: 10px;
+
+	  a.primary {
+		width: fit-content;
+		height: 50px;
+		padding: 10px 30px;
+		background-color: var(--color-primary-purple);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 15px;
+		border-radius: 25px;
+		font-weight: 600;
+		transition: var(--transition-fast);
+
+		&:hover {
+		  transform: scale(1.02);
+		}
+
+		.icon {
+		  width: 28px;
+		}
+	  }
+
+	  .secondary {
+		font-size: 14px;
+		opacity: .7;
+		padding: 0 15px;
+		transition: var(--transition-fast);
+
+		&:hover {
+		  opacity: .8;
+		}
+	  }
+	}
+  }
+}
+
+@media (max-width: supports.$breakpoints-desktop) {
+  main {
+	justify-content: center;
+
+	section.background {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  bottom: 0;
+	  right: 0;
+	  z-index: -1;
+	  opacity: 0.5;
+	}
+
+	section.content {
+	  max-width: 600px;
+
+	  .stickers {
+		height: 100px;
+	  }
+
+	  .text {
+		h1 {
+		  font-size: 48px;
+		}
+	  }
+
+	  .actions {
+		a.primary {
+		  width: 100%;
+		}
+	  }
+	}
+  }
+}

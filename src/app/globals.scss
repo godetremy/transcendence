@@ -12,6 +12,12 @@
 
   	--font-title: 'Lugati v1';
 	--font-paragraph: 'Montserrat';
+
+  	--transition-fast: .1s ease-in-out;
+}
+
+::selection {
+  background-color: #9F99FF;
 }
 
 * {
