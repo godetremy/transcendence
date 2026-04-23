@@ -1,3 +1,5 @@
+import { Memberships } from './Memberships';
+
 export interface User {
 	id: string;
 	mail: string;
@@ -6,5 +8,6 @@ export interface User {
 	full_name: string;
 	is_agent: boolean;
 	memberships_id: string | null;
+	memberships: Memberships | null;
 	oauth_fortytwo_id: string | null;
 }

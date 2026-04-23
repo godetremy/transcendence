@@ -1,7 +1,7 @@
 import { prisma } from '@/database/prisma/prisma';
-import { memberships } from '@/types/database/memberships';
+import { User } from '@/types/database/User';
 
-export async function getUserByFortyTwoUserId(id: string): Promise<memberships | null> {
+export async function getUserByFortyTwoUserId(id: string): Promise<User | null> {
 	const row = await prisma.users.findUnique({
 		where: {
 			id: id,
@@ -12,7 +12,7 @@ export async function getUserByFortyTwoUserId(id: string): Promise<memberships |
 		},
 	});
 	if (row != null) {
-		const value: memberships = {
+		return {
 			id: row.id,
 			mail: row.mail,
 			first_name: row.first_name,
@@ -21,10 +21,8 @@ export async function getUserByFortyTwoUserId(id: string): Promise<memberships |
 			is_agent: row.is_agent,
 			oauth_fortytwo_id: row.oauth_fortytwo_id,
 			memberships_id: row.memberships_id,
-			start_at: row.memberships?.start_at.getDate(),
-			end_at: row.memberships?.end_at.getDate(),
+			memberships: row.memberships,
 		};
-		return value;
 	}
 	return null;
 }

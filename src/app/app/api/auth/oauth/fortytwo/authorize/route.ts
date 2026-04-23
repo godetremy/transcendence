@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { getFortyTwoMe, getFortyTwoOauthToken } from '@/rest/fortytwo';
 import { upsertUser } from '@/database/users/upsertUser';
 import { createSession } from '@/lib/session';
-import { createCookie } from '@/lib/cookie';
+import { cookies } from 'next/headers';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
 	const params: URLSearchParams = request.nextUrl.searchParams;
@@ -17,7 +17,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 		const user_id = await upsertUser(me, authorization);
 		const session = await createSession({ user_id });
 
-		await createCookie('session', session.body, session.expirationDate);
+		const cookieStore = await cookies();
+
+		cookieStore.set('session', session.body, {
+			httpOnly: true,
+			secure: true,
+			expires: session.expirationDate,
+			sameSite: 'lax',
+			path: '/',
+		});
 	} catch (err: unknown) {
 		console.log(err);
 		return new NextResponse(`Failed to login. Please try again later.`, {
