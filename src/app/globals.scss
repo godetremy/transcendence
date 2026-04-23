@@ -1,33 +1,17 @@
+@font-face {
+  font-family: 'Lugati v1';
+  src: url('/fonts/Lugati.otf');
+}
+
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
-}
+	--color-primary-green: #99FFBA;
+	--color-primary-pink: #FD84FE;
+	--color-primary-purple: #9F99FF;
+	--color-primary-black:#000;
+	--color-primary-white: #F2F2F2;
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
-	}
-}
-
-html {
-	height: 100%;
-}
-
-html,
-body {
-	max-width: 100vw;
-	overflow-x: hidden;
-}
-
-body {
-	min-height: 100%;
-	display: flex;
-	flex-direction: column;
-	background: var(--background);
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: #f2f2f2;
+  	--font-title: 'Lugati v1';
+	--font-paragraph: 'Monserrat';
 }
 
 * {
@@ -36,22 +20,20 @@ body {
 	margin: 0;
 }
 
+body {
+	min-height: 100vh;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background: var(--color-primary-black);
+  	color: var(--color-primary-white);
+  	font-family: var(--font-paragraph), sans-serif;
+}
+
 a {
 	color: inherit;
 	text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-	html {
-		color-scheme: dark;
-	}
-}
-
-@font-face {
-	font-family: 'lugati';
-	src: url('/font/Lugati.otf');
-}
-
-h1 {
-	font-family: 'lugati', sans-serif;
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-title), sans-serif;
 }
