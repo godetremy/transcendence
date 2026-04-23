@@ -1,7 +1,6 @@
 'use client';
 import './page.scss';
 import { useState } from 'react';
-import Image from 'next/image';
 import { StudentLoginPagesImages } from '@/const/StudentLoginPagesImages';
 import { generateFortyTwoAuthorizationUrl } from '@/rest/fortytwo';
 import { Eyes } from '@/components/stickers/eyes/Eyes';
