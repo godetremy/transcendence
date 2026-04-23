@@ -5,6 +5,7 @@ import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
 import { KeyRound, User2 } from 'lucide-react';
+import { InputTemplate } from '@/components/login/loginTemplate/signupTemplate/InputTemplate';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -27,16 +28,16 @@ export default function Page() {
 
 			<form>
 				<div className={'inputs'}>
-					<label htmlFor="name">Adresse e-mail</label>
-					<div className={'userInput'}>
-						<User2 />
-						<input type={'email'} placeholder={'michel.doe@bde.42angouleme.fr'} />
-					</div>
-					<label htmlFor="name">Mot de passe</label>
-					<div className={'userInput'}>
-						<KeyRound />
-						<input type={'password'} placeholder={'············'} />
-					</div>
+					<InputTemplate
+						icon={<User2 />}
+						nameLabel={'Adresse e-mail'}
+						inside={'michel.doe@bde.42angouleme.fr'}
+					/>
+					<InputTemplate
+						icon={<KeyRound />}
+						nameLabel={'Mot de passe'}
+						inside={'••••••••••••'}
+					/>
 				</div>
 				<div className={'sublinks'}>
 					<a href={'/app/login/agents'}>Mots de passe oublié ?</a>
