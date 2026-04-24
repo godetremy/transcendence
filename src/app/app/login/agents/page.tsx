@@ -5,7 +5,7 @@ import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
 import { KeyRound, User2 } from 'lucide-react';
-import { InputTemplate } from '@/components/login/loginTemplate/signupTemplate/InputTemplate';
+import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -28,15 +28,17 @@ export default function Page() {
 
 			<form>
 				<div className={'inputs'}>
-					<InputTemplate
+					<LoginTextInput
+						type={'email'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
-						inside={'michel.doe@bde.42angouleme.fr'}
+						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
-					<InputTemplate
+					<LoginTextInput
+						type={'password'}
 						icon={<KeyRound />}
 						nameLabel={'Mot de passe'}
-						inside={'••••••••••••'}
+						placeholder={'••••••••••••'}
 					/>
 				</div>
 				<div className={'sublinks'}>
