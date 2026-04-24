@@ -1,5 +1,5 @@
-import { FortyTwoCursusUserDetails } from '@/types/FortyTwoCursusUserDetails';
-import { FortyTwoOauthToken } from '@/types/FortyTwoOauthToken';
+import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
+import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 
 const FORTY_TWO_BASE_URL = 'https://api.intra.42.fr';
 

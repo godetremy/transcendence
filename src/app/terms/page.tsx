@@ -1,7 +1,7 @@
 export default function Page() {
 	return (
 		<>
-			<p>Hello, World !</p>
+			<p>Hello, World term!</p>
 		</>
 	);
 }
