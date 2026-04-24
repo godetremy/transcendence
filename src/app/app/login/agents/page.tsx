@@ -6,6 +6,7 @@ import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
 import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
+import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -41,11 +42,15 @@ export default function Page() {
 						placeholder={'••••••••••••'}
 					/>
 				</div>
-				<div className={'sublinks'}>
-					<a href={'/app/login/agents'}>Mots de passe oublié ?</a>
-					<a href={'/app/login/agents/signup'}>Crée un nouveau compte.</a>
-					<a href={'/app/login'}>Tu es étudiants ? C’est par ici.</a>
-				</div>
+
+				<Sublinks
+					links={[
+						{ text: 'Mots de passe oublié ?', href: '/app/login/agents'},
+						{ text: 'Crée un nouveau compte.', href: '/app/login/agents/signup'},
+						{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login'},
+
+					]}
+				/>
 
 				<input type={'submit'} value={'Connexion'} />
 			</form>
