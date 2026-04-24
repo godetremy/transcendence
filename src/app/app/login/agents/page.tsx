@@ -8,10 +8,6 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 
 export default function Page() {
-	const [image] = useState(() => {
-		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
-	});
-
 	return (
 		<LoginTemplate
 			background={{
