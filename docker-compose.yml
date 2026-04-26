@@ -1,13 +1,13 @@
 services:
     postgres:
         image: postgres:15-alpine
-        container_name: postgres
+        container_name: $DB_NAME_POSTGRES
         environment:
-            POSTGRES_USER: admin
-            POSTGRES_PASSWORD: motdepasse123
-            POSTGRES_DB: data
+            POSTGRES_USER: $USER_POSTGRES
+            POSTGRES_PASSWORD: $PASSWORD_POSTGRES
+            POSTGRES_DB: $DB_NAME_POSTGRES
         ports:
-            - '5432:5432'
+            - '$PORT_POSTGRES:5432'
         volumes:
             - postgres_data:/var/lib/postgresql/data
         networks:
