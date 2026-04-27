@@ -3,10 +3,10 @@ import './page.scss';
 import { useState } from 'react';
 import { StudentLoginPagesImages } from '@/const/StudentLoginPagesImages';
 import { generateFortyTwoAuthorizationUrl } from '@/rest/fortytwo';
-import { Eyes } from '@/components/stickers/eyes/Eyes';
 import { FortyTwo } from '@/components/stickers/FortyTwo/FortyTwo';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { LoginText } from '@/components/login/LoginText/LoginText';
+import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -27,10 +27,9 @@ export default function Page() {
 					<FortyTwo className={'icon'} />
 					Connexion avec 42
 				</a>
-				<a href={'/app/login/agents'} className={'secondary'}>
-					Vous êtes un agents extérieur ?
-				</a>
 			</div>
+
+			<Sublinks links={[{ text: 'Vous êtes un agents extérieur ?', href: '/app/login/agents' }]} />
 		</LoginTemplate>
 	);
 }

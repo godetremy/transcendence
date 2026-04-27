@@ -1,6 +1,5 @@
 'use client';
 import './page.scss';
-import { Eyes } from '@/components/stickers/eyes/Eyes';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
@@ -47,7 +46,6 @@ export default function Page() {
 						{ text: 'Mots de passe oublié ?', href: '/app/login/agents/forgot-password' },
 						{ text: 'Crée un nouveau compte.', href: '/app/login/agents/signup' },
 						{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login' },
-
 					]}
 				/>
 
