@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
+import { LoginText } from '@/components/login/LoginText/LoginText';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -20,12 +21,10 @@ export default function Page() {
 				alt: image.alt,
 			}}
 		>
-			<Eyes className={'stickers'} />
-
-			<div className={'text'}>
-				<h1>Connexion Agents</h1>
-				<p>Pour accéder à vos services connectez vous avec vos identifiants.</p>
-			</div>
+			<LoginText
+				title={'Connexion Agents'}
+				description={'Pour accéder à vos services connectez vous avec vos identifiants.'}
+			/>
 
 			<form>
 				<div className={'inputs'}>
@@ -45,9 +44,9 @@ export default function Page() {
 
 				<Sublinks
 					links={[
-						{ text: 'Mots de passe oublié ?', href: '/app/login/agents'},
-						{ text: 'Crée un nouveau compte.', href: '/app/login/agents/signup'},
-						{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login'},
+						{ text: 'Mots de passe oublié ?', href: '/app/login/agents/forgot-password' },
+						{ text: 'Crée un nouveau compte.', href: '/app/login/agents/signup' },
+						{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login' },
 
 					]}
 				/>

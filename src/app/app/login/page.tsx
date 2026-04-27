@@ -6,6 +6,7 @@ import { generateFortyTwoAuthorizationUrl } from '@/rest/fortytwo';
 import { Eyes } from '@/components/stickers/eyes/Eyes';
 import { FortyTwo } from '@/components/stickers/FortyTwo/FortyTwo';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
+import { LoginText } from '@/components/login/LoginText/LoginText';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -19,12 +20,7 @@ export default function Page() {
 				alt: image.alt,
 			}}
 		>
-			<Eyes className={'stickers'} />
-
-			<div className={'text'}>
-				<h1>Connexion</h1>
-				<p>Pour accéder à tes services connecte toi avec 42.</p>
-			</div>
+			<LoginText title={'Connexion'} description={'Pour accéder à tes services connecte toi avec 42.'} />
 
 			<div className={'actions'}>
 				<a href={generateFortyTwoAuthorizationUrl()} className={'primary'}>
