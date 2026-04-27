@@ -1,8 +1,7 @@
 'use client';
 
-import { deleteCookie } from '@/lib/cookie';
 import { User } from '@/types/bde/User';
-import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
@@ -13,18 +12,6 @@ export default function Page() {
 			.then((res) => res.json())
 			.then(setUser);
 	}, []);
-
-	const deleteAccount = async () => {
-		await fetch('/app/api/users/me', {
-			method: 'DELETE',
-		});
-		return redirect('/app/login');
-	};
-
-	const logout = () => {
-		deleteCookie('session');
-		return redirect('/app/login');
-	};
 
 	return (
 		<>
@@ -44,21 +31,10 @@ export default function Page() {
 					<p>end at : {user.memberships?.end_at.toLocaleDateString() ?? '-'}</p>
 				</>
 			)}
-			<button
-				onClick={() => {
-					logout();
-				}}
-			>
-				log out
-			</button>
+			<br></br>
+			<Link href={'/app/logout'}>log out</Link>
 			<p>or</p>
-			<button
-				onClick={() => {
-					deleteAccount();
-				}}
-			>
-				delete account
-			</button>
+			<Link href={'/app/api/users/me/delete'}>delete account</Link>
 		</>
 	);
 }
