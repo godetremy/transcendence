@@ -1,7 +1,10 @@
+import { createUserAgent} from '@/database/users/createUser';
 import { deleteAccount } from '@/database/users/deleteUser';
 import { getUserByFortyTwoUserId } from '@/database/users/getUser';
+import { isAccountExistByMail } from '@/database/users/isAccountExist';
 import { deleteCookie } from '@/lib/cookie';
 import { decrypt } from '@/lib/session';
+import { SignupFormSchema } from '@/schema/SignupForm';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -12,6 +15,39 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse(`Failed to login. Please try again later.`, {
+			status: 500,
+		});
+	}
+}
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+	try {
+
+		const body = await req.json();
+		// check back fields
+
+		const signUp = async (form: FormData) => {
+			const fields = SignupFormSchema.safeParse({
+				email: form.get('email'),
+				password: form.get('password'),
+				passwordCheck: form.get('password'), 
+			});
+		}
+
+		// check account exist
+
+		const exist = await isAccountExistByMail(body.mail);
+		if (exist)
+			throw ("error: account already exist");
+
+		// create user
+
+		const res = await createUserAgent(body.password, body.mail);
+
+		return NextResponse.json("");
+	} catch (error: unknown) {
+		console.error(error);
+		return new NextResponse(`Failed to create account. Try again :(`, {
 			status: 500,
 		});
 	}

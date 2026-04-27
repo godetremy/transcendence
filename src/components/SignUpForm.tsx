@@ -1,13 +1,13 @@
 'use client';
 
-import { SignupFormFrontSchema } from '@/schema/SignupForm';
+import { SignupFormSchema } from '@/schema/SignupForm';
 import { useState } from 'react';
 
 export function SignUpFrom() {
 	const [error, setError] = useState<string | null>(null);
 
 	const signUp = async (form: FormData) => {
-		const fields = SignupFormFrontSchema.safeParse({
+		const fields = SignupFormSchema.safeParse({
 			email: form.get('email'),
 			password: form.get('password'),
 			passwordCheck: form.get('passwordCheck'),
@@ -17,7 +17,7 @@ export function SignUpFrom() {
 			setError(fields.error.issues[0].message);
 			return;
 		}
-		const response = await fetch('/api/users/me', {
+		const response = await fetch('/app/api/users/me', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -25,15 +25,9 @@ export function SignUpFrom() {
 			body: JSON.stringify({
 				mail: fields.data.email,
 				password: fields.data.password,
-				first_name: null,
-				last_name: null,
-				full_name: null,
-				fortytwo_user_id: 0,
 			}),
 		});
-
-		const result = await response.json();
-		console.log(result);
+		console.log(response);
 	};
 
 	return (
