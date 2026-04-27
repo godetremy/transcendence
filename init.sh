@@ -4,18 +4,19 @@ set -a
 source .env
 set +a
 
+echo "" >> .env
 echo "## DATABASE_URL" >> .env
 echo DATABASE_URL="postgres://$USER_POSTGRES:$PASSWORD_POSTGRES@$HOST:$PORT_POSTGRES/$DB_NAME_POSTGRES" >> .env
 
 if ! docker ps | grep -q "$DB_NAME_POSTGRES" ; then
 	echo "[Docker] The database $DB_NAME_POSTGRES not installed."
-	echo "[Docker] installing Postgres..."
 	if docker ps | grep -q  "$PORT_POSTGRES" ; then
-		echo "[Docker]Error port $PORT_POSTGRES used :"
+		echo "[Docker] Error port $PORT_POSTGRES used :"
 		echo -n "- "
 		docker ps | grep -q  "$PORT_POSTGRES"
 		exit 1
 	fi
+	echo "[Docker] installing Postgres..."
 	docker compose up --build -d > /dev/null
 else
 	echo "[Docker] The database $DB_NAME_POSTGRES is install."
