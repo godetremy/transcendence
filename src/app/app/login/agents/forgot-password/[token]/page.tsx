@@ -3,9 +3,8 @@ import './page.scss';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
-import { KeyRound, User2 } from 'lucide-react';
+import { KeyRound } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
-import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 
 export default function Page() {
@@ -21,35 +20,27 @@ export default function Page() {
 			}}
 		>
 			<LoginText
-				title={'Connexion Agents'}
-				description={'Pour accéder à vos services connectez vous avec vos identifiants.'}
+				title={'Reinitialiser votre mot de passe'}
+				description={'Choisissez votre mot de passe pour vous connecter.'}
 			/>
 
 			<form>
 				<div className={'inputs'}>
-					<LoginTextInput
-						type={'email'}
-						icon={<User2 />}
-						nameLabel={'Adresse e-mail'}
-						placeholder={'michel.doe@bde.42angouleme.fr'}
-					/>
 					<LoginTextInput
 						type={'password'}
 						icon={<KeyRound />}
 						nameLabel={'Mot de passe'}
 						placeholder={'••••••••••••'}
 					/>
+					<LoginTextInput
+						type={'password'}
+						icon={<KeyRound />}
+						nameLabel={'Confirmation du mot de passe'}
+						placeholder={'••••••••••••'}
+					/>
 				</div>
 
-				<Sublinks
-					links={[
-						{ text: 'Mots de passe oublié ?', href: '/app/login/agents/forgot-password' },
-						{ text: 'Crée un nouveau compte.', href: '/app/login/agents/signup' },
-						{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login' },
-					]}
-				/>
-
-				<input type={'submit'} value={'Connexion'} />
+				<input type={'submit'} value={'Réinitialiser mon mot de passe'} />
 			</form>
 		</LoginTemplate>
 	);
