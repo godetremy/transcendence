@@ -1,5 +1,5 @@
 import { prisma } from '@/database/prisma/prisma';
-import { User } from '@/types/database/User';
+import { User } from '@/types/bde/User';
 
 export async function getUserByFortyTwoUserId(id: string): Promise<User | null> {
 	const row = await prisma.users.findUnique({

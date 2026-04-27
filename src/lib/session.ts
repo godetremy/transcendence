@@ -1,6 +1,6 @@
 import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
-import { SessionPayload, JWTSessionPayload } from '@/types/payload/SessionPayload';
+import { SessionPayload, JWTSessionPayload } from '@/types/session/SessionPayload';
 
 const encodedKey = new TextEncoder().encode(process.env.SESSION_SECRET);
 

@@ -1,5 +1,5 @@
 import { decrypt } from '@/lib/session';
-import { SessionPayload } from '@/types/payload/SessionPayload';
+import { SessionPayload } from '@/types/session/SessionPayload';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 

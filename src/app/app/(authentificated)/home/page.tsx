@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteCookie } from '@/lib/cookie';
-import { User } from '@/types/database/User';
+import { User } from '@/types/bde/User';
 import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
