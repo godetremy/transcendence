@@ -3,7 +3,7 @@ import './page.scss';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
-import { User2 } from 'lucide-react';
+import { KeyRound } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 
@@ -20,19 +20,23 @@ export default function Page() {
 			}}
 		>
 			<LoginText
-				title={"Verification d'identite"}
-				description={
-					'Pour réinitialiser votre mot de passe, veuillez fournir votre addresse e-mail de connexion.'
-				}
+				title={'Reinitialiser votre mot de passe'}
+				description={'Choisissez votre mot de passe pour vous connecter.'}
 			/>
 
 			<form>
 				<div className={'inputs'}>
 					<LoginTextInput
-						type={'email'}
-						icon={<User2 />}
-						nameLabel={'Adresse e-mail'}
-						placeholder={'michel.doe@bde.42angouleme.fr'}
+						type={'password'}
+						icon={<KeyRound />}
+						nameLabel={'Mot de passe'}
+						placeholder={'••••••••••••'}
+					/>
+					<LoginTextInput
+						type={'password'}
+						icon={<KeyRound />}
+						nameLabel={'Confirmation du mot de passe'}
+						placeholder={'••••••••••••'}
 					/>
 				</div>
 
