@@ -7,6 +7,7 @@ import { FortyTwo } from '@/components/stickers/FortyTwo/FortyTwo';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
+import Link from 'next/link';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -23,10 +24,10 @@ export default function Page() {
 			<LoginText title={'Connexion'} description={'Pour accéder à tes services connecte toi avec 42.'} />
 
 			<div className={'actions'}>
-				<a href={generateFortyTwoAuthorizationUrl()} className={'primary'}>
+				<Link href={generateFortyTwoAuthorizationUrl()} className={'primary'}>
 					<FortyTwo className={'icon'} />
 					Connexion avec 42
-				</a>
+				</Link>
 			</div>
 
 			<Sublinks links={[{ text: 'Vous êtes un agents extérieur ?', href: '/app/login/agents' }]} />

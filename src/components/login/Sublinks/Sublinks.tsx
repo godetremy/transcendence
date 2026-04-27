@@ -1,4 +1,5 @@
 import './components.scss';
+import Link from 'next/link';
 
 export interface SublinksProps {
 	links: Array<{
@@ -11,9 +12,9 @@ export function Sublinks(props: SublinksProps) {
 	return (
 		<div className={'sublinks'}>
 			{props.links.map((link, index) => (
-				<a href={link.href} key={index}>
+				<Link href={link.href} key={index}>
 					{link.text}
-				</a>
+				</Link>
 			))}
 		</div>
 	);
