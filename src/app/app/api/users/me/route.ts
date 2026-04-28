@@ -25,8 +25,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
 		const body = await req.json();
 
-		const signUp = async (form: FormData) => {
-			const fields = SignupFormSchema.safeParse({
+		async (form: FormData) => {
+			SignupFormSchema.safeParse({
 				email: form.get('email'),
 				password: form.get('password'),
 				passwordCheck: form.get('password'),
