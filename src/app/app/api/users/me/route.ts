@@ -3,8 +3,9 @@ import { deleteAccount } from '@/database/users/deleteUser';
 import { getUserByFortyTwoUserId } from '@/database/users/getUser';
 import { isAccountExistByMail } from '@/database/users/isAccountExist';
 import { deleteCookie } from '@/lib/cookie';
-import { decrypt } from '@/lib/session';
+import { createSession, decrypt } from '@/lib/session';
 import { SignupFormSchema } from '@/schema/SignupForm';
+import { cookies } from 'next/headers';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -24,7 +25,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
 
 		const body = await req.json();
-		// check back fields
 
 		const signUp = async (form: FormData) => {
 			const fields = SignupFormSchema.safeParse({
@@ -34,15 +34,23 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			});
 		}
 
-		// check account exist
-
 		const exist = await isAccountExistByMail(body.mail);
 		if (exist)
 			throw ("error: account already exist");
 
-		// create user
+		const user_id = await createUserAgent(body.password, body.mail);
 
-		const res = await createUserAgent(body.password, body.mail);
+		const session = await createSession({user_id});
+		
+				const cookieStore = await cookies();
+		
+				cookieStore.set('session', session.body, {
+					httpOnly: true,
+					secure: true,
+					expires: session.expirationDate,
+					sameSite: 'lax',
+					path: '/',
+				});
 
 		return NextResponse.json("");
 	} catch (error: unknown) {
