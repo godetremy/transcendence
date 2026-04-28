@@ -25,13 +25,19 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
 		const body = await req.json();
 
-		async (form: FormData) => {
-			SignupFormSchema.safeParse({
-				email: form.get('email'),
-				password: form.get('password'),
-				passwordCheck: form.get('password'),
-			});
-		};
+		const fields = SignupFormSchema.safeParse({
+			email: body.mail,
+			password: body.password,
+			passwordCheck: body.password,
+		});
+
+		if (!fields.success)
+			return NextResponse.json(
+				{
+					error: fields.error.issues[0].message,
+				},
+				{ status: 400 }
+			);
 
 		const exist = await isAccountExistByMail(body.mail);
 		if (exist) throw 'error: account already exist';
