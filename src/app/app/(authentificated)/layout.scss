@@ -136,7 +136,7 @@ main {
 	}
 }
 
-@include supports.hover {
+@include supports.hover(supports.$breakpoints-tablets) {
 	nav {
 		&:hover {
 			width: 300px;
@@ -168,7 +168,7 @@ main {
 	}
 }
 
-@media (max-width: supports.$breakpoints-desktop) {
+@media (max-width: supports.$breakpoints-tablets) {
 	body {
 		padding-left: 0;
 		padding-bottom: 70px;
