@@ -1,5 +1,6 @@
 import { prisma } from '@/database/prisma/prisma';
 import { User } from '@/types/bde/User';
+import { Prisma } from '../prisma/generated/client';
 
 export async function getUserByFortyTwoUserId(id: string): Promise<User | null> {
 	const row = await prisma.users.findUnique({
@@ -12,12 +13,12 @@ export async function getUserByFortyTwoUserId(id: string): Promise<User | null> 
 		},
 	});
 	if (row != null) {
-		return await UserFormatting(row);
+		return UserFormatting(row);
 	}
 	return null;
 }
 
-export async function UserFormatting(row: object): Promise<User | null> {
+export function UserFormatting(row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User | null {
 	return {
 		id: row.id,
 		mail: row.mail,
