@@ -1,4 +1,4 @@
-import { createUserAgent} from '@/database/users/createUser';
+import { createUserAgent } from '@/database/users/createUser';
 import { deleteAccount } from '@/database/users/deleteUser';
 import { getUserByFortyTwoUserId } from '@/database/users/getUser';
 import { isAccountExistByMail } from '@/database/users/isAccountExist';
@@ -23,36 +23,34 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
-
 		const body = await req.json();
 
 		const signUp = async (form: FormData) => {
 			const fields = SignupFormSchema.safeParse({
 				email: form.get('email'),
 				password: form.get('password'),
-				passwordCheck: form.get('password'), 
+				passwordCheck: form.get('password'),
 			});
-		}
+		};
 
 		const exist = await isAccountExistByMail(body.mail);
-		if (exist)
-			throw ("error: account already exist");
+		if (exist) throw 'error: account already exist';
 
 		const user_id = await createUserAgent(body.password, body.mail);
 
-		const session = await createSession({user_id});
-		
-				const cookieStore = await cookies();
-		
-				cookieStore.set('session', session.body, {
-					httpOnly: true,
-					secure: true,
-					expires: session.expirationDate,
-					sameSite: 'lax',
-					path: '/',
-				});
+		const session = await createSession({ user_id });
 
-		return NextResponse.json("");
+		const cookieStore = await cookies();
+
+		cookieStore.set('session', session.body, {
+			httpOnly: true,
+			secure: true,
+			expires: session.expirationDate,
+			sameSite: 'lax',
+			path: '/',
+		});
+
+		return NextResponse.json('');
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse(`Failed to create account. Try again :(`, {

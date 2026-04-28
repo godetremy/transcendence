@@ -15,7 +15,6 @@ export default function Page() {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
 
-
 	const signUp = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
 			email: form.get('email'),
