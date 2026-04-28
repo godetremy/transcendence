@@ -7,11 +7,43 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
+import { SignupFormSchema } from '@/schema/SignupForm';
 
 export default function Page() {
+	const [error, setError] = useState<string | null>(null);
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
+
+
+	const signUp = async (form: FormData) => {
+		const fields = SignupFormSchema.safeParse({
+			email: form.get('email'),
+			password: form.get('password'),
+			passwordCheck: form.get('passwordCheck'),
+		});
+
+		if (!fields.success) {
+			setError(fields.error.issues[0].message);
+			return;
+		}
+		const response = await fetch('/app/api/users/me', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				mail: fields.data.email,
+				password: fields.data.password,
+				first_name: null,
+				last_name: null,
+				full_name: null,
+				fortytwo_user_id: 0,
+			}),
+		});
+
+		console.log(response);
+	};
 
 	return (
 		<LoginTemplate
@@ -22,7 +54,7 @@ export default function Page() {
 		>
 			<LoginText title={'Cree un compte'} description={'Pour accéder à vos services inscrivez vous.'} />
 
-			<form>
+			<form action={signUp}>
 				<div className={'inputs'}>
 					<LoginTextInput
 						type={'email'}
@@ -43,6 +75,9 @@ export default function Page() {
 						placeholder={'••••••••••••'}
 					/>
 				</div>
+
+				{/* TODO: Error text */}
+				{error && <p>{error}</p>}
 
 				<Sublinks
 					links={[
