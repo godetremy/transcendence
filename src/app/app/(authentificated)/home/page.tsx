@@ -73,7 +73,7 @@ export default function Page() {
 				>
 					delete account
 				</button>
-				<div style={{ height: 10000, background: 'red' }} />
+				<div style={{ height: 1000, background: 'red' }} />
 			</section>
 		</>
 	);

@@ -170,10 +170,10 @@ main {
 
 @media (max-width: supports.$breakpoints-tablets) {
 	body {
-		padding-left: 0;
-		padding-bottom: 70px;
 		overflow: hidden;
+		padding-left: 0;
 	}
+
 	nav {
 		top: auto;
 		bottom: 0;
@@ -233,7 +233,7 @@ main {
 	}
 
 	main {
-		-webkit-overflow-scrolling: touch;
 		overflow-y: scroll;
+		margin-bottom: 70px;
 	}
 }
