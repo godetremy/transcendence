@@ -1,7 +1,12 @@
 import { prisma } from '@/database/prisma/prisma';
 import { User } from '@/types/database/User';
+import { JWTSessionPayload } from '@/types/payload/SessionPayload';
 
-export async function getUserByFortyTwoUserId(id: string): Promise<User | null> {
+export async function getUserFromSession(session: JWTSessionPayload): Promise<User | null> {
+	return getUserById(session.user_id);
+}
+
+export async function getUserById(id: string): Promise<User | null> {
 	const row = await prisma.users.findUnique({
 		where: {
 			id: id,
