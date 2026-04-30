@@ -40,7 +40,13 @@ export default function Sidebar() {
 					const active = pathname.startsWith(tab.href);
 
 					return (
-						<Link href={tab.href} key={index} className={active ? 'active' : undefined}>
+						<Link
+							href={tab.href}
+							key={index}
+							className={active ? 'active' : undefined}
+							prefetch={true}
+							scroll={false}
+						>
 							<div className={'icon'}>
 								{tab.icon === null ? (
 									<Image src={user?.profile_picture ?? ''} alt={''} width={24} height={24} />
