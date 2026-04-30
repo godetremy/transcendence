@@ -1,4 +1,4 @@
-@use "../../../app/supports";
+@use '../../../app/supports';
 
 nav {
 	position: fixed;
@@ -200,8 +200,8 @@ body > .overlay {
 			&::before {
 				width: 100%;
 				background: linear-gradient(
-						rgba(var(--color-rgb-primary-pink), 0.5),
-						rgba(var(--color-rgb-primary-pink), 0)
+					rgba(var(--color-rgb-primary-pink), 0.5),
+					rgba(var(--color-rgb-primary-pink), 0)
 				);
 				transform: translateY(-70px);
 			}

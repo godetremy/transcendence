@@ -1,8 +1,10 @@
 'use client';
+import './component.scss';
 import { CalendarFold, Coins, House } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useUser } from '@/contexts/UserContext';
 
 const tabs = [
 	{
@@ -29,6 +31,7 @@ const tabs = [
 
 export default function Sidebar() {
 	const pathname = usePathname();
+	const user = useUser();
 
 	return (
 		<>
@@ -40,7 +43,7 @@ export default function Sidebar() {
 						<Link href={tab.href} key={index} className={active ? 'active' : undefined}>
 							<div className={'icon'}>
 								{tab.icon === null ? (
-									<Image src={'/images/demo_profile.jpg'} alt={''} width={24} height={24} />
+									<Image src={user?.profile_picture ?? ''} alt={''} width={24} height={24} />
 								) : (
 									<tab.icon color={active ? '#FD84FE' : '#F2F2F2'} size={24} />
 								)}
