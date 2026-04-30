@@ -148,9 +148,12 @@ main {
 				pointer-events: auto;
 			}
 
+			a::before {
+				opacity: 0.5;
+			}
+
 			a.active::before {
 				transform: translateX(0);
-				opacity: 0.5;
 			}
 
 			a > span {
