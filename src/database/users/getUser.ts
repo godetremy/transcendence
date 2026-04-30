@@ -24,6 +24,7 @@ export async function getUserById(id: string): Promise<User | null> {
 			last_name: row.last_name,
 			full_name: row.full_name,
 			is_agent: row.is_agent,
+			profile_picture: row.profile_picture,
 			oauth_fortytwo_id: row.oauth_fortytwo_id,
 			memberships_id: row.memberships_id,
 			memberships: row.memberships,
