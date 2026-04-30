@@ -75,13 +75,17 @@ nav {
 		}
 
 		&::before {
-			content: "";
+			content: '';
 			position: absolute;
 			top: 0;
 			left: 0;
 			bottom: 0;
 			width: 370px;
-			background: linear-gradient(90deg, rgba(var(--color-rgb-primary-pink), 0.5) 300px, rgba(var(--color-rgb-primary-pink), 0.15));
+			background: linear-gradient(
+				90deg,
+				rgba(var(--color-rgb-primary-pink), 0.5) 300px,
+				rgba(var(--color-rgb-primary-pink), 0.15)
+			);
 			transform: translateX(-370px);
 			transition: var(--transition-medium);
 			z-index: -1;
@@ -140,9 +144,9 @@ main {
 	nav {
 		&:hover {
 			width: 300px;
-			box-shadow: 0 0 80px rgba(0,0,0,0.5);
+			box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
 
-			&~ .overlay {
+			& ~ .overlay {
 				opacity: 1;
 				backdrop-filter: blur(2px);
 				pointer-events: auto;
@@ -223,7 +227,10 @@ main {
 
 			&::before {
 				width: 100%;
-				background: linear-gradient(rgba(var(--color-rgb-primary-pink), 0.5), rgba(var(--color-rgb-primary-pink), 0));
+				background: linear-gradient(
+					rgba(var(--color-rgb-primary-pink), 0.5),
+					rgba(var(--color-rgb-primary-pink), 0)
+				);
 				transform: translateY(-70px);
 			}
 
