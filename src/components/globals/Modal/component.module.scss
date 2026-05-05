@@ -1,0 +1,101 @@
+@use '../../../app/supports';
+
+.modalOverlay {
+	position: fixed;
+	width: 200vw;
+	height: 200vh;
+	top: -50vh;
+	left: -50vw;
+	padding: 50vh calc(50vw + 20px);
+	z-index: 10000;
+	background-color: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(10px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.modal {
+		background-color: #111;
+		padding: 25px 15px 15px 25px;
+		border-radius: 15px;
+		border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+		width: 100%;
+		max-width: 600px;
+
+		h3 {
+
+			font: 700 22px var(--font-paragraph);
+			margin-bottom: 3px;
+			margin-top: 5px;
+		}
+
+		p {
+			font: 400 15px var(--font-paragraph);
+			opacity: 0.6;
+		}
+
+		.buttons {
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+			gap: 6px;
+			margin-top: 35px;
+			flex-wrap: wrap;
+
+			button {
+				height: 40px;
+				padding: 0 20px;
+				border: none;
+				color: rgba(var(--color-rgb-primary-white), 0.7);
+				background: rgba(var(--color-rgb-primary-white), 0.05);
+				border-radius: 5px;
+				font: 550 14px var(--font-paragraph);
+				transition: var(--transition-fast);
+
+				&.negative {
+					background: rgba(254, 132, 132, 0.1);
+					color: #FE8484;
+				}
+			}
+		}
+	}
+}
+
+@include supports.hover(supports.$breakpoints-tablets) {
+	.modalOverlay {
+		.modal {
+			.buttons {
+				button {
+					&:hover {
+						background-color: rgba(var(--color-rgb-primary-white), 0.1);
+					}
+					&:active {
+						scale: 0.96;
+					}
+
+					&.negative {
+						&:hover {
+							background: rgba(254, 132, 132, 0.2);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.modalOverlay {
+		.modal {
+			padding: 20px;
+
+			.buttons {
+				flex-direction: column;
+
+				button {
+					width: 100%;
+				}
+			}
+		}
+	}
+}

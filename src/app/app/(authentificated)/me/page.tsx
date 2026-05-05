@@ -5,10 +5,12 @@ import { ProfileBanner } from '@/components/profile/ProfileBanner/ProfileBanner'
 import { ListItem } from '@/components/globals/ListItem/ListItem';
 import { BadgeDollarSign, BookOpenText, FileLock, GitCommitVerticalIcon, Lock, LogOut, User2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 
 export default function Page() {
 	const router = useRouter();
 	const user = useUser();
+	const { openModal, closeModal } = useModal();
 
 	return (
 		<>
@@ -56,7 +58,31 @@ export default function Page() {
 				</div>
 
 				<div className={styles.list}>
-					<ListItem icon={LogOut} title={'Déconnexion'} last negative={true} showChevron={false} />
+					<ListItem
+						icon={LogOut}
+						title={'Déconnexion'}
+						last
+						negative={true}
+						showChevron={false}
+						onPress={() => {
+							openModal({
+								title: 'Se déconnecter ?',
+								message:
+									'Vous allez être déconnecté de votre compte. Vous pourrez vous reconnecter à tout moment.',
+								buttons: [
+									{
+										text: 'Annuler',
+										onClick: closeModal,
+									},
+									{
+										text: 'Se déconnecter',
+										negative: true,
+										onClick: () => router.push('/app/logout'),
+									},
+								],
+							});
+						}}
+					/>
 				</div>
 			</section>
 		</>
