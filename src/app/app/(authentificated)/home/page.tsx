@@ -45,22 +45,9 @@ export default function Page() {
 						<p>end at : {user.memberships?.end_at.toLocaleDateString() ?? '-'}</p>
 					</>
 				)}
-				<button
-					onClick={() => {
-						logout();
-					}}
-				>
-					log out
-				</button>
+				<Link href={'/app/logout/'}>Log out</Link>
 				<p>or</p>
-				<button
-					onClick={() => {
-						deleteAccount();
-					}}
-				>
-					delete account
-				</button>
-				<div style={{ height: 1000, background: 'red' }} />
+				<Link href={'app/api/users/me/delete/'}>Delete account</Link>
 			</section>
 		</>
 	);
