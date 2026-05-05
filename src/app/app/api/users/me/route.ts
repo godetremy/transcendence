@@ -40,7 +40,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			);
 
 		const exist = await isAccountExistByMail(body.mail);
-		if (exist) throw 'error: account already exist';
+		if (exist) return NextResponse.json({ message: 'This account already exist.' }, { status: 400 });
 
 		const user_id = await createUserAgent(body.password, body.mail);
 
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			path: '/',
 		});
 
-		return NextResponse.json('');
+		return NextResponse.json({ message: 'Account created !' }, { status: 201 });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse(`Failed to create account. Try again :(`, {

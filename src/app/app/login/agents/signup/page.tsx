@@ -10,7 +10,7 @@ import { LoginText } from '@/components/login/LoginText/LoginText';
 import { SignupFormSchema } from '@/schema/SignupForm';
 
 export default function Page() {
-	const [error, setError] = useState<string | null>(null);
+	const [message, setMessage] = useState<string | null>(null);
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
@@ -23,7 +23,7 @@ export default function Page() {
 		});
 
 		if (!fields.success) {
-			setError(fields.error.issues[0].message);
+			setMessage(fields.error.issues[0].message);
 			return;
 		}
 		const response = await fetch('/app/api/users/me', {
@@ -41,7 +41,15 @@ export default function Page() {
 			}),
 		});
 
-		console.log(response);
+		const data = await response.json();
+
+		if (!response.ok) {
+			setMessage(data.message);
+			return;
+		} else {
+			setMessage(data.message);
+			return;
+		}
 	};
 
 	return (
@@ -56,6 +64,7 @@ export default function Page() {
 			<form action={signUp}>
 				<div className={'inputs'}>
 					<LoginTextInput
+						name={'email'}
 						type={'email'}
 						icon={<User2 />}
 						name={'email'}
@@ -63,6 +72,7 @@ export default function Page() {
 						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
 					<LoginTextInput
+						name={'password'}
 						type={'password'}
 						icon={<KeyRound />}
 						name={'password'}
@@ -70,6 +80,7 @@ export default function Page() {
 						placeholder={'••••••••••••'}
 					/>
 					<LoginTextInput
+						name={'passwordCheck'}
 						type={'password'}
 						icon={<KeyRound />}
 						name={'passwordCheck'}
@@ -78,8 +89,7 @@ export default function Page() {
 					/>
 				</div>
 
-				{/* TODO: Error text */}
-				{error && <p>{error}</p>}
+				{message && <p>{message}</p>}
 
 				<Sublinks
 					links={[
