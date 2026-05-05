@@ -7,22 +7,23 @@
 	padding: 10px 10px 10px 15px;
 	align-items: center;
 	gap: 15px;
-	transition: .04s ease-out;
+	transition: 0.04s ease-out;
 	border: none;
 	background-color: var(--color-primary-black);
 	color: var(--color-primary-white);
 	text-align: left;
 
 	&.negative {
-		color: #FE8484;
+		color: #fe8484;
 	}
 
-	>.left, >.right {
+	> .left,
+	> .right {
 		width: 24px;
 		height: 24px;
 	}
 
-	>.main {
+	> .main {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
@@ -38,7 +39,7 @@
 		}
 	}
 
-	>.right {
+	> .right {
 		opacity: 0.4;
 	}
 }
