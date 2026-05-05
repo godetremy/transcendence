@@ -8,12 +8,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {
 		const session = await decrypt(req.cookies.get('session')?.value);
 		const user = await getUserByFortyTwoUserId(session.user_id);
-		if (user !== null) deleteAccount(user);
+		if (user != null) deleteAccount(user);
 	} catch (error: unknown) {
 		console.error(error);
-		return new NextResponse(`Failed to delete account. Please try again later.`, {
-			status: 500,
-		});
+		return NextResponse.redirect(new URL('/app/home', req.url), { status: 308 });
 	}
-	return redirect('/app/logout/');
+	return redirect('/app/logout');
 }

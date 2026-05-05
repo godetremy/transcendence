@@ -8,7 +8,7 @@ export async function encrypt(payload: JWTSessionPayload): Promise<string> {
 	return new SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
 		.setIssuedAt()
-		.setExpirationTime('2h')
+		.setExpirationTime(payload.exp)
 		.sign(encodedKey);
 }
 
@@ -16,6 +16,9 @@ export async function decrypt(session: string | undefined = ''): Promise<JWTSess
 	const { payload } = await jwtVerify(session, encodedKey, {
 		algorithms: ['HS256'],
 	});
+	if (payload.exp != null && Date.now() / 1000 >= payload.exp) {
+		throw new Error('Error, session cookie is not set');
+	}
 	return payload as JWTSessionPayload;
 }
 

@@ -1,11 +1,9 @@
-import { decrypt } from '@/lib/session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
+export async function GET(): Promise<NextResponse> {
 	try {
-		await decrypt(req.cookies.get('session')?.value);
 		const cookieStore = await cookies();
 		const cookie = cookieStore.get('session');
 		if (cookie != null) {
