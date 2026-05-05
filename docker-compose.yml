@@ -13,9 +13,19 @@ services:
         networks:
             - main
         restart: on-failure
+    caddy:
+        image: caddy:alpine
+        ports:
+            - '443:443'
+        volumes:
+            - ./docker/Caddyfile:/etc/caddy/Caddyfile
+            - caddy_data:/data
+            - caddy_config:/config
 
 volumes:
     postgres_data:
+    caddy_data:
+    caddy_config:
 
 networks:
     main:
