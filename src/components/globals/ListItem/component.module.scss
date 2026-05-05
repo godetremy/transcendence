@@ -1,0 +1,64 @@
+@use '../../../app/supports';
+
+.listItem {
+	display: flex;
+	width: 100%;
+	height: 60px;
+	padding: 10px 10px 10px 15px;
+	align-items: center;
+	gap: 15px;
+	transition: .04s ease-out;
+	border: none;
+	background-color: var(--color-primary-black);
+	color: var(--color-primary-white);
+	text-align: left;
+
+	&.negative {
+		color: #FE8484;
+	}
+
+	>.left, >.right {
+		width: 24px;
+		height: 24px;
+	}
+
+	>.main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		p {
+			font: 600 16px var(--font-paragraph);
+			line-height: 18px;
+		}
+
+		span {
+			font: 400 13px var(--font-paragraph);
+			opacity: 0.6;
+		}
+	}
+
+	>.right {
+		opacity: 0.4;
+	}
+}
+
+@include supports.hover(supports.$breakpoints-tablets) {
+	.listItem {
+		&:hover {
+			background-color: rgba(var(--color-rgb-primary-white), 0.07);
+
+			&.negative {
+				background-color: rgba(254, 132, 132, 0.07);
+			}
+		}
+
+		&:active {
+			background-color: rgba(var(--color-rgb-primary-white), 0.1);
+
+			&.negative {
+				background-color: rgba(254, 132, 132, 0.1);
+			}
+		}
+	}
+}
