@@ -47,7 +47,7 @@ export default function Page() {
 				)}
 				<Link href={'/app/logout/'}>Log out</Link>
 				<p>or</p>
-				<Link href={'app/api/users/me/delete/'}>Delete account</Link>
+				<Link href={'/app/api/users/me/delete/'}>Delete account</Link>
 			</section>
 		</>
 	);
