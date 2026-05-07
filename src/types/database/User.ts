@@ -6,6 +6,7 @@ export interface User {
 	first_name: string | null;
 	last_name: string | null;
 	full_name: string | null;
+	profile_picture: string;
 	is_agent: boolean;
 	memberships_id: string | null;
 	memberships: Memberships | null;

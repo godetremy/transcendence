@@ -45,6 +45,7 @@ export type UsersMinAggregateOutputType = {
   first_name: string | null
   last_name: string | null
   full_name: string | null
+  profile_picture: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -60,6 +61,7 @@ export type UsersMaxAggregateOutputType = {
   first_name: string | null
   last_name: string | null
   full_name: string | null
+  profile_picture: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -75,6 +77,7 @@ export type UsersCountAggregateOutputType = {
   first_name: number
   last_name: number
   full_name: number
+  profile_picture: number
   created_at: number
   updated_at: number
   _all: number
@@ -100,6 +103,7 @@ export type UsersMinAggregateInputType = {
   first_name?: true
   last_name?: true
   full_name?: true
+  profile_picture?: true
   created_at?: true
   updated_at?: true
 }
@@ -115,6 +119,7 @@ export type UsersMaxAggregateInputType = {
   first_name?: true
   last_name?: true
   full_name?: true
+  profile_picture?: true
   created_at?: true
   updated_at?: true
 }
@@ -130,6 +135,7 @@ export type UsersCountAggregateInputType = {
   first_name?: true
   last_name?: true
   full_name?: true
+  profile_picture?: true
   created_at?: true
   updated_at?: true
   _all?: true
@@ -225,13 +231,14 @@ export type UsersGroupByOutputType = {
   id: string
   oauth_fortytwo_id: string | null
   memberships_id: string | null
-  fortytwo_user_id: number | null
+  fortytwo_user_id: number
   is_agent: boolean
   mail: string
   password: string | null
-  first_name: string | null
-  last_name: string | null
-  full_name: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture: string
   created_at: Date
   updated_at: Date
   _count: UsersCountAggregateOutputType | null
@@ -263,13 +270,14 @@ export type usersWhereInput = {
   id?: Prisma.StringFilter<"users"> | string
   oauth_fortytwo_id?: Prisma.StringNullableFilter<"users"> | string | null
   memberships_id?: Prisma.StringNullableFilter<"users"> | string | null
-  fortytwo_user_id?: Prisma.IntNullableFilter<"users"> | number | null
+  fortytwo_user_id?: Prisma.IntFilter<"users"> | number
   is_agent?: Prisma.BoolFilter<"users"> | boolean
   mail?: Prisma.StringFilter<"users"> | string
   password?: Prisma.StringNullableFilter<"users"> | string | null
-  first_name?: Prisma.StringNullableFilter<"users"> | string | null
-  last_name?: Prisma.StringNullableFilter<"users"> | string | null
-  full_name?: Prisma.StringNullableFilter<"users"> | string | null
+  first_name?: Prisma.StringFilter<"users"> | string
+  last_name?: Prisma.StringFilter<"users"> | string
+  full_name?: Prisma.StringFilter<"users"> | string
+  profile_picture?: Prisma.StringFilter<"users"> | string
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"users"> | Date | string
   oauth_fortytwo?: Prisma.XOR<Prisma.Oauth_fortytwoNullableScalarRelationFilter, Prisma.oauth_fortytwoWhereInput> | null
@@ -280,13 +288,14 @@ export type usersOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   oauth_fortytwo_id?: Prisma.SortOrderInput | Prisma.SortOrder
   memberships_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  fortytwo_user_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  fortytwo_user_id?: Prisma.SortOrder
   is_agent?: Prisma.SortOrder
   mail?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
-  first_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  last_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  full_name?: Prisma.SortOrderInput | Prisma.SortOrder
+  first_name?: Prisma.SortOrder
+  last_name?: Prisma.SortOrder
+  full_name?: Prisma.SortOrder
+  profile_picture?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   oauth_fortytwo?: Prisma.oauth_fortytwoOrderByWithRelationInput
@@ -304,9 +313,10 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   memberships_id?: Prisma.StringNullableFilter<"users"> | string | null
   is_agent?: Prisma.BoolFilter<"users"> | boolean
   password?: Prisma.StringNullableFilter<"users"> | string | null
-  first_name?: Prisma.StringNullableFilter<"users"> | string | null
-  last_name?: Prisma.StringNullableFilter<"users"> | string | null
-  full_name?: Prisma.StringNullableFilter<"users"> | string | null
+  first_name?: Prisma.StringFilter<"users"> | string
+  last_name?: Prisma.StringFilter<"users"> | string
+  full_name?: Prisma.StringFilter<"users"> | string
+  profile_picture?: Prisma.StringFilter<"users"> | string
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"users"> | Date | string
   oauth_fortytwo?: Prisma.XOR<Prisma.Oauth_fortytwoNullableScalarRelationFilter, Prisma.oauth_fortytwoWhereInput> | null
@@ -317,13 +327,14 @@ export type usersOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   oauth_fortytwo_id?: Prisma.SortOrderInput | Prisma.SortOrder
   memberships_id?: Prisma.SortOrderInput | Prisma.SortOrder
-  fortytwo_user_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  fortytwo_user_id?: Prisma.SortOrder
   is_agent?: Prisma.SortOrder
   mail?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
-  first_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  last_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  full_name?: Prisma.SortOrderInput | Prisma.SortOrder
+  first_name?: Prisma.SortOrder
+  last_name?: Prisma.SortOrder
+  full_name?: Prisma.SortOrder
+  profile_picture?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.usersCountOrderByAggregateInput
@@ -340,26 +351,28 @@ export type usersScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"users"> | string
   oauth_fortytwo_id?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   memberships_id?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
-  fortytwo_user_id?: Prisma.IntNullableWithAggregatesFilter<"users"> | number | null
+  fortytwo_user_id?: Prisma.IntWithAggregatesFilter<"users"> | number
   is_agent?: Prisma.BoolWithAggregatesFilter<"users"> | boolean
   mail?: Prisma.StringWithAggregatesFilter<"users"> | string
   password?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
-  first_name?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
-  last_name?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
-  full_name?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
+  first_name?: Prisma.StringWithAggregatesFilter<"users"> | string
+  last_name?: Prisma.StringWithAggregatesFilter<"users"> | string
+  full_name?: Prisma.StringWithAggregatesFilter<"users"> | string
+  profile_picture?: Prisma.StringWithAggregatesFilter<"users"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"users"> | Date | string
 }
 
 export type usersCreateInput = {
   id?: string
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoCreateNestedOneWithoutMemberUsersInput
@@ -370,26 +383,28 @@ export type usersUncheckedCreateInput = {
   id?: string
   oauth_fortytwo_id?: string | null
   memberships_id?: string | null
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type usersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoUpdateOneWithoutMemberUsersNestedInput
@@ -400,13 +415,14 @@ export type usersUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   oauth_fortytwo_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -415,26 +431,28 @@ export type usersCreateManyInput = {
   id?: string
   oauth_fortytwo_id?: string | null
   memberships_id?: string | null
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type usersUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -443,13 +461,14 @@ export type usersUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   oauth_fortytwo_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -475,6 +494,7 @@ export type usersCountOrderByAggregateInput = {
   first_name?: Prisma.SortOrder
   last_name?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
+  profile_picture?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -494,6 +514,7 @@ export type usersMaxOrderByAggregateInput = {
   first_name?: Prisma.SortOrder
   last_name?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
+  profile_picture?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -509,6 +530,7 @@ export type usersMinOrderByAggregateInput = {
   first_name?: Prisma.SortOrder
   last_name?: Prisma.SortOrder
   full_name?: Prisma.SortOrder
+  profile_picture?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -601,8 +623,8 @@ export type usersUncheckedUpdateManyWithoutOauth_fortytwoNestedInput = {
   deleteMany?: Prisma.usersScalarWhereInput | Prisma.usersScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
+export type IntFieldUpdateOperationsInput = {
+  set?: number
   increment?: number
   decrement?: number
   multiply?: number
@@ -615,13 +637,14 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type usersCreateWithoutMembershipsInput = {
   id?: string
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoCreateNestedOneWithoutMemberUsersInput
@@ -630,13 +653,14 @@ export type usersCreateWithoutMembershipsInput = {
 export type usersUncheckedCreateWithoutMembershipsInput = {
   id?: string
   oauth_fortytwo_id?: string | null
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -674,26 +698,28 @@ export type usersScalarWhereInput = {
   id?: Prisma.StringFilter<"users"> | string
   oauth_fortytwo_id?: Prisma.StringNullableFilter<"users"> | string | null
   memberships_id?: Prisma.StringNullableFilter<"users"> | string | null
-  fortytwo_user_id?: Prisma.IntNullableFilter<"users"> | number | null
+  fortytwo_user_id?: Prisma.IntFilter<"users"> | number
   is_agent?: Prisma.BoolFilter<"users"> | boolean
   mail?: Prisma.StringFilter<"users"> | string
   password?: Prisma.StringNullableFilter<"users"> | string | null
-  first_name?: Prisma.StringNullableFilter<"users"> | string | null
-  last_name?: Prisma.StringNullableFilter<"users"> | string | null
-  full_name?: Prisma.StringNullableFilter<"users"> | string | null
+  first_name?: Prisma.StringFilter<"users"> | string
+  last_name?: Prisma.StringFilter<"users"> | string
+  full_name?: Prisma.StringFilter<"users"> | string
+  profile_picture?: Prisma.StringFilter<"users"> | string
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"users"> | Date | string
 }
 
 export type usersCreateWithoutOauth_fortytwoInput = {
   id?: string
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
   memberships?: Prisma.membershipsCreateNestedOneWithoutMemberUsersInput
@@ -702,13 +728,14 @@ export type usersCreateWithoutOauth_fortytwoInput = {
 export type usersUncheckedCreateWithoutOauth_fortytwoInput = {
   id?: string
   memberships_id?: string | null
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -742,26 +769,28 @@ export type usersUpdateManyWithWhereWithoutOauth_fortytwoInput = {
 export type usersCreateManyMembershipsInput = {
   id?: string
   oauth_fortytwo_id?: string | null
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type usersUpdateWithoutMembershipsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoUpdateOneWithoutMemberUsersNestedInput
@@ -770,13 +799,14 @@ export type usersUpdateWithoutMembershipsInput = {
 export type usersUncheckedUpdateWithoutMembershipsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   oauth_fortytwo_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -784,13 +814,14 @@ export type usersUncheckedUpdateWithoutMembershipsInput = {
 export type usersUncheckedUpdateManyWithoutMembershipsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   oauth_fortytwo_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -798,26 +829,28 @@ export type usersUncheckedUpdateManyWithoutMembershipsInput = {
 export type usersCreateManyOauth_fortytwoInput = {
   id?: string
   memberships_id?: string | null
-  fortytwo_user_id?: number | null
+  fortytwo_user_id: number
   is_agent?: boolean
   mail: string
   password?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  first_name: string
+  last_name: string
+  full_name: string
+  profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
 }
 
 export type usersUpdateWithoutOauth_fortytwoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.membershipsUpdateOneWithoutMemberUsersNestedInput
@@ -826,13 +859,14 @@ export type usersUpdateWithoutOauth_fortytwoInput = {
 export type usersUncheckedUpdateWithoutOauth_fortytwoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -840,13 +874,14 @@ export type usersUncheckedUpdateWithoutOauth_fortytwoInput = {
 export type usersUncheckedUpdateManyWithoutOauth_fortytwoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_user_id?: Prisma.IntFieldUpdateOperationsInput | number
   is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mail?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  full_name?: Prisma.StringFieldUpdateOperationsInput | string
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -864,6 +899,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   first_name?: boolean
   last_name?: boolean
   full_name?: boolean
+  profile_picture?: boolean
   created_at?: boolean
   updated_at?: boolean
   oauth_fortytwo?: boolean | Prisma.users$oauth_fortytwoArgs<ExtArgs>
@@ -881,6 +917,7 @@ export type usersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   first_name?: boolean
   last_name?: boolean
   full_name?: boolean
+  profile_picture?: boolean
   created_at?: boolean
   updated_at?: boolean
   oauth_fortytwo?: boolean | Prisma.users$oauth_fortytwoArgs<ExtArgs>
@@ -898,6 +935,7 @@ export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   first_name?: boolean
   last_name?: boolean
   full_name?: boolean
+  profile_picture?: boolean
   created_at?: boolean
   updated_at?: boolean
   oauth_fortytwo?: boolean | Prisma.users$oauth_fortytwoArgs<ExtArgs>
@@ -915,11 +953,12 @@ export type usersSelectScalar = {
   first_name?: boolean
   last_name?: boolean
   full_name?: boolean
+  profile_picture?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "oauth_fortytwo_id" | "memberships_id" | "fortytwo_user_id" | "is_agent" | "mail" | "password" | "first_name" | "last_name" | "full_name" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "oauth_fortytwo_id" | "memberships_id" | "fortytwo_user_id" | "is_agent" | "mail" | "password" | "first_name" | "last_name" | "full_name" | "profile_picture" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   oauth_fortytwo?: boolean | Prisma.users$oauth_fortytwoArgs<ExtArgs>
   memberships?: boolean | Prisma.users$membershipsArgs<ExtArgs>
@@ -943,13 +982,14 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     oauth_fortytwo_id: string | null
     memberships_id: string | null
-    fortytwo_user_id: number | null
+    fortytwo_user_id: number
     is_agent: boolean
     mail: string
     password: string | null
-    first_name: string | null
-    last_name: string | null
-    full_name: string | null
+    first_name: string
+    last_name: string
+    full_name: string
+    profile_picture: string
     created_at: Date
     updated_at: Date
   }, ExtArgs["result"]["users"]>
@@ -1387,6 +1427,7 @@ export interface usersFieldRefs {
   readonly first_name: Prisma.FieldRef<"users", 'String'>
   readonly last_name: Prisma.FieldRef<"users", 'String'>
   readonly full_name: Prisma.FieldRef<"users", 'String'>
+  readonly profile_picture: Prisma.FieldRef<"users", 'String'>
   readonly created_at: Prisma.FieldRef<"users", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"users", 'DateTime'>
 }
