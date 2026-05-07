@@ -31,6 +31,28 @@ model oauth_fortytwo {
   MemberUsers   users[]
 }
 
+model permission {
+	id			String @id @default(uuid())
+
+	admin			Boolean	@default(false)
+
+	create_event	Boolean	@default(false)
+	modify_event	Boolean	@default(false)
+	delete_event	Boolean	@default(false)
+
+	modify_event_other	Boolean	@default(false)
+	delete_event_other	Boolean	@default(false)
+
+	create_service	Boolean	@default(false)
+	modify_service	Boolean	@default(false)
+	delete_service	Boolean	@default(false)
+
+	modify_service_other	Boolean	@default(false)
+	delete_service_other	Boolean	@default(false)
+
+	MemberUsers users[]
+}
+
 model users {
   id                String          @id @default(uuid())
   
@@ -39,6 +61,9 @@ model users {
   
   memberships_id    String?
   memberships    memberships?       @relation(fields: [memberships_id], references: [id])
+
+  permission_id		String
+  persission	permission			@relation(fields: [permission_id], references: [id])
   
   fortytwo_user_id  Int             @unique
   is_agent          Boolean         @default(false)
