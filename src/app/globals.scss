@@ -47,6 +47,8 @@ body {
 	background: var(--color-primary-black);
 	color: var(--color-primary-white);
 	font-family: var(--font-paragraph), sans-serif;
+	display: flex;
+	flex-direction: column;
 }
 
 a {
