@@ -1,5 +1,5 @@
 'use client';
-import './component.scss';
+import styles from './component.module.scss';
 import { CalendarFold, Coins, House } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -35,7 +35,7 @@ export default function Sidebar() {
 
 	return (
 		<>
-			<nav>
+			<nav className={styles.sidebar}>
 				{tabs.map((tab, index) => {
 					const active = pathname.startsWith(tab.href);
 
@@ -43,24 +43,24 @@ export default function Sidebar() {
 						<Link
 							href={tab.href}
 							key={index}
-							className={active ? 'active' : undefined}
+							className={`${styles.link} ${active ? styles.active : ''}`}
 							prefetch={true}
 							scroll={false}
 						>
-							<div className={'icon'}>
+							<div className={styles.icon}>
 								{tab.icon === null ? (
 									<Image src={user?.profile_picture ?? ''} alt={''} width={24} height={24} />
 								) : (
 									<tab.icon color={active ? '#FD84FE' : '#F2F2F2'} size={24} />
 								)}
 							</div>
-							<span>{tab.title}</span>
+							<span className={styles.title}>{tab.title}</span>
 						</Link>
 					);
 				})}
 			</nav>
 
-			<div className={'overlay'} />
+			<div className={styles.overlay} />
 		</>
 	);
 }
