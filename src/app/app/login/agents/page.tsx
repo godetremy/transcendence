@@ -13,6 +13,19 @@ export default function Page() {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
 
+	const login = async (form: FormData) => {
+		fetch('/app/api/users/me/name', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/js',
+			},
+			body: JSON.stringify({
+				email: form.get('email'),
+				password: form.get('password'),
+			}),
+		});
+	};
+
 	return (
 		<LoginTemplate
 			background={{
@@ -25,19 +38,21 @@ export default function Page() {
 				description={'Pour accéder à vos services connectez vous avec vos identifiants.'}
 			/>
 
-			<form>
+			<form action={login}>
 				<div className={'inputs'}>
 					<LoginTextInput
 						type={'email'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
+						name="email"
 					/>
 					<LoginTextInput
 						type={'password'}
 						icon={<KeyRound />}
 						nameLabel={'Mot de passe'}
 						placeholder={'••••••••••••'}
+						name="password"
 					/>
 				</div>
 
