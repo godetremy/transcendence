@@ -1,8 +1,13 @@
 import { prisma } from '@/database/prisma/prisma';
 import { User } from '@/types/bde/User';
+import { JWTSessionPayload } from '@/types/session/SessionPayload';
+
+export async function getUserFromSession(session: JWTSessionPayload): Promise<User | null> {
+	return getUserById(session.user_id);
+}
 import { Prisma } from '../prisma/generated/client';
 
-export async function getUserByFortyTwoUserId(id: string): Promise<User | null> {
+export async function getUserById(id: string): Promise<User | null> {
 	const row = await prisma.users.findUnique({
 		where: {
 			id: id,
@@ -26,6 +31,7 @@ export function UserFormatting(row: Prisma.usersGetPayload<{ include: { membersh
 		last_name: row.last_name,
 		full_name: row.full_name,
 		is_agent: row.is_agent,
+		profile_picture: row.profile_picture,
 		oauth_fortytwo_id: row.oauth_fortytwo_id,
 		memberships_id: row.memberships_id,
 		memberships: row.memberships,

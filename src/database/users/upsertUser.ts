@@ -9,6 +9,7 @@ export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: F
 		first_name: me.usual_first_name,
 		last_name: me.last_name,
 		full_name: me.usual_full_name,
+		profile_picture: me.image.link,
 		memberships: {},
 	};
 

@@ -48,6 +48,8 @@ model users {
   first_name        String
   last_name         String
   full_name         String
+
+  profile_picture   String          @default("/images/default_user.png")
   
   created_at        DateTime        @default(now())
   updated_at        DateTime        @default(now())
