@@ -41,7 +41,10 @@ model users {
   memberships    memberships?       @relation(fields: [memberships_id], references: [id])
   
   fortytwo_user_id  Int?            @unique
+
   is_agent          Boolean         @default(false)
+  is_verify_agent	Boolean			@default(false)
+  reason			String?
 
   mail              String          @unique
   password          String?
@@ -49,7 +52,6 @@ model users {
   last_name         String?
   full_name         String?
 
-  reason			String?
 
   profile_picture   String          @default("/images/default_user.png")
 

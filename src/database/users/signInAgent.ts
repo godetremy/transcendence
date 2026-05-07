@@ -1,13 +1,14 @@
+'use server';
 import { findAgent } from '@/database/users/findAgent';
 import { createSession } from '@/lib/session';
 import { cookies } from 'next/headers';
-import { NextResponse, NextRequest } from 'next/server';
+import { redirect } from 'next/navigation';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function signUpAgent(mail: string | null, password: string | null): Promise<NextResponse> {
 	try {
-		const body = await req.json();
-
-		const user_id = await findAgent(body.mail, body.password);
+		if (mail == null || password == null) throw new Error('Error, mail or password null');
+		const user_id = await findAgent(mail, password);
 		if (user_id == null)
 			return new NextResponse(`Agent account not found. Please try again later.`, {
 				status: 404,
@@ -23,11 +24,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			sameSite: 'lax',
 			path: '/',
 		});
-		return NextResponse.json(session);
 	} catch (error: unknown) {
 		console.error(error);
-		return new NextResponse(`Failed to login. Please try again later.`, {
-			status: 500,
-		});
 	}
+	redirect('/app/home/');
 }

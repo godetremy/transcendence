@@ -3,7 +3,7 @@ import { SessionPayload } from '@/types/session/SessionPayload';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
-const ignorePath = ['/app/api/auth/oauth'];
+const ignorePath = ['/app/api/auth/'];
 
 function isPathIgnored(path: string): boolean {
 	if (!path.startsWith('/app')) return true;

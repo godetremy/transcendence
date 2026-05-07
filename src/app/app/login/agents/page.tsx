@@ -7,6 +7,8 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
+import { signUpAgent } from '@/database/users/signInAgent';
+import { SignupFormSchema } from '@/schema/SignupForm';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -14,16 +16,16 @@ export default function Page() {
 	});
 
 	const login = async (form: FormData) => {
-		fetch('/app/api/users/me/name', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/js',
-			},
-			body: JSON.stringify({
-				email: form.get('email'),
-				password: form.get('password'),
-			}),
+		const fields = SignupFormSchema.safeParse({
+			email: form.get('email'),
+			password: form.get('password'),
+			passwordCheck: form.get('password'),
 		});
+
+		if (!fields.success) {
+			return;
+		}
+		await signUpAgent(fields.data.email, fields.data.password);
 	};
 
 	return (
