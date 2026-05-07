@@ -33,7 +33,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		if (!fields.success)
 			return NextResponse.json(
 				{
-					error: fields.error.issues[0].message,
+					message: fields.error.issues[0].message,
 				},
 				{ status: 400 }
 			);
