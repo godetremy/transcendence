@@ -2,6 +2,7 @@
 import styles from './components.module.scss';
 import { ChevronLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export interface NavigationBarHeaderProps {
 	title: string;
@@ -10,6 +11,7 @@ export interface NavigationBarHeaderProps {
 
 export function NavigationBarHeader(props: NavigationBarHeaderProps) {
 	const [titleProgression, setTitleProgression] = useState(0);
+	const router = useRouter();
 
 	useEffect(() => {
 		const onScroll = () => {
@@ -24,8 +26,12 @@ export function NavigationBarHeader(props: NavigationBarHeaderProps) {
 
 	return (
 		<div className={styles.scrollContainer}>
-			<header>
-				<div className={styles.headerContainer}>
+			<header
+				style={{
+					borderColor: `rgba(var(--color-rgb-primary-white), ${Math.min(titleProgression * 0.7, 0.1)})`,
+				}}
+			>
+				<div className={styles.headerContainer} onClick={() => router.back()}>
 					<button>
 						<ChevronLeft color={'currentColor'} size={24} />
 					</button>
