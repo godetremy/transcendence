@@ -1,6 +1,6 @@
 @use '../../../app/supports';
 
-nav {
+.sidebar {
 	position: fixed;
 	z-index: 1000;
 	background-color: var(--color-primary-black);
@@ -16,7 +16,7 @@ nav {
 	overflow: hidden;
 	gap: 10px;
 
-	a {
+	.link {
 		position: relative;
 		width: 300px;
 		height: 50px;
@@ -46,7 +46,7 @@ nav {
 			}
 		}
 
-		span {
+		.title {
 			opacity: 0;
 			transform: translateX(-20px);
 			filter: blur(4px);
@@ -113,7 +113,7 @@ body > .overlay {
 }
 
 @include supports.hover(supports.$breakpoints-tablets) {
-	nav {
+	.sidebar {
 		&:hover {
 			width: 300px;
 			box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
@@ -124,25 +124,23 @@ body > .overlay {
 				pointer-events: auto;
 			}
 
-			a::before {
+			.link::before {
 				opacity: 0.5;
 			}
 
-			a.active::before {
+			.link.active::before {
 				transform: translateX(0);
 			}
 
-			a > span {
+			.link > .title {
 				opacity: 1;
 				transform: none;
 				filter: none;
 			}
 		}
 
-		a {
-			&:hover {
-				background-color: rgb(var(--color-rgb-primary-white), 0.1);
-			}
+		.link:hover {
+			background-color: rgb(var(--color-rgb-primary-white), 0.1);
 		}
 	}
 }
@@ -153,7 +151,7 @@ body > .overlay {
 		padding-left: 0;
 	}
 
-	nav {
+	.sidebar {
 		top: auto;
 		bottom: 0;
 		left: 0;
@@ -164,7 +162,7 @@ body > .overlay {
 		border-right: none;
 		border-top: 1px solid var(--color-border-dark);
 
-		a {
+		.link {
 			flex: 1;
 			height: 100%;
 			overflow: hidden;
@@ -185,7 +183,7 @@ body > .overlay {
 				margin-bottom: 15px;
 			}
 
-			span {
+			.title {
 				position: absolute;
 				width: 100%;
 				top: 45px;

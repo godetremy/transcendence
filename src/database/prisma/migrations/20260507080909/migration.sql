@@ -20,15 +20,16 @@ CREATE TABLE "oauth_fortytwo" (
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
-    "fortytwo_user_id" INTEGER NOT NULL,
     "oauth_fortytwo_id" TEXT,
     "memberships_id" TEXT,
+    "fortytwo_user_id" INTEGER NOT NULL,
     "is_agent" BOOLEAN NOT NULL DEFAULT false,
     "mail" TEXT NOT NULL,
     "password" TEXT,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
     "full_name" TEXT NOT NULL,
+    "profile_picture" TEXT NOT NULL DEFAULT '/images/default_user.png',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

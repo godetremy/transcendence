@@ -1,5 +1,5 @@
 import { prisma } from '../prisma/prisma';
-import { User } from '@/types/database/User';
+import { User } from '@/types/bde/User';
 
 export async function deleteAccount(user: User) {
 	if (user.id != null) deleteUser(user.id);
