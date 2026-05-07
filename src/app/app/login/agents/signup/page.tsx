@@ -58,18 +58,21 @@ export default function Page() {
 					<LoginTextInput
 						type={'email'}
 						icon={<User2 />}
+						name={'email'}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
 					<LoginTextInput
 						type={'password'}
 						icon={<KeyRound />}
+						name={'password'}
 						nameLabel={'Mot de passe'}
 						placeholder={'••••••••••••'}
 					/>
 					<LoginTextInput
 						type={'password'}
 						icon={<KeyRound />}
+						name={'passwordCheck'}
 						nameLabel={'Confirmation du mot de passe'}
 						placeholder={'••••••••••••'}
 					/>
