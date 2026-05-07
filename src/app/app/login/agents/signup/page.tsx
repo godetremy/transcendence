@@ -67,7 +67,6 @@ export default function Page() {
 						name={'email'}
 						type={'email'}
 						icon={<User2 />}
-						name={'email'}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
@@ -75,7 +74,6 @@ export default function Page() {
 						name={'password'}
 						type={'password'}
 						icon={<KeyRound />}
-						name={'password'}
 						nameLabel={'Mot de passe'}
 						placeholder={'••••••••••••'}
 					/>
@@ -83,7 +81,6 @@ export default function Page() {
 						name={'passwordCheck'}
 						type={'password'}
 						icon={<KeyRound />}
-						name={'passwordCheck'}
 						nameLabel={'Confirmation du mot de passe'}
 						placeholder={'••••••••••••'}
 					/>
