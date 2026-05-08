@@ -9,7 +9,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const session = await decrypt(req.cookies.get('session')?.value);
 		const status = await isAccountExist(session.user_id);
 		if (!status)
-			return new NextResponse(`The account exist.`, {
+			return new NextResponse(`The account not exist.`, {
 				status: 400,
 			});
 		const value = await setUserName(session.user_id, body.name);

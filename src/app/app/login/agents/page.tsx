@@ -7,13 +7,14 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { signUpAgent } from '@/database/users/signInAgent';
+import { signInAgent } from '@/database/users/signInAgent';
 import { SignupFormSchema } from '@/schema/SignupForm';
 
 export default function Page() {
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
+	const [error, setError] = useState<string>();
 
 	const login = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
@@ -23,9 +24,12 @@ export default function Page() {
 		});
 
 		if (!fields.success) {
+			setError(fields.error.issues[0].message);
 			return;
+		} else {
+			const status = await signInAgent(fields.data.email, fields.data.password);
+			if (!status.ok) setError(status.message);
 		}
-		await signUpAgent(fields.data.email, fields.data.password);
 	};
 
 	return (
@@ -57,6 +61,8 @@ export default function Page() {
 						name="password"
 					/>
 				</div>
+
+				{error && <p>{error}</p>}
 
 				<Sublinks
 					links={[
