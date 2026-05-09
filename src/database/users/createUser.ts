@@ -40,6 +40,7 @@ export async function createUserAgent(password: string, mail: string): Promise<s
 			memberships: undefined,
 			oauth_fortytwo_id: null,
 			memberships_id: null,
+			is_agent: true,
 		},
 	});
 	return row.id;
