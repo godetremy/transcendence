@@ -19,7 +19,6 @@ export async function signInAgent(mail: string | null, password: string | null):
 			message: `Agent account not found`,
 			code: 404,
 		};
-	if (user.is_verify_agent == false) return redirect('/app/login/agents/steps/');
 	try {
 		const session = await createSession({ user_id: user.id });
 
@@ -40,5 +39,6 @@ export async function signInAgent(mail: string | null, password: string | null):
 			code: 500,
 		};
 	}
+	if (user.is_verify_agent == false) return redirect('/app/agents/approval/');
 	redirect('/app/home/');
 }
