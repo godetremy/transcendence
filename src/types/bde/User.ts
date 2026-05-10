@@ -8,7 +8,7 @@ export interface User {
 	full_name: string | null;
 	profile_picture: string;
 	is_agent: boolean;
-	is_verify_agent: boolean | null;
+	is_verified_agent: boolean | null;
 	memberships_id: string | null;
 	memberships: Memberships | null;
 	oauth_fortytwo_id: string | null;

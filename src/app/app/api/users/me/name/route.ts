@@ -1,5 +1,5 @@
 import { isAccountExist } from '@/database/users/isAccountExist';
-import { setUserName } from '@/database/users/setUser';
+import { setAgentName } from '@/database/users/setAgent';
 import { decrypt } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			return new NextResponse(`The account not exist.`, {
 				status: 400,
 			});
-		const value = await setUserName(session.user_id, body.name);
+		const value = await setAgentName(body.name);
 		return NextResponse.json(value);
 	} catch (error: unknown) {
 		console.error(error);

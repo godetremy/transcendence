@@ -21,7 +21,7 @@ export function agentFormatting(row: Prisma.usersGetPayload<{ include: { members
 		last_name: row.last_name,
 		full_name: row.full_name,
 		is_agent: row.is_agent,
-		is_verify_agent: row.is_verify_agent,
+		is_verified_agent: row.is_verified_agent,
 		profile_picture: row.profile_picture,
 		oauth_fortytwo_id: null,
 		memberships_id: null,

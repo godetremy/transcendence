@@ -1,15 +1,16 @@
 'use client';
-import { setUserName, setUserReason } from '@/database/users/setUser';
+import { setAgentName, setAgentReason, setAgentVerified } from '@/database/users/setAgent';
 import { useState } from 'react';
 
 export default function Page() {
 	const [responseName, setResponseName] = useState<string>('');
 	const [responseReason, setResponseReason] = useState<string>('');
+	const [responseStatus, setResponseStatus] = useState<string>('');
 
 	const validName = async (form: FormData) => {
 		const value = form.get('name');
 		if (value != null) {
-			const status = await setUserName(value.toString());
+			const status = await setAgentName(value.toString());
 			setResponseName(status);
 		} else {
 			setResponseName('the field is empty');
@@ -19,7 +20,7 @@ export default function Page() {
 	const validReason = async (form: FormData) => {
 		const value = form.get('reason');
 		if (value != null) {
-			const status = await setUserReason(value.toString());
+			const status = await setAgentReason(value.toString());
 			setResponseReason(status);
 		} else {
 			setResponseReason('the field is empty');
@@ -38,8 +39,14 @@ export default function Page() {
 			</form>
 			{responseReason && <p>{responseReason}</p>}
 			<div>
-				<button>valider compte</button>
-				<button>refuser compte</button>
+				<button onClick={async () => {
+					const status = await setAgentVerified(true);
+					setResponseStatus(status);
+				}}>valider compte</button>
+				<button onClick={async () => {
+					const status = await setAgentVerified(false);
+					setResponseStatus(status);
+				}}>refuser compte</button>
 			</div>
 		</>
 	);

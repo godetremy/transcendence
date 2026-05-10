@@ -49,7 +49,8 @@ export default async function proxy(req: NextRequest) {
 
 	if (
 		user.is_agent == true &&
-		user.is_verify_agent == false &&
+		(user.is_verified_agent === null ||
+		user.is_verified_agent == false) &&
 		!req.nextUrl.pathname.startsWith('/app/agents/approval')
 	)
 		return NextResponse.redirect(new URL('/app/agents/approval', req.nextUrl));
