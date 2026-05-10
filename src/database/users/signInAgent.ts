@@ -39,6 +39,6 @@ export async function signInAgent(mail: string | null, password: string | null):
 			code: 500,
 		};
 	}
-	if (user.is_verify_agent == false) return redirect('/app/agents/approval/');
+	if (user.is_verified_agent == false) return redirect('/app/agents/approval/');
 	redirect('/app/home/');
 }

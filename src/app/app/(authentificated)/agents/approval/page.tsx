@@ -39,15 +39,24 @@ export default function Page() {
 			</form>
 			{responseReason && <p>{responseReason}</p>}
 			<div>
-				<button onClick={async () => {
-					const status = await setAgentVerified(true);
-					setResponseStatus(status);
-				}}>valider compte</button>
-				<button onClick={async () => {
-					const status = await setAgentVerified(false);
-					setResponseStatus(status);
-				}}>refuser compte</button>
+				<button
+					onClick={async () => {
+						const status = await setAgentVerified(true);
+						setResponseStatus(status);
+					}}
+				>
+					valider compte
+				</button>
+				<button
+					onClick={async () => {
+						const status = await setAgentVerified(false);
+						setResponseStatus(status);
+					}}
+				>
+					refuser compte
+				</button>
 			</div>
+			{responseStatus && <p>{responseStatus}</p>}
 		</>
 	);
 }
