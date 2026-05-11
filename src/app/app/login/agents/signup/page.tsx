@@ -8,6 +8,7 @@ import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 import { SignupFormSchema } from '@/schema/SignupForm';
+import { signUpAgent } from '@/database/users/signUpAgent';
 
 export default function Page() {
 	const [message, setMessage] = useState<string | null>(null);
@@ -26,20 +27,7 @@ export default function Page() {
 			setMessage(fields.error.issues[0].message);
 			return;
 		}
-		const response = await fetch('/app/api/auth/signup/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				mail: fields.data.email,
-				password: fields.data.password,
-				first_name: null,
-				last_name: null,
-				full_name: null,
-				fortytwo_user_id: 0,
-			}),
-		});
+		const response = await signUpAgent(fields.data.email, fields.data.password);
 
 		const data = await response.json();
 

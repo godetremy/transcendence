@@ -1,18 +1,18 @@
+'use server';
 import { createUserAgent } from '@/database/users/createUser';
 import { isAccountExistByMail } from '@/database/users/isAccountExist';
 import { createSession } from '@/lib/session';
 import { SignupFormSchema } from '@/schema/SignupForm';
 import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { redirect } from 'next/navigation';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function signUpAgent(email: string, password: string): Promise<NextResponse> {
 	try {
-		const body = await req.json();
-
 		const fields = SignupFormSchema.safeParse({
-			email: body.mail,
-			password: body.password,
-			passwordCheck: body.password,
+			email: email,
+			password: password,
+			passwordCheck: password,
 		});
 
 		if (!fields.success)
@@ -23,10 +23,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 				{ status: 400 }
 			);
 
-		const exist = await isAccountExistByMail(body.mail);
+		const exist = await isAccountExistByMail(email);
 		if (exist) return NextResponse.json({ message: 'This account already exist.' }, { status: 400 });
 
-		const user_id = await createUserAgent(body.password, body.mail);
+		const user_id = await createUserAgent(password, email);
 
 		const session = await createSession({ user_id });
 
@@ -39,12 +39,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			sameSite: 'lax',
 			path: '/',
 		});
-
-		return NextResponse.json({ message: 'Account created !' }, { status: 201 });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse(`Failed to create account. Try again :(`, {
 			status: 500,
 		});
 	}
+	return redirect('/app/home/');
 }
