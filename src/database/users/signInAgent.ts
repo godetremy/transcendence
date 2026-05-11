@@ -40,5 +40,5 @@ export async function signInAgent(mail: string | null, password: string | null):
 		};
 	}
 	if (user.is_verified_agent == false) return redirect('/app/agents/approval/');
-	redirect('/app/home/');
+	return redirect('/app/home/');
 }
