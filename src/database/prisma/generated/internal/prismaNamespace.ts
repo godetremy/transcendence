@@ -841,6 +841,7 @@ export const Registered_eventScalarFieldEnum = {
   first_name: 'first_name',
   last_name: 'last_name',
   full_name: 'full_name',
+  created_at: 'created_at',
   registered_event_id: 'registered_event_id'
 } as const
 

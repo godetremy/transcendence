@@ -528,9 +528,9 @@ export type usersOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type UsersNullableScalarRelationFilter = {
-  is?: Prisma.usersWhereInput | null
-  isNot?: Prisma.usersWhereInput | null
+export type UsersScalarRelationFilter = {
+  is?: Prisma.usersWhereInput
+  isNot?: Prisma.usersWhereInput
 }
 
 export type usersCountOrderByAggregateInput = {
@@ -685,12 +685,10 @@ export type usersCreateNestedOneWithoutEventsInput = {
   connect?: Prisma.usersWhereUniqueInput
 }
 
-export type usersUpdateOneWithoutEventsNestedInput = {
+export type usersUpdateOneRequiredWithoutEventsNestedInput = {
   create?: Prisma.XOR<Prisma.usersCreateWithoutEventsInput, Prisma.usersUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.usersCreateOrConnectWithoutEventsInput
   upsert?: Prisma.usersUpsertWithoutEventsInput
-  disconnect?: Prisma.usersWhereInput | boolean
-  delete?: Prisma.usersWhereInput | boolean
   connect?: Prisma.usersWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutEventsInput, Prisma.usersUpdateWithoutEventsInput>, Prisma.usersUncheckedUpdateWithoutEventsInput>
 }

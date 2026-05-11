@@ -23,6 +23,7 @@ CREATE TABLE "registered_event" (
     "first_name" TEXT,
     "last_name" TEXT,
     "full_name" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "registered_event_id" TEXT,
 
     CONSTRAINT "registered_event_pkey" PRIMARY KEY ("id")
@@ -31,7 +32,7 @@ CREATE TABLE "registered_event" (
 -- CreateTable
 CREATE TABLE "event" (
     "id" TEXT NOT NULL,
-    "author_id" TEXT,
+    "author_id" TEXT NOT NULL,
     "title" TEXT,
     "description" TEXT,
     "max_inscription" INTEGER NOT NULL DEFAULT 0,
@@ -77,7 +78,7 @@ CREATE UNIQUE INDEX "users_mail_key" ON "users"("mail");
 ALTER TABLE "registered_event" ADD CONSTRAINT "registered_event_registered_event_id_fkey" FOREIGN KEY ("registered_event_id") REFERENCES "event"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "event" ADD CONSTRAINT "event_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "event" ADD CONSTRAINT "event_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_oauth_fortytwo_id_fkey" FOREIGN KEY ("oauth_fortytwo_id") REFERENCES "oauth_fortytwo"("id") ON DELETE SET NULL ON UPDATE CASCADE;

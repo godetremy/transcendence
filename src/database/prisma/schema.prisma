@@ -46,10 +46,10 @@ model registered_event {
 }
 
 model event {
-	id						String		@id @default(uuid())
+	id						String			@id @default(uuid())
 
-	author_id				String?
-	author					users?			@relation(fields: [author_id], references: [id])
+	author_id				String
+	author					users			@relation(fields: [author_id], references: [id])
 
 	registered				registered_event?
 
