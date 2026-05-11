@@ -38,13 +38,15 @@ model registered_event {
 	last_name					String?
 	full_name					String?
 
+	created_at					DateTime	@default(now())
+
 	registered_event_id			String? 	@unique
 	event						event?		@relation(fields: [registered_event_id], references: [id])
 
 }
 
 model event {
-	id				String		@id @default(uuid())
+	id						String		@id @default(uuid())
 
 	author_id				String?
 	author					users?			@relation(fields: [author_id], references: [id])
