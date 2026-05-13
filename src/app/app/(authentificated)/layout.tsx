@@ -16,7 +16,6 @@ export default async function RootLayout({
 	const user = await getUserFromSession(session);
 
 	if (!user) return null;
-
 	return (
 		<UserProvider user={user}>
 			<Sidebar />
