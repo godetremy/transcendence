@@ -2,7 +2,7 @@
 import styles from './page.module.scss';
 import { useUser } from '@/contexts/UserContext';
 import { ProfileBanner } from '@/components/profile/ProfileBanner/ProfileBanner';
-import { ListItem } from '@/components/globals/ListItem/ListItem';
+import ListItem from '@/components/globals/ListItem/ListItem';
 import { BadgeDollarSign, BookOpenText, FileLock, GitCommitVerticalIcon, Lock, LogOut, User2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
@@ -22,20 +22,26 @@ export default function Page() {
 			/>
 			<section className={styles.section}>
 				<div className={styles.list}>
-					<ListItem icon={User2} title={'Mon compte'} description={'Mail, mot de passe'} />
+					<ListItem
+						icon={User2}
+						title={'Mon compte'}
+						description={'Mail, mot de passe'}
+						onPress={() => router.push('/app/me/account')}
+					/>
 					<ListItem
 						icon={Lock}
 						title={'Confidentialité & sécurité'}
 						description={'Mot de passe et télémétrie'}
+						onPress={() => router.push('/app/me/privacy')}
 					/>
 					<ListItem
 						icon={BadgeDollarSign}
 						title={'Ton adhesion'}
 						description={'Gère ton adhesion au BDE'}
+						onPress={() => router.push('/app/me/membership')}
 						last
 					/>
 				</div>
-
 				<div className={styles.list}>
 					<ListItem
 						icon={GitCommitVerticalIcon}
@@ -56,7 +62,6 @@ export default function Page() {
 						onPress={() => router.push('/privacy')}
 					/>
 				</div>
-
 				<div className={styles.list}>
 					<ListItem
 						icon={LogOut}
