@@ -1,8 +1,17 @@
 import styles from './component.module.scss';
 import { ComponentPropsWithoutRef } from 'react';
 
-export interface CarouselSlideProps extends ComponentPropsWithoutRef<'div'> {
-	title: string;
+export interface SlideProps {
+	slideImage: string;
+	slideTitle: string;
+	slideDescription: string;
+	slideTag: {
+		text: string;
+		color: string;
+	};
+}
+
+export interface CarouselSlideProps extends SlideProps, ComponentPropsWithoutRef<'div'> {
 	progression: number;
 }
 
@@ -14,6 +23,8 @@ export function CarouselSlide(props: CarouselSlideProps) {
 			aria-live={'off'}
 			className={styles.slide}
 			style={{
+				backgroundImage: `url(${props.slideImage})`,
+				backgroundSize: `${120 - props.progression * 20}%`,
 				opacity: Math.max(props.progression, 0.5),
 				...props.style,
 			}}
@@ -21,12 +32,33 @@ export function CarouselSlide(props: CarouselSlideProps) {
 			<div
 				className={styles.content}
 				style={{
-					transform: `translateX(-${100 - props.progression * 100}px) scale(${1.3 - props.progression * 0.3})`,
-					filter: `blur(${5 - props.progression * 5}px)`,
+					backdropFilter: `blur(${2 - props.progression * 2}px) saturate(0%) brightness(0.7)`,
 				}}
 			>
-				<img src={'/images/demo_profile.jpg'} alt={''} className={styles.backgroundImage} />
-				<h3>{props.title}</h3>
+				<span
+					style={{
+						clipPath: `inset(0 ${100 - props.progression * 100}% 0 0)`,
+						backgroundColor: `var(--color-primary-${props.slideTag.color}`,
+					}}
+				>
+					{props.slideTag.text}
+				</span>
+				<h3
+					style={{
+						opacity: props.progression,
+						transform: `translateX(${50 - props.progression * 50}px)`,
+					}}
+				>
+					{props.slideTitle}
+				</h3>
+				<p
+					style={{
+						opacity: props.progression,
+						transform: `translateX(${100 - props.progression * 100}px)`,
+					}}
+				>
+					{props.slideDescription}
+				</p>
 			</div>
 		</div>
 	);

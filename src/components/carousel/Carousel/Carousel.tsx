@@ -1,11 +1,11 @@
 'use client';
 import styles from './component.module.scss';
-import { ReactElement, RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { CarouselSlide } from '@/components/carousel/CarouselSlide/CarouselSlide';
+import { RefObject, useEffect, useRef, useState } from 'react';
+import { CarouselSlide, SlideProps } from '@/components/carousel/CarouselSlide/CarouselSlide';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface CarouselProps {
-	children: ReactElement<typeof CarouselSlide>[];
+	slides: SlideProps[];
 }
 
 export function Carousel(props: CarouselProps) {
@@ -133,17 +133,15 @@ export function Carousel(props: CarouselProps) {
 	function calculateSlideProgression(index: number): number {
 		let progression = Math.max(0, Math.min(1, 1 - Math.abs(slidesProgression - index)));
 
-		if (index === 0 && slidesProgression > props.children.length - 1) {
-			progression = Math.max(0, Math.min(1, Math.abs(slidesProgression - (props.children.length - 1) - index)));
+		if (index === 0 && slidesProgression > props.slides.length - 1) {
+			progression = Math.max(0, Math.min(1, Math.abs(slidesProgression - (props.slides.length - 1) - index)));
 		}
 
 		return progression;
 	}
 
 	function updateSlideTimeout() {
-		const timeout = Date.now() + 1000 * SLIDE_TIMEOUT_DURATION;
-
-		nextSlideTimeoutRef.current = timeout;
+		nextSlideTimeoutRef.current = Date.now() + 1000 * SLIDE_TIMEOUT_DURATION;
 	}
 
 	function updateNextSlideTimeoutProgression(now: number) {
@@ -177,15 +175,15 @@ export function Carousel(props: CarouselProps) {
 		<div role={'group'} aria-roledescription={'carousel'} className={styles.carousel} ref={carouselRef}>
 			<div aria-atomic={false} aria-live={'off'} className={styles.slideContainer} ref={carouselContainerRef}>
 				<div aria-atomic={false} aria-live={'off'} className={styles.slides} ref={slidesContainerRef}>
-					{props.children.map((slide, index) => (
+					{props.slides.map((slide, index) => (
 						<CarouselSlide
-							title={`Slide ${index}`}
+							{...slide}
 							key={`${index}-${slide}`}
 							progression={calculateSlideProgression(index)}
 							style={
-								index === props.children.length - 1
+								index === props.slides.length - 1
 									? {
-											transform: `translateX(-${props.children.length}00%)`,
+											transform: `translateX(-${props.slides.length}00%)`,
 										}
 									: undefined
 							}
@@ -194,7 +192,7 @@ export function Carousel(props: CarouselProps) {
 				</div>
 			</div>
 			<div className={styles.pages}>
-				{props.children.map((_, index) => (
+				{props.slides.map((_, index) => (
 					<button
 						key={index}
 						onClick={() => goToSlide(index)}
