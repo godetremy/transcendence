@@ -9,10 +9,14 @@ export interface CarouselProps {
 }
 
 export function Carousel(props: CarouselProps) {
+	const SLIDE_TIMEOUT_DURATION = 8;
+
 	const carouselRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null);
 	const carouselContainerRef: RefObject<HTMLDivElement | null> = useRef(null);
 	const slidesContainerRef: RefObject<HTMLDivElement | null> = useRef(null);
 
+	const nextSlideTimeoutRef = useRef(0);
+	const [nextSlideTimeoutProgress, setNextSlideTimeoutProgress] = useState(0);
 	const [slidesProgression, setSlidesProgression] = useState<number>(0);
 	const slidesProgressionRef = useRef(slidesProgression);
 
@@ -97,6 +101,8 @@ export function Carousel(props: CarouselProps) {
 		const slideWidth = container.children[0].getBoundingClientRect().width;
 
 		scrollToWithAnimation(-(slideWidth * page));
+		updateSlideTimeout();
+		setNextSlideTimeoutProgress(0);
 	}
 
 	function previousSlide() {
@@ -134,6 +140,18 @@ export function Carousel(props: CarouselProps) {
 		return progression;
 	}
 
+	function updateSlideTimeout() {
+		const timeout = Date.now() + 1000 * SLIDE_TIMEOUT_DURATION;
+
+		nextSlideTimeoutRef.current = timeout;
+	}
+
+	function updateNextSlideTimeoutProgression(now: number) {
+		const timeout = nextSlideTimeoutRef.current - now;
+
+		setNextSlideTimeoutProgress(1 - timeout / (1000 * SLIDE_TIMEOUT_DURATION));
+	}
+
 	useEffect(() => {
 		function createEventHandler() {
 			window.addEventListener('resize', resizeEventHandler);
@@ -142,6 +160,15 @@ export function Carousel(props: CarouselProps) {
 			window.removeEventListener('resize', resizeEventHandler);
 		}
 
+		updateSlideTimeout();
+		setInterval(() => {
+			const now = Date.now();
+
+			updateNextSlideTimeoutProgression(now);
+			if (now >= nextSlideTimeoutRef.current) {
+				nextSlide();
+			}
+		}, 100);
 		createEventHandler();
 		return removeEventHandler;
 	}, []);
@@ -155,6 +182,13 @@ export function Carousel(props: CarouselProps) {
 							title={`Slide ${index}`}
 							key={`${index}-${slide}`}
 							progression={calculateSlideProgression(index)}
+							style={
+								index === props.children.length - 1
+									? {
+											transform: `translateX(-${props.children.length}00%)`,
+										}
+									: undefined
+							}
 						/>
 					))}
 				</div>
@@ -164,8 +198,13 @@ export function Carousel(props: CarouselProps) {
 					<button
 						key={index}
 						onClick={() => goToSlide(index)}
-						style={{ opacity: 0.2 + calculateSlideProgression(index) * 0.8 }}
-					></button>
+						style={{
+							opacity: 0.2 + calculateSlideProgression(index) * 0.8,
+							width: 6 + calculateSlideProgression(index) * 18,
+						}}
+					>
+						<div style={{ width: 6 + nextSlideTimeoutProgress * 18 }} />
+					</button>
 				))}
 			</div>
 			<button onClick={previousSlide} className={styles.direction} style={{ left: 20, paddingRight: 1.1 }}>

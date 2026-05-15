@@ -47,9 +47,19 @@
 		&> button {
 			width: 6px;
 			height: 6px;
-			border-radius: 50%;
+			border-radius: 10px;
 			border: none;
-			background-color: var(--color-primary-white);
+			background-color: rgba(var(--color-rgb-primary-white), 0.2);
+			overflow: hidden;
+
+			&> div {
+				min-width: 6px;
+				width: 6px;
+				height: 6px;
+				background-color: var(--color-primary-white);
+				border-radius: 10px;
+				transition: .1s linear;
+			}
 		}
 	}
 }
