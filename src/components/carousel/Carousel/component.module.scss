@@ -76,3 +76,9 @@
 		}
 	}
 }
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.carousel {
+		height: 300px;
+	}
+}

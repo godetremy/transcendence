@@ -1,3 +1,5 @@
+@use '../../../app/supports';
+
 .slide {
 	top: 0;
 	bottom: 0;
@@ -10,8 +12,10 @@
 	overflow: hidden;
 	justify-content: center;
 	background-position: center;
+	background-repeat: no-repeat;
 
 	.content {
+		appearance: none;
 		position: relative;
 		flex-shrink: 0;
 		width: 100%;
@@ -22,8 +26,11 @@
 		padding: 20px 30px;
 		background: linear-gradient(rgba(var(--color-rgb-primary-black), 0), var(--color-primary-black));
 		gap: 12px;
+		border: none;
+		text-align: left;
 
 		span {
+			color: var(--color-primary-white);
 			text-transform: uppercase;
 			font: 700 18px var(--font-title);
 			padding: 6px 8px;
@@ -47,7 +54,25 @@
 		p {
 			font: 500 16px var(--font-paragraph);
 			margin-top: -4px;
-			color: rgba(var(--color-rgb-primary-white), .6);
+			color: rgba(var(--color-rgb-primary-white), 0.6);
+		}
+	}
+}
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.slide {
+		.content {
+			span {
+				font-size: 14px;
+			}
+			h3 {
+				font-size: 38px;
+				line-height: 34px;
+			}
+
+			p {
+				font-size: 14px;
+			}
 		}
 	}
 }
