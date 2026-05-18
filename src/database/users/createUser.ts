@@ -2,6 +2,8 @@ import { prisma } from '@/database/prisma/prisma';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 import * as bcrypt from 'bcrypt';
+import { agentFormatting } from './getAgent';
+import { User } from '@/types/bde/User';
 
 export async function createUser(me: FortyTwoCursusUserDetails, authorization: FortyTwoOauthToken) {
 	await prisma.users.create({
@@ -28,7 +30,7 @@ export default function hashPassword(password: string) {
 	return bcrypt.hash(password, 10);
 }
 
-export async function createUserAgent(password: string, mail: string): Promise<string> {
+export async function createUserAgent(password: string, mail: string): Promise<User> {
 	const hashed = await hashPassword(password);
 
 	const row = await prisma.users.create({
@@ -43,5 +45,5 @@ export async function createUserAgent(password: string, mail: string): Promise<s
 			is_agent: true,
 		},
 	});
-	return row.id;
+	return agentFormatting(row);
 }

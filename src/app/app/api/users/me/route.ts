@@ -2,6 +2,8 @@ import { deleteAccount } from '@/database/users/deleteUser';
 import { getUserById } from '@/database/users/getUser';
 import { decrypt } from '@/lib/session';
 import { cookies } from 'next/headers';
+import { isAccountExist } from '@/database/users/isAccountExist';
+import { setAgentName } from '@/database/users/setAgent';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -17,29 +19,20 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 	}
 }
 
-export async function DELETE(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
+		const body = await req.json();
 		const session = await decrypt(req.cookies.get('session')?.value);
-		const cookieStore = await cookies();
-		const cookie = cookieStore.get('session');
-		if (cookie != null) {
-			cookieStore.set('session', cookie.value, {
-				httpOnly: true,
-				secure: true,
-				expires: Date.now(),
-				sameSite: 'lax',
-				path: '/',
+		const status = await isAccountExist(session.user_id);
+		if (!status)
+			return new NextResponse(`The account not exist.`, {
+				status: 400,
 			});
-		}
-		const user = await getUserById(session.user_id);
-		if (user !== null) {
-			deleteAccount(user);
-			return NextResponse.json(user);
-		}
-		return NextResponse.json(session);
+		const value = await setAgentName(body.name);
+		return NextResponse.json(value);
 	} catch (error: unknown) {
 		console.error(error);
-		return new NextResponse(`Failed to login. Please try again later.`, {
+		return new NextResponse(`Failed to set name for agent. Please try again later.`, {
 			status: 500,
 		});
 	}

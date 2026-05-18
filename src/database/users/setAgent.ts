@@ -42,7 +42,7 @@ export async function setAgentVerified(status: boolean): Promise<string> {
 		const session = await decrypt(cookie?.value);
 		await prisma.users.update({
 			where: { id: session.user_id },
-			data: { is_verified_agent: status },
+			data: { is_agent_verified: status },
 		});
 	} catch (error: unknown) {
 		console.error(error);

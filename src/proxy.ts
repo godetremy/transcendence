@@ -2,7 +2,6 @@ import { decrypt } from '@/lib/session';
 import { SessionPayload } from '@/types/session/SessionPayload';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserById } from './database/users/getUser';
 
 const ignorePath = ['/app/api/auth/'];
 
@@ -44,12 +43,9 @@ export default async function proxy(req: NextRequest) {
 
 	if (session === null) return NextResponse.redirect(new URL('/app/login', req.nextUrl));
 
-	const user = await getUserById(session.user_id);
-	if (user == null) return NextResponse.redirect(new URL('/app/login', req.nextUrl));
-
 	if (
-		user.is_agent == true &&
-		(user.is_verified_agent === null || user.is_verified_agent == false) &&
+		session.is_agent == true &&
+		(session.is_agent_verified === null || session.is_agent_verified == false) &&
 		!req.nextUrl.pathname.startsWith('/app/agents/approval')
 	)
 		return NextResponse.redirect(new URL('/app/agents/approval', req.nextUrl));

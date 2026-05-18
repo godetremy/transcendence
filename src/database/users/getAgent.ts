@@ -3,7 +3,7 @@ import { User } from '@/types/bde/User';
 import * as bcrypt from 'bcrypt';
 import { Prisma } from '@/database/prisma/generated/client';
 
-export async function findAgent(mail: string, password: string): Promise<User | null> {
+export async function getAgent(mail: string, password: string): Promise<User | null> {
 	const row = await prisma.users.findFirst({
 		where: { mail: mail },
 	});
@@ -13,7 +13,7 @@ export async function findAgent(mail: string, password: string): Promise<User | 
 	return null;
 }
 
-export function agentFormatting(row: Prisma.usersGetPayload<{ include: { memberships: false } }>): User | null {
+export function agentFormatting(row: Prisma.usersGetPayload<{ include: { memberships: false } }>): User {
 	return {
 		id: row.id,
 		mail: row.mail,
@@ -21,7 +21,7 @@ export function agentFormatting(row: Prisma.usersGetPayload<{ include: { members
 		last_name: row.last_name,
 		full_name: row.full_name,
 		is_agent: row.is_agent,
-		is_verified_agent: row.is_verified_agent,
+		is_agent_verified: row.is_agent_verified,
 		profile_picture: row.profile_picture,
 		oauth_fortytwo_id: null,
 		memberships_id: null,

@@ -8,7 +8,7 @@ import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 import { SignupFormSchema } from '@/schema/SignupForm';
-import { signUpAgent } from '@/database/users/signUpAgent';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
 	const [message, setMessage] = useState<string | null>(null);
@@ -27,17 +27,20 @@ export default function Page() {
 			setMessage(fields.error.issues[0].message);
 			return;
 		}
-		const response = await signUpAgent(fields.data.email, fields.data.password);
-
-		const data = await response.json();
-
-		if (!response.ok) {
-			setMessage(data.message);
-			return;
-		} else {
-			setMessage(data.message);
-			return;
-		}
+		const message = await fetch('/app/api/auth/agents/signup/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email: fields.data.email,
+				password: fields.data.password,
+				passwordCheck: fields.data.passwordCheck,
+			}),
+		});
+		const body = await message.json();
+		setMessage(body.message);
+		if (message.ok) return redirect('/app/home/');
 	};
 
 	return (
