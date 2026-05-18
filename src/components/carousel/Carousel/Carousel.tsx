@@ -16,9 +16,13 @@ export function Carousel(props: CarouselProps) {
 	const slidesContainerRef: RefObject<HTMLDivElement | null> = useRef(null);
 
 	const nextSlideTimeoutRef = useRef(0);
+	const slideTimeoutPaused = useRef(false);
 	const [nextSlideTimeoutProgress, setNextSlideTimeoutProgress] = useState(0);
 	const [slidesProgression, setSlidesProgression] = useState<number>(0);
 	const slidesProgressionRef = useRef(slidesProgression);
+
+	const dragBaseXPosition = useRef(0);
+	const dragBaseTranslateX = useRef(0);
 
 	useEffect(() => {
 		slidesProgressionRef.current = slidesProgression;
@@ -33,11 +37,14 @@ export function Carousel(props: CarouselProps) {
 		let distance = position - translateX;
 
 		if (distance >= slideWidth * (container.children.length - 1)) {
-			container.style.transform = `translateX(${slideWidth}px)`;
-			translateSlideInfinite(container, slideWidth);
+			const slideDifference = -translateX - slideWidth * (container.children.length - 1);
+			translateX = slideWidth - slideDifference;
+			distance = -slideWidth + slideDifference;
 
-			translateX = slideWidth;
-			distance = -slideWidth;
+			console.log(translateX, distance);
+
+			container.style.transform = `translateX(${translateX}px)`;
+			translateSlideInfinite(container, slideWidth);
 		}
 
 		const animationDuration = 600;
@@ -150,17 +157,101 @@ export function Carousel(props: CarouselProps) {
 		setNextSlideTimeoutProgress(1 - timeout / (1000 * SLIDE_TIMEOUT_DURATION));
 	}
 
+	function beginDragEventHandler(event: MouseEvent) {
+		const container = slidesContainerRef.current;
+		if (!container) return;
+
+		dragBaseXPosition.current = event.x;
+		dragBaseTranslateX.current = parseTranslateX(container);
+	}
+
+	function dragEventHandler(event: MouseEvent) {
+		if (event.buttons !== 1) return;
+
+		slideTimeoutPaused.current = true;
+
+		const container = slidesContainerRef.current;
+		if (!container) return;
+
+		const slideWidth = container.children[0].getBoundingClientRect().width;
+
+		const progression = ((event.x - dragBaseXPosition.current) / slideWidth) * 2;
+		let translateX = dragBaseTranslateX.current + progression * slideWidth;
+
+		if (translateX > 0) {
+			translateX = -(slideWidth * container.children.length) + translateX;
+		}
+		if (translateX < -(slideWidth * container.children.length)) {
+			translateX += slideWidth * container.children.length;
+		}
+
+		container.style.transform = `translateX(${translateX}px)`;
+		translateSlideInfinite(container, slideWidth);
+
+		setSlidesProgression(-(translateX / slideWidth));
+	}
+
+	function endDragEventHandler() {
+		const container = slidesContainerRef.current;
+		if (!container) return;
+
+		slideTimeoutPaused.current = false;
+		updateSlideTimeout();
+
+		const slideWidth = container.children[0].getBoundingClientRect().width;
+		const translateX = parseTranslateX(container);
+
+		const targetSlide = Math.round(-(translateX / slideWidth)) % container.children.length;
+		goToSlide(targetSlide);
+	}
+
+	function convertTouchEventToMouseEvent(event: TouchEvent) {
+		return new MouseEvent(event.type, {
+			buttons: 1,
+			clientX: event.touches.length > 0 ? event.touches[0]?.clientX : 0,
+		});
+	}
+
+	function beginDragTouchEventHandler(event: TouchEvent) {
+		event.preventDefault();
+		beginDragEventHandler(convertTouchEventToMouseEvent(event));
+	}
+	function dragTouchEventHandler(event: TouchEvent) {
+		event.preventDefault();
+		dragEventHandler(convertTouchEventToMouseEvent(event));
+	}
+	function endDragTouchEventHandler() {
+		endDragEventHandler();
+	}
+
 	useEffect(() => {
+		const container = carouselContainerRef.current;
+		if (!container) return;
+
 		function createEventHandler() {
 			window.addEventListener('resize', resizeEventHandler);
+			container?.addEventListener('mousedown', beginDragEventHandler);
+			container?.addEventListener('mousemove', dragEventHandler);
+			container?.addEventListener('mouseup', endDragEventHandler);
+			container?.addEventListener('touchstart', beginDragTouchEventHandler);
+			container?.addEventListener('touchmove', dragTouchEventHandler);
+			container?.addEventListener('touchend', endDragTouchEventHandler);
 		}
 		function removeEventHandler() {
 			window.removeEventListener('resize', resizeEventHandler);
+			container?.removeEventListener('mousedown', beginDragEventHandler);
+			container?.removeEventListener('mousemove', dragEventHandler);
+			container?.removeEventListener('mouseup', endDragEventHandler);
+			container?.removeEventListener('touchstart', beginDragTouchEventHandler);
+			container?.removeEventListener('touchmove', dragTouchEventHandler);
+			container?.removeEventListener('touchend', endDragTouchEventHandler);
 		}
 
 		updateSlideTimeout();
 		setInterval(() => {
 			const now = Date.now();
+
+			if (slideTimeoutPaused.current) nextSlideTimeoutRef.current += 100;
 
 			updateNextSlideTimeoutProgression(now);
 			if (now >= nextSlideTimeoutRef.current) {
@@ -198,10 +289,10 @@ export function Carousel(props: CarouselProps) {
 						onClick={() => goToSlide(index)}
 						style={{
 							opacity: 0.2 + calculateSlideProgression(index) * 0.8,
-							width: 6 + calculateSlideProgression(index) * 18,
+							width: 6 + (slideTimeoutPaused.current ? 0 : calculateSlideProgression(index)) * 18,
 						}}
 					>
-						<div style={{ width: 6 + nextSlideTimeoutProgress * 18 }} />
+						<div style={{ width: 6 + (slideTimeoutPaused.current ? 0 : nextSlideTimeoutProgress) * 18 }} />
 					</button>
 				))}
 			</div>

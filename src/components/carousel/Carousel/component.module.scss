@@ -51,6 +51,7 @@
 			border: none;
 			background-color: rgba(var(--color-rgb-primary-white), 0.2);
 			overflow: hidden;
+			transition: width .1s;
 
 			&> div {
 				min-width: 6px;
@@ -79,6 +80,9 @@
 
 @media (max-width: supports.$breakpoints-tablets) {
 	.carousel {
-		height: 300px;
+		.direction {
+			visibility: hidden;
+		}
+		height: 250px;
 	}
 }

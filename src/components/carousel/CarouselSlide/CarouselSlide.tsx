@@ -1,5 +1,6 @@
 import styles from './component.module.scss';
 import { ComponentPropsWithoutRef } from 'react';
+import Image from 'next/image';
 
 export interface SlideProps {
 	slideImage: string;
@@ -30,17 +31,17 @@ export function CarouselSlide({
 			aria-live={'off'}
 			className={styles.slide}
 			style={{
-				backgroundImage: `url(${slideImage})`,
-				backgroundSize: `${120 - progression * 20}%`,
 				opacity: Math.max(progression, 0.5),
 				...props.style,
 			}}
 		>
+			<Image src={slideImage} alt={slideTitle} style={{ scale: 1.2 - progression * 0.2 }} fill />
 			<button
 				className={styles.content}
 				style={{
 					backdropFilter: `blur(${2 - progression * 2}px) saturate(0%) brightness(0.7)`,
 				}}
+				onClick={() => console.log(slideTitle)}
 			>
 				<span
 					style={{
