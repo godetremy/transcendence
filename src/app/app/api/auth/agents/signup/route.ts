@@ -25,7 +25,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const exist = await isAccountExistByMail(fields.data.email);
 		if (exist) return NextResponse.json({ message: 'This account already exist.' }, { status: 400 });
 
-		const user = await createUserAgent(fields.data.password, fields.data.email);
+		const user = await createUserAgent(fields.data.email, fields.data.password);
 
 		const session = await createSession({
 			user_id: user.id,
@@ -43,6 +43,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			path: '/',
 		});
 	} catch (error: unknown) {
+		console.error(error);
 		return NextResponse.json(`Failed to signup account. Try again :(`, {
 			status: 500,
 		});

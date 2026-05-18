@@ -1,8 +1,9 @@
 import { prisma } from '@/database/prisma/prisma';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
+import { User } from '@/types/bde/User';
 
-export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: FortyTwoOauthToken): Promise<string> {
+export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: FortyTwoOauthToken): Promise<User> {
 	const body = {
 		fortytwo_user_id: me.id,
 		mail: me.email,
@@ -41,5 +42,17 @@ export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: F
 		},
 	});
 
-	return row.id;
+	return {
+		id: row.id,
+		mail: row.mail,
+		first_name: row.first_name,
+		last_name: row.last_name,
+		full_name: row.full_name,
+		profile_picture: row.profile_picture,
+		is_agent: row.is_agent,
+		is_agent_verified: row.is_agent_verified,
+		memberships_id: row.memberships_id,
+		memberships: null,
+		oauth_fortytwo_id: row.oauth_fortytwo_id,
+	};
 }

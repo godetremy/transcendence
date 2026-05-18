@@ -30,7 +30,7 @@ export default function hashPassword(password: string) {
 	return bcrypt.hash(password, 10);
 }
 
-export async function createUserAgent(password: string, mail: string): Promise<User> {
+export async function createUserAgent(mail: string, password: string): Promise<User> {
 	const hashed = await hashPassword(password);
 
 	const row = await prisma.users.create({

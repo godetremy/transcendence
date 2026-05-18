@@ -1,7 +1,5 @@
-import { deleteAccount } from '@/database/users/deleteUser';
 import { getUserById } from '@/database/users/getUser';
 import { decrypt } from '@/lib/session';
-import { cookies } from 'next/headers';
 import { isAccountExist } from '@/database/users/isAccountExist';
 import { setAgentName } from '@/database/users/setAgent';
 import { NextResponse, NextRequest } from 'next/server';
