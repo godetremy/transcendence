@@ -17,3 +17,10 @@ $breakpoints-desktop: 1200px;
 	-webkit-line-clamp: $line;
 	-webkit-box-orient: vertical;
 }
+
+@mixin center-content() {
+	width: 100%;
+	max-width: 1200px;
+	padding: 20px;
+	align-self: center;
+}
