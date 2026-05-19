@@ -32,17 +32,18 @@ function ListItem({
 			}}
 			onClick={onPress}
 		>
-			<div className={styles.left}>{Icon ? <Icon width={24} height={24} color={'currentColor'} /> : null}</div>
+			{Icon && (
+				<div className={styles.left}>
+					<Icon width={24} height={24} color={'currentColor'} />
+				</div>
+			)}
 			<div className={styles.main}>
 				<p>{title}</p>
 				{description && <span>{description}</span>}
 			</div>
 			<div className={styles.right}>
-				{rightElement ? (
-					<p className={styles.rightElement}>{rightElement}</p>
-				) : (
-					showChevron && <ChevronRight width={24} height={24} color={'currentColor'} />
-				)}
+				{rightElement && <div className={styles.rightElement}>{rightElement}</div>}
+				{showChevron && <ChevronRight width={24} height={24} color={'currentColor'} />}
 			</div>
 		</button>
 	);

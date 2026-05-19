@@ -23,13 +23,9 @@
 	}
 	> .right {
 		height: 24px;
-		width: auto;
 		color: rgba(255, 255, 255, 0.4);
-		> .rightElement {
-			color: white;
-			font: 600 16px var(--font-paragraph);
-			line-height: 18px;
-		}
+		display: flex;
+		align-items: center;
 	}
 
 	> .main {

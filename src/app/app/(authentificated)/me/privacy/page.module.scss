@@ -6,7 +6,7 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 20px;
-	padding: 20px;
+	padding: 10px 20px 20px;
 }
 
 .list {
@@ -15,5 +15,13 @@
 	border-radius: 15px;
 	overflow: hidden;
 	border: 1px solid var(--color-border-dark);
-	padding-top: 10px;
+}
+
+.listSectionTitle {
+	max-width: 600px;
+	width: 100%;
+	font: 600 14px var(--font-paragraph);
+	margin-bottom: -10px;
+	margin-top: 5px;
+	opacity: .6;
 }
