@@ -1,0 +1,20 @@
+name: trans-dev
+
+services:
+  node:
+    build:
+      target: dev
+    volumes:
+      - ./:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    environment:
+      NODE_ENV: development
+    command: sh -c "npm install && npm run dev"
+
+  vault:
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
+      VAULT_ADDR: ${VAULT_ADDR}
+    command:
+      - server
+      - -dev

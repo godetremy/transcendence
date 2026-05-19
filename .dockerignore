@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+!.env.example
+node_modules
+docker
+docker-compose*.yml
+Makefile
+wiki
+*.p12
+*.pem
+.next
+coverage
+.DS_Store
+a.out

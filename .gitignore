@@ -43,3 +43,10 @@ next-env.d.ts
 
 # prisma
 /src/generated/prisma
+
+# docker generated files
+docker/elasticsearch/certs/
+*.p12
+docker/kibana/certs/
+*.crt
+config.md

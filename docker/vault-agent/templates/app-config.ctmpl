@@ -1,0 +1,5 @@
+{{ with secret "secret/data/app" }}
+APP_SECRET={{ .Data.data.app_secret }}
+ELASTIC_PASSWORD={{ .Data.data.elastic_password }}
+KIBANA_ENCRYPTION_KEY={{ .Data.data.kibana_encryption_key }}
+{{ end }}
