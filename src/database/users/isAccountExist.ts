@@ -1,3 +1,5 @@
+'use server';
+
 import { prisma } from '@/database/prisma/prisma';
 
 export async function isAccountExist(id: number): Promise<boolean> {

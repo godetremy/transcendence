@@ -5,7 +5,6 @@ import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { isAccountExistByMail } from '@/database/users/isAccountExist';
 import { forgotPasswordForm } from '@/schema/ForgotPasswordForm';
 import { User2 } from 'lucide-react';
 
@@ -19,11 +18,28 @@ export default function Page() {
 		const field = forgotPasswordForm.safeParse({
 			email: form.get('email'),
 		});
-		if (!field.success) setError(field.error.issues[0].message);
-		else {
-			const exist = await isAccountExistByMail(field.data.email);
-			if (exist) setError(field.data.email);
+
+		if (!field.success) {
+			setError(field.error.issues[0].message);
+			return;
+		} 
+
+		const response = await fetch('/app/api/auth/forgot-password', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email: field.data.email,
+			}),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			setError(data.message);
 		}
+
+		return ;
 	};
 
 	return (
