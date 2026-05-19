@@ -1,0 +1,23 @@
+server.name: kibana
+server.host: 0.0.0.0
+server.port: 5601
+server.ssl.enabled: true
+server.ssl.certificate: /usr/share/kibana/config/certs/kibana.crt
+server.ssl.key: /usr/share/kibana/config/certs/kibana.key
+
+server.maxPayload: 1048576
+
+elasticsearch.hosts: ["https://elasticsearch:9200"]
+elasticsearch.username: ${KIBANA_SYSTEM_USERNAME}
+elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
+
+elasticsearch.ssl.certificateAuthorities: ["/usr/share/elasticsearch/config/certs/elastic-certificates.p12"]
+elasticsearch.ssl.keystore.path: "/usr/share/elasticsearch/config/certs/elastic-certificates.p12"
+elasticsearch.ssl.keystore.password: ${ELASTIC_CERT_PASSWORD}
+elasticsearch.ssl.verificationMode: full
+
+xpack.encryptedSavedObjects.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
+xpack.security.encryptionKey: ${KIBANA_SECURITY_ENCRYPTION_KEY}
+xpack.reporting.encryptionKey: ${KIBANA_REPORTING_ENCRYPTION_KEY}
+
+logging.root.level: info

@@ -1,36 +1,35 @@
-'use client';
-import './page.scss';
-import { useState } from 'react';
-import { StudentLoginPagesImages } from '@/const/StudentLoginPagesImages';
 import { generateFortyTwoAuthorizationUrl } from '@/rest/fortytwo';
-import { FortyTwo } from '@/components/stickers/FortyTwo/FortyTwo';
-import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
-import { LoginText } from '@/components/login/LoginText/LoginText';
-import { Sublinks } from '@/components/login/Sublinks/Sublinks';
-import Link from 'next/link';
+import '../../page.css';
+import Image from 'next/image';
 
 export default function Page() {
-	const [image] = useState(() => {
-		return StudentLoginPagesImages[Math.floor(Math.random() * StudentLoginPagesImages.length)];
-	});
-
 	return (
-		<LoginTemplate
-			background={{
-				source: image.source,
-				alt: image.alt,
-			}}
-		>
-			<LoginText title={'Connexion'} description={'Pour accéder à tes services connecte toi avec 42.'} />
+		<div className="main">
+			<div className="login">
+				<Image src="/login/eyes_icon.svg" alt="eyes icon" width={73} height={70} />
 
-			<div className={'actions'}>
-				<Link href={generateFortyTwoAuthorizationUrl()} className={'primary'}>
-					<FortyTwo className={'icon'} />
-					Connexion avec 42
-				</Link>
+				<div>
+					<h1>CONNEXION</h1>
+					<p>Pour accéder à tes services connecte toi avec 42.</p>
+				</div>
+
+				<div className="login-btn">
+					<div>
+						<a className="login-42" href={generateFortyTwoAuthorizationUrl()}>
+							<Image src="/login/42.png" alt="logo 42" width={28} height={15}></Image>
+							<p>Continuer avec 42</p>
+						</a>
+					</div>
+					<div className="other-btn">
+						<a>
+							<p>Vous êtes un agents extérieur ?</p>
+						</a>
+					</div>
+				</div>
 			</div>
-
-			<Sublinks links={[{ text: 'Vous êtes un agents extérieur ?', href: '/app/login/agents' }]} />
-		</LoginTemplate>
+			<div className="image-container">
+				<Image src="/login/bg.png" alt="the image background" className="img-bg" width={640} height={832} />
+			</div>
+		</div>
 	);
 }
