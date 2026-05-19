@@ -1,56 +1,75 @@
 'use client';
-import { setAgentName, setAgentReason, setAgentVerified } from '@/database/users/setAgent';
 import { useState } from 'react';
 
 export default function Page() {
-	const [responseName, setResponseName] = useState<string>('');
-	const [responseReason, setResponseReason] = useState<string>('');
+	const [response, setResponse] = useState<string>('');
 	const [responseStatus, setResponseStatus] = useState<string>('');
 
-	const validName = async (form: FormData) => {
-		const value = form.get('name');
-		if (value != null) {
-			const status = await setAgentName(value.toString());
-			setResponseName(status);
-		} else {
-			setResponseName('the field is empty');
+	const validNameAndReason = async (form: FormData) => {
+		const name = form.get('name');
+		const reason = form.get('reason');
+		if (name == null || reason == null) {
+			setResponse('the field is empty');
+			return ;
 		}
+		const response = await fetch('/app/api/users/me/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				name: name,
+				password: reason,
+			}),
+		})
+		if (!response.ok) {
+			setResponse('Error to set value, retry please.');
+		}
+		setResponse('reason and fields are set.');
 	};
 
-	const validReason = async (form: FormData) => {
-		const value = form.get('reason');
-		if (value != null) {
-			const status = await setAgentReason(value.toString());
-			setResponseReason(status);
-		} else {
-			setResponseReason('the field is empty');
+	async function approvedAgent(id: string, status: boolean) {
+		let statustostring = 'approve';
+		if (status == false)
+			statustostring = 'reject';
+		const response = await fetch(`/app/api/auth/approval/${id}/${statustostring}/`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+		if (!response.ok) {
+			setResponseStatus('Error to set value, retry please.');
+			return ;
 		}
-	};
+		setResponseStatus('status are set.');
+	}
+
 	return (
 		<>
-			<form action={validName}>
+			<form action={validNameAndReason}>
 				<p>Nom de l agent :</p>
-				<input type="text" placeholder="Nom" name="name" required={true} />
-			</form>
-			{responseName && <p>{responseName}</p>}
-			<form action={validReason}>
+				<input type="text" placeholder="Nom" name="name"/>
 				<p>raison :</p>
-				<input type="text" placeholder="Reason" name="reason" required={true}></input>
+				<input type="text" placeholder="Reason" name="reason"></input>
+				<br/>
+				<button type='submit'
+				>
+					valider le nom et la raison
+				</button>
 			</form>
-			{responseReason && <p>{responseReason}</p>}
+			{response && <p>{response}</p>}
 			<div>
 				<button
 					onClick={async () => {
-						const status = await setAgentVerified(true);
-						setResponseStatus(status);
+						await approvedAgent('2e2f842b-2e79-4a28-8357-764490c10de6', true);
 					}}
 				>
 					valider compte
 				</button>
 				<button
 					onClick={async () => {
-						const status = await setAgentVerified(false);
-						setResponseStatus(status);
+						await approvedAgent('2e2f842b-2e79-4a28-8357-764490c10de6', false);
 					}}
 				>
 					refuser compte
