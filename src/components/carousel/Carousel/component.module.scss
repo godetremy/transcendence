@@ -44,22 +44,22 @@
 		gap: 4px;
 		padding: 5px 20px;
 
-		&> button {
+		& > button {
 			width: 6px;
 			height: 6px;
 			border-radius: 10px;
 			border: none;
 			background-color: rgba(var(--color-rgb-primary-white), 0.2);
 			overflow: hidden;
-			transition: width .1s;
+			transition: width 0.1s;
 
-			&> div {
+			& > div {
 				min-width: 6px;
 				width: 6px;
 				height: 6px;
 				background-color: var(--color-primary-white);
 				border-radius: 10px;
-				transition: .1s linear;
+				transition: 0.1s linear;
 			}
 		}
 	}
