@@ -32,6 +32,7 @@ export function UserFormatting(row: Prisma.usersGetPayload<{ include: { membersh
 		full_name: row.full_name,
 		is_agent: row.is_agent,
 		is_agent_verified: row.is_agent_verified,
+		reason: row.reason,
 		profile_picture: row.profile_picture,
 		oauth_fortytwo_id: row.oauth_fortytwo_id,
 		memberships_id: row.memberships_id,

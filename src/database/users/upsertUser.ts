@@ -51,6 +51,7 @@ export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: F
 		profile_picture: row.profile_picture,
 		is_agent: row.is_agent,
 		is_agent_verified: row.is_agent_verified,
+		reason: row.reason,
 		memberships_id: row.memberships_id,
 		memberships: null,
 		oauth_fortytwo_id: row.oauth_fortytwo_id,

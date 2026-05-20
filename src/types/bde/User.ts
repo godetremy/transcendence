@@ -9,6 +9,7 @@ export interface User {
 	profile_picture: string;
 	is_agent: boolean;
 	is_agent_verified: boolean | null;
+	reason: string | null;
 	memberships_id: string | null;
 	memberships: Memberships | null;
 	oauth_fortytwo_id: string | null;
