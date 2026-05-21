@@ -1,8 +1,6 @@
-import { random_code } from "@/database/numerous_code/random_code";
 import { isAccountExistByMail } from "@/database/users/isAccountExist";
 import { forgotPasswordForm } from "@/schema/ForgotPasswordForm";
 import { NextRequest, NextResponse } from "next/server";
-import * as nodemailer from 'nodemailer';
 
 export async function POST(req: NextRequest) : Promise<NextResponse> {
     try {
@@ -32,24 +30,7 @@ export async function POST(req: NextRequest) : Promise<NextResponse> {
             );
         }
 
-        const transporter = nodemailer.createTransport({
-        	host: 'smtp.gmail.com',
-        	port: 587,
-        	secure: false,
-        	auth: {
-        		user: process.env.SMTP_USER,
-        		pass: process.env.SMTP_PASS,
-        	},
-        });
-
-        const code = await random_code();
-
-        const info = await transporter.sendMail({
-            from: '"bde" <manuarii.degache@gmail.com>',
-            to: body.email,
-            subject: 'Code',
-            text: code,
-        });
+        
 
         return NextResponse.json({ message: `Success` }, {
             status: 200,
