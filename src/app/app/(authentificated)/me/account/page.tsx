@@ -11,6 +11,7 @@ function Page() {
 		<>
 			<NavigationBarHeader title={'Mon compte'}>
 				<section className={styles.section}>
+					<span className={styles.listSectionTitle}>Informations personnelles</span>
 					<div className={styles.list}>
 						<ListItem
 							title={'Nom'}
