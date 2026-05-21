@@ -1,3 +1,4 @@
+import { random_code } from "@/database/numerous_code/random_code";
 import { isAccountExistByMail } from "@/database/users/isAccountExist";
 import { forgotPasswordForm } from "@/schema/ForgotPasswordForm";
 import { NextRequest, NextResponse } from "next/server";
@@ -41,11 +42,13 @@ export async function POST(req: NextRequest) : Promise<NextResponse> {
         	},
         });
 
+        const code = await random_code();
+
         const info = await transporter.sendMail({
             from: '"bde" <manuarii.degache@gmail.com>',
             to: body.email,
-            subject: 'test',
-            text: 'testtest',
+            subject: 'Code',
+            text: code,
         });
 
         return NextResponse.json({ message: `Success` }, {
