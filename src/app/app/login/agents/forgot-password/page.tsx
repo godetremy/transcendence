@@ -22,7 +22,7 @@ export default function Page() {
 		if (!field.success) {
 			setError(field.error.issues[0].message);
 			return;
-		} 
+		}
 
 		const response = await fetch('/app/api/auth/forgot-password', {
 			method: 'POST',
@@ -39,7 +39,7 @@ export default function Page() {
 			setError(data.message);
 		}
 
-		return ;
+		return;
 	};
 
 	return (

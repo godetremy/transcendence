@@ -29,6 +29,7 @@ CREATE TABLE "users" (
     "first_name" TEXT,
     "last_name" TEXT,
     "full_name" TEXT,
+    "code" TEXT,
     "profile_picture" TEXT NOT NULL DEFAULT '/images/default_user.png',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
