@@ -203,7 +203,6 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./:/home/node/app
       - node_modules:/home/node/app/node_modules
     environment:
       DATABASE_URL: ${DATABASE_URL}

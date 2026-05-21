@@ -15,14 +15,7 @@ services:
 
   vault:
     volumes:
-      - ./docker/vault/vault-prod.hcl:/vault/config/vault.hcl:ro
       - vault_data:/vault/file
-    environment:
-      VAULT_ADDR: ${VAULT_ADDR}
-      VAULT_API_ADDR: ${VAULT_API_ADDR}
-    command:
-      - server
-      - -config=/vault/config/vault.hcl
 
 volumes:
   vault_data:
