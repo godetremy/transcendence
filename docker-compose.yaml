@@ -165,7 +165,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
-    mem_limit: 128m
+    mem_limit: 256m
     security_opt:
       - no-new-privileges:true
 
@@ -226,7 +226,7 @@ services:
     working_dir: /home/node/app
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1' ]
+      test: [ 'CMD-SHELL', 'curl -fsS http://127.0.0.1:3000/ >/dev/null 2>&1' ]
       interval: 15s
       timeout: 5s
       retries: 5

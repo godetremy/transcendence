@@ -1,8 +1,15 @@
-FROM node:24-alpine AS base
+FROM node:22-slim AS base
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /home/node/app
 
 FROM base AS dev
-CMD ["sh", "-c", "npm install && npm run dev"]
+COPY package.json package-lock.json ./
+RUN npm ci
+RUN cp -r node_modules /home/node/node_modules_backup
+COPY docker/node/entrypoint-dev.sh /entrypoint-dev.sh
+RUN chmod +x /entrypoint-dev.sh
+ENTRYPOINT ["/entrypoint-dev.sh"]
+CMD ["npm", "run", "dev"]
 
 FROM base AS deps
 COPY package.json package-lock.json ./

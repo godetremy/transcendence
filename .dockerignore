@@ -4,6 +4,8 @@
 !.env.example
 node_modules
 docker
+!docker/node/
+!docker/node/entrypoint-dev.sh
 docker-compose*.yml
 Makefile
 wiki
