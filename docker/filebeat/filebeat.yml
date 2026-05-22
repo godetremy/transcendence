@@ -98,6 +98,54 @@ filebeat.autodiscover:
 
         - condition:
             contains:
+              docker.container.name: nginx
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              fields:
+                service: nginx-stdout
+                log_type: container
+              fields_under_root: true
+
+        - condition:
+            contains:
+              docker.container.name: portainer
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              fields:
+                service: portainer
+                log_type: container
+              fields_under_root: true
+
+        - condition:
+            contains:
+              docker.container.name: postgres-exporter
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              fields:
+                service: postgres-exporter
+                log_type: container
+              fields_under_root: true
+
+        - condition:
+            contains:
+              docker.container.name: nginx-exporter
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              fields:
+                service: nginx-exporter
+                log_type: container
+              fields_under_root: true
+
+        - condition:
+            contains:
               docker.container.name: vault-agent
           config:
             - type: container
@@ -126,30 +174,6 @@ filebeat.autodiscover:
 
         - condition:
             contains:
-              docker.container.name: nginx
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: nginx-stdout
-                log_type: container
-              fields_under_root: true
-
-        - condition:
-            contains:
-              docker.container.name: portainer
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: portainer
-                log_type: container
-              fields_under_root: true
-
-        - condition:
-            contains:
               docker.container.name: prometheus
           config:
             - type: container
@@ -172,8 +196,37 @@ filebeat.autodiscover:
                 log_type: container
               fields_under_root: true
 
+        - condition:
+            contains:
+              docker.container.name: telegraf
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              fields:
+                service: telegraf
+                log_type: container
+              fields_under_root: true
+
 output.logstash:
   hosts: ['logstash:5044']
+  ssl.enabled: true
+  ssl.certificate_authorities: ["/usr/share/filebeat/config/certs/ca.crt"]
+  ssl.certificate: "/usr/share/filebeat/config/certs/filebeat.crt"
+  ssl.key: "/usr/share/filebeat/config/certs/filebeat.key"
+
+# Expose monitoring API for Telegraf
+http.enabled: true
+http.host: 0.0.0.0
+http.port: 5066
+
+# Memory queue tuning for high throughput
+queue.mem:
+  events: 4096
+  flush.min_events: 512
+  flush.timeout: 5s
+
+max_procs: 1
 
 logging.level: warning
 logging.to_stderr: true

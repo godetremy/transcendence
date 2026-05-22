@@ -9,18 +9,22 @@ discovery.type: single-node
 
 xpack.security.enabled: true
 xpack.security.enrollment.enabled: true
+
+# Transport layer: mTLS between ES nodes
 xpack.security.transport.ssl.enabled: true
 xpack.security.transport.ssl.verification_mode: certificate
-xpack.security.transport.ssl.keystore.path: certs/elastic-certificates.p12
-xpack.security.transport.ssl.keystore.password: ${ELASTIC_CERT_PASSWORD}
-xpack.security.transport.ssl.truststore.path: certs/elastic-certificates.p12
-xpack.security.transport.ssl.truststore.password: ${ELASTIC_CERT_PASSWORD}
+xpack.security.transport.ssl.certificate: certs/elasticsearch.crt
+xpack.security.transport.ssl.key: certs/elasticsearch.key
+xpack.security.transport.ssl.certificate_authorities: certs/ca.crt
 
+# HTTP layer: TLS + optional client cert (mTLS for internal services, optional for healthchecks)
 xpack.security.http.ssl.enabled: true
-xpack.security.http.ssl.keystore.path: certs/elastic-certificates.p12
-xpack.security.http.ssl.keystore.password: ${ELASTIC_CERT_PASSWORD}
-xpack.security.http.ssl.truststore.path: certs/elastic-certificates.p12
-xpack.security.http.ssl.truststore.password: ${ELASTIC_CERT_PASSWORD}
+xpack.security.http.ssl.certificate: certs/elasticsearch.crt
+xpack.security.http.ssl.key: certs/elasticsearch.key
+xpack.security.http.ssl.certificate_authorities: certs/ca.crt
+xpack.security.http.ssl.client_authentication: optional
 
+bootstrap.memory_lock: false
+xpack.ml.enabled: false
 
 action.destructive_requires_name: true

@@ -24,10 +24,24 @@ es_api() {
 	fi
 }
 
+# 1. Set kibana_system password
 es_api POST "/_security/user/kibana_system/_password" \
 	"{\"password\":\"${KIBANA_SYSTEM_PASSWORD}\"}" \
 	"Configuring kibana_system password"
 
+# 2. Create ILM policy with rollover
 es_api PUT "/_ilm/policy/logs-policy" \
-	'{"policy":{"phases":{"hot":{"min_age":"0ms","actions":{"rollover":{"max_primary_shard_size":"50gb","max_age":"30d"}}},"warm":{"min_age":"7d","actions":{"set_priority":{"priority":50}}},"delete":{"min_age":"30d","actions":{"delete":{}}}}}}' \
+	'{"policy":{"phases":{"hot":{"min_age":"0ms","actions":{"rollover":{"max_primary_shard_size":"1gb","max_age":"7d","max_docs":1000000}}},"warm":{"min_age":"3d","actions":{"set_priority":{"priority":50},"readonly":{}}},"delete":{"min_age":"30d","actions":{"delete":{}}}}}}' \
 	"Creating ILM policy for logs"
+
+# 3. Create index template for the transcendence alias
+es_api PUT "/_index_template/transcendence-template" \
+	'{"index_patterns":["transcendence-*"],"template":{"settings":{"number_of_shards":1,"number_of_replicas":0,"index.lifecycle.name":"logs-policy","index.lifecycle.rollover_alias":"transcendence"},"mappings":{"dynamic_templates":[{"strings_as_keywords":{"match_mapping_type":"string","mapping":{"type":"keyword","ignore_above":1024}}}],"properties":{"@timestamp":{"type":"date"},"service":{"type":"keyword"},"log_level":{"type":"keyword"},"log_type":{"type":"keyword"},"request_id":{"type":"keyword"},"event_type":{"type":"keyword"},"message":{"type":"text"},"app":{"type":"object","dynamic":true}}}},"priority":500,"composed_of":[],"version":1,"_meta":{"description":"Template for transcendence logs with ILM"}}' \
+	"Creating index template for transcendence"
+
+# 4. Bootstrap the first write index for the alias
+es_api PUT "/transcendence-000001" \
+	'{"aliases":{"transcendence":{"is_write_index":true}}}' \
+	"Bootstrapping first transcendence index"
+
+echo "Elasticsearch setup complete."

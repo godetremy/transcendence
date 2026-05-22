@@ -1,9 +1,30 @@
-name: trans
+name: transcendence
 
 services:
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    volumes:
+      - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager_data:/alertmanager
+    networks:
+      - monitoring
+      - app
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://127.0.0.1:9093'
+    restart: on-failure
+    healthcheck:
+      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9093/-/healthy >/dev/null 2>&1' ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    mem_limit: 128m
+    security_opt:
+      - no-new-privileges:true
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
-    container_name: elasticsearch
     volumes:
       - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - elastic_data:/usr/share/elasticsearch/data
@@ -28,52 +49,49 @@ services:
         until curl -fsSk -u "$$ELASTIC_USERNAME:$$ELASTIC_PASSWORD" https://127.0.0.1:9200/_cluster/health >/dev/null 2>&1; do
           sleep 2
         done
-        bash /scripts/01-retention.sh
+        bash /scripts/01-retention.sh || echo "WARNING: ES retention setup failed, continuing"
         wait $$ES_PID
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'curl -fsSk -u $$ELASTIC_USERNAME:$$ELASTIC_PASSWORD https://127.0.0.1:9200/_cluster/health >/dev/null' ]
-      timeout: 5s
+      test:
+        - CMD-SHELL
+        - 'curl -fsSk -u "$$ELASTIC_USERNAME:$$ELASTIC_PASSWORD" https://127.0.0.1:9200/_cluster/health | grep -qE ''"status":"(green|yellow)"'' '
+      interval: 30s
+      timeout: 10s
       retries: 5
-      start_period: 20s
+      start_period: 30s
     user: '0:0'
     mem_limit: 3g
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
-    container_name: filebeat
     depends_on:
       logstash:
         condition: service_healthy
     volumes:
-      - ./docker/filebeat/filebeat.yml:/tmp/filebeat.yml:ro
+      - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - nginx_logs:/var/log/nginx:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - filebeat_data:/usr/share/filebeat/data
+      - ./docker/elasticsearch/certs:/usr/share/filebeat/config/certs:ro
     networks:
       - elk
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        cp /tmp/filebeat.yml /usr/share/filebeat/filebeat.yml
-        chown root:root /usr/share/filebeat/filebeat.yml
-        chmod 0644 /usr/share/filebeat/filebeat.yml
-        exec filebeat -e
+      - monitoring
+    ports:
+      - '127.0.0.1:5066:5066'
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'filebeat test output 2>/dev/null | grep -q "logstash" || exit 1' ]
+      test: [ 'CMD-SHELL', 'timeout 5 bash -c "</dev/tcp/logstash/5044"' ]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 20s
+      start_period: 30s
     user: root
     mem_limit: 128m
 
   grafana:
     image: grafana/grafana:11.1.0
-    container_name: grafana
     depends_on:
       prometheus:
         condition: service_healthy
@@ -87,7 +105,6 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
     networks:
       - monitoring
-      - edge
     restart: on-failure
     healthcheck:
       test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/api/health >/dev/null 2>&1' ]
@@ -101,31 +118,30 @@ services:
 
   kibana:
     image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
-    container_name: kibana
     depends_on:
       elasticsearch:
         condition: service_healthy
     volumes:
       - ./docker/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
-      - ./docker/kibana/certs:/usr/share/kibana/config/certs:rw
+      - ./docker/elasticsearch/certs:/usr/share/kibana/config/certs:ro
       - ./docker/kibana/bootstrap/generate-kibana-certs.sh:/usr/share/kibana/config/bootstrap-generate-kibana-certs.sh:ro
-      - ./docker/elasticsearch/certs:/usr/share/elasticsearch/config/certs:ro
+      - kibana_data:/usr/share/kibana/data
     environment:
       KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME}
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
       KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY}
       KIBANA_REPORTING_ENCRYPTION_KEY: ${KIBANA_REPORTING_ENCRYPTION_KEY}
       KIBANA_SECURITY_ENCRYPTION_KEY: ${KIBANA_SECURITY_ENCRYPTION_KEY}
-      ELASTIC_CERT_PASSWORD: ${ELASTIC_CERT_PASSWORD}
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
       ELASTIC_USERNAME: ${ELASTIC_USERNAME}
     networks:
       - elk
-      - edge
     entrypoint: [ "/bin/sh", "-c", "/usr/share/kibana/config/bootstrap-generate-kibana-certs.sh && /usr/local/bin/kibana-docker" ]
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'curl -kfsS https://127.0.0.1:5601/api/status >/dev/null' ]
+      test:
+        - CMD-SHELL
+        - 'curl -kfsS https://127.0.0.1:5601/kibana/api/status | grep -q ''"level":"available"'' '
       interval: 30s
       timeout: 10s
       retries: 10
@@ -133,63 +149,128 @@ services:
     user: '1000:0'
     mem_limit: 768m
 
+  kibana-dashboards:
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+    depends_on:
+      kibana:
+        condition: service_healthy
+    volumes:
+      - ./docker/kibana/bootstrap/import-dashboards.sh:/scripts/import-dashboards.sh:ro
+      - ./docker/kibana/dashboards:/usr/share/kibana/dashboards:ro
+      - ./docker/elasticsearch/certs:/usr/share/kibana/config/certs:ro
+    environment:
+      KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
+    networks:
+      - elk
+    entrypoint: [ "/bin/sh", "-c", "sh /scripts/import-dashboards.sh" ]
+    restart: "no"
+    mem_limit: 256m
+
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
-    container_name: logstash
     depends_on:
       elasticsearch:
         condition: service_healthy
     volumes:
       - ./docker/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./docker/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./docker/elasticsearch/certs:/usr/share/logstash/config/certs:ro
     environment:
       LOGSTASH_USERNAME: ${LOGSTASH_USERNAME}
       LOGSTASH_PASSWORD: ${LOGSTASH_PASSWORD}
     networks:
       - elk
+      - monitoring
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'curl -fsS http://127.0.0.1:9600 >/dev/null' ]
+      test:
+        - CMD-SHELL
+        - 'curl -fsS http://127.0.0.1:9600/_node/pipelines/main | grep -q ''"status":"green"'' '
       interval: 30s
       timeout: 10s
       retries: 10
       start_period: 60s
     mem_limit: 1g
 
+  telegraf:
+    image: telegraf:1.31
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      logstash:
+        condition: service_healthy
+    volumes:
+      - ./docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./docker/elasticsearch/certs:/etc/telegraf/certs:ro
+    environment:
+      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    networks:
+      - elk
+      - monitoring
+    restart: on-failure
+    healthcheck:
+      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9273/metrics >/dev/null 2>&1' ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    mem_limit: 128m
+    security_opt:
+      - no-new-privileges:true
+
   nginx:
     image: owasp/modsecurity-crs:nginx
-    container_name: nginx
     depends_on:
       node:
         condition: service_healthy
     volumes:
-      - ./docker/nginx/nginx.conf:/opt/custom/nginx.conf:ro
+      - ./docker/nginx/nginx.conf.template:/opt/custom/nginx.conf.template:ro
       - ./docker/nginx/modsecurity.conf:/opt/custom/modsecurity.conf:ro
+      - ./docker/nginx/modsecurity-exclusions.conf:/opt/custom/modsecurity-exclusions.conf:ro
       - ./docker/nginx/crs-setup.conf:/opt/custom/crs-setup.conf:ro
+      - ./docker/nginx/entrypoint.sh:/opt/custom/entrypoint.sh:ro
       - nginx_logs:/var/log/nginx
+      - nginx_certs:/etc/nginx/certs
     ports:
       - '127.0.0.1:8080:8080'
     networks:
-      - app
       - edge
-      - vault_net
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        cp /opt/custom/modsecurity.conf /etc/nginx/modsecurity.d/modsecurity-override.conf
-        cp /opt/custom/crs-setup.conf /etc/modsecurity.d/owasp-crs/crs-setup.conf.example
-        /docker-entrypoint.sh nginx -version
-        cp /opt/custom/nginx.conf /etc/nginx/nginx.conf
-        exec nginx -g "daemon off;"
+      - app
+      - monitoring
+      - elk
+    entrypoint: [ "/bin/sh", "/opt/custom/entrypoint.sh" ]
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'curl -fsS http://127.0.0.1:8080/ >/dev/null || exit 1' ]
+      test: [ 'CMD-SHELL', 'curl -fsS http://127.0.0.1:8081/stub_status >/dev/null' ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    user: root
+    mem_limit: 256m
+    security_opt:
+      - no-new-privileges:true
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.1.0
+    depends_on:
+      nginx:
+        condition: service_healthy
+    networks:
+      - monitoring
+      - app
+    command:
+      - '-nginx.scrape-uri=http://nginx:8081/stub_status'
+    restart: on-failure
+    healthcheck:
+      test: [ 'CMD', '/usr/bin/nginx-prometheus-exporter', '--version' ]
       interval: 30s
       timeout: 5s
       retries: 5
       start_period: 10s
-    mem_limit: 256m
+    mem_limit: 128m
     security_opt:
       - no-new-privileges:true
 
@@ -198,33 +279,36 @@ services:
       context: .
       dockerfile: docker/node/Dockerfile
       target: ${NODE_TARGET:-dev}
-    container_name: node
+      args:
+        NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
     depends_on:
       postgres:
         condition: service_healthy
+      vault-agent:
+        condition: service_healthy
     volumes:
       - node_modules:/home/node/app/node_modules
+      - vault_agent_data:/vault/agent:ro
     environment:
       DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: ${NODE_ENV}
     networks:
       - app
-      - edge
+    command: sh -c 'set -a; [ -f /vault/agent/rendered/app-config.env ] && . /vault/agent/rendered/app-config.env; set +a; npm install && npm run dev'
     working_dir: /home/node/app
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1' ]
+      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1' ]
       interval: 15s
       timeout: 5s
-      retries: 10
-      start_period: 120s
-    mem_limit: 1g
+      retries: 5
+      start_period: 60s
+    mem_limit: 2g
     security_opt:
       - no-new-privileges:true
 
   portainer:
     image: portainer/portainer-ce:sts
-    container_name: portainer
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - portainer_data:/data
@@ -243,7 +327,6 @@ services:
 
   postgres:
     image: postgres:17-alpine
-    container_name: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -256,7 +339,7 @@ services:
     restart: on-failure
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB' ]
-      interval: 30s
+      interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s
@@ -265,20 +348,41 @@ services:
       - no-new-privileges:true
     shm_size: 128m
 
-  prometheus:
-    image: prom/prometheus:v2.54.1
-    container_name: prometheus
-    volumes:
-      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATA_SOURCE_NAME: ${DATABASE_URL}
+      PGSSLMODE: disable
     networks:
       - monitoring
       - app
-      - elk
+    restart: on-failure
+    healthcheck:
+      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9187/metrics >/dev/null 2>&1' ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    mem_limit: 128m
+    security_opt:
+      - no-new-privileges:true
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./docker/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - monitoring
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.retention.time=7d'
       - '--storage.tsdb.retention.size=256MB'
+      - '--web.enable-lifecycle'
     restart: on-failure
     healthcheck:
       test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9090/-/healthy >/dev/null 2>&1' ]
@@ -292,20 +396,21 @@ services:
 
   vault:
     image: hashicorp/vault:1.17
-    container_name: vault
     environment:
       VAULT_ADDR: ${VAULT_ADDR}
       VAULT_API_ADDR: ${VAULT_API_ADDR}
     ports:
-      - '127.0.0.1:8200:8200'
+      - '0.0.0.0:8200:8200'
     networks:
       - vault_net
     command:
       - server
       - -dev
+      - -dev-listen-address=0.0.0.0:8200
+      - -dev-root-token-id=${VAULT_DEV_ROOT_TOKEN_ID}
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'vault status -address=http://127.0.0.1:8200 >/dev/null 2>&1' ]
+      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:8200/v1/sys/health?standbyok=true >/dev/null 2>&1' ]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -316,7 +421,6 @@ services:
 
   vault-agent:
     image: hashicorp/vault:1.17
-    container_name: vault-agent
     depends_on:
       vault:
         condition: service_healthy
@@ -336,7 +440,7 @@ services:
     command: sh -c 'sh /scripts/bootstrap-vault-agent.sh'
     restart: on-failure
     healthcheck:
-      test: [ 'CMD-SHELL', 'test -f /vault/agent/rendered/app-config.env' ]
+      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:8100/agent/v1/metrics >/dev/null 2>&1 && test -f /vault/agent/rendered/app-config.env' ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -352,20 +456,22 @@ networks:
   app:
     driver: bridge
     internal: true
-  vault_net:
-    driver: bridge
-    internal: true
   monitoring:
     driver: bridge
     internal: true
+  vault_net:
+    driver: bridge
 
 volumes:
   elastic_data:
   postgres_data:
-  portainer_data:
-  vault_agent_data:
   node_modules:
   nginx_logs:
+  nginx_certs:
   filebeat_data:
   prometheus_data:
   grafana_data:
+  portainer_data:
+  kibana_data:
+  vault_agent_data:
+  alertmanager_data:

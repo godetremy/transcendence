@@ -1,6 +1,9 @@
 server.name: kibana
 server.host: 0.0.0.0
 server.port: 5601
+server.basePath: /kibana
+server.rewriteBasePath: true
+
 server.ssl.enabled: true
 server.ssl.certificate: /usr/share/kibana/config/certs/kibana.crt
 server.ssl.key: /usr/share/kibana/config/certs/kibana.key
@@ -11,13 +14,18 @@ elasticsearch.hosts: ["https://elasticsearch:9200"]
 elasticsearch.username: ${KIBANA_SYSTEM_USERNAME}
 elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
 
-elasticsearch.ssl.certificateAuthorities: ["/usr/share/elasticsearch/config/certs/elastic-certificates.p12"]
-elasticsearch.ssl.keystore.path: "/usr/share/elasticsearch/config/certs/elastic-certificates.p12"
-elasticsearch.ssl.keystore.password: ${ELASTIC_CERT_PASSWORD}
+# mTLS to Elasticsearch
+elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca.crt"]
+elasticsearch.ssl.certificate: /usr/share/kibana/config/certs/kibana.crt
+elasticsearch.ssl.key: /usr/share/kibana/config/certs/kibana.key
 elasticsearch.ssl.verificationMode: full
 
 xpack.encryptedSavedObjects.encryptionKey: ${KIBANA_ENCRYPTION_KEY}
 xpack.security.encryptionKey: ${KIBANA_SECURITY_ENCRYPTION_KEY}
 xpack.reporting.encryptionKey: ${KIBANA_REPORTING_ENCRYPTION_KEY}
+
+xpack.fleet.enabled: false
+xpack.securitySolution.enabled: false
+monitoring.ui.container.elasticsearch.enabled: true
 
 logging.root.level: info
