@@ -1,28 +1,6 @@
 name: transcendence
 
 services:
-  alertmanager:
-    image: prom/alertmanager:v0.27.0
-    volumes:
-      - ./docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-      - alertmanager_data:/alertmanager
-    networks:
-      - monitoring
-      - app
-    command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
-      - '--web.external-url=http://127.0.0.1:9093'
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9093/-/healthy >/dev/null 2>&1' ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    mem_limit: 128m
-    security_opt:
-      - no-new-privileges:true
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     volumes:
@@ -77,7 +55,6 @@ services:
       - ./docker/elasticsearch/certs:/usr/share/filebeat/config/certs:ro
     networks:
       - elk
-      - monitoring
     ports:
       - '127.0.0.1:5066:5066'
     restart: on-failure
@@ -89,32 +66,6 @@ services:
       start_period: 30s
     user: root
     mem_limit: 128m
-
-  grafana:
-    image: grafana/grafana:11.1.0
-    depends_on:
-      prometheus:
-        condition: service_healthy
-    volumes:
-      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
-      - grafana_data:/var/lib/grafana
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
-    networks:
-      - monitoring
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:3000/api/health >/dev/null 2>&1' ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
-    mem_limit: 256m
-    security_opt:
-      - no-new-privileges:true
 
   kibana:
     image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
@@ -181,7 +132,6 @@ services:
       LOGSTASH_PASSWORD: ${LOGSTASH_PASSWORD}
     networks:
       - elk
-      - monitoring
     restart: on-failure
     healthcheck:
       test:
@@ -208,7 +158,6 @@ services:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     networks:
       - elk
-      - monitoring
     restart: on-failure
     healthcheck:
       test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9273/metrics >/dev/null 2>&1' ]
@@ -238,7 +187,6 @@ services:
     networks:
       - edge
       - app
-      - monitoring
       - elk
       - vault_net
     entrypoint: [ "/bin/sh", "/opt/custom/entrypoint.sh" ]
@@ -251,27 +199,6 @@ services:
       start_period: 10s
     user: root
     mem_limit: 256m
-    security_opt:
-      - no-new-privileges:true
-
-  nginx-exporter:
-    image: nginx/nginx-prometheus-exporter:1.1.0
-    depends_on:
-      nginx:
-        condition: service_healthy
-    networks:
-      - monitoring
-      - app
-    command:
-      - '-nginx.scrape-uri=http://nginx:8081/stub_status'
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD', '/usr/bin/nginx-prometheus-exporter', '--version' ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    mem_limit: 128m
     security_opt:
       - no-new-privileges:true
 
@@ -349,52 +276,6 @@ services:
       - no-new-privileges:true
     shm_size: 128m
 
-  postgres-exporter:
-    image: prometheuscommunity/postgres-exporter:v0.15.0
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DATA_SOURCE_NAME: ${DATABASE_URL}
-      PGSSLMODE: disable
-    networks:
-      - monitoring
-      - app
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9187/metrics >/dev/null 2>&1' ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    mem_limit: 128m
-    security_opt:
-      - no-new-privileges:true
-
-  prometheus:
-    image: prom/prometheus:v2.54.1
-    volumes:
-      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./docker/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
-      - prometheus_data:/prometheus
-    networks:
-      - monitoring
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.retention.time=7d'
-      - '--storage.tsdb.retention.size=256MB'
-      - '--web.enable-lifecycle'
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9090/-/healthy >/dev/null 2>&1' ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    mem_limit: 256m
-    security_opt:
-      - no-new-privileges:true
-
   vault:
     image: hashicorp/vault:1.17
     environment:
@@ -455,9 +336,6 @@ networks:
   app:
     driver: bridge
     internal: true
-  monitoring:
-    driver: bridge
-    internal: true
   vault_net:
     driver: bridge
 
@@ -468,9 +346,6 @@ volumes:
   nginx_logs:
   nginx_certs:
   filebeat_data:
-  prometheus_data:
-  grafana_data:
   portainer_data:
   kibana_data:
   vault_agent_data:
-  alertmanager_data:

@@ -48,7 +48,7 @@ dev:
 	@echo "$(GREEN)✓ Development environment started$(RESET)"
 	@echo "$(BLUE)App:      http://localhost:8080$(RESET)"
 	@echo "$(BLUE)Kibana:   http://kibana.localhost:8080$(RESET)"
-	@echo "$(BLUE)Grafana:  http://grafana.localhost:8080$(RESET)"
+
 	@echo "$(BLUE)Vault:    http://vault.localhost:8080/ui$(RESET)"
 
 prod:
@@ -62,7 +62,7 @@ prod:
 	@echo "$(GREEN)✓ Production environment started$(RESET)"
 	@echo "$(BLUE)App:      https://localhost$(RESET)"
 	@echo "$(BLUE)Kibana:   https://kibana.localhost$(RESET)"
-	@echo "$(BLUE)Grafana:  https://grafana.localhost$(RESET)"
+
 	@echo "$(BLUE)Vault:    https://vault.localhost/ui$(RESET)"
 
 down:
