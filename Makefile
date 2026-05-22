@@ -46,7 +46,10 @@ dev:
 	@echo "$(BLUE)Starting $(PROJECT_NAME) in development mode...$(RESET)"
 	@$(COMPOSE_DEV) up --build -d
 	@echo "$(GREEN)✓ Development environment started$(RESET)"
-	@echo "$(BLUE)App: http://127.0.0.1:8080 | Vault: http://127.0.0.1:8200/ui$(RESET)"
+	@echo "$(BLUE)App:      http://localhost:8080$(RESET)"
+	@echo "$(BLUE)Kibana:   http://kibana.localhost:8080$(RESET)"
+	@echo "$(BLUE)Grafana:  http://grafana.localhost:8080$(RESET)"
+	@echo "$(BLUE)Vault:    http://127.0.0.1:8200/ui$(RESET)"
 
 prod:
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(RESET)"
@@ -57,7 +60,10 @@ prod:
 	@echo "$(BLUE)Starting $(PROJECT_NAME) in production mode...$(RESET)"
 	@$(COMPOSE_PROD) up --build -d
 	@echo "$(GREEN)✓ Production environment started$(RESET)"
-	@echo "$(BLUE)App: http://127.0.0.1 | Vault: http://127.0.0.1:8200/ui$(RESET)"
+	@echo "$(BLUE)App:      https://localhost$(RESET)"
+	@echo "$(BLUE)Kibana:   https://kibana.localhost$(RESET)"
+	@echo "$(BLUE)Grafana:  https://grafana.localhost$(RESET)"
+	@echo "$(BLUE)Vault:    http://127.0.0.1:8200/ui$(RESET)"
 
 down:
 	@echo "$(YELLOW)Stopping all environments...$(RESET)"
