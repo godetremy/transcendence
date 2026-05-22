@@ -37,13 +37,13 @@ Ce guide couvre l'utilisation de la stack **Elasticsearch + Logstash + Kibana + 
 | **App** | `http://localhost:8080` | `https://localhost` |
 | **Kibana** | `http://kibana.localhost:8080` | `https://kibana.localhost` |
 | **Grafana** | `http://grafana.localhost:8080` | `https://grafana.localhost` |
-| **Vault** | `http://127.0.0.1:8200/ui` | `http://127.0.0.1:8200/ui` |
+| **Vault** | `http://vault.localhost:8080/ui` | `https://vault.localhost/ui` |
 | **Portainer** | `https://127.0.0.1:9443` | `https://127.0.0.1:9443` |
 | **Prometheus** | `http://127.0.0.1:9090` | `http://127.0.0.1:9090` |
 
 > **Note macOS** : `*.localhost` résout automatiquement vers `127.0.0.1`. Sur Linux, ajoutez dans `/etc/hosts` :
 > ```
-> 127.0.0.1 kibana.localhost grafana.localhost app.localhost
+> 127.0.0.1 kibana.localhost grafana.localhost vault.localhost app.localhost
 > ```
 
 ## Démarrage
@@ -234,4 +234,4 @@ curl http://127.0.0.1:9273/metrics | grep elasticsearch
 | `app` | Node, Postgres, Nginx | ❌ Interne |
 | `monitoring` | Prometheus, Grafana, Alertmanager, Telegraf | ❌ Interne |
 | `elk` | ES, Kibana, Logstash, Filebeat, Telegraf | ❌ Interne |
-| `vault_net` | Vault, Vault-Agent | ✅ Vault (8200) |
+| `vault_net` | Vault, Vault-Agent | ❌ Interne (via nginx) |

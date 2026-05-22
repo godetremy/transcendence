@@ -240,6 +240,7 @@ services:
       - app
       - monitoring
       - elk
+      - vault_net
     entrypoint: [ "/bin/sh", "/opt/custom/entrypoint.sh" ]
     restart: on-failure
     healthcheck:
@@ -399,8 +400,6 @@ services:
     environment:
       VAULT_ADDR: ${VAULT_ADDR}
       VAULT_API_ADDR: ${VAULT_API_ADDR}
-    ports:
-      - '0.0.0.0:8200:8200'
     networks:
       - vault_net
     command:

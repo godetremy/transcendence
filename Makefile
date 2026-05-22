@@ -49,7 +49,7 @@ dev:
 	@echo "$(BLUE)App:      http://localhost:8080$(RESET)"
 	@echo "$(BLUE)Kibana:   http://kibana.localhost:8080$(RESET)"
 	@echo "$(BLUE)Grafana:  http://grafana.localhost:8080$(RESET)"
-	@echo "$(BLUE)Vault:    http://127.0.0.1:8200/ui$(RESET)"
+	@echo "$(BLUE)Vault:    http://vault.localhost:8080/ui$(RESET)"
 
 prod:
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(RESET)"
@@ -63,7 +63,7 @@ prod:
 	@echo "$(BLUE)App:      https://localhost$(RESET)"
 	@echo "$(BLUE)Kibana:   https://kibana.localhost$(RESET)"
 	@echo "$(BLUE)Grafana:  https://grafana.localhost$(RESET)"
-	@echo "$(BLUE)Vault:    http://127.0.0.1:8200/ui$(RESET)"
+	@echo "$(BLUE)Vault:    https://vault.localhost/ui$(RESET)"
 
 down:
 	@echo "$(YELLOW)Stopping all environments...$(RESET)"
