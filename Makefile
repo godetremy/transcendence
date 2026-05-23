@@ -87,7 +87,16 @@ status:
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
 	-@$(DOCKER_STATS) --no-stream --format "table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.CPUPerc}}" 2>/dev/null || true
 
-ps: status
+ps:
+	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
+	@echo "$(BLUE)  Containers$(RESET)"
+	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
+	-@docker ps --filter "name=trans-" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "  (not running)"
+	@echo ""
+	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
+	@echo "$(BLUE)  Memory Usage$(RESET)"
+	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
+	-@$(DOCKER_STATS) --no-stream --format "table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.CPUPerc}}" 2>/dev/null || true
 
 logs-dev:
 	@echo "$(BLUE)=== Dev Logs ====$(RESET)"
