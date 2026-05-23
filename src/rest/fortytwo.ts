@@ -1,5 +1,5 @@
-import { FortyTwoCursusUserDetails } from '@/types/FortyTwoCursusUserDetails';
-import { FortyTwoOauthToken } from '@/types/FortyTwoOauthToken';
+import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
+import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 
 const FORTY_TWO_BASE_URL = 'https://api.intra.42.fr';
 
@@ -10,7 +10,7 @@ export function generateFortyTwoAuthorizationUrl(): string {
 		throw new Error('Missing key NEXT_PUBLIC_OAUTH_42_CLIENTID in environement');
 
 	url.searchParams.set('client_id', process.env.NEXT_PUBLIC_OAUTH_42_CLIENTID);
-	url.searchParams.set('redirect_uri', 'http://localhost:3000/app/api/auth/oauth/fortytwo/authorize');
+	url.searchParams.set('redirect_uri', `${process.env.NEXT_PUBLIC_BASE_URL}/app/api/auth/oauth/fortytwo/authorize`);
 	url.searchParams.set('response_type', 'code');
 
 	return url.toString();
@@ -24,7 +24,7 @@ export async function getFortyTwoOauthToken(code: string): Promise<FortyTwoOauth
 			client_id: process.env.NEXT_PUBLIC_OAUTH_42_CLIENTID,
 			client_secret: process.env.OAUTH_42_SECRET,
 			code: code,
-			redirect_uri: 'http://localhost:3000/app/api/auth/oauth/fortytwo/authorize',
+			redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/app/api/auth/oauth/fortytwo/authorize`,
 		}),
 		headers: {
 			'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ COPY --from=deps /home/node/app/node_modules ./node_modules
 COPY --from=build /home/node/app/.next ./.next
 COPY --from=build /home/node/app/public ./public
 COPY --from=build /home/node/app/package.json ./
-COPY --from=build /home/node/app/prisma ./prisma
+COPY --from=build /home/node/app/src/database/prisma ./src/database/prisma
 USER node
 EXPOSE 3000
 CMD ["npm", "start"]

@@ -1,6 +1,7 @@
+import './globals.scss';
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
-import './globals.scss';
+import { ModalProvider } from '@/components/globals/ModalProvider/ModalProvider';
 
 const montserrat = Montserrat({
 	subsets: ['latin'],
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="fr" className={`${montserrat.className}`}>
-			<body>{children}</body>
+			<body>
+				<ModalProvider>{children}</ModalProvider>
+			</body>
 		</html>
 	);
 }
