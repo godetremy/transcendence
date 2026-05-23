@@ -71,14 +71,9 @@ down:
 	-@$(COMPOSE_PROD) down --remove-orphans 2>/dev/null || true
 	@echo "$(GREEN)✓ All environments stopped$(RESET)"
 
-status:
+ps:
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	@echo "$(BLUE)  Dev Environment$(RESET)"
-	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	-@$(COMPOSE_DEV) ps -a 2>/dev/null || echo "  (not running)"
-	@echo ""
-	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	@echo "$(BLUE)  Prod Environment$(RESET)"
+	@echo "$(BLUE)  Containers$(RESET)"
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
 	-@$(COMPOSE_PROD) ps -a 2>/dev/null || echo "  (not running)"
 	@echo ""
@@ -86,28 +81,6 @@ status:
 	@echo "$(BLUE)  Memory Usage$(RESET)"
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
 	-@$(DOCKER_STATS) --no-stream --format "table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.CPUPerc}}" 2>/dev/null || true
-
-ps:
-	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	@echo "$(BLUE)  Containers$(RESET)"
-	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	-@docker ps --filter "name=trans-" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "  (not running)"
-	@echo ""
-	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	@echo "$(BLUE)  Memory Usage$(RESET)"
-	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	-@$(DOCKER_STATS) --no-stream --format "table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.CPUPerc}}" 2>/dev/null || true
-
-logs-dev:
-	@echo "$(BLUE)=== Dev Logs ====$(RESET)"
-	@$(COMPOSE_DEV) logs --tail=100 -f
-
-logs-prod:
-	@echo "$(BLUE)=== Prod Logs ====$(RESET)"
-	@$(COMPOSE_PROD) logs --tail=100 -f
-
-logs:
-	@echo "$(YELLOW)Use 'make logs-dev' or 'make logs-prod' to follow specific environment logs$(RESET)"
 
 clean:
 	@echo "$(RED)WARNING: This will remove all volumes and certificates (data loss!)$(RESET)"
@@ -153,12 +126,10 @@ help:
 	@echo "  $(GREEN)dev$(RESET)      : Start in development mode (hot reload, debug tools)"
 	@echo "  $(GREEN)prod$(RESET)     : Start in production mode (built app, SSL)"
 	@echo "  $(GREEN)down$(RESET)     : Stop all containers"
-	@echo "  $(GREEN)status$(RESET)   : Show container status + memory usage"
 	@echo "  $(GREEN)ps$(RESET)       : Show all containers"
-	@echo "  $(GREEN)logs$(RESET)     : Follow logs from all services"
 	@echo "  $(GREEN)clean$(RESET)    : Stop + remove volumes (DESTRUCTIVE)"
 	@echo "  $(GREEN)prune$(RESET)    : Stop + remove volumes, images, networks + prune system (DESTRUCTIVE)"
 	@echo "  $(GREEN)help$(RESET)     : Show this help message"
 	@echo ""
 
-.PHONY: all dev prod down status ps logs clean prune help
+.PHONY: all dev prod down ps clean prune help
