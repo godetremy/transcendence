@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-KIBANA_URL="https://kibana:5601/kibana"
+KIBANA_URL="https://kibana:5601"
 AUTH="${KIBANA_SYSTEM_USERNAME}:${KIBANA_SYSTEM_PASSWORD}"
 DASHBOARD_DIR="/usr/share/kibana/dashboards"
 
