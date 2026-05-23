@@ -76,6 +76,9 @@ services:
       - ./docker/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
       - ./docker/elasticsearch/certs:/usr/share/kibana/config/certs:ro
       - ./docker/kibana/bootstrap/generate-kibana-certs.sh:/usr/share/kibana/config/bootstrap-generate-kibana-certs.sh:ro
+      - ./docker/kibana/bootstrap/kibana-entrypoint.sh:/usr/share/kibana/config/kibana-entrypoint.sh:ro
+      - ./docker/kibana/bootstrap/import-dashboards.sh:/scripts/import-dashboards.sh:ro
+      - ./docker/kibana/dashboards:/usr/share/kibana/dashboards:ro
       - kibana_data:/usr/share/kibana/data
     environment:
       KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME}
@@ -87,7 +90,7 @@ services:
       ELASTIC_USERNAME: ${ELASTIC_USERNAME}
     networks:
       - elk
-    entrypoint: [ "/bin/sh", "-c", "/usr/share/kibana/config/bootstrap-generate-kibana-certs.sh && /usr/local/bin/kibana-docker" ]
+    entrypoint: [ "/bin/sh", "-c", "sh /usr/share/kibana/config/kibana-entrypoint.sh" ]
     restart: on-failure
     healthcheck:
       test:
@@ -99,24 +102,6 @@ services:
       start_period: 100s
     user: '1000:0'
     mem_limit: 768m
-
-  kibana-dashboards:
-    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
-    depends_on:
-      kibana:
-        condition: service_healthy
-    volumes:
-      - ./docker/kibana/bootstrap/import-dashboards.sh:/scripts/import-dashboards.sh:ro
-      - ./docker/kibana/dashboards:/usr/share/kibana/dashboards:ro
-      - ./docker/elasticsearch/certs:/usr/share/kibana/config/certs:ro
-    environment:
-      KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME}
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
-    networks:
-      - elk
-    entrypoint: [ "/bin/sh", "-c", "sh /scripts/import-dashboards.sh" ]
-    restart: "no"
-    mem_limit: 256m
 
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELK_VERSION}

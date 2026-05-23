@@ -18,4 +18,4 @@ if [ ! -f "$CERT_DIR/kibana.crt" ]; then
     exit 1
 fi
 
-exec /usr/local/bin/kibana-docker
+# Certificates ready — Kibana will be started by the caller entrypoint
