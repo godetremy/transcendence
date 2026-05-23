@@ -46,10 +46,10 @@ dev:
 	@echo "$(BLUE)Starting $(PROJECT_NAME) in development mode...$(RESET)"
 	@$(COMPOSE_DEV) up --build -d
 	@echo "$(GREEN)✓ Development environment started$(RESET)"
-	@echo "$(BLUE)App:      https://localhost:8080$(RESET)"
-	@echo "$(BLUE)Kibana:   https://kibana.localhost:8080$(RESET)"
+	@echo "$(BLUE)App:      https://localhost$(RESET)"
+	@echo "$(BLUE)Kibana:   https://kibana.localhost$(RESET)"
 
-	@echo "$(BLUE)Vault:    https://vault.localhost:8080/ui$(RESET)"
+	@echo "$(BLUE)Vault:    https://vault.localhost/ui$(RESET)"
 
 prod:
 	@echo "$(YELLOW)═══════════════════════════════════════════════════════$(RESET)"

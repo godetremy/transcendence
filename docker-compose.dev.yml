@@ -1,6 +1,12 @@
 name: trans-dev
 
 services:
+  nginx:
+    environment:
+      NGINX_SSL: "1"
+    ports:
+      - '127.0.0.1:443:443'
+
   node:
     build:
       target: dev
