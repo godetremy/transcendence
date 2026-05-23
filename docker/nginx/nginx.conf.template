@@ -106,7 +106,7 @@ http {
 
 	# Main app — localhost / app.localhost / 127.0.0.1 (catch-all)
 	server {
-		listen ${NGINX_PORT};
+		listen ${NGINX_PORT} default_server;
 		${NGINX_SSL_CERT}
 		${NGINX_SSL_KEY}
 
