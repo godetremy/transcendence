@@ -17,3 +17,19 @@ $breakpoints-desktop: 1200px;
 	-webkit-line-clamp: $line;
 	-webkit-box-orient: vertical;
 }
+
+@keyframes skeletonBackground {
+	0% {
+		opacity: 0.15;
+	}
+	50% {
+		opacity: 0.1;
+	}
+	100% {
+		opacity: 0.15;
+	}
+}
+
+@mixin skeleton {
+	animation: skeletonBackground 2s ease-out infinite;
+}
