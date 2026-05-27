@@ -75,7 +75,7 @@ ps:
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
 	@echo "$(BLUE)  Containers$(RESET)"
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	-@$(COMPOSE_PROD) ps -a 2>/dev/null || echo "  (not running)"
+	-@$(COMPOSE_BASE) ps -a 2>/dev/null || echo "  (not running)"
 	@echo ""
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
 	@echo "$(BLUE)  Memory Usage$(RESET)"

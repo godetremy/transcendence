@@ -15,12 +15,11 @@ CMD ["npm", "run", "dev"]
 # ── DEPS ──
 FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm ci && npm prune --production
-
-# ── BUILD ──
-FROM base AS build
-COPY package.json package-lock.json ./
 RUN npm ci
+
+# ── BUILDER ──
+FROM base AS builder
+COPY --from=deps /home/node/app/node_modules ./node_modules
 COPY . .
 ARG NEXT_PUBLIC_OAUTH_42_CLIENTID
 ENV NEXT_PUBLIC_OAUTH_42_CLIENTID=${NEXT_PUBLIC_OAUTH_42_CLIENTID}
@@ -28,15 +27,17 @@ ARG NEXT_PUBLIC_BASE_URL
 ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
 RUN npm run build
 
-# ── PROD ──
-FROM base AS prod
+# ── RUNNER ──
+FROM base AS runner
 ENV NODE_ENV=production
-COPY --from=deps /home/node/app/node_modules ./node_modules
-COPY --from=build /home/node/app/.next/standalone ./
-COPY --from=build /home/node/app/.next/static ./.next/static
-COPY --from=build /home/node/app/public ./public
-COPY --from=build /home/node/app/src/database/prisma ./src/database/prisma
-COPY --from=build /home/node/app/package.json ./
+ENV PORT=3000
+
+COPY --from=builder /home/node/app/public ./public
+COPY --from=builder --chown=node:node /home/node/app/.next/standalone ./
+COPY --from=builder --chown=node:node /home/node/app/.next/static ./.next/static
+COPY --from=builder /home/node/app/src/database/prisma ./src/database/prisma
+COPY --from=builder /home/node/app/package.json ./
+
 USER node
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD HOSTNAME="0.0.0.0" node server.js

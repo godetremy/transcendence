@@ -9,4 +9,10 @@ if [ ! -f /home/node/app/node_modules/.bin/next ]; then
 	cp -r /home/node/node_modules_backup/. /home/node/app/node_modules/
 fi
 
+# Apply Prisma migrations (idempotent — does nothing if already up to date)
+if [ -f /home/node/app/src/database/prisma/schema.prisma ]; then
+	echo "[dev] Applying Prisma migrations..."
+	npx prisma migrate deploy --schema=/home/node/app/src/database/prisma/schema.prisma
+fi
+
 exec "$@"

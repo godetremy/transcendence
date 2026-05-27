@@ -8,17 +8,45 @@ services:
       - '0.0.0.0:80:80'
       - '0.0.0.0:443:443'
 
+  prisma-migrate:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+      target: builder
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    command: npx prisma migrate deploy --schema=src/database/prisma/schema.prisma
+    networks:
+      - app
+
   node:
     build:
-      target: prod
+      target: runner
       args:
         NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
         NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      vault-agent:
+        condition: service_healthy
+      prisma-migrate:
+        condition: service_completed_successfully
     volumes:
       - node_modules:/home/node/app/node_modules
       - vault_agent_data:/vault/agent:ro
     environment:
       NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      PORT: "3000"
+      DATABASE_URL: ${DATABASE_URL}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+      NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+      OAUTH_42_SECRET: ${OAUTH_42_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
     command: >
       sh -c 'set -a;
       [ -f /vault/agent/rendered/app-config.env ] && . /vault/agent/rendered/app-config.env;

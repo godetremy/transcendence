@@ -208,6 +208,7 @@ services:
       NODE_ENV: ${NODE_ENV}
     networks:
       - app
+      - edge
     working_dir: /home/node/app
     restart: on-failure
     healthcheck:
