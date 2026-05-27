@@ -7,17 +7,23 @@ services:
     ports:
       - '0.0.0.0:80:80'
       - '0.0.0.0:443:443'
+
   node:
     build:
       target: prod
       args:
         NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
     volumes:
       - node_modules:/home/node/app/node_modules
       - vault_agent_data:/vault/agent:ro
     environment:
       NODE_ENV: production
-    command: sh -c 'set -a; [ -f /vault/agent/rendered/app-config.env ] && . /vault/agent/rendered/app-config.env; set +a; exec npm run start'
+    command: >
+      sh -c 'set -a;
+      [ -f /vault/agent/rendered/app-config.env ] && . /vault/agent/rendered/app-config.env;
+      set +a;
+      exec node server.js'
 
   vault:
     volumes:

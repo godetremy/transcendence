@@ -194,6 +194,7 @@ services:
       target: ${NODE_TARGET:-dev}
       args:
         NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
     depends_on:
       postgres:
         condition: service_healthy
@@ -207,7 +208,6 @@ services:
       NODE_ENV: ${NODE_ENV}
     networks:
       - app
-    command: sh -c 'set -a; [ -f /vault/agent/rendered/app-config.env ] && . /vault/agent/rendered/app-config.env; set +a; npm install && npm run dev'
     working_dir: /home/node/app
     restart: on-failure
     healthcheck:
