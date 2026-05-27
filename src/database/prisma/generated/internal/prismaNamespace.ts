@@ -386,6 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   memberships: 'memberships',
   oauth_fortytwo: 'oauth_fortytwo',
+  registered_event: 'registered_event',
+  event: 'event',
   users: 'users'
 } as const
 
@@ -402,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "memberships" | "oauth_fortytwo" | "users"
+    modelProps: "memberships" | "oauth_fortytwo" | "registered_event" | "event" | "users"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -554,6 +556,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    registered_event: {
+      payload: Prisma.$registered_eventPayload<ExtArgs>
+      fields: Prisma.registered_eventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.registered_eventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.registered_eventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>
+        }
+        findFirst: {
+          args: Prisma.registered_eventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.registered_eventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>
+        }
+        findMany: {
+          args: Prisma.registered_eventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>[]
+        }
+        create: {
+          args: Prisma.registered_eventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>
+        }
+        createMany: {
+          args: Prisma.registered_eventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.registered_eventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>[]
+        }
+        delete: {
+          args: Prisma.registered_eventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>
+        }
+        update: {
+          args: Prisma.registered_eventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>
+        }
+        deleteMany: {
+          args: Prisma.registered_eventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.registered_eventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.registered_eventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>[]
+        }
+        upsert: {
+          args: Prisma.registered_eventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$registered_eventPayload>
+        }
+        aggregate: {
+          args: Prisma.Registered_eventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRegistered_event>
+        }
+        groupBy: {
+          args: Prisma.registered_eventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Registered_eventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.registered_eventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Registered_eventCountAggregateOutputType> | number
+        }
+      }
+    }
+    event: {
+      payload: Prisma.$eventPayload<ExtArgs>
+      fields: Prisma.eventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.eventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.eventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>
+        }
+        findFirst: {
+          args: Prisma.eventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.eventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>
+        }
+        findMany: {
+          args: Prisma.eventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>[]
+        }
+        create: {
+          args: Prisma.eventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>
+        }
+        createMany: {
+          args: Prisma.eventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.eventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>[]
+        }
+        delete: {
+          args: Prisma.eventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>
+        }
+        update: {
+          args: Prisma.eventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>
+        }
+        deleteMany: {
+          args: Prisma.eventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.eventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.eventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>[]
+        }
+        upsert: {
+          args: Prisma.eventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$eventPayload>
+        }
+        aggregate: {
+          args: Prisma.EventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvent>
+        }
+        groupBy: {
+          args: Prisma.eventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.eventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventCountAggregateOutputType> | number
+        }
+      }
+    }
     users: {
       payload: Prisma.$usersPayload<ExtArgs>
       fields: Prisma.usersFieldRefs
@@ -684,6 +834,33 @@ export const Oauth_fortytwoScalarFieldEnum = {
 } as const
 
 export type Oauth_fortytwoScalarFieldEnum = (typeof Oauth_fortytwoScalarFieldEnum)[keyof typeof Oauth_fortytwoScalarFieldEnum]
+
+
+export const Registered_eventScalarFieldEnum = {
+  id: 'id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  full_name: 'full_name',
+  created_at: 'created_at',
+  registered_event_id: 'registered_event_id'
+} as const
+
+export type Registered_eventScalarFieldEnum = (typeof Registered_eventScalarFieldEnum)[keyof typeof Registered_eventScalarFieldEnum]
+
+
+export const EventScalarFieldEnum = {
+  id: 'id',
+  author_id: 'author_id',
+  title: 'title',
+  description: 'description',
+  max_inscription: 'max_inscription',
+  registered_count: 'registered_count',
+  start_at: 'start_at',
+  end_at: 'end_at',
+  created_at: 'created_at'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const UsersScalarFieldEnum = {
@@ -896,6 +1073,8 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   memberships?: Prisma.membershipsOmit
   oauth_fortytwo?: Prisma.oauth_fortytwoOmit
+  registered_event?: Prisma.registered_eventOmit
+  event?: Prisma.eventOmit
   users?: Prisma.usersOmit
 }
 

@@ -28,6 +28,16 @@ export type memberships = Prisma.membershipsModel
  */
 export type oauth_fortytwo = Prisma.oauth_fortytwoModel
 /**
+ * Model registered_event
+ * 
+ */
+export type registered_event = Prisma.registered_eventModel
+/**
+ * Model event
+ * 
+ */
+export type event = Prisma.eventModel
+/**
  * Model users
  * 
  */

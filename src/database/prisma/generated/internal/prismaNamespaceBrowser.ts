@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   memberships: 'memberships',
   oauth_fortytwo: 'oauth_fortytwo',
+  registered_event: 'registered_event',
+  event: 'event',
   users: 'users'
 } as const
 
@@ -89,6 +91,33 @@ export const Oauth_fortytwoScalarFieldEnum = {
 } as const
 
 export type Oauth_fortytwoScalarFieldEnum = (typeof Oauth_fortytwoScalarFieldEnum)[keyof typeof Oauth_fortytwoScalarFieldEnum]
+
+
+export const Registered_eventScalarFieldEnum = {
+  id: 'id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  full_name: 'full_name',
+  created_at: 'created_at',
+  registered_event_id: 'registered_event_id'
+} as const
+
+export type Registered_eventScalarFieldEnum = (typeof Registered_eventScalarFieldEnum)[keyof typeof Registered_eventScalarFieldEnum]
+
+
+export const EventScalarFieldEnum = {
+  id: 'id',
+  author_id: 'author_id',
+  title: 'title',
+  description: 'description',
+  max_inscription: 'max_inscription',
+  registered_count: 'registered_count',
+  start_at: 'start_at',
+  end_at: 'end_at',
+  created_at: 'created_at'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const UsersScalarFieldEnum = {

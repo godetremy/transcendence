@@ -53,6 +53,39 @@ model permission {
 	MemberUsers users[]
 }
 
+model registered_event {
+	id							String		@id @default(uuid())
+
+	first_name					String?
+	last_name					String?
+	full_name					String?
+
+	created_at					DateTime	@default(now())
+
+	registered_event_id			String? 	@unique
+	event						event?		@relation(fields: [registered_event_id], references: [id])
+
+}
+
+model event {
+	id						String			@id @default(uuid())
+
+	author_id				String
+	author					users			@relation(fields: [author_id], references: [id])
+
+	registered				registered_event?
+
+	title					String?
+	description				String?
+
+	max_inscription			Int			@default(0)
+	registered_count		Int			@default(0)
+
+	start_at				DateTime	@default(now())
+	end_at					DateTime	@default(now())
+	created_at				DateTime	@default(now())
+}
+
 model users {
 	id					String				@id	@default(uuid())
 	
@@ -64,6 +97,7 @@ model users {
 
 	permission_id		String?
 	permission			permission?		@relation(fields: [permission_id], references: [id])
+	events				event[]
 	
 	fortytwo_user_id	Int?				@unique
 
