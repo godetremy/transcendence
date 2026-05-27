@@ -83,6 +83,7 @@ services:
     environment:
       KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME}
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
+      KIBANA_URL: ${KIBANA_URL}
       KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY}
       KIBANA_REPORTING_ENCRYPTION_KEY: ${KIBANA_REPORTING_ENCRYPTION_KEY}
       KIBANA_SECURITY_ENCRYPTION_KEY: ${KIBANA_SECURITY_ENCRYPTION_KEY}
@@ -165,6 +166,7 @@ services:
       - ./docker/nginx/modsecurity-exclusions.conf:/opt/custom/modsecurity-exclusions.conf:ro
       - ./docker/nginx/crs-setup.conf:/opt/custom/crs-setup.conf:ro
       - ./docker/nginx/entrypoint.sh:/opt/custom/entrypoint.sh:ro
+      - ./docker/nginx/modsecurity-kibana-crs-exclusions.conf:/etc/modsecurity.d/owasp-crs/rules/000-kibana-exclusions.conf:ro
       - nginx_logs:/var/log/nginx
       - nginx_certs:/etc/nginx/certs
     ports:
@@ -205,7 +207,6 @@ services:
       - vault_agent_data:/vault/agent:ro
     environment:
       DATABASE_URL: ${DATABASE_URL}
-      NODE_ENV: ${NODE_ENV}
     networks:
       - app
       - edge

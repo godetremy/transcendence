@@ -9,6 +9,11 @@ cp /opt/custom/modsecurity.conf /etc/nginx/modsecurity.d/modsecurity-override.co
 cp /opt/custom/modsecurity-exclusions.conf /etc/nginx/modsecurity.d/modsecurity-exclusions.conf
 cp /opt/custom/crs-setup.conf /etc/modsecurity.d/owasp-crs/crs-setup.conf
 
+# Ensure custom exclusions are actually loaded by ModSecurity
+if ! grep -q "modsecurity-exclusions.conf" /etc/nginx/modsecurity.d/setup.conf 2>/dev/null; then
+    echo "Include /etc/nginx/modsecurity.d/modsecurity-exclusions.conf" >> /etc/nginx/modsecurity.d/setup.conf
+fi
+
 # Generate self-signed certificates for production if SSL is enabled
 if [ "${NGINX_SSL:-0}" = "1" ]; then
 	if [ ! -f /etc/nginx/certs/nginx.crt ] || [ ! -f /etc/nginx/certs/nginx.key ]; then

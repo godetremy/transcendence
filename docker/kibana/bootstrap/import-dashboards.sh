@@ -1,13 +1,16 @@
 #!/bin/bash
 set -eu
 
-KIBANA_URL="https://kibana:5601"
+# Use internal URL for container-side API calls; KIBANA_URL is only for publicBaseUrl
+KIBANA_INTERNAL_URL="https://127.0.0.1:5601"
 AUTH="${KIBANA_SYSTEM_USERNAME}:${KIBANA_SYSTEM_PASSWORD}"
+# elastic superuser is required for saved-objects import API
+ADMIN_AUTH="${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
 DASHBOARD_DIR="/usr/share/kibana/dashboards"
 
 wait_for_kibana() {
     for i in $(seq 1 60); do
-        code=$(curl -sSk -o /dev/null -w "%{http_code}" "${KIBANA_URL}/api/status" -u "${AUTH}" || true)
+        code=$(curl -sSk -o /dev/null -w "%{http_code}" "${KIBANA_INTERNAL_URL}/api/status" -u "${AUTH}" || true)
         if [ "$code" = "200" ] || [ "$code" = "302" ]; then
             echo "Kibana is ready."
             return 0
@@ -22,9 +25,9 @@ wait_for_kibana() {
 import_ndjson() {
     local file="$1"
     echo "Importing dashboard file: $file"
-    curl -sSk -X POST "${KIBANA_URL}/api/saved_objects/_import?overwrite=true" \
+    curl -sSk -X POST "${KIBANA_INTERNAL_URL}/api/saved_objects/_import?overwrite=true" \
         -H "kbn-xsrf: true" \
-        -u "${AUTH}" \
+        -u "${ADMIN_AUTH}" \
         --form "file=@$file" \
         -o /dev/null -w "%{http_code}"
     echo ""

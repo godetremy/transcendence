@@ -66,6 +66,20 @@ http {
 		add_header X-XSS-Protection "1; mode=block" always;
 		add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
+		# Disable ModSecurity for Kibana internal security API to avoid
+		# false positives on login JSON payloads containing URL-encoded values
+		location /internal/security/ {
+			modsecurity off;
+			proxy_pass https://kibana_backend/internal/security/;
+			proxy_ssl_verify off;
+			proxy_http_version 1.1;
+			proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header X-Forwarded-Proto $scheme;
+			proxy_read_timeout 300s;
+		}
+
 		location / {
 			proxy_pass https://kibana_backend/;
 			proxy_ssl_verify off;
