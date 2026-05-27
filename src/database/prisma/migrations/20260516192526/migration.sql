@@ -10,7 +10,7 @@ CREATE TABLE "memberships" (
 -- CreateTable
 CREATE TABLE "oauth_fortytwo" (
     "id" TEXT NOT NULL,
-    "access_token" TEXT NOT NULL,
+    "access_token" TEXT,
     "refresh_token" TEXT,
     "valid_until" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -22,13 +22,15 @@ CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "oauth_fortytwo_id" TEXT,
     "memberships_id" TEXT,
-    "fortytwo_user_id" INTEGER NOT NULL,
+    "fortytwo_user_id" INTEGER,
     "is_agent" BOOLEAN NOT NULL DEFAULT false,
+    "is_agent_verified" BOOLEAN,
+    "reason" TEXT,
     "mail" TEXT NOT NULL,
     "password" TEXT,
-    "first_name" TEXT NOT NULL,
-    "last_name" TEXT NOT NULL,
-    "full_name" TEXT NOT NULL,
+    "first_name" TEXT,
+    "last_name" TEXT,
+    "full_name" TEXT,
     "profile_picture" TEXT NOT NULL DEFAULT '/images/default_user.png',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

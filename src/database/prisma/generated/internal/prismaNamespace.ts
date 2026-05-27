@@ -692,6 +692,8 @@ export const UsersScalarFieldEnum = {
   memberships_id: 'memberships_id',
   fortytwo_user_id: 'fortytwo_user_id',
   is_agent: 'is_agent',
+  is_agent_verified: 'is_agent_verified',
+  reason: 'reason',
   mail: 'mail',
   password: 'password',
   first_name: 'first_name',

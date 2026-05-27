@@ -7,11 +7,41 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
+import { SignupFormSchema } from '@/schema/SignupForm';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
+	const [message, setMessage] = useState<string | null>(null);
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
+
+	const signUp = async (form: FormData) => {
+		const fields = SignupFormSchema.safeParse({
+			email: form.get('email'),
+			password: form.get('password'),
+			passwordCheck: form.get('passwordCheck'),
+		});
+
+		if (!fields.success) {
+			setMessage(fields.error.issues[0].message);
+			return;
+		}
+		const message = await fetch('/app/api/auth/agents/signup/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email: fields.data.email,
+				password: fields.data.password,
+				passwordCheck: fields.data.passwordCheck,
+			}),
+		});
+		const body = await message.json();
+		setMessage(body.message);
+		if (message.ok) return redirect('/app/home/');
+	};
 
 	return (
 		<LoginTemplate
@@ -22,27 +52,32 @@ export default function Page() {
 		>
 			<LoginText title={'Cree un compte'} description={'Pour accéder à vos services inscrivez vous.'} />
 
-			<form>
+			<form action={signUp}>
 				<div className={'inputs'}>
 					<LoginTextInput
+						name={'email'}
 						type={'email'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
 					<LoginTextInput
+						name={'password'}
 						type={'password'}
 						icon={<KeyRound />}
 						nameLabel={'Mot de passe'}
 						placeholder={'••••••••••••'}
 					/>
 					<LoginTextInput
+						name={'passwordCheck'}
 						type={'password'}
 						icon={<KeyRound />}
 						nameLabel={'Confirmation du mot de passe'}
 						placeholder={'••••••••••••'}
 					/>
 				</div>
+
+				{message && <p>{message}</p>}
 
 				<Sublinks
 					links={[

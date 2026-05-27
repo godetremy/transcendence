@@ -3,7 +3,7 @@ import { SessionPayload } from '@/types/session/SessionPayload';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
-const ignorePath = ['/app/api/auth/oauth'];
+const ignorePath = ['/app/api/auth/'];
 
 function isPathIgnored(path: string): boolean {
 	if (!path.startsWith('/app')) return true;
@@ -42,6 +42,14 @@ export default async function proxy(req: NextRequest) {
 	}
 
 	if (session === null) return NextResponse.redirect(new URL('/app/login', req.nextUrl));
+
+	if (
+		session.is_agent == true &&
+		(session.is_agent_verified === null || session.is_agent_verified == false) &&
+		!req.nextUrl.pathname.startsWith('/app/agents/approval') &&
+		!req.nextUrl.pathname.startsWith('/app/api')
+	)
+		return NextResponse.redirect(new URL('/app/agents/approval', req.nextUrl));
 
 	return NextResponse.next();
 }
