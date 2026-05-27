@@ -1,18 +1,17 @@
-'use server';
 import { createUserAgent } from '@/database/users/createUser';
 import { isAccountExistByMail } from '@/database/users/isAccountExist';
 import { createSession } from '@/lib/session';
 import { SignupFormSchema } from '@/schema/SignupForm';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function signUpAgent(email: string, password: string): Promise<NextResponse> {
+export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
+		const body = await req.json();
 		const fields = SignupFormSchema.safeParse({
-			email: email,
-			password: password,
-			passwordCheck: password,
+			email: body.email,
+			password: body.password,
+			passwordCheck: body.passwordCheck,
 		});
 
 		if (!fields.success)
@@ -23,12 +22,16 @@ export async function signUpAgent(email: string, password: string): Promise<Next
 				{ status: 400 }
 			);
 
-		const exist = await isAccountExistByMail(email);
+		const exist = await isAccountExistByMail(fields.data.email);
 		if (exist) return NextResponse.json({ message: 'This account already exist.' }, { status: 400 });
 
-		const user_id = await createUserAgent(password, email);
+		const user = await createUserAgent(fields.data.email, fields.data.password);
 
-		const session = await createSession({ user_id });
+		const session = await createSession({
+			user_id: user.id,
+			is_agent: user.is_agent,
+			is_agent_verified: user.is_agent_verified,
+		});
 
 		const cookieStore = await cookies();
 
@@ -41,9 +44,11 @@ export async function signUpAgent(email: string, password: string): Promise<Next
 		});
 	} catch (error: unknown) {
 		console.error(error);
-		return new NextResponse(`Failed to create account. Try again :(`, {
+		return NextResponse.json(`Failed to signup account. Try again :(`, {
 			status: 500,
 		});
 	}
-	return redirect('/app/home/');
+	return NextResponse.json(`Succeed to sign up account`, {
+		status: 200,
+	});
 }

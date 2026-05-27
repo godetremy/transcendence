@@ -51,7 +51,7 @@ CREATE TABLE "users" (
     "memberships_id" TEXT,
     "fortytwo_user_id" INTEGER,
     "is_agent" BOOLEAN NOT NULL DEFAULT false,
-    "is_verified_agent" BOOLEAN,
+    "is_agent_verified" BOOLEAN,
     "reason" TEXT,
     "mail" TEXT NOT NULL,
     "password" TEXT,

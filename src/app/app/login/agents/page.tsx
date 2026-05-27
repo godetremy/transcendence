@@ -7,8 +7,8 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { signInAgent } from '@/database/users/signInAgent';
 import { SignupFormSchema } from '@/schema/SignupForm';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -26,10 +26,20 @@ export default function Page() {
 		if (!fields.success) {
 			setError(fields.error.issues[0].message);
 			return;
-		} else {
-			const status = await signInAgent(fields.data.email, fields.data.password);
-			if (!status.ok) setError(status.message);
 		}
+		const message = await fetch('/app/api/auth/agents/signin/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email: fields.data.email,
+				password: fields.data.password,
+			}),
+		});
+		const body = await message.json();
+		setError(body.message);
+		if (message.ok) return redirect('/app/home/');
 	};
 
 	return (

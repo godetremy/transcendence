@@ -78,7 +78,7 @@ model users {
 	fortytwo_user_id	Int?				@unique
 
 	is_agent			Boolean				@default(false)
-	is_verified_agent	Boolean?
+	is_agent_verified	Boolean?
 	reason				String?
 
 	mail				String				@unique
