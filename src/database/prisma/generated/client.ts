@@ -50,6 +50,11 @@ export type memberships = Prisma.membershipsModel
  */
 export type oauth_fortytwo = Prisma.oauth_fortytwoModel
 /**
+ * Model permission
+ * 
+ */
+export type permission = Prisma.permissionModel
+/**
  * Model registered_event
  * 
  */

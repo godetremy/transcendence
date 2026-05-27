@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   memberships: 'memberships',
   oauth_fortytwo: 'oauth_fortytwo',
+  permission: 'permission',
   registered_event: 'registered_event',
   event: 'event',
   users: 'users'
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "memberships" | "oauth_fortytwo" | "registered_event" | "event" | "users"
+    modelProps: "memberships" | "oauth_fortytwo" | "permission" | "registered_event" | "event" | "users"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +554,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.oauth_fortytwoCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Oauth_fortytwoCountAggregateOutputType> | number
+        }
+      }
+    }
+    permission: {
+      payload: Prisma.$permissionPayload<ExtArgs>
+      fields: Prisma.permissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.permissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.permissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>
+        }
+        findFirst: {
+          args: Prisma.permissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.permissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>
+        }
+        findMany: {
+          args: Prisma.permissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>[]
+        }
+        create: {
+          args: Prisma.permissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>
+        }
+        createMany: {
+          args: Prisma.permissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.permissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>[]
+        }
+        delete: {
+          args: Prisma.permissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>
+        }
+        update: {
+          args: Prisma.permissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.permissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.permissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.permissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.permissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$permissionPayload>
+        }
+        aggregate: {
+          args: Prisma.PermissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePermission>
+        }
+        groupBy: {
+          args: Prisma.permissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PermissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.permissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PermissionCountAggregateOutputType> | number
         }
       }
     }
@@ -836,6 +911,24 @@ export const Oauth_fortytwoScalarFieldEnum = {
 export type Oauth_fortytwoScalarFieldEnum = (typeof Oauth_fortytwoScalarFieldEnum)[keyof typeof Oauth_fortytwoScalarFieldEnum]
 
 
+export const PermissionScalarFieldEnum = {
+  id: 'id',
+  admin: 'admin',
+  create_event: 'create_event',
+  modify_event: 'modify_event',
+  delete_event: 'delete_event',
+  modify_event_other: 'modify_event_other',
+  delete_event_other: 'delete_event_other',
+  create_service: 'create_service',
+  modify_service: 'modify_service',
+  delete_service: 'delete_service',
+  modify_service_other: 'modify_service_other',
+  delete_service_other: 'delete_service_other'
+} as const
+
+export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
 export const Registered_eventScalarFieldEnum = {
   id: 'id',
   first_name: 'first_name',
@@ -867,6 +960,7 @@ export const UsersScalarFieldEnum = {
   id: 'id',
   oauth_fortytwo_id: 'oauth_fortytwo_id',
   memberships_id: 'memberships_id',
+  permission_id: 'permission_id',
   fortytwo_user_id: 'fortytwo_user_id',
   is_agent: 'is_agent',
   is_agent_verified: 'is_agent_verified',
@@ -943,6 +1037,13 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -953,13 +1054,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1073,6 +1167,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   memberships?: Prisma.membershipsOmit
   oauth_fortytwo?: Prisma.oauth_fortytwoOmit
+  permission?: Prisma.permissionOmit
   registered_event?: Prisma.registered_eventOmit
   event?: Prisma.eventOmit
   users?: Prisma.usersOmit

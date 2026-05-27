@@ -10,6 +10,7 @@
  */
 export type * from './models/memberships'
 export type * from './models/oauth_fortytwo'
+export type * from './models/permission'
 export type * from './models/registered_event'
 export type * from './models/event'
 export type * from './models/users'
