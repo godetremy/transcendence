@@ -41,8 +41,6 @@ export function Carousel(props: CarouselProps) {
 			translateX = slideWidth - slideDifference;
 			distance = -slideWidth + slideDifference;
 
-			console.log(translateX, distance);
-
 			container.style.transform = `translateX(${translateX}px)`;
 			translateSlideInfinite(container, slideWidth);
 		}
