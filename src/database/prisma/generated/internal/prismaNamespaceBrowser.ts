@@ -95,9 +95,7 @@ export type Oauth_fortytwoScalarFieldEnum = (typeof Oauth_fortytwoScalarFieldEnu
 
 export const Registered_eventScalarFieldEnum = {
   id: 'id',
-  first_name: 'first_name',
-  last_name: 'last_name',
-  full_name: 'full_name',
+  user_id: 'user_id',
   created_at: 'created_at',
   registered_event_id: 'registered_event_id'
 } as const
@@ -111,7 +109,6 @@ export const EventScalarFieldEnum = {
   title: 'title',
   description: 'description',
   max_inscription: 'max_inscription',
-  registered_count: 'registered_count',
   start_at: 'start_at',
   end_at: 'end_at',
   created_at: 'created_at'

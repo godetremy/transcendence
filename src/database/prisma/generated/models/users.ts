@@ -299,6 +299,7 @@ export type usersWhereInput = {
   oauth_fortytwo?: Prisma.XOR<Prisma.Oauth_fortytwoNullableScalarRelationFilter, Prisma.oauth_fortytwoWhereInput> | null
   memberships?: Prisma.XOR<Prisma.MembershipsNullableScalarRelationFilter, Prisma.membershipsWhereInput> | null
   events?: Prisma.EventListRelationFilter
+  registered_event?: Prisma.Registered_eventListRelationFilter
 }
 
 export type usersOrderByWithRelationInput = {
@@ -320,6 +321,7 @@ export type usersOrderByWithRelationInput = {
   oauth_fortytwo?: Prisma.oauth_fortytwoOrderByWithRelationInput
   memberships?: Prisma.membershipsOrderByWithRelationInput
   events?: Prisma.eventOrderByRelationAggregateInput
+  registered_event?: Prisma.registered_eventOrderByRelationAggregateInput
 }
 
 export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -344,6 +346,7 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   oauth_fortytwo?: Prisma.XOR<Prisma.Oauth_fortytwoNullableScalarRelationFilter, Prisma.oauth_fortytwoWhereInput> | null
   memberships?: Prisma.XOR<Prisma.MembershipsNullableScalarRelationFilter, Prisma.membershipsWhereInput> | null
   events?: Prisma.EventListRelationFilter
+  registered_event?: Prisma.Registered_eventListRelationFilter
 }, "id" | "fortytwo_user_id" | "mail">
 
 export type usersOrderByWithAggregationInput = {
@@ -407,6 +410,7 @@ export type usersCreateInput = {
   oauth_fortytwo?: Prisma.oauth_fortytwoCreateNestedOneWithoutMemberUsersInput
   memberships?: Prisma.membershipsCreateNestedOneWithoutMemberUsersInput
   events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateInput = {
@@ -426,6 +430,7 @@ export type usersUncheckedCreateInput = {
   created_at?: Date | string
   updated_at?: Date | string
   events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersUpdateInput = {
@@ -445,6 +450,7 @@ export type usersUpdateInput = {
   oauth_fortytwo?: Prisma.oauth_fortytwoUpdateOneWithoutMemberUsersNestedInput
   memberships?: Prisma.membershipsUpdateOneWithoutMemberUsersNestedInput
   events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateInput = {
@@ -464,6 +470,7 @@ export type usersUncheckedUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateManyInput = {
@@ -526,6 +533,11 @@ export type UsersListRelationFilter = {
 
 export type usersOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type UsersNullableScalarRelationFilter = {
+  is?: Prisma.usersWhereInput | null
+  isNot?: Prisma.usersWhereInput | null
 }
 
 export type UsersScalarRelationFilter = {
@@ -679,6 +691,22 @@ export type usersUncheckedUpdateManyWithoutOauth_fortytwoNestedInput = {
   deleteMany?: Prisma.usersScalarWhereInput | Prisma.usersScalarWhereInput[]
 }
 
+export type usersCreateNestedOneWithoutRegistered_eventInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutRegistered_eventInput, Prisma.usersUncheckedCreateWithoutRegistered_eventInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutRegistered_eventInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneWithoutRegistered_eventNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutRegistered_eventInput, Prisma.usersUncheckedCreateWithoutRegistered_eventInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutRegistered_eventInput
+  upsert?: Prisma.usersUpsertWithoutRegistered_eventInput
+  disconnect?: Prisma.usersWhereInput | boolean
+  delete?: Prisma.usersWhereInput | boolean
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutRegistered_eventInput, Prisma.usersUpdateWithoutRegistered_eventInput>, Prisma.usersUncheckedUpdateWithoutRegistered_eventInput>
+}
+
 export type usersCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.usersCreateWithoutEventsInput, Prisma.usersUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.usersCreateOrConnectWithoutEventsInput
@@ -725,6 +753,7 @@ export type usersCreateWithoutMembershipsInput = {
   updated_at?: Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoCreateNestedOneWithoutMemberUsersInput
   events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutMembershipsInput = {
@@ -743,6 +772,7 @@ export type usersUncheckedCreateWithoutMembershipsInput = {
   created_at?: Date | string
   updated_at?: Date | string
   events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutMembershipsInput = {
@@ -808,6 +838,7 @@ export type usersCreateWithoutOauth_fortytwoInput = {
   updated_at?: Date | string
   memberships?: Prisma.membershipsCreateNestedOneWithoutMemberUsersInput
   events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutOauth_fortytwoInput = {
@@ -826,6 +857,7 @@ export type usersUncheckedCreateWithoutOauth_fortytwoInput = {
   created_at?: Date | string
   updated_at?: Date | string
   events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutOauth_fortytwoInput = {
@@ -854,6 +886,98 @@ export type usersUpdateManyWithWhereWithoutOauth_fortytwoInput = {
   data: Prisma.XOR<Prisma.usersUpdateManyMutationInput, Prisma.usersUncheckedUpdateManyWithoutOauth_fortytwoInput>
 }
 
+export type usersCreateWithoutRegistered_eventInput = {
+  id?: string
+  fortytwo_user_id?: number | null
+  is_agent?: boolean
+  is_agent_verified?: boolean | null
+  reason?: string | null
+  mail: string
+  password?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  oauth_fortytwo?: Prisma.oauth_fortytwoCreateNestedOneWithoutMemberUsersInput
+  memberships?: Prisma.membershipsCreateNestedOneWithoutMemberUsersInput
+  events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+}
+
+export type usersUncheckedCreateWithoutRegistered_eventInput = {
+  id?: string
+  oauth_fortytwo_id?: string | null
+  memberships_id?: string | null
+  fortytwo_user_id?: number | null
+  is_agent?: boolean
+  is_agent_verified?: boolean | null
+  reason?: string | null
+  mail: string
+  password?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type usersCreateOrConnectWithoutRegistered_eventInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutRegistered_eventInput, Prisma.usersUncheckedCreateWithoutRegistered_eventInput>
+}
+
+export type usersUpsertWithoutRegistered_eventInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutRegistered_eventInput, Prisma.usersUncheckedUpdateWithoutRegistered_eventInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutRegistered_eventInput, Prisma.usersUncheckedCreateWithoutRegistered_eventInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutRegistered_eventInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutRegistered_eventInput, Prisma.usersUncheckedUpdateWithoutRegistered_eventInput>
+}
+
+export type usersUpdateWithoutRegistered_eventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oauth_fortytwo?: Prisma.oauth_fortytwoUpdateOneWithoutMemberUsersNestedInput
+  memberships?: Prisma.membershipsUpdateOneWithoutMemberUsersNestedInput
+  events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+}
+
+export type usersUncheckedUpdateWithoutRegistered_eventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  oauth_fortytwo_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  is_agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  is_agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
 export type usersCreateWithoutEventsInput = {
   id?: string
   fortytwo_user_id?: number | null
@@ -870,6 +994,7 @@ export type usersCreateWithoutEventsInput = {
   updated_at?: Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoCreateNestedOneWithoutMemberUsersInput
   memberships?: Prisma.membershipsCreateNestedOneWithoutMemberUsersInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutEventsInput = {
@@ -888,6 +1013,7 @@ export type usersUncheckedCreateWithoutEventsInput = {
   profile_picture?: string
   created_at?: Date | string
   updated_at?: Date | string
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutEventsInput = {
@@ -922,6 +1048,7 @@ export type usersUpdateWithoutEventsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoUpdateOneWithoutMemberUsersNestedInput
   memberships?: Prisma.membershipsUpdateOneWithoutMemberUsersNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutEventsInput = {
@@ -940,6 +1067,7 @@ export type usersUncheckedUpdateWithoutEventsInput = {
   profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateManyMembershipsInput = {
@@ -975,6 +1103,7 @@ export type usersUpdateWithoutMembershipsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   oauth_fortytwo?: Prisma.oauth_fortytwoUpdateOneWithoutMemberUsersNestedInput
   events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutMembershipsInput = {
@@ -993,6 +1122,7 @@ export type usersUncheckedUpdateWithoutMembershipsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateManyWithoutMembershipsInput = {
@@ -1045,6 +1175,7 @@ export type usersUpdateWithoutOauth_fortytwoInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.membershipsUpdateOneWithoutMemberUsersNestedInput
   events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutOauth_fortytwoInput = {
@@ -1063,6 +1194,7 @@ export type usersUncheckedUpdateWithoutOauth_fortytwoInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateManyWithoutOauth_fortytwoInput = {
@@ -1089,10 +1221,12 @@ export type usersUncheckedUpdateManyWithoutOauth_fortytwoInput = {
 
 export type UsersCountOutputType = {
   events: number
+  registered_event: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | UsersCountOutputTypeCountEventsArgs
+  registered_event?: boolean | UsersCountOutputTypeCountRegistered_eventArgs
 }
 
 /**
@@ -1110,6 +1244,13 @@ export type UsersCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type UsersCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.eventWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountRegistered_eventArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.registered_eventWhereInput
 }
 
 
@@ -1132,6 +1273,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   oauth_fortytwo?: boolean | Prisma.users$oauth_fortytwoArgs<ExtArgs>
   memberships?: boolean | Prisma.users$membershipsArgs<ExtArgs>
   events?: boolean | Prisma.users$eventsArgs<ExtArgs>
+  registered_event?: boolean | Prisma.users$registered_eventArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -1198,6 +1340,7 @@ export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   oauth_fortytwo?: boolean | Prisma.users$oauth_fortytwoArgs<ExtArgs>
   memberships?: boolean | Prisma.users$membershipsArgs<ExtArgs>
   events?: boolean | Prisma.users$eventsArgs<ExtArgs>
+  registered_event?: boolean | Prisma.users$registered_eventArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1215,6 +1358,7 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     oauth_fortytwo: Prisma.$oauth_fortytwoPayload<ExtArgs> | null
     memberships: Prisma.$membershipsPayload<ExtArgs> | null
     events: Prisma.$eventPayload<ExtArgs>[]
+    registered_event: Prisma.$registered_eventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1629,6 +1773,7 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   oauth_fortytwo<T extends Prisma.users$oauth_fortytwoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$oauth_fortytwoArgs<ExtArgs>>): Prisma.Prisma__oauth_fortytwoClient<runtime.Types.Result.GetResult<Prisma.$oauth_fortytwoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   memberships<T extends Prisma.users$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$membershipsArgs<ExtArgs>>): Prisma.Prisma__membershipsClient<runtime.Types.Result.GetResult<Prisma.$membershipsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   events<T extends Prisma.users$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$eventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  registered_event<T extends Prisma.users$registered_eventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$registered_eventArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$registered_eventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2133,6 +2278,30 @@ export type users$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
+}
+
+/**
+ * users.registered_event
+ */
+export type users$registered_eventArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the registered_event
+   */
+  select?: Prisma.registered_eventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the registered_event
+   */
+  omit?: Prisma.registered_eventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.registered_eventInclude<ExtArgs> | null
+  where?: Prisma.registered_eventWhereInput
+  orderBy?: Prisma.registered_eventOrderByWithRelationInput | Prisma.registered_eventOrderByWithRelationInput[]
+  cursor?: Prisma.registered_eventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Registered_eventScalarFieldEnum | Prisma.Registered_eventScalarFieldEnum[]
 }
 
 /**

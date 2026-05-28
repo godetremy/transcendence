@@ -28,12 +28,10 @@ export type AggregateEvent = {
 
 export type EventAvgAggregateOutputType = {
   max_inscription: number | null
-  registered_count: number | null
 }
 
 export type EventSumAggregateOutputType = {
   max_inscription: number | null
-  registered_count: number | null
 }
 
 export type EventMinAggregateOutputType = {
@@ -42,7 +40,6 @@ export type EventMinAggregateOutputType = {
   title: string | null
   description: string | null
   max_inscription: number | null
-  registered_count: number | null
   start_at: Date | null
   end_at: Date | null
   created_at: Date | null
@@ -54,7 +51,6 @@ export type EventMaxAggregateOutputType = {
   title: string | null
   description: string | null
   max_inscription: number | null
-  registered_count: number | null
   start_at: Date | null
   end_at: Date | null
   created_at: Date | null
@@ -66,7 +62,6 @@ export type EventCountAggregateOutputType = {
   title: number
   description: number
   max_inscription: number
-  registered_count: number
   start_at: number
   end_at: number
   created_at: number
@@ -76,12 +71,10 @@ export type EventCountAggregateOutputType = {
 
 export type EventAvgAggregateInputType = {
   max_inscription?: true
-  registered_count?: true
 }
 
 export type EventSumAggregateInputType = {
   max_inscription?: true
-  registered_count?: true
 }
 
 export type EventMinAggregateInputType = {
@@ -90,7 +83,6 @@ export type EventMinAggregateInputType = {
   title?: true
   description?: true
   max_inscription?: true
-  registered_count?: true
   start_at?: true
   end_at?: true
   created_at?: true
@@ -102,7 +94,6 @@ export type EventMaxAggregateInputType = {
   title?: true
   description?: true
   max_inscription?: true
-  registered_count?: true
   start_at?: true
   end_at?: true
   created_at?: true
@@ -114,7 +105,6 @@ export type EventCountAggregateInputType = {
   title?: true
   description?: true
   max_inscription?: true
-  registered_count?: true
   start_at?: true
   end_at?: true
   created_at?: true
@@ -213,7 +203,6 @@ export type EventGroupByOutputType = {
   title: string | null
   description: string | null
   max_inscription: number
-  registered_count: number
   start_at: Date
   end_at: Date
   created_at: Date
@@ -248,7 +237,6 @@ export type eventWhereInput = {
   title?: Prisma.StringNullableFilter<"event"> | string | null
   description?: Prisma.StringNullableFilter<"event"> | string | null
   max_inscription?: Prisma.IntFilter<"event"> | number
-  registered_count?: Prisma.IntFilter<"event"> | number
   start_at?: Prisma.DateTimeFilter<"event"> | Date | string
   end_at?: Prisma.DateTimeFilter<"event"> | Date | string
   created_at?: Prisma.DateTimeFilter<"event"> | Date | string
@@ -262,7 +250,6 @@ export type eventOrderByWithRelationInput = {
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   max_inscription?: Prisma.SortOrder
-  registered_count?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -279,7 +266,6 @@ export type eventWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringNullableFilter<"event"> | string | null
   description?: Prisma.StringNullableFilter<"event"> | string | null
   max_inscription?: Prisma.IntFilter<"event"> | number
-  registered_count?: Prisma.IntFilter<"event"> | number
   start_at?: Prisma.DateTimeFilter<"event"> | Date | string
   end_at?: Prisma.DateTimeFilter<"event"> | Date | string
   created_at?: Prisma.DateTimeFilter<"event"> | Date | string
@@ -293,7 +279,6 @@ export type eventOrderByWithAggregationInput = {
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   max_inscription?: Prisma.SortOrder
-  registered_count?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -313,7 +298,6 @@ export type eventScalarWhereWithAggregatesInput = {
   title?: Prisma.StringNullableWithAggregatesFilter<"event"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"event"> | string | null
   max_inscription?: Prisma.IntWithAggregatesFilter<"event"> | number
-  registered_count?: Prisma.IntWithAggregatesFilter<"event"> | number
   start_at?: Prisma.DateTimeWithAggregatesFilter<"event"> | Date | string
   end_at?: Prisma.DateTimeWithAggregatesFilter<"event"> | Date | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"event"> | Date | string
@@ -324,7 +308,6 @@ export type eventCreateInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -338,7 +321,6 @@ export type eventUncheckedCreateInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -350,7 +332,6 @@ export type eventUpdateInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -364,7 +345,6 @@ export type eventUncheckedUpdateInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,7 +357,6 @@ export type eventCreateManyInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -388,7 +367,6 @@ export type eventUpdateManyMutationInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -400,7 +378,6 @@ export type eventUncheckedUpdateManyInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,7 +394,6 @@ export type eventCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_inscription?: Prisma.SortOrder
-  registered_count?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -425,7 +401,6 @@ export type eventCountOrderByAggregateInput = {
 
 export type eventAvgOrderByAggregateInput = {
   max_inscription?: Prisma.SortOrder
-  registered_count?: Prisma.SortOrder
 }
 
 export type eventMaxOrderByAggregateInput = {
@@ -434,7 +409,6 @@ export type eventMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_inscription?: Prisma.SortOrder
-  registered_count?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -446,7 +420,6 @@ export type eventMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_inscription?: Prisma.SortOrder
-  registered_count?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -454,7 +427,6 @@ export type eventMinOrderByAggregateInput = {
 
 export type eventSumOrderByAggregateInput = {
   max_inscription?: Prisma.SortOrder
-  registered_count?: Prisma.SortOrder
 }
 
 export type EventListRelationFilter = {
@@ -538,7 +510,6 @@ export type eventCreateWithoutRegisteredInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -551,7 +522,6 @@ export type eventUncheckedCreateWithoutRegisteredInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -578,7 +548,6 @@ export type eventUpdateWithoutRegisteredInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -591,7 +560,6 @@ export type eventUncheckedUpdateWithoutRegisteredInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -602,7 +570,6 @@ export type eventCreateWithoutAuthorInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -614,7 +581,6 @@ export type eventUncheckedCreateWithoutAuthorInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -656,7 +622,6 @@ export type eventScalarWhereInput = {
   title?: Prisma.StringNullableFilter<"event"> | string | null
   description?: Prisma.StringNullableFilter<"event"> | string | null
   max_inscription?: Prisma.IntFilter<"event"> | number
-  registered_count?: Prisma.IntFilter<"event"> | number
   start_at?: Prisma.DateTimeFilter<"event"> | Date | string
   end_at?: Prisma.DateTimeFilter<"event"> | Date | string
   created_at?: Prisma.DateTimeFilter<"event"> | Date | string
@@ -667,7 +632,6 @@ export type eventCreateManyAuthorInput = {
   title?: string | null
   description?: string | null
   max_inscription?: number
-  registered_count?: number
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
@@ -678,7 +642,6 @@ export type eventUpdateWithoutAuthorInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -690,7 +653,6 @@ export type eventUncheckedUpdateWithoutAuthorInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -702,7 +664,6 @@ export type eventUncheckedUpdateManyWithoutAuthorInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_inscription?: Prisma.IntFieldUpdateOperationsInput | number
-  registered_count?: Prisma.IntFieldUpdateOperationsInput | number
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -716,7 +677,6 @@ export type eventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   title?: boolean
   description?: boolean
   max_inscription?: boolean
-  registered_count?: boolean
   start_at?: boolean
   end_at?: boolean
   created_at?: boolean
@@ -730,7 +690,6 @@ export type eventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   title?: boolean
   description?: boolean
   max_inscription?: boolean
-  registered_count?: boolean
   start_at?: boolean
   end_at?: boolean
   created_at?: boolean
@@ -743,7 +702,6 @@ export type eventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   title?: boolean
   description?: boolean
   max_inscription?: boolean
-  registered_count?: boolean
   start_at?: boolean
   end_at?: boolean
   created_at?: boolean
@@ -756,13 +714,12 @@ export type eventSelectScalar = {
   title?: boolean
   description?: boolean
   max_inscription?: boolean
-  registered_count?: boolean
   start_at?: boolean
   end_at?: boolean
   created_at?: boolean
 }
 
-export type eventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "author_id" | "title" | "description" | "max_inscription" | "registered_count" | "start_at" | "end_at" | "created_at", ExtArgs["result"]["event"]>
+export type eventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "author_id" | "title" | "description" | "max_inscription" | "start_at" | "end_at" | "created_at", ExtArgs["result"]["event"]>
 export type eventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   registered?: boolean | Prisma.event$registeredArgs<ExtArgs>
@@ -786,7 +743,6 @@ export type $eventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     title: string | null
     description: string | null
     max_inscription: number
-    registered_count: number
     start_at: Date
     end_at: Date
     created_at: Date
@@ -1220,7 +1176,6 @@ export interface eventFieldRefs {
   readonly title: Prisma.FieldRef<"event", 'String'>
   readonly description: Prisma.FieldRef<"event", 'String'>
   readonly max_inscription: Prisma.FieldRef<"event", 'Int'>
-  readonly registered_count: Prisma.FieldRef<"event", 'Int'>
   readonly start_at: Prisma.FieldRef<"event", 'DateTime'>
   readonly end_at: Prisma.FieldRef<"event", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"event", 'DateTime'>

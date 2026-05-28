@@ -37,7 +37,6 @@ export async function EventFormatting(row: Prisma.eventGetPayload<{ include: { r
 		title: row.title,
 		description: row.description,
 		max_inscription: row.max_inscription,
-		registered_count: row.registered_count,
 		start_at: row.start_at,
 		end_at: row.end_at,
 		create_at: row.created_at,

@@ -32,12 +32,19 @@ function Card({ event }: { event: Event; }) {
 							id: event.id,
 						})
 					});
+					console.log('delete');
 				}}
 			>
 				suppression
 			</button>
 			<button
 				onClick={async () => {
+					await fetch(`/app/api/events/${event.id}/subscribe`, {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					});
 					console.log('subscribe');
 				}}
 			>
@@ -45,6 +52,12 @@ function Card({ event }: { event: Event; }) {
 			</button>
 			<button
 				onClick={async () => {
+					await fetch(`/app/api/events/${event.id}/unsubscribe`, {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					});
 					console.log('unsubscribe');
 				}}
 			>

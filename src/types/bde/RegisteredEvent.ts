@@ -1,7 +1,6 @@
 export interface RegisteredEvent {
 	id: string,
-	first_name: string | null,
-	last_name: string | null,
-	full_name: string | null,
+	user_id: string | null,
 	created_at: Date,
+	registered_event_id: string | null,
 }

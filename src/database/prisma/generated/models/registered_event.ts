@@ -26,27 +26,21 @@ export type AggregateRegistered_event = {
 
 export type Registered_eventMinAggregateOutputType = {
   id: string | null
-  first_name: string | null
-  last_name: string | null
-  full_name: string | null
+  user_id: string | null
   created_at: Date | null
   registered_event_id: string | null
 }
 
 export type Registered_eventMaxAggregateOutputType = {
   id: string | null
-  first_name: string | null
-  last_name: string | null
-  full_name: string | null
+  user_id: string | null
   created_at: Date | null
   registered_event_id: string | null
 }
 
 export type Registered_eventCountAggregateOutputType = {
   id: number
-  first_name: number
-  last_name: number
-  full_name: number
+  user_id: number
   created_at: number
   registered_event_id: number
   _all: number
@@ -55,27 +49,21 @@ export type Registered_eventCountAggregateOutputType = {
 
 export type Registered_eventMinAggregateInputType = {
   id?: true
-  first_name?: true
-  last_name?: true
-  full_name?: true
+  user_id?: true
   created_at?: true
   registered_event_id?: true
 }
 
 export type Registered_eventMaxAggregateInputType = {
   id?: true
-  first_name?: true
-  last_name?: true
-  full_name?: true
+  user_id?: true
   created_at?: true
   registered_event_id?: true
 }
 
 export type Registered_eventCountAggregateInputType = {
   id?: true
-  first_name?: true
-  last_name?: true
-  full_name?: true
+  user_id?: true
   created_at?: true
   registered_event_id?: true
   _all?: true
@@ -155,9 +143,7 @@ export type registered_eventGroupByArgs<ExtArgs extends runtime.Types.Extensions
 
 export type Registered_eventGroupByOutputType = {
   id: string
-  first_name: string | null
-  last_name: string | null
-  full_name: string | null
+  user_id: string | null
   created_at: Date
   registered_event_id: string | null
   _count: Registered_eventCountAggregateOutputType | null
@@ -185,21 +171,19 @@ export type registered_eventWhereInput = {
   OR?: Prisma.registered_eventWhereInput[]
   NOT?: Prisma.registered_eventWhereInput | Prisma.registered_eventWhereInput[]
   id?: Prisma.StringFilter<"registered_event"> | string
-  first_name?: Prisma.StringNullableFilter<"registered_event"> | string | null
-  last_name?: Prisma.StringNullableFilter<"registered_event"> | string | null
-  full_name?: Prisma.StringNullableFilter<"registered_event"> | string | null
+  user_id?: Prisma.StringNullableFilter<"registered_event"> | string | null
   created_at?: Prisma.DateTimeFilter<"registered_event"> | Date | string
   registered_event_id?: Prisma.StringNullableFilter<"registered_event"> | string | null
+  user?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.eventWhereInput> | null
 }
 
 export type registered_eventOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  first_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  last_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  full_name?: Prisma.SortOrderInput | Prisma.SortOrder
+  user_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   registered_event_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  user?: Prisma.usersOrderByWithRelationInput
   event?: Prisma.eventOrderByWithRelationInput
 }
 
@@ -209,18 +193,15 @@ export type registered_eventWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.registered_eventWhereInput | Prisma.registered_eventWhereInput[]
   OR?: Prisma.registered_eventWhereInput[]
   NOT?: Prisma.registered_eventWhereInput | Prisma.registered_eventWhereInput[]
-  first_name?: Prisma.StringNullableFilter<"registered_event"> | string | null
-  last_name?: Prisma.StringNullableFilter<"registered_event"> | string | null
-  full_name?: Prisma.StringNullableFilter<"registered_event"> | string | null
+  user_id?: Prisma.StringNullableFilter<"registered_event"> | string | null
   created_at?: Prisma.DateTimeFilter<"registered_event"> | Date | string
+  user?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.eventWhereInput> | null
 }, "id" | "registered_event_id">
 
 export type registered_eventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  first_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  last_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  full_name?: Prisma.SortOrderInput | Prisma.SortOrder
+  user_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   registered_event_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.registered_eventCountOrderByAggregateInput
@@ -233,98 +214,75 @@ export type registered_eventScalarWhereWithAggregatesInput = {
   OR?: Prisma.registered_eventScalarWhereWithAggregatesInput[]
   NOT?: Prisma.registered_eventScalarWhereWithAggregatesInput | Prisma.registered_eventScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"registered_event"> | string
-  first_name?: Prisma.StringNullableWithAggregatesFilter<"registered_event"> | string | null
-  last_name?: Prisma.StringNullableWithAggregatesFilter<"registered_event"> | string | null
-  full_name?: Prisma.StringNullableWithAggregatesFilter<"registered_event"> | string | null
+  user_id?: Prisma.StringNullableWithAggregatesFilter<"registered_event"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"registered_event"> | Date | string
   registered_event_id?: Prisma.StringNullableWithAggregatesFilter<"registered_event"> | string | null
 }
 
 export type registered_eventCreateInput = {
   id?: string
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
   created_at?: Date | string
+  user?: Prisma.usersCreateNestedOneWithoutRegistered_eventInput
   event?: Prisma.eventCreateNestedOneWithoutRegisteredInput
 }
 
 export type registered_eventUncheckedCreateInput = {
   id?: string
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  user_id?: string | null
   created_at?: Date | string
   registered_event_id?: string | null
 }
 
 export type registered_eventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.usersUpdateOneWithoutRegistered_eventNestedInput
   event?: Prisma.eventUpdateOneWithoutRegisteredNestedInput
 }
 
 export type registered_eventUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_event_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type registered_eventCreateManyInput = {
   id?: string
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  user_id?: string | null
   created_at?: Date | string
   registered_event_id?: string | null
 }
 
 export type registered_eventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type registered_eventUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_event_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type registered_eventCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  first_name?: Prisma.SortOrder
-  last_name?: Prisma.SortOrder
-  full_name?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   registered_event_id?: Prisma.SortOrder
 }
 
 export type registered_eventMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  first_name?: Prisma.SortOrder
-  last_name?: Prisma.SortOrder
-  full_name?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   registered_event_id?: Prisma.SortOrder
 }
 
 export type registered_eventMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  first_name?: Prisma.SortOrder
-  last_name?: Prisma.SortOrder
-  full_name?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   registered_event_id?: Prisma.SortOrder
 }
@@ -332,6 +290,16 @@ export type registered_eventMinOrderByAggregateInput = {
 export type Registered_eventNullableScalarRelationFilter = {
   is?: Prisma.registered_eventWhereInput | null
   isNot?: Prisma.registered_eventWhereInput | null
+}
+
+export type Registered_eventListRelationFilter = {
+  every?: Prisma.registered_eventWhereInput
+  some?: Prisma.registered_eventWhereInput
+  none?: Prisma.registered_eventWhereInput
+}
+
+export type registered_eventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type registered_eventCreateNestedOneWithoutEventInput = {
@@ -366,19 +334,57 @@ export type registered_eventUncheckedUpdateOneWithoutEventNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.registered_eventUpdateToOneWithWhereWithoutEventInput, Prisma.registered_eventUpdateWithoutEventInput>, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
 }
 
+export type registered_eventCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutUserInput, Prisma.registered_eventUncheckedCreateWithoutUserInput> | Prisma.registered_eventCreateWithoutUserInput[] | Prisma.registered_eventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutUserInput | Prisma.registered_eventCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.registered_eventCreateManyUserInputEnvelope
+  connect?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+}
+
+export type registered_eventUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutUserInput, Prisma.registered_eventUncheckedCreateWithoutUserInput> | Prisma.registered_eventCreateWithoutUserInput[] | Prisma.registered_eventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutUserInput | Prisma.registered_eventCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.registered_eventCreateManyUserInputEnvelope
+  connect?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+}
+
+export type registered_eventUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutUserInput, Prisma.registered_eventUncheckedCreateWithoutUserInput> | Prisma.registered_eventCreateWithoutUserInput[] | Prisma.registered_eventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutUserInput | Prisma.registered_eventCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.registered_eventUpsertWithWhereUniqueWithoutUserInput | Prisma.registered_eventUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.registered_eventCreateManyUserInputEnvelope
+  set?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  disconnect?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  delete?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  connect?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  update?: Prisma.registered_eventUpdateWithWhereUniqueWithoutUserInput | Prisma.registered_eventUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.registered_eventUpdateManyWithWhereWithoutUserInput | Prisma.registered_eventUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.registered_eventScalarWhereInput | Prisma.registered_eventScalarWhereInput[]
+}
+
+export type registered_eventUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutUserInput, Prisma.registered_eventUncheckedCreateWithoutUserInput> | Prisma.registered_eventCreateWithoutUserInput[] | Prisma.registered_eventUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutUserInput | Prisma.registered_eventCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.registered_eventUpsertWithWhereUniqueWithoutUserInput | Prisma.registered_eventUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.registered_eventCreateManyUserInputEnvelope
+  set?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  disconnect?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  delete?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  connect?: Prisma.registered_eventWhereUniqueInput | Prisma.registered_eventWhereUniqueInput[]
+  update?: Prisma.registered_eventUpdateWithWhereUniqueWithoutUserInput | Prisma.registered_eventUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.registered_eventUpdateManyWithWhereWithoutUserInput | Prisma.registered_eventUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.registered_eventScalarWhereInput | Prisma.registered_eventScalarWhereInput[]
+}
+
 export type registered_eventCreateWithoutEventInput = {
   id?: string
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
   created_at?: Date | string
+  user?: Prisma.usersCreateNestedOneWithoutRegistered_eventInput
 }
 
 export type registered_eventUncheckedCreateWithoutEventInput = {
   id?: string
-  first_name?: string | null
-  last_name?: string | null
-  full_name?: string | null
+  user_id?: string | null
   created_at?: Date | string
 }
 
@@ -400,82 +406,147 @@ export type registered_eventUpdateToOneWithWhereWithoutEventInput = {
 
 export type registered_eventUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.usersUpdateOneWithoutRegistered_eventNestedInput
 }
 
 export type registered_eventUncheckedUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type registered_eventCreateWithoutUserInput = {
+  id?: string
+  created_at?: Date | string
+  event?: Prisma.eventCreateNestedOneWithoutRegisteredInput
+}
+
+export type registered_eventUncheckedCreateWithoutUserInput = {
+  id?: string
+  created_at?: Date | string
+  registered_event_id?: string | null
+}
+
+export type registered_eventCreateOrConnectWithoutUserInput = {
+  where: Prisma.registered_eventWhereUniqueInput
+  create: Prisma.XOR<Prisma.registered_eventCreateWithoutUserInput, Prisma.registered_eventUncheckedCreateWithoutUserInput>
+}
+
+export type registered_eventCreateManyUserInputEnvelope = {
+  data: Prisma.registered_eventCreateManyUserInput | Prisma.registered_eventCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type registered_eventUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.registered_eventWhereUniqueInput
+  update: Prisma.XOR<Prisma.registered_eventUpdateWithoutUserInput, Prisma.registered_eventUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.registered_eventCreateWithoutUserInput, Prisma.registered_eventUncheckedCreateWithoutUserInput>
+}
+
+export type registered_eventUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.registered_eventWhereUniqueInput
+  data: Prisma.XOR<Prisma.registered_eventUpdateWithoutUserInput, Prisma.registered_eventUncheckedUpdateWithoutUserInput>
+}
+
+export type registered_eventUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.registered_eventScalarWhereInput
+  data: Prisma.XOR<Prisma.registered_eventUpdateManyMutationInput, Prisma.registered_eventUncheckedUpdateManyWithoutUserInput>
+}
+
+export type registered_eventScalarWhereInput = {
+  AND?: Prisma.registered_eventScalarWhereInput | Prisma.registered_eventScalarWhereInput[]
+  OR?: Prisma.registered_eventScalarWhereInput[]
+  NOT?: Prisma.registered_eventScalarWhereInput | Prisma.registered_eventScalarWhereInput[]
+  id?: Prisma.StringFilter<"registered_event"> | string
+  user_id?: Prisma.StringNullableFilter<"registered_event"> | string | null
+  created_at?: Prisma.DateTimeFilter<"registered_event"> | Date | string
+  registered_event_id?: Prisma.StringNullableFilter<"registered_event"> | string | null
+}
+
+export type registered_eventCreateManyUserInput = {
+  id?: string
+  created_at?: Date | string
+  registered_event_id?: string | null
+}
+
+export type registered_eventUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.eventUpdateOneWithoutRegisteredNestedInput
+}
+
+export type registered_eventUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registered_event_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type registered_eventUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registered_event_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
 
 export type registered_eventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  first_name?: boolean
-  last_name?: boolean
-  full_name?: boolean
+  user_id?: boolean
   created_at?: boolean
   registered_event_id?: boolean
+  user?: boolean | Prisma.registered_event$userArgs<ExtArgs>
   event?: boolean | Prisma.registered_event$eventArgs<ExtArgs>
 }, ExtArgs["result"]["registered_event"]>
 
 export type registered_eventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  first_name?: boolean
-  last_name?: boolean
-  full_name?: boolean
+  user_id?: boolean
   created_at?: boolean
   registered_event_id?: boolean
+  user?: boolean | Prisma.registered_event$userArgs<ExtArgs>
   event?: boolean | Prisma.registered_event$eventArgs<ExtArgs>
 }, ExtArgs["result"]["registered_event"]>
 
 export type registered_eventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  first_name?: boolean
-  last_name?: boolean
-  full_name?: boolean
+  user_id?: boolean
   created_at?: boolean
   registered_event_id?: boolean
+  user?: boolean | Prisma.registered_event$userArgs<ExtArgs>
   event?: boolean | Prisma.registered_event$eventArgs<ExtArgs>
 }, ExtArgs["result"]["registered_event"]>
 
 export type registered_eventSelectScalar = {
   id?: boolean
-  first_name?: boolean
-  last_name?: boolean
-  full_name?: boolean
+  user_id?: boolean
   created_at?: boolean
   registered_event_id?: boolean
 }
 
-export type registered_eventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "first_name" | "last_name" | "full_name" | "created_at" | "registered_event_id", ExtArgs["result"]["registered_event"]>
+export type registered_eventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "created_at" | "registered_event_id", ExtArgs["result"]["registered_event"]>
 export type registered_eventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.registered_event$userArgs<ExtArgs>
   event?: boolean | Prisma.registered_event$eventArgs<ExtArgs>
 }
 export type registered_eventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.registered_event$userArgs<ExtArgs>
   event?: boolean | Prisma.registered_event$eventArgs<ExtArgs>
 }
 export type registered_eventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.registered_event$userArgs<ExtArgs>
   event?: boolean | Prisma.registered_event$eventArgs<ExtArgs>
 }
 
 export type $registered_eventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "registered_event"
   objects: {
+    user: Prisma.$usersPayload<ExtArgs> | null
     event: Prisma.$eventPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    first_name: string | null
-    last_name: string | null
-    full_name: string | null
+    user_id: string | null
     created_at: Date
     registered_event_id: string | null
   }, ExtArgs["result"]["registered_event"]>
@@ -872,6 +943,7 @@ readonly fields: registered_eventFieldRefs;
  */
 export interface Prisma__registered_eventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.registered_event$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.registered_event$userArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   event<T extends Prisma.registered_event$eventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.registered_event$eventArgs<ExtArgs>>): Prisma.Prisma__eventClient<runtime.Types.Result.GetResult<Prisma.$eventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -903,9 +975,7 @@ export interface Prisma__registered_eventClient<T, Null = never, ExtArgs extends
  */
 export interface registered_eventFieldRefs {
   readonly id: Prisma.FieldRef<"registered_event", 'String'>
-  readonly first_name: Prisma.FieldRef<"registered_event", 'String'>
-  readonly last_name: Prisma.FieldRef<"registered_event", 'String'>
-  readonly full_name: Prisma.FieldRef<"registered_event", 'String'>
+  readonly user_id: Prisma.FieldRef<"registered_event", 'String'>
   readonly created_at: Prisma.FieldRef<"registered_event", 'DateTime'>
   readonly registered_event_id: Prisma.FieldRef<"registered_event", 'String'>
 }
@@ -1306,6 +1376,25 @@ export type registered_eventDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many registered_events to delete.
    */
   limit?: number
+}
+
+/**
+ * registered_event.user
+ */
+export type registered_event$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the users
+   */
+  select?: Prisma.usersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the users
+   */
+  omit?: Prisma.usersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersInclude<ExtArgs> | null
+  where?: Prisma.usersWhereInput
 }
 
 /**

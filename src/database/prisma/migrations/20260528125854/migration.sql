@@ -20,9 +20,7 @@ CREATE TABLE "oauth_fortytwo" (
 -- CreateTable
 CREATE TABLE "registered_event" (
     "id" TEXT NOT NULL,
-    "first_name" TEXT,
-    "last_name" TEXT,
-    "full_name" TEXT,
+    "user_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "registered_event_id" TEXT,
 
@@ -36,7 +34,6 @@ CREATE TABLE "event" (
     "title" TEXT,
     "description" TEXT,
     "max_inscription" INTEGER NOT NULL DEFAULT 0,
-    "registered_count" INTEGER NOT NULL DEFAULT 0,
     "start_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "end_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -73,6 +70,9 @@ CREATE UNIQUE INDEX "users_fortytwo_user_id_key" ON "users"("fortytwo_user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_mail_key" ON "users"("mail");
+
+-- AddForeignKey
+ALTER TABLE "registered_event" ADD CONSTRAINT "registered_event_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "registered_event" ADD CONSTRAINT "registered_event_registered_event_id_fkey" FOREIGN KEY ("registered_event_id") REFERENCES "event"("id") ON DELETE SET NULL ON UPDATE CASCADE;

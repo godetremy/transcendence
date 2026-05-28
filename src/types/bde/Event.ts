@@ -7,7 +7,6 @@ export interface Event {
 	title: string | null,
 	description: string | null,
 	max_inscription: number,
-	registered_count: number,
 	start_at: Date,
 	end_at: Date,
 	create_at: Date,
