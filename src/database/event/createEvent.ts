@@ -3,7 +3,7 @@ import { CreateEventType, Event } from '@/types/bde/Event';
 
 import { prisma } from "@/database/prisma/prisma";
 import { Prisma } from '../prisma/generated/client';
-import { getMe } from '../users/getUser';
+import { getMe, UserFormatting } from '../users/getUser';
 
 export async function CreateEvent(event: CreateEventType): Promise<Event | null> {
 	const me = await getMe();
@@ -42,7 +42,7 @@ export async function EventFormatting(row: Prisma.eventGetPayload<{ include: { r
 		end_at: row.end_at,
 		create_at: row.created_at,
 		author_id: row.author_id,
-		author: row.author,
+		author: UserFormatting(row.author),
 		registered: row.registered,
 	}
 }

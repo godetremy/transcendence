@@ -21,3 +21,13 @@ export const EventFormSchema = z
 		end_at: z
 			.coerce.date({ error: 'Please enter a valid date.' }),
 	})
+
+export const EventSearchFormSchema = z
+	.object({
+		from: z
+			.coerce.date({ error: 'Please enter a valid date.' }),
+		to : z
+			.coerce.date({ error: 'Please enter a valid date.' }),
+		limit : z
+			.coerce.number({ error: 'Please entry a number.'}),
+	})

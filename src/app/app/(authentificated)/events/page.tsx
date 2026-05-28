@@ -1,9 +1,89 @@
 'use client';
 
 import { CreateEvent } from "@/database/event/createEvent";
-import { EventFormSchema } from "@/schema/EventForm";
+import { deleteEvent } from "@/database/event/deleteEvent";
+import { EventFormSchema, EventSearchFormSchema } from "@/schema/EventForm";
+import { Event } from "@/types/bde/Event";
+import { useEffect, useState } from "react";
+
+function Card({ event }: { event: Event; }) {
+	return (
+		<div className="card">
+			<h2>Nom</h2>
+			<p>{event.title}</p>
+			<h2>description</h2>
+			<p>{event.description}</p>
+			<h2>max_inscription</h2>
+			<p>{event.max_inscription}</p>
+			<button
+				onClick={async () => {
+					console.log('modifier');
+				}}
+			>
+				modifier
+			</button>
+			<button
+				onClick={async () => {
+					deleteEvent(event.id);
+				}}
+			>
+				suppression
+			</button>
+			<button
+				onClick={async () => {
+					console.log('subscribe');
+				}}
+			>
+				subscribe
+			</button>
+			<button
+				onClick={async () => {
+					console.log('unsubscribe');
+				}}
+			>
+				unsubscribe
+			</button>
+			<br></br>
+		</div>
+	);
+}
+
+function CardList({ from, to, limit }: { from: Date | undefined, to: Date | undefined, limit: number | undefined}) {
+	const [events, setEvents] = useState<Event[]>();
+
+	useEffect(() => {
+		const fetchEvents = async () => {
+			const response = await fetch(`/app/api/events?from=${from?.toISOString()}&to=${to?.toISOString()}&limit=${limit?.toString()}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			if (response.ok) {
+				const value = await response.json();
+				setEvents(value);
+				return;
+			}
+			return;
+		};
+
+		fetchEvents();
+	}, [from, to, limit]);
+
+	return (
+		<div>
+			{events?.map((item, index) => (
+				<Card key={index} event={item}/>
+			))}
+		</div>
+	);
+}
 
 export default function Page() {
+	const [from, setFrom] = useState<Date>();
+	const [to, setTo] = useState<Date>();
+	const [limit, setLimit] = useState<number>();
+	const [searched, setSearched] = useState<boolean>(false);
 
 	const create = async (form: FormData) => {
 		const fields = EventFormSchema.safeParse({
@@ -22,6 +102,23 @@ export default function Page() {
 		console.log(value);
 	}
 
+	const search = (form: FormData) => {
+		const fields = EventSearchFormSchema.safeParse({
+			from: form.get('from'),
+			to: form.get('to'),
+			limit: form.get('limit'),
+		});
+		if (!fields.success) {
+			console.log(fields.error.issues[0].message);
+			return;
+		}
+		if (fields.data == null) return ;
+		setFrom(fields.data.from);
+		setTo(fields.data.to);
+		setLimit(fields.data.limit);
+		setSearched(true);
+	}
+
 	return (
 		<>
 			<form action={create}>
@@ -37,6 +134,22 @@ export default function Page() {
 				<input type="number" name="max_inscription"></input>
 				<button type="submit">créer</button>
 			</form>
+			<h1>
+				search event
+				<form action={search}>
+					<p>debut</p>
+					<input type="date" name="from"></input>
+					<p>fin</p>
+					<input type="date" name="to"></input>
+					<p>limit</p>
+					<input type="number" name="limit"></input>
+					<button type="submit">find</button>
+				</form>
+				{ searched && from && to 
+                	? <CardList from={new Date(from)} to={new Date(to)} limit={limit} />
+                	: <p>Lancez une recherche</p>
+            	}
+			</h1>
 		</>
 	);
 }
