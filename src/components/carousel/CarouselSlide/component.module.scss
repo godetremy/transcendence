@@ -1,0 +1,81 @@
+@use '../../../app/supports';
+
+.slide {
+	top: 0;
+	bottom: 0;
+	display: flex;
+	flex-shrink: 0;
+	background-color: #111;
+	height: 100%;
+	width: 100vw;
+	max-width: 1200px;
+	overflow: hidden;
+	justify-content: center;
+	background-position: center;
+	background-repeat: no-repeat;
+	position: relative;
+
+	& > img {
+		object-fit: cover;
+	}
+
+	.content {
+		appearance: none;
+		position: relative;
+		flex-shrink: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		align-items: flex-start;
+		padding: 20px 30px;
+		background: linear-gradient(rgba(var(--color-rgb-primary-black), 0), var(--color-primary-black));
+		gap: 12px;
+		border: none;
+		text-align: left;
+
+		span {
+			color: var(--color-primary-white);
+			text-transform: uppercase;
+			font: 700 18px var(--font-title);
+			padding: 6px 8px;
+			background-color: var(--color-primary-purple);
+			text-box-trim: trim-both;
+			text-box-edge: cap alphabetic;
+			transform: rotate(-3deg) translateX(-10px);
+		}
+
+		h3 {
+			color: var(--color-primary-green);
+			text-transform: uppercase;
+			font-size: 58px;
+			font-weight: 700;
+			letter-spacing: 0.76px;
+			line-height: 48px;
+		}
+
+		p {
+			font: 500 16px var(--font-paragraph);
+			margin-top: -16px;
+			color: rgba(var(--color-rgb-primary-white), 0.6);
+		}
+	}
+}
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.slide {
+		.content {
+			span {
+				font-size: 14px;
+			}
+			h3 {
+				font-size: 38px;
+				line-height: 34px;
+			}
+
+			p {
+				font-size: 12px;
+			}
+		}
+	}
+}
