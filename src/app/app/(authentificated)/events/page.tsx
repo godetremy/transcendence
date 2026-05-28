@@ -1,7 +1,6 @@
 'use client';
 
 import { CreateEvent } from "@/database/event/createEvent";
-import { deleteEvent } from "@/database/event/deleteEvent";
 import { EventFormSchema, EventSearchFormSchema } from "@/schema/EventForm";
 import { Event } from "@/types/bde/Event";
 import { useEffect, useState } from "react";
@@ -24,7 +23,15 @@ function Card({ event }: { event: Event; }) {
 			</button>
 			<button
 				onClick={async () => {
-					deleteEvent(event.id);
+					await fetch(`/app/api/events`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body : JSON.stringify({
+							id: event.id,
+						})
+					});
 				}}
 			>
 				suppression

@@ -45,3 +45,25 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		});
 	}
 }
+
+export async function DELETE(req: NextRequest): Promise<NextResponse> {
+	try {
+		const cookie = req.cookies.get('session');
+		await decrypt(cookie?.value);
+		const body = await req.json();
+		const row = await prisma.event.delete({
+			where: {
+				id : body.id,
+			},
+			include: {
+				registered: true,
+			}
+		})
+		return NextResponse.json(row);
+	} catch (error: unknown) {
+		console.error(error);
+		return new NextResponse('Error, failed to delete event.', {
+			status: 500,
+		});
+	}
+} 
