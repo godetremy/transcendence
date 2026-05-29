@@ -44,6 +44,20 @@ model registered_event {
 
 }
 
+model image_event {
+	id							String		@id @default(uuid())
+
+	upload_user_id				String?
+	user						users?		@relation(fields: [upload_user_id], references: [id])
+	
+	event_id					String? 	@unique
+	event						event?		@relation(fields: [event_id], references: [id])
+
+	image_path					String
+
+	created_at					DateTime	@default(now())
+}
+
 model event {
 	id						String			@id @default(uuid())
 
@@ -51,6 +65,7 @@ model event {
 	author					users			@relation(fields: [author_id], references: [id])
 
 	registered				registered_event?
+	image_event				image_event?
 
 	title					String?
 	description				String?
@@ -72,6 +87,7 @@ model users {
 	memberships			memberships?		@relation(fields: [memberships_id], references: [id])
 
 	events				event[]
+	image_event			image_event[]
 	registered_event	registered_event[]
 	
 	fortytwo_user_id	Int?				@unique

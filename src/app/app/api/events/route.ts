@@ -67,3 +67,35 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 		});
 	}
 } 
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+	try {
+		const cookie = req.cookies.get('session');
+		const session = await decrypt(cookie?.value);
+		const body = await req.json();
+		const row = await prisma.event.create({
+			data: {
+				author_id: session.user_id,
+				title: body.title,
+				description: body.description,
+				max_inscription: body.max_inscription,
+				start_at: body.start_at,
+				end_at: body.end_at,
+			},
+			include: {
+				author: {
+					include: {
+						memberships: true
+					}
+				},
+				registered: true,
+			}
+		})
+		return NextResponse.json(EventFormatting(row));
+	} catch (error: unknown) {
+		console.error(error);
+		return new NextResponse('Error, failed to delete event.', {
+			status: 500,
+		});
+	}
+} 

@@ -1,9 +1,45 @@
 'use client';
 
-import { CreateEvent } from "@/database/event/createEvent";
+import './page.scss';
 import { EventFormSchema, EventSearchFormSchema } from "@/schema/EventForm";
 import { Event } from "@/types/bde/Event";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import {useDropzone} from 'react-dropzone';
+
+function Basic({ event }: { event: Event; }) {
+	const onDrop = useCallback(async (acceptedFiles: Array<File>) => {
+		const file = acceptedFiles[0]
+
+		const formData = new FormData()
+		formData.append("file", file)
+		formData.append("name", file.name)
+
+		await fetch(`/app/api/events/${event.id}/photos/download`, {
+			method: 'POST',
+			body: formData,
+		})
+	}, [])
+	const {acceptedFiles, getRootProps, getInputProps} = useDropzone({onDrop});
+	
+	const files = acceptedFiles.map(file => (
+		<li key={file.path}>
+		{file.path} - {file.size} bytes
+		</li>
+	));
+
+	return (
+		<section className="container">
+		<div {...getRootProps({className: 'dropzone'})}>
+			<input {...getInputProps()} />
+			<p>Drag and drop some files here, or click to select files</p>
+		</div>
+		<aside>
+			<h4>Files</h4>
+			<ul>{files}</ul>
+		</aside>
+		</section>
+	);
+}
 
 function Card({ event }: { event: Event; }) {
 	return (
@@ -63,6 +99,7 @@ function Card({ event }: { event: Event; }) {
 			>
 				unsubscribe
 			</button>
+			<Basic event={event}/>
 			<br></br>
 		</div>
 	);
@@ -118,7 +155,16 @@ export default function Page() {
 			return;
 		}
 		if (fields.data == null) return ;
-		const value = await CreateEvent(fields.data);
+		const value = await fetch(`/app/api/events`, {
+			method: 'POST',
+			body: JSON.stringify({
+				title: fields.data.title,
+				description: fields.data.description,
+				max_inscription: fields.data.max_inscription,
+				start_at: fields.data.start_at,
+				end_at: fields.data.end_at,
+			}),
+		})
 		console.log(value);
 	}
 
@@ -141,7 +187,11 @@ export default function Page() {
 
 	return (
 		<>
-			<form action={create}>
+			<form onSubmit={(e) => {
+				e.preventDefault();
+				const formData = new FormData(e.currentTarget);
+				create(formData);
+			}}>
 				<p>Titre</p>
 				<input type="text" placeholder="titre" name="title"></input>
 				<p>description</p>
@@ -154,9 +204,13 @@ export default function Page() {
 				<input type="number" name="max_inscription"></input>
 				<button type="submit">créer</button>
 			</form>
-			<h1>
-				search event
-				<form action={search}>
+			<div className='search'>
+				<h2>search event</h2>
+				<form onSubmit={(e) => {
+					e.preventDefault();
+					const formData = new FormData(e.currentTarget);
+					search(formData);
+				}}>
 					<p>debut</p>
 					<input type="date" name="from"></input>
 					<p>fin</p>
@@ -167,9 +221,9 @@ export default function Page() {
 				</form>
 				{ searched && from && to 
                 	? <CardList from={new Date(from)} to={new Date(to)} limit={limit} />
-                	: <p>Lancez une recherche</p>
+                	: <p>Not found</p>
             	}
-			</h1>
+			</div>
 		</>
 	);
 }
