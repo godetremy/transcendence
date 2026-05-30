@@ -14,8 +14,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ eve
 		const name = formData.get("name") as string;
 
 		const buffer = Buffer.from(await file.arrayBuffer());
-		await mkdir(`imageStore/${event_id}`, { recursive: true });
-		await writeFile(`imageStore/${event_id}/${name}`, buffer);
+		await mkdir(`imageStore/events/${event_id}`, { recursive: true });
+		await writeFile(`imageStore/events/${event_id}/${name}`, buffer);
 
 		const value = await prisma.event.update({
 			include: {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ eve
 			data: {
 				image_event: {
 					create: {
-						image_path: `imageStore/${event_id}/${name}`,
+						image_path: `imageStore/events/${event_id}/${name}`,
 						upload_user_id: session.user_id,
 					},
 				},
