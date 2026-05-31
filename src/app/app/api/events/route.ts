@@ -9,32 +9,30 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const to = req.nextUrl.searchParams.get('to');
 		const limit = req.nextUrl.searchParams.get('limit');
 		let limitValue = 20;
-		if (limit != null)
-			limitValue = Number(limit);
-		if (limitValue > 100)
-			limitValue = 100;
+		if (limit != null) limitValue = Number(limit);
+		if (limitValue > 100) limitValue = 100;
 		if (from == null || to == null)
 			return new NextResponse('Error empty fields', {
-			status: 401,
-		});
+				status: 401,
+			});
 		const cookie = req.cookies.get('session');
 		await decrypt(cookie?.value);
 		const value = await prisma.event.findMany({
 			take: limitValue,
 			include: {
 				author: {
-					include: { memberships: true }
+					include: { memberships: true },
 				},
 				registered: true,
 				image_event: true,
 			},
 			where: {
 				start_at: {
-					gte : new Date(from),
+					gte: new Date(from),
 				},
 				end_at: {
-					lte : new Date(to),
-				}
+					lte: new Date(to),
+				},
 			},
 		});
 		const events = await Promise.all(value.map(EventFormatting));
@@ -54,13 +52,13 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 		const body = await req.json();
 		const row = await prisma.event.delete({
 			where: {
-				id : body.id,
+				id: body.id,
 			},
 			include: {
 				registered: true,
 				image_event: true,
-			}
-		})
+			},
+		});
 		return NextResponse.json(row);
 	} catch (error: unknown) {
 		console.error(error);
@@ -68,7 +66,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 			status: 500,
 		});
 	}
-} 
+}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
@@ -87,12 +85,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			include: {
 				author: {
 					include: {
-						memberships: true
-					}
+						memberships: true,
+					},
 				},
 				registered: true,
-			}
-		})
+			},
+		});
 		return NextResponse.json(EventFormatting(row));
 	} catch (error: unknown) {
 		console.error(error);
@@ -100,4 +98,4 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			status: 500,
 		});
 	}
-} 
+}

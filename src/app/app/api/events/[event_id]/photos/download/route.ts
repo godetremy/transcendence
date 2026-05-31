@@ -3,15 +3,18 @@ import { decrypt } from '@/lib/session';
 import { mkdir, writeFile } from 'fs/promises';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ event_id: string }> }): Promise<NextResponse> {
+export async function POST(
+	req: NextRequest,
+	{ params }: { params: Promise<{ event_id: string }> }
+): Promise<NextResponse> {
 	try {
 		const { event_id } = await params;
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
-		
+
 		const formData = await req.formData();
-		const file = formData.get("file") as File;
-		const name = formData.get("name") as string;
+		const file = formData.get('file') as File;
+		const name = formData.get('name') as string;
 
 		const buffer = Buffer.from(await file.arrayBuffer());
 		await mkdir(`imageStore/events/${event_id}`, { recursive: true });
@@ -19,8 +22,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ eve
 
 		const value = await prisma.event.update({
 			include: {
-				image_event: {
-				},
+				image_event: {},
 			},
 			where: {
 				id: event_id,
