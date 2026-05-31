@@ -53,7 +53,7 @@ model image_event {
 	event_id					String? 	@unique
 	event						event?		@relation(fields: [event_id], references: [id])
 
-	image_path					String
+	image_path					String		@unique
 
 	created_at					DateTime	@default(now())
 }

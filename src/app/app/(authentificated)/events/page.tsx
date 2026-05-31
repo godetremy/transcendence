@@ -24,6 +24,22 @@ function Basic({ event }: { event: Event; }) {
 	const files = acceptedFiles.map(file => (
 		<li key={file.path}>
 		{file.path} - {file.size} bytes
+			<button
+				onClick={async () => {
+					await fetch(`/app/api/events/${event.id}/photos/report`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body : JSON.stringify({
+							name: file.name,
+						})
+					});
+					console.log('delete');
+				}}
+			>
+				suppression
+			</button>
 		</li>
 	));
 

@@ -80,6 +80,9 @@ CREATE UNIQUE INDEX "registered_event_registered_event_id_key" ON "registered_ev
 CREATE UNIQUE INDEX "image_event_event_id_key" ON "image_event"("event_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "image_event_image_path_key" ON "image_event"("image_path");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_fortytwo_user_id_key" ON "users"("fortytwo_user_id");
 
 -- CreateIndex

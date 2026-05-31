@@ -11,6 +11,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ even
 			include: {
 				registered: {
 				},
+				image_event: {
+				},
 			},
 			where: {
 				id: event_id,

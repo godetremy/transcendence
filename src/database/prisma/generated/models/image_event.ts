@@ -199,15 +199,15 @@ export type image_eventOrderByWithRelationInput = {
 export type image_eventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   event_id?: string
+  image_path?: string
   AND?: Prisma.image_eventWhereInput | Prisma.image_eventWhereInput[]
   OR?: Prisma.image_eventWhereInput[]
   NOT?: Prisma.image_eventWhereInput | Prisma.image_eventWhereInput[]
   upload_user_id?: Prisma.StringNullableFilter<"image_event"> | string | null
-  image_path?: Prisma.StringFilter<"image_event"> | string
   created_at?: Prisma.DateTimeFilter<"image_event"> | Date | string
   user?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.eventWhereInput> | null
-}, "id" | "event_id">
+}, "id" | "event_id" | "image_path">
 
 export type image_eventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

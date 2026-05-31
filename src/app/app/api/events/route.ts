@@ -26,6 +26,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 					include: { memberships: true }
 				},
 				registered: true,
+				image_event: true,
 			},
 			where: {
 				start_at: {
@@ -57,6 +58,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 			},
 			include: {
 				registered: true,
+				image_event: true,
 			}
 		})
 		return NextResponse.json(row);
