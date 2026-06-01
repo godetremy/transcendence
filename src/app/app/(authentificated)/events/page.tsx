@@ -2,7 +2,7 @@
 
 import './page.scss';
 import { EventFormSchema, EventSearchFormSchema } from '@/schema/EventForm';
-import { Event } from '@/types/bde/Event';
+import { CreateEventType, Event } from '@/types/bde/Event';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -57,7 +57,7 @@ function Basic({ event }: { event: Event }) {
 	);
 }
 
-function Card({ event }: { event: Event }) {
+function Card({ event, eventmodify }: { event: Event, eventmodify: CreateEventType }) {
 	return (
 		<div className="card">
 			<h2>Nom</h2>
@@ -68,6 +68,19 @@ function Card({ event }: { event: Event }) {
 			<p>{event.max_inscription}</p>
 			<button
 				onClick={async () => {
+					await fetch(`/app/api/events/${event.id}`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							title: eventmodify.title,
+							description: eventmodify.description,
+							max_inscription: eventmodify.max_inscription,
+							start_at: eventmodify.start_at,
+							end_at: eventmodify.end_at,
+						}),
+					});
 					console.log('modifier');
 				}}
 			>
@@ -121,7 +134,7 @@ function Card({ event }: { event: Event }) {
 	);
 }
 
-function CardList({ from, to, limit }: { from: Date | undefined; to: Date | undefined; limit: number | undefined }) {
+function CardList({ from, to, limit, event }: { from: Date | undefined; to: Date | undefined; limit: number | undefined, event: CreateEventType }) {
 	const [events, setEvents] = useState<Event[]>();
 
 	useEffect(() => {
@@ -149,7 +162,7 @@ function CardList({ from, to, limit }: { from: Date | undefined; to: Date | unde
 	return (
 		<div>
 			{events?.map((item, index) => (
-				<Card key={index} event={item} />
+				<Card key={index} event={item} eventmodify={event} />
 			))}
 		</div>
 	);
@@ -160,6 +173,13 @@ export default function Page() {
 	const [to, setTo] = useState<Date>();
 	const [limit, setLimit] = useState<number>();
 	const [searched, setSearched] = useState<boolean>(false);
+	const [event, setEvent] = useState<CreateEventType>({
+		title: '',
+		description: '',
+		max_inscription: 0,
+		start_at: new Date(),
+		end_at: new Date(),
+	});
 
 	const create = async (form: FormData) => {
 		const fields = EventFormSchema.safeParse({
@@ -214,15 +234,15 @@ export default function Page() {
 				}}
 			>
 				<p>Titre</p>
-				<input type="text" placeholder="titre" name="title"></input>
+				<input type="text" placeholder="titre" name="title"  onChange={(e) => setEvent({...event, title: e.target.value})}></input>
 				<p>description</p>
-				<input type="text" placeholder="description" name="describe"></input>
+				<input type="text" placeholder="description" name="describe" onChange={(e) => setEvent({...event, description: e.target.value})}></input>
 				<p>debut</p>
-				<input type="datetime-local" name="start"></input>
+				<input type="datetime-local" name="start" onChange={(e) => setEvent({...event, start_at: new Date(e.target.value)})}></input>
 				<p>fin</p>
-				<input type="datetime-local" name="end"></input>
+				<input type="datetime-local" name="end" onChange={(e) => setEvent({...event, end_at: new Date(e.target.value)})}></input>
 				<p>Nombre de personne</p>
-				<input type="number" name="max_inscription"></input>
+				<input type="number" name="max_inscription" onChange={(e) => setEvent({...event, max_inscription: Number(e.target.value)})}></input>
 				<button type="submit">créer</button>
 			</form>
 			<div className="search">
@@ -243,7 +263,7 @@ export default function Page() {
 					<button type="submit">find</button>
 				</form>
 				{searched && from && to ? (
-					<CardList from={new Date(from)} to={new Date(to)} limit={limit} />
+					<CardList from={new Date(from)} to={new Date(to)} limit={limit} event={event}/>
 				) : (
 					<p>Not found</p>
 				)}
