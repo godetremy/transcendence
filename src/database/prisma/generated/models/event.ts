@@ -242,7 +242,7 @@ export type eventWhereInput = {
   created_at?: Prisma.DateTimeFilter<"event"> | Date | string
   author?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   registered?: Prisma.XOR<Prisma.Registered_eventNullableScalarRelationFilter, Prisma.registered_eventWhereInput> | null
-  image_event?: Prisma.XOR<Prisma.Image_eventNullableScalarRelationFilter, Prisma.image_eventWhereInput> | null
+  image_album?: Prisma.XOR<Prisma.Image_albumNullableScalarRelationFilter, Prisma.image_albumWhereInput> | null
 }
 
 export type eventOrderByWithRelationInput = {
@@ -256,7 +256,7 @@ export type eventOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   author?: Prisma.usersOrderByWithRelationInput
   registered?: Prisma.registered_eventOrderByWithRelationInput
-  image_event?: Prisma.image_eventOrderByWithRelationInput
+  image_album?: Prisma.image_albumOrderByWithRelationInput
 }
 
 export type eventWhereUniqueInput = Prisma.AtLeast<{
@@ -273,7 +273,7 @@ export type eventWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"event"> | Date | string
   author?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   registered?: Prisma.XOR<Prisma.Registered_eventNullableScalarRelationFilter, Prisma.registered_eventWhereInput> | null
-  image_event?: Prisma.XOR<Prisma.Image_eventNullableScalarRelationFilter, Prisma.image_eventWhereInput> | null
+  image_album?: Prisma.XOR<Prisma.Image_albumNullableScalarRelationFilter, Prisma.image_albumWhereInput> | null
 }, "id">
 
 export type eventOrderByWithAggregationInput = {
@@ -316,7 +316,7 @@ export type eventCreateInput = {
   created_at?: Date | string
   author: Prisma.usersCreateNestedOneWithoutEventsInput
   registered?: Prisma.registered_eventCreateNestedOneWithoutEventInput
-  image_event?: Prisma.image_eventCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumCreateNestedOneWithoutEventInput
 }
 
 export type eventUncheckedCreateInput = {
@@ -329,7 +329,7 @@ export type eventUncheckedCreateInput = {
   end_at?: Date | string
   created_at?: Date | string
   registered?: Prisma.registered_eventUncheckedCreateNestedOneWithoutEventInput
-  image_event?: Prisma.image_eventUncheckedCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedOneWithoutEventInput
 }
 
 export type eventUpdateInput = {
@@ -342,7 +342,7 @@ export type eventUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.usersUpdateOneRequiredWithoutEventsNestedInput
   registered?: Prisma.registered_eventUpdateOneWithoutEventNestedInput
-  image_event?: Prisma.image_eventUpdateOneWithoutEventNestedInput
+  image_album?: Prisma.image_albumUpdateOneWithoutEventNestedInput
 }
 
 export type eventUncheckedUpdateInput = {
@@ -355,7 +355,7 @@ export type eventUncheckedUpdateInput = {
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered?: Prisma.registered_eventUncheckedUpdateOneWithoutEventNestedInput
-  image_event?: Prisma.image_eventUncheckedUpdateOneWithoutEventNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateOneWithoutEventNestedInput
 }
 
 export type eventCreateManyInput = {
@@ -462,20 +462,20 @@ export type eventUpdateOneWithoutRegisteredNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.eventUpdateToOneWithWhereWithoutRegisteredInput, Prisma.eventUpdateWithoutRegisteredInput>, Prisma.eventUncheckedUpdateWithoutRegisteredInput>
 }
 
-export type eventCreateNestedOneWithoutImage_eventInput = {
-  create?: Prisma.XOR<Prisma.eventCreateWithoutImage_eventInput, Prisma.eventUncheckedCreateWithoutImage_eventInput>
-  connectOrCreate?: Prisma.eventCreateOrConnectWithoutImage_eventInput
+export type eventCreateNestedOneWithoutImage_albumInput = {
+  create?: Prisma.XOR<Prisma.eventCreateWithoutImage_albumInput, Prisma.eventUncheckedCreateWithoutImage_albumInput>
+  connectOrCreate?: Prisma.eventCreateOrConnectWithoutImage_albumInput
   connect?: Prisma.eventWhereUniqueInput
 }
 
-export type eventUpdateOneWithoutImage_eventNestedInput = {
-  create?: Prisma.XOR<Prisma.eventCreateWithoutImage_eventInput, Prisma.eventUncheckedCreateWithoutImage_eventInput>
-  connectOrCreate?: Prisma.eventCreateOrConnectWithoutImage_eventInput
-  upsert?: Prisma.eventUpsertWithoutImage_eventInput
+export type eventUpdateOneWithoutImage_albumNestedInput = {
+  create?: Prisma.XOR<Prisma.eventCreateWithoutImage_albumInput, Prisma.eventUncheckedCreateWithoutImage_albumInput>
+  connectOrCreate?: Prisma.eventCreateOrConnectWithoutImage_albumInput
+  upsert?: Prisma.eventUpsertWithoutImage_albumInput
   disconnect?: Prisma.eventWhereInput | boolean
   delete?: Prisma.eventWhereInput | boolean
   connect?: Prisma.eventWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.eventUpdateToOneWithWhereWithoutImage_eventInput, Prisma.eventUpdateWithoutImage_eventInput>, Prisma.eventUncheckedUpdateWithoutImage_eventInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.eventUpdateToOneWithWhereWithoutImage_albumInput, Prisma.eventUpdateWithoutImage_albumInput>, Prisma.eventUncheckedUpdateWithoutImage_albumInput>
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -537,7 +537,7 @@ export type eventCreateWithoutRegisteredInput = {
   end_at?: Date | string
   created_at?: Date | string
   author: Prisma.usersCreateNestedOneWithoutEventsInput
-  image_event?: Prisma.image_eventCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumCreateNestedOneWithoutEventInput
 }
 
 export type eventUncheckedCreateWithoutRegisteredInput = {
@@ -549,7 +549,7 @@ export type eventUncheckedCreateWithoutRegisteredInput = {
   start_at?: Date | string
   end_at?: Date | string
   created_at?: Date | string
-  image_event?: Prisma.image_eventUncheckedCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedOneWithoutEventInput
 }
 
 export type eventCreateOrConnectWithoutRegisteredInput = {
@@ -577,7 +577,7 @@ export type eventUpdateWithoutRegisteredInput = {
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.usersUpdateOneRequiredWithoutEventsNestedInput
-  image_event?: Prisma.image_eventUpdateOneWithoutEventNestedInput
+  image_album?: Prisma.image_albumUpdateOneWithoutEventNestedInput
 }
 
 export type eventUncheckedUpdateWithoutRegisteredInput = {
@@ -589,10 +589,10 @@ export type eventUncheckedUpdateWithoutRegisteredInput = {
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  image_event?: Prisma.image_eventUncheckedUpdateOneWithoutEventNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateOneWithoutEventNestedInput
 }
 
-export type eventCreateWithoutImage_eventInput = {
+export type eventCreateWithoutImage_albumInput = {
   id?: string
   title?: string | null
   description?: string | null
@@ -604,7 +604,7 @@ export type eventCreateWithoutImage_eventInput = {
   registered?: Prisma.registered_eventCreateNestedOneWithoutEventInput
 }
 
-export type eventUncheckedCreateWithoutImage_eventInput = {
+export type eventUncheckedCreateWithoutImage_albumInput = {
   id?: string
   author_id: string
   title?: string | null
@@ -616,23 +616,23 @@ export type eventUncheckedCreateWithoutImage_eventInput = {
   registered?: Prisma.registered_eventUncheckedCreateNestedOneWithoutEventInput
 }
 
-export type eventCreateOrConnectWithoutImage_eventInput = {
+export type eventCreateOrConnectWithoutImage_albumInput = {
   where: Prisma.eventWhereUniqueInput
-  create: Prisma.XOR<Prisma.eventCreateWithoutImage_eventInput, Prisma.eventUncheckedCreateWithoutImage_eventInput>
+  create: Prisma.XOR<Prisma.eventCreateWithoutImage_albumInput, Prisma.eventUncheckedCreateWithoutImage_albumInput>
 }
 
-export type eventUpsertWithoutImage_eventInput = {
-  update: Prisma.XOR<Prisma.eventUpdateWithoutImage_eventInput, Prisma.eventUncheckedUpdateWithoutImage_eventInput>
-  create: Prisma.XOR<Prisma.eventCreateWithoutImage_eventInput, Prisma.eventUncheckedCreateWithoutImage_eventInput>
+export type eventUpsertWithoutImage_albumInput = {
+  update: Prisma.XOR<Prisma.eventUpdateWithoutImage_albumInput, Prisma.eventUncheckedUpdateWithoutImage_albumInput>
+  create: Prisma.XOR<Prisma.eventCreateWithoutImage_albumInput, Prisma.eventUncheckedCreateWithoutImage_albumInput>
   where?: Prisma.eventWhereInput
 }
 
-export type eventUpdateToOneWithWhereWithoutImage_eventInput = {
+export type eventUpdateToOneWithWhereWithoutImage_albumInput = {
   where?: Prisma.eventWhereInput
-  data: Prisma.XOR<Prisma.eventUpdateWithoutImage_eventInput, Prisma.eventUncheckedUpdateWithoutImage_eventInput>
+  data: Prisma.XOR<Prisma.eventUpdateWithoutImage_albumInput, Prisma.eventUncheckedUpdateWithoutImage_albumInput>
 }
 
-export type eventUpdateWithoutImage_eventInput = {
+export type eventUpdateWithoutImage_albumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -644,7 +644,7 @@ export type eventUpdateWithoutImage_eventInput = {
   registered?: Prisma.registered_eventUpdateOneWithoutEventNestedInput
 }
 
-export type eventUncheckedUpdateWithoutImage_eventInput = {
+export type eventUncheckedUpdateWithoutImage_albumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   author_id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -665,7 +665,7 @@ export type eventCreateWithoutAuthorInput = {
   end_at?: Date | string
   created_at?: Date | string
   registered?: Prisma.registered_eventCreateNestedOneWithoutEventInput
-  image_event?: Prisma.image_eventCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumCreateNestedOneWithoutEventInput
 }
 
 export type eventUncheckedCreateWithoutAuthorInput = {
@@ -677,7 +677,7 @@ export type eventUncheckedCreateWithoutAuthorInput = {
   end_at?: Date | string
   created_at?: Date | string
   registered?: Prisma.registered_eventUncheckedCreateNestedOneWithoutEventInput
-  image_event?: Prisma.image_eventUncheckedCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedOneWithoutEventInput
 }
 
 export type eventCreateOrConnectWithoutAuthorInput = {
@@ -739,7 +739,7 @@ export type eventUpdateWithoutAuthorInput = {
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered?: Prisma.registered_eventUpdateOneWithoutEventNestedInput
-  image_event?: Prisma.image_eventUpdateOneWithoutEventNestedInput
+  image_album?: Prisma.image_albumUpdateOneWithoutEventNestedInput
 }
 
 export type eventUncheckedUpdateWithoutAuthorInput = {
@@ -751,7 +751,7 @@ export type eventUncheckedUpdateWithoutAuthorInput = {
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered?: Prisma.registered_eventUncheckedUpdateOneWithoutEventNestedInput
-  image_event?: Prisma.image_eventUncheckedUpdateOneWithoutEventNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateOneWithoutEventNestedInput
 }
 
 export type eventUncheckedUpdateManyWithoutAuthorInput = {
@@ -777,7 +777,7 @@ export type eventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   created_at?: boolean
   author?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   registered?: boolean | Prisma.event$registeredArgs<ExtArgs>
-  image_event?: boolean | Prisma.event$image_eventArgs<ExtArgs>
+  image_album?: boolean | Prisma.event$image_albumArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type eventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -819,7 +819,7 @@ export type eventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type eventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   registered?: boolean | Prisma.event$registeredArgs<ExtArgs>
-  image_event?: boolean | Prisma.event$image_eventArgs<ExtArgs>
+  image_album?: boolean | Prisma.event$image_albumArgs<ExtArgs>
 }
 export type eventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.usersDefaultArgs<ExtArgs>
@@ -833,7 +833,7 @@ export type $eventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     author: Prisma.$usersPayload<ExtArgs>
     registered: Prisma.$registered_eventPayload<ExtArgs> | null
-    image_event: Prisma.$image_eventPayload<ExtArgs> | null
+    image_album: Prisma.$image_albumPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1240,7 +1240,7 @@ export interface Prisma__eventClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   author<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   registered<T extends Prisma.event$registeredArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.event$registeredArgs<ExtArgs>>): Prisma.Prisma__registered_eventClient<runtime.Types.Result.GetResult<Prisma.$registered_eventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  image_event<T extends Prisma.event$image_eventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.event$image_eventArgs<ExtArgs>>): Prisma.Prisma__image_eventClient<runtime.Types.Result.GetResult<Prisma.$image_eventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  image_album<T extends Prisma.event$image_albumArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.event$image_albumArgs<ExtArgs>>): Prisma.Prisma__image_albumClient<runtime.Types.Result.GetResult<Prisma.$image_albumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1698,22 +1698,22 @@ export type event$registeredArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * event.image_event
+ * event.image_album
  */
-export type event$image_eventArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type event$image_albumArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the image_event
+   * Select specific fields to fetch from the image_album
    */
-  select?: Prisma.image_eventSelect<ExtArgs> | null
+  select?: Prisma.image_albumSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the image_event
+   * Omit specific fields from the image_album
    */
-  omit?: Prisma.image_eventOmit<ExtArgs> | null
+  omit?: Prisma.image_albumOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.image_eventInclude<ExtArgs> | null
-  where?: Prisma.image_eventWhereInput
+  include?: Prisma.image_albumInclude<ExtArgs> | null
+  where?: Prisma.image_albumWhereInput
 }
 
 /**

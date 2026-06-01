@@ -21,12 +21,30 @@ function Basic({ event }: { event: Event }) {
 	}, []);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({ onDrop });
 
+	const report = async (form: FormData) => {
+		const reason = form.get('reason');
+		if (!reason) {
+			console.error("Error: reason not set");
+			return;
+		}
+		await fetch(`/app/api/events/${event.id}/photos/report`, {
+			method: 'POST',
+			headers: {
+					'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				name: acceptedFiles[0].name,
+				reason: reason,
+			}),
+		});
+	};
+
 	const files = acceptedFiles.map((file) => (
 		<li key={file.path}>
 			{file.path} - {file.size} bytes
 			<button
 				onClick={async () => {
-					await fetch(`/app/api/events/${event.id}/photos/report`, {
+					await fetch(`/app/api/events/${event.id}`, {
 						method: 'DELETE',
 						headers: {
 							'Content-Type': 'application/json',
@@ -40,6 +58,17 @@ function Basic({ event }: { event: Event }) {
 			>
 				suppression
 			</button>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					const formData = new FormData(e.currentTarget);
+					report(formData);
+				}}
+				>
+				<p>raison</p>
+				<input type="text" name="reason"></input>
+				<button type="submit">find</button>
+			</form>
 		</li>
 	));
 
@@ -57,7 +86,7 @@ function Basic({ event }: { event: Event }) {
 	);
 }
 
-function Card({ event, eventmodify }: { event: Event, eventmodify: CreateEventType }) {
+function Card({ event, eventmodify }: { event: Event; eventmodify: CreateEventType }) {
 	return (
 		<div className="card">
 			<h2>Nom</h2>
@@ -134,7 +163,17 @@ function Card({ event, eventmodify }: { event: Event, eventmodify: CreateEventTy
 	);
 }
 
-function CardList({ from, to, limit, event }: { from: Date | undefined; to: Date | undefined; limit: number | undefined, event: CreateEventType }) {
+function CardList({
+	from,
+	to,
+	limit,
+	event,
+}: {
+	from: Date | undefined;
+	to: Date | undefined;
+	limit: number | undefined;
+	event: CreateEventType;
+}) {
 	const [events, setEvents] = useState<Event[]>();
 
 	useEffect(() => {
@@ -234,15 +273,37 @@ export default function Page() {
 				}}
 			>
 				<p>Titre</p>
-				<input type="text" placeholder="titre" name="title"  onChange={(e) => setEvent({...event, title: e.target.value})}></input>
+				<input
+					type="text"
+					placeholder="titre"
+					name="title"
+					onChange={(e) => setEvent({ ...event, title: e.target.value })}
+				></input>
 				<p>description</p>
-				<input type="text" placeholder="description" name="describe" onChange={(e) => setEvent({...event, description: e.target.value})}></input>
+				<input
+					type="text"
+					placeholder="description"
+					name="describe"
+					onChange={(e) => setEvent({ ...event, description: e.target.value })}
+				></input>
 				<p>debut</p>
-				<input type="datetime-local" name="start" onChange={(e) => setEvent({...event, start_at: new Date(e.target.value)})}></input>
+				<input
+					type="datetime-local"
+					name="start"
+					onChange={(e) => setEvent({ ...event, start_at: new Date(e.target.value) })}
+				></input>
 				<p>fin</p>
-				<input type="datetime-local" name="end" onChange={(e) => setEvent({...event, end_at: new Date(e.target.value)})}></input>
+				<input
+					type="datetime-local"
+					name="end"
+					onChange={(e) => setEvent({ ...event, end_at: new Date(e.target.value) })}
+				></input>
 				<p>Nombre de personne</p>
-				<input type="number" name="max_inscription" onChange={(e) => setEvent({...event, max_inscription: Number(e.target.value)})}></input>
+				<input
+					type="number"
+					name="max_inscription"
+					onChange={(e) => setEvent({ ...event, max_inscription: Number(e.target.value) })}
+				></input>
 				<button type="submit">créer</button>
 			</form>
 			<div className="search">
@@ -263,7 +324,7 @@ export default function Page() {
 					<button type="submit">find</button>
 				</form>
 				{searched && from && to ? (
-					<CardList from={new Date(from)} to={new Date(to)} limit={limit} event={event}/>
+					<CardList from={new Date(from)} to={new Date(to)} limit={limit} event={event} />
 				) : (
 					<p>Not found</p>
 				)}

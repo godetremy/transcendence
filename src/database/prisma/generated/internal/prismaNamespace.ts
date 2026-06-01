@@ -387,7 +387,8 @@ export const ModelName = {
   memberships: 'memberships',
   oauth_fortytwo: 'oauth_fortytwo',
   registered_event: 'registered_event',
-  image_event: 'image_event',
+  image_album: 'image_album',
+  image_report: 'image_report',
   event: 'event',
   users: 'users'
 } as const
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "memberships" | "oauth_fortytwo" | "registered_event" | "image_event" | "event" | "users"
+    modelProps: "memberships" | "oauth_fortytwo" | "registered_event" | "image_album" | "image_report" | "event" | "users"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -631,77 +632,151 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    image_event: {
-      payload: Prisma.$image_eventPayload<ExtArgs>
-      fields: Prisma.image_eventFieldRefs
+    image_album: {
+      payload: Prisma.$image_albumPayload<ExtArgs>
+      fields: Prisma.image_albumFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.image_eventFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload> | null
+          args: Prisma.image_albumFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.image_eventFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>
+          args: Prisma.image_albumFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>
         }
         findFirst: {
-          args: Prisma.image_eventFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload> | null
+          args: Prisma.image_albumFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.image_eventFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>
+          args: Prisma.image_albumFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>
         }
         findMany: {
-          args: Prisma.image_eventFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>[]
+          args: Prisma.image_albumFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>[]
         }
         create: {
-          args: Prisma.image_eventCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>
+          args: Prisma.image_albumCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>
         }
         createMany: {
-          args: Prisma.image_eventCreateManyArgs<ExtArgs>
+          args: Prisma.image_albumCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.image_eventCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>[]
+          args: Prisma.image_albumCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>[]
         }
         delete: {
-          args: Prisma.image_eventDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>
+          args: Prisma.image_albumDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>
         }
         update: {
-          args: Prisma.image_eventUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>
+          args: Prisma.image_albumUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>
         }
         deleteMany: {
-          args: Prisma.image_eventDeleteManyArgs<ExtArgs>
+          args: Prisma.image_albumDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.image_eventUpdateManyArgs<ExtArgs>
+          args: Prisma.image_albumUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.image_eventUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>[]
+          args: Prisma.image_albumUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>[]
         }
         upsert: {
-          args: Prisma.image_eventUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_eventPayload>
+          args: Prisma.image_albumUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_albumPayload>
         }
         aggregate: {
-          args: Prisma.Image_eventAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateImage_event>
+          args: Prisma.Image_albumAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateImage_album>
         }
         groupBy: {
-          args: Prisma.image_eventGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Image_eventGroupByOutputType>[]
+          args: Prisma.image_albumGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Image_albumGroupByOutputType>[]
         }
         count: {
-          args: Prisma.image_eventCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Image_eventCountAggregateOutputType> | number
+          args: Prisma.image_albumCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Image_albumCountAggregateOutputType> | number
+        }
+      }
+    }
+    image_report: {
+      payload: Prisma.$image_reportPayload<ExtArgs>
+      fields: Prisma.image_reportFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.image_reportFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.image_reportFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>
+        }
+        findFirst: {
+          args: Prisma.image_reportFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.image_reportFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>
+        }
+        findMany: {
+          args: Prisma.image_reportFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>[]
+        }
+        create: {
+          args: Prisma.image_reportCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>
+        }
+        createMany: {
+          args: Prisma.image_reportCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.image_reportCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>[]
+        }
+        delete: {
+          args: Prisma.image_reportDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>
+        }
+        update: {
+          args: Prisma.image_reportUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>
+        }
+        deleteMany: {
+          args: Prisma.image_reportDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.image_reportUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.image_reportUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>[]
+        }
+        upsert: {
+          args: Prisma.image_reportUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$image_reportPayload>
+        }
+        aggregate: {
+          args: Prisma.Image_reportAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateImage_report>
+        }
+        groupBy: {
+          args: Prisma.image_reportGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Image_reportGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.image_reportCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Image_reportCountAggregateOutputType> | number
         }
       }
     }
@@ -921,7 +996,7 @@ export const Registered_eventScalarFieldEnum = {
 export type Registered_eventScalarFieldEnum = (typeof Registered_eventScalarFieldEnum)[keyof typeof Registered_eventScalarFieldEnum]
 
 
-export const Image_eventScalarFieldEnum = {
+export const Image_albumScalarFieldEnum = {
   id: 'id',
   upload_user_id: 'upload_user_id',
   event_id: 'event_id',
@@ -929,7 +1004,18 @@ export const Image_eventScalarFieldEnum = {
   created_at: 'created_at'
 } as const
 
-export type Image_eventScalarFieldEnum = (typeof Image_eventScalarFieldEnum)[keyof typeof Image_eventScalarFieldEnum]
+export type Image_albumScalarFieldEnum = (typeof Image_albumScalarFieldEnum)[keyof typeof Image_albumScalarFieldEnum]
+
+
+export const Image_reportScalarFieldEnum = {
+  id: 'id',
+  image_album_id: 'image_album_id',
+  signaling_id: 'signaling_id',
+  reason: 'reason',
+  created_at: 'created_at'
+} as const
+
+export type Image_reportScalarFieldEnum = (typeof Image_reportScalarFieldEnum)[keyof typeof Image_reportScalarFieldEnum]
 
 
 export const EventScalarFieldEnum = {
@@ -1157,7 +1243,8 @@ export type GlobalOmitConfig = {
   memberships?: Prisma.membershipsOmit
   oauth_fortytwo?: Prisma.oauth_fortytwoOmit
   registered_event?: Prisma.registered_eventOmit
-  image_event?: Prisma.image_eventOmit
+  image_album?: Prisma.image_albumOmit
+  image_report?: Prisma.image_reportOmit
   event?: Prisma.eventOmit
   users?: Prisma.usersOmit
 }

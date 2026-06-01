@@ -54,7 +54,8 @@ export const ModelName = {
   memberships: 'memberships',
   oauth_fortytwo: 'oauth_fortytwo',
   registered_event: 'registered_event',
-  image_event: 'image_event',
+  image_album: 'image_album',
+  image_report: 'image_report',
   event: 'event',
   users: 'users'
 } as const
@@ -104,7 +105,7 @@ export const Registered_eventScalarFieldEnum = {
 export type Registered_eventScalarFieldEnum = (typeof Registered_eventScalarFieldEnum)[keyof typeof Registered_eventScalarFieldEnum]
 
 
-export const Image_eventScalarFieldEnum = {
+export const Image_albumScalarFieldEnum = {
   id: 'id',
   upload_user_id: 'upload_user_id',
   event_id: 'event_id',
@@ -112,7 +113,18 @@ export const Image_eventScalarFieldEnum = {
   created_at: 'created_at'
 } as const
 
-export type Image_eventScalarFieldEnum = (typeof Image_eventScalarFieldEnum)[keyof typeof Image_eventScalarFieldEnum]
+export type Image_albumScalarFieldEnum = (typeof Image_albumScalarFieldEnum)[keyof typeof Image_albumScalarFieldEnum]
+
+
+export const Image_reportScalarFieldEnum = {
+  id: 'id',
+  image_album_id: 'image_album_id',
+  signaling_id: 'signaling_id',
+  reason: 'reason',
+  created_at: 'created_at'
+} as const
+
+export type Image_reportScalarFieldEnum = (typeof Image_reportScalarFieldEnum)[keyof typeof Image_reportScalarFieldEnum]
 
 
 export const EventScalarFieldEnum = {

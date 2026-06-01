@@ -22,13 +22,13 @@ export async function POST(
 
 		const value = await prisma.event.update({
 			include: {
-				image_event: {},
+				image_album: {},
 			},
 			where: {
 				id: event_id,
 			},
 			data: {
-				image_event: {
+				image_album: {
 					create: {
 						image_path: `imageStore/events/${event_id}/${name}`,
 						upload_user_id: session.user_id,

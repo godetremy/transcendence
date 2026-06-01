@@ -33,10 +33,15 @@ export type oauth_fortytwo = Prisma.oauth_fortytwoModel
  */
 export type registered_event = Prisma.registered_eventModel
 /**
- * Model image_event
+ * Model image_album
  * 
  */
-export type image_event = Prisma.image_eventModel
+export type image_album = Prisma.image_albumModel
+/**
+ * Model image_report
+ * 
+ */
+export type image_report = Prisma.image_reportModel
 /**
  * Model event
  * 

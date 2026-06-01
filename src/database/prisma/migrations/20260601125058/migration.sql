@@ -28,14 +28,25 @@ CREATE TABLE "registered_event" (
 );
 
 -- CreateTable
-CREATE TABLE "image_event" (
+CREATE TABLE "image_album" (
     "id" TEXT NOT NULL,
     "upload_user_id" TEXT,
     "event_id" TEXT,
     "image_path" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "image_event_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "image_album_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "image_report" (
+    "id" TEXT NOT NULL,
+    "image_album_id" TEXT,
+    "signaling_id" TEXT NOT NULL,
+    "reason" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "image_report_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -77,10 +88,13 @@ CREATE TABLE "users" (
 CREATE UNIQUE INDEX "registered_event_registered_event_id_key" ON "registered_event"("registered_event_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "image_event_event_id_key" ON "image_event"("event_id");
+CREATE UNIQUE INDEX "image_album_event_id_key" ON "image_album"("event_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "image_event_image_path_key" ON "image_event"("image_path");
+CREATE UNIQUE INDEX "image_album_image_path_key" ON "image_album"("image_path");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "image_report_image_album_id_key" ON "image_report"("image_album_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_fortytwo_user_id_key" ON "users"("fortytwo_user_id");
@@ -95,10 +109,16 @@ ALTER TABLE "registered_event" ADD CONSTRAINT "registered_event_user_id_fkey" FO
 ALTER TABLE "registered_event" ADD CONSTRAINT "registered_event_registered_event_id_fkey" FOREIGN KEY ("registered_event_id") REFERENCES "event"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "image_event" ADD CONSTRAINT "image_event_upload_user_id_fkey" FOREIGN KEY ("upload_user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "image_album" ADD CONSTRAINT "image_album_upload_user_id_fkey" FOREIGN KEY ("upload_user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "image_event" ADD CONSTRAINT "image_event_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "event"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "image_album" ADD CONSTRAINT "image_album_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "event"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "image_report" ADD CONSTRAINT "image_report_image_album_id_fkey" FOREIGN KEY ("image_album_id") REFERENCES "image_album"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "image_report" ADD CONSTRAINT "image_report_signaling_id_fkey" FOREIGN KEY ("signaling_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "event" ADD CONSTRAINT "event_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
