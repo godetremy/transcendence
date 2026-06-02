@@ -24,6 +24,33 @@ es_api() {
 	fi
 }
 
+# Same as es_api but ignores 400 errors (useful for idempotent index creation)
+es_api_ignore_400() {
+	method="$1"
+	path="$2"
+	body="$3"
+	desc="$4"
+	tmpfile="/tmp/es-response-$(echo "$path" | tr '/' '-').json"
+
+	echo "${desc}..."
+	http_code="$(curl -sSk -o "${tmpfile}" -w "%{http_code}" \
+		-X "${method}" "${ES_URL}${path}" \
+		-H "Content-Type: application/json" \
+		-u "${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}" \
+		-d "${body}")"
+
+	if [ "$http_code" = "400" ]; then
+		echo "Skipping: ${desc} already exists (HTTP 400)"
+		return 0
+	fi
+
+	if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+		echo "Failed: ${desc} (HTTP ${http_code})"
+		cat "${tmpfile}"
+		exit 1
+	fi
+}
+
 # 1. Set kibana_system password
 es_api POST "/_security/user/kibana_system/_password" \
 	"{\"password\":\"${KIBANA_SYSTEM_PASSWORD}\"}" \
@@ -40,8 +67,18 @@ es_api PUT "/_index_template/transcendence-template" \
 	"Creating index template for transcendence"
 
 # 4. Bootstrap the first write index for the alias
-es_api PUT "/transcendence-000001" \
+es_api_ignore_400 PUT "/transcendence-000001" \
 	'{"aliases":{"transcendence":{"is_write_index":true}}}' \
 	"Bootstrapping first transcendence index"
+
+# 5. Create index template for elastic-stack-logs (ES / Kibana / Logstash logs)
+es_api PUT "/_index_template/elastic-stack-logs-template" \
+	'{"index_patterns":["elastic-stack-logs-*"],"template":{"settings":{"number_of_shards":1,"number_of_replicas":0,"index.lifecycle.name":"logs-policy","index.lifecycle.rollover_alias":"elastic-stack-logs"},"mappings":{"dynamic_templates":[{"strings_as_keywords":{"match_mapping_type":"string","mapping":{"type":"keyword","ignore_above":1024}}}],"properties":{"@timestamp":{"type":"date"},"service":{"type":"keyword"},"log_level":{"type":"keyword"},"log_type":{"type":"keyword"},"message":{"type":"text"},"app":{"type":"object","dynamic":true}}}},"priority":500,"composed_of":[],"version":1,"_meta":{"description":"Template for Elastic Stack component logs"}}' \
+	"Creating index template for elastic-stack-logs"
+
+# 6. Bootstrap the first write index for elastic-stack-logs
+es_api_ignore_400 PUT "/elastic-stack-logs-000001" \
+	'{"aliases":{"elastic-stack-logs":{"is_write_index":true}}}' \
+	"Bootstrapping first elastic-stack-logs index"
 
 echo "Elasticsearch setup complete."

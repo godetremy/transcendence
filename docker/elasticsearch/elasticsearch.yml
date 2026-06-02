@@ -27,4 +27,7 @@ xpack.security.http.ssl.client_authentication: optional
 bootstrap.memory_lock: false
 xpack.ml.enabled: false
 
+# Enable Stack Monitoring metrics collection
+xpack.monitoring.collection.enabled: true
+
 action.destructive_requires_name: true
