@@ -1,6 +1,6 @@
-import { EventFormatting } from '@/database/event/createEvent';
 import { prisma } from '@/database/prisma/prisma';
 import { decrypt } from '@/lib/session';
+import { EventFormSchema } from '@/schema/EventForm';
 import { access, rm } from 'fs/promises';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,9 +9,14 @@ export async function GET(
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
 	try {
-		const { event_id } = await params;
 		const cookie = req.cookies.get('session');
 		await decrypt(cookie?.value);
+		
+		const { event_id } = await params;
+		if (event_id == null)
+			return new NextResponse('Error, event_id not found.', {
+				status: 404,
+			});
 		const value = await prisma.event.findFirst({
 			include: {
 				registered: {},
@@ -21,6 +26,7 @@ export async function GET(
 				id: event_id,
 			},
 		});
+
 		return NextResponse.json(value);
 	} catch (error: unknown) {
 		console.error(error);
@@ -35,20 +41,40 @@ export async function POST(
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
 	try {
-		const { event_id } = await params;
 		const cookie = req.cookies.get('session');
 		await decrypt(cookie?.value);
+
+		const { event_id } = await params;
+		if (event_id == null)
+			return new NextResponse('Error, event_id not found.', {
+				status: 404,
+			});
+
 		const body = await req.json();
-		const row = await prisma.event.update({
+
+		const fields = EventFormSchema.safeParse({
+			title: body.title,
+			description: body.description,
+			max_inscription: body.max_inscription,
+			start_at: body.start_at,
+			end_at: body.end_at,
+		});
+		if (!fields.success) {
+			console.error(fields.error.issues[0].message);
+			return new NextResponse(fields.error.issues[0].message, {
+				status: 401,
+			});
+		}
+		await prisma.event.update({
 			where: {
 				id: event_id,
 			},
 			data: {
-				title: body.title,
-				description: body.description,
-				max_inscription: body.max_inscription,
-				start_at: body.start_at,
-				end_at: body.end_at,
+				title: fields.data.title,
+				description: fields.data.description,
+				max_inscription: fields.data.max_inscription,
+				start_at: fields.data.start_at,
+				end_at: fields.data.end_at,
 			},
 			include: {
 				author: {
@@ -59,7 +85,7 @@ export async function POST(
 				registered: true,
 			},
 		});
-		return NextResponse.json(EventFormatting(row));
+		return NextResponse.json({success: true});
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to delete event.', {
@@ -73,11 +99,16 @@ export async function DELETE(
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
 	try {
-		const { event_id } = await params;
 		const cookie = req.cookies.get('session');
 		await decrypt(cookie?.value);
 
+		const { event_id } = await params;
 		const body = await req.json();
+
+		if (event_id == null || body.name == null)
+			return new NextResponse('Error, event_id or name not found.', {
+				status: 404,
+			});
 
 		try {
 			await access(`imageStore/events/${event_id}/${body.name}`);
@@ -87,13 +118,15 @@ export async function DELETE(
 				status: 404,
 			});
 		}
-		const value = await prisma.image_album.delete({
+
+		await prisma.image_album.delete({
 			where: {
 				image_path: `imageStore/events/${event_id}/${body.name}`,
 			},
 		});
+
 		await rm(`imageStore/events/${event_id}/${body.name}`);
-		return NextResponse.json(value);
+		return NextResponse.json({success: true});
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to download image.', {
