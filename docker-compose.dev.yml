@@ -1,35 +1,35 @@
 name: trans-dev
 
 services:
-  nginx:
-    environment:
-      NGINX_SSL: "1"
-    ports:
-      - '127.0.0.1:443:443'
+    nginx:
+        environment:
+            NGINX_SSL: '1'
+        ports:
+            - '127.0.0.1:443:443'
 
-  node:
-    build:
-      target: dev
-    volumes:
-      - ./:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    environment:
-      NODE_ENV: development
-      DATABASE_URL: ${DATABASE_URL}
-      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
-      NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
-      OAUTH_42_SECRET: ${OAUTH_42_SECRET}
-      SESSION_SECRET: ${SESSION_SECRET}
-    command: npm run dev
+    node:
+        build:
+            target: dev
+        volumes:
+            - ./:/home/node/app
+            - node_modules:/home/node/app/node_modules
+        environment:
+            NODE_ENV: development
+            DATABASE_URL: ${DATABASE_URL}
+            NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+            NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+            OAUTH_42_SECRET: ${OAUTH_42_SECRET}
+            SESSION_SECRET: ${SESSION_SECRET}
+        command: npm run dev
 
-  vault:
-    environment:
-      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
-      VAULT_ADDR: ${VAULT_ADDR}
-    command:
-      - server
-      - -dev
+    vault:
+        environment:
+            VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
+            VAULT_ADDR: ${VAULT_ADDR}
+        command:
+            - server
+            - -dev
 
 networks:
-  app:
-    internal: false
+    app:
+        internal: false

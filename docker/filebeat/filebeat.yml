@@ -1,219 +1,219 @@
 filebeat.inputs:
-  - type: log
-    enabled: true
-    paths:
-      - /var/log/nginx/access.log
-    fields:
-      service: nginx
-      log_type: access
-    fields_under_root: true
+    - type: log
+      enabled: true
+      paths:
+          - /var/log/nginx/access.log
+      fields:
+          service: nginx
+          log_type: access
+      fields_under_root: true
 
-  - type: log
-    enabled: true
-    paths:
-      - /var/log/nginx/error.log
-    fields:
-      service: nginx
-      log_type: error
-    fields_under_root: true
+    - type: log
+      enabled: true
+      paths:
+          - /var/log/nginx/error.log
+      fields:
+          service: nginx
+          log_type: error
+      fields_under_root: true
 
-  - type: log
-    enabled: true
-    paths:
-      - /var/log/nginx/modsec_audit.log
-    fields:
-      service: modsecurity
-      log_type: audit
-    fields_under_root: true
-    multiline:
-      pattern: '^--[a-fA-F0-9]{8}-[A-Z]--$'
-      negate: true
-      match: after
+    - type: log
+      enabled: true
+      paths:
+          - /var/log/nginx/modsec_audit.log
+      fields:
+          service: modsecurity
+          log_type: audit
+      fields_under_root: true
+      multiline:
+          pattern: '^--[a-fA-F0-9]{8}-[A-Z]--$'
+          negate: true
+          match: after
 
 filebeat.autodiscover:
-  providers:
-    - type: docker
-      hints.enabled: true
-      hints.default_config.enabled: true
-      templates:
-        - condition:
-            contains:
-              docker.container.name: elasticsearch
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: elasticsearch
-                log_type: container
-              fields_under_root: true
+    providers:
+        - type: docker
+          hints.enabled: true
+          hints.default_config.enabled: true
+          templates:
+              - condition:
+                    contains:
+                        docker.container.name: elasticsearch
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: elasticsearch
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: kibana
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: kibana
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: kibana
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: kibana
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: logstash
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: logstash
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: logstash
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: logstash
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: node
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: nextjs
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: node
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: nextjs
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: postgres
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: postgres
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: postgres
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: postgres
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: nginx
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: nginx-stdout
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: nginx
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: nginx-stdout
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: portainer
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: portainer
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: portainer
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: portainer
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: postgres-exporter
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: postgres-exporter
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: postgres-exporter
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: postgres-exporter
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: nginx-exporter
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: nginx-exporter
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: nginx-exporter
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: nginx-exporter
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: vault-agent
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: vault-agent
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: vault-agent
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: vault-agent
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            and:
-              - contains:
-                  docker.container.name: vault
-              - not:
-                  contains:
-                    docker.container.name: vault-agent
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: vault
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    and:
+                        - contains:
+                              docker.container.name: vault
+                        - not:
+                              contains:
+                                  docker.container.name: vault-agent
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: vault
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: prometheus
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: prometheus
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: prometheus
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: prometheus
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: grafana
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: grafana
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: grafana
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: grafana
+                          log_type: container
+                      fields_under_root: true
 
-        - condition:
-            contains:
-              docker.container.name: telegraf
-          config:
-            - type: container
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
-              fields:
-                service: telegraf
-                log_type: container
-              fields_under_root: true
+              - condition:
+                    contains:
+                        docker.container.name: telegraf
+                config:
+                    - type: container
+                      paths:
+                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
+                      fields:
+                          service: telegraf
+                          log_type: container
+                      fields_under_root: true
 
 output.logstash:
-  hosts: ['logstash:5044']
-  ssl.enabled: true
-  ssl.certificate_authorities: ["/usr/share/filebeat/config/certs/ca.crt"]
-  ssl.certificate: "/usr/share/filebeat/config/certs/filebeat.crt"
-  ssl.key: "/usr/share/filebeat/config/certs/filebeat.key"
+    hosts: ['logstash:5044']
+    ssl.enabled: true
+    ssl.certificate_authorities: ['/usr/share/filebeat/config/certs/ca.crt']
+    ssl.certificate: '/usr/share/filebeat/config/certs/filebeat.crt'
+    ssl.key: '/usr/share/filebeat/config/certs/filebeat.key'
 
 # Expose monitoring API for Telegraf
 http.enabled: true
@@ -222,9 +222,9 @@ http.port: 5066
 
 # Memory queue tuning for high throughput
 queue.mem:
-  events: 4096
-  flush.min_events: 512
-  flush.timeout: 5s
+    events: 4096
+    flush.min_events: 512
+    flush.timeout: 5s
 
 max_procs: 1
 

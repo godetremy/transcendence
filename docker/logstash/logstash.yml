@@ -11,9 +11,9 @@ log.level: info
 
 # Stack Monitoring: ship Logstash metrics to Elasticsearch
 xpack.monitoring.enabled: true
-xpack.monitoring.elasticsearch.hosts: ["https://elasticsearch:9200"]
-xpack.monitoring.elasticsearch.username: "${LOGSTASH_USERNAME}"
-xpack.monitoring.elasticsearch.password: "${LOGSTASH_PASSWORD}"
+xpack.monitoring.elasticsearch.hosts: ['https://elasticsearch:9200']
+xpack.monitoring.elasticsearch.username: '${LOGSTASH_USERNAME}'
+xpack.monitoring.elasticsearch.password: '${LOGSTASH_PASSWORD}'
 xpack.monitoring.elasticsearch.ssl.certificate_authority: /usr/share/logstash/config/certs/ca.crt
 xpack.monitoring.elasticsearch.ssl.certificate: /usr/share/logstash/config/certs/logstash.crt
 xpack.monitoring.elasticsearch.ssl.key: /usr/share/logstash/config/certs/logstash.key

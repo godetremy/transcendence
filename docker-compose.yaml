@@ -1,338 +1,342 @@
 name: transcendence
 
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
-    volumes:
-      - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - elastic_data:/usr/share/elasticsearch/data
-      - ./docker/elasticsearch/bootstrap:/scripts:ro
-      - ./docker/elasticsearch/certs:/usr/share/elasticsearch/config/certs
-    environment:
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      ELASTIC_CERT_PASSWORD: ${ELASTIC_CERT_PASSWORD}
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-    networks:
-      - elk
-    entrypoint:
-      - /bin/bash
-      - -c
-      - |
-        bash /scripts/00-generate-certs.sh
-        chown -R 1000:0 /usr/share/elasticsearch/data /usr/share/elasticsearch/config/certs /usr/share/elasticsearch/logs
-        su elasticsearch -s /bin/bash -c 'export PATH="/usr/share/elasticsearch/bin:$$PATH" && /usr/local/bin/docker-entrypoint.sh elasticsearch' &
-        ES_PID=$$!
-        until curl -fsSk -u "$$ELASTIC_USERNAME:$$ELASTIC_PASSWORD" https://127.0.0.1:9200/_cluster/health >/dev/null 2>&1; do
-          sleep 2
-        done
-        bash /scripts/01-retention.sh || echo "WARNING: ES retention setup failed, continuing"
-        wait $$ES_PID
-    restart: on-failure
-    healthcheck:
-      test:
-        - CMD-SHELL
-        - 'curl -fsSk -u "$$ELASTIC_USERNAME:$$ELASTIC_PASSWORD" https://127.0.0.1:9200/_cluster/health | grep -qE ''"status":"(green|yellow)"'' '
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-    user: '0:0'
-    mem_limit: 3g
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+        volumes:
+            - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+            - elastic_data:/usr/share/elasticsearch/data
+            - ./docker/elasticsearch/bootstrap:/scripts:ro
+            - ./docker/elasticsearch/certs:/usr/share/elasticsearch/config/certs
+        environment:
+            ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+            ELASTIC_CERT_PASSWORD: ${ELASTIC_CERT_PASSWORD}
+            KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
+            ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+        networks:
+            - elk
+        entrypoint:
+            - /bin/bash
+            - -c
+            - |
+                bash /scripts/00-generate-certs.sh
+                chown -R 1000:0 /usr/share/elasticsearch/data /usr/share/elasticsearch/config/certs /usr/share/elasticsearch/logs
+                su elasticsearch -s /bin/bash -c 'export PATH="/usr/share/elasticsearch/bin:$$PATH" && /usr/local/bin/docker-entrypoint.sh elasticsearch' &
+                ES_PID=$$!
+                until curl -fsSk -u "$$ELASTIC_USERNAME:$$ELASTIC_PASSWORD" https://127.0.0.1:9200/_cluster/health >/dev/null 2>&1; do
+                  sleep 2
+                done
+                bash /scripts/01-retention.sh || echo "WARNING: ES retention setup failed, continuing"
+                wait $$ES_PID
+        restart: on-failure
+        healthcheck:
+            test:
+                - CMD-SHELL
+                - 'curl -fsSk -u "$$ELASTIC_USERNAME:$$ELASTIC_PASSWORD" https://127.0.0.1:9200/_cluster/health | grep -qE ''"status":"(green|yellow)"'' '
+            interval: 30s
+            timeout: 10s
+            retries: 5
+            start_period: 30s
+        user: '0:0'
+        mem_limit: 3g
 
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
-    depends_on:
-      logstash:
-        condition: service_healthy
-    volumes:
-      - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - nginx_logs:/var/log/nginx:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - filebeat_data:/usr/share/filebeat/data
-      - ./docker/elasticsearch/certs:/usr/share/filebeat/config/certs:ro
-    networks:
-      - elk
-    ports:
-      - '127.0.0.1:5066:5066'
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'timeout 5 bash -c "</dev/tcp/logstash/5044"' ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-    user: root
-    mem_limit: 128m
+    filebeat:
+        image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
+        depends_on:
+            logstash:
+                condition: service_healthy
+        volumes:
+            - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+            - nginx_logs:/var/log/nginx:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /var/lib/docker/containers:/var/lib/docker/containers:ro
+            - filebeat_data:/usr/share/filebeat/data
+            - ./docker/elasticsearch/certs:/usr/share/filebeat/config/certs:ro
+        networks:
+            - elk
+        ports:
+            - '127.0.0.1:5066:5066'
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'timeout 5 bash -c "</dev/tcp/logstash/5044"']
+            interval: 30s
+            timeout: 10s
+            retries: 5
+            start_period: 30s
+        user: root
+        mem_limit: 128m
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    volumes:
-      - ./docker/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
-      - ./docker/elasticsearch/certs:/usr/share/kibana/config/certs:ro
-      - ./docker/kibana/bootstrap/generate-kibana-certs.sh:/usr/share/kibana/config/bootstrap-generate-kibana-certs.sh:ro
-      - ./docker/kibana/bootstrap/kibana-entrypoint.sh:/usr/share/kibana/config/kibana-entrypoint.sh:ro
-      - ./docker/kibana/bootstrap/import-dashboards.sh:/scripts/import-dashboards.sh:ro
-      - ./docker/kibana/dashboards:/usr/share/kibana/dashboards:ro
-      - kibana_data:/usr/share/kibana/data
-    environment:
-      KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME}
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
-      KIBANA_URL: ${KIBANA_URL}
-      KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY}
-      KIBANA_REPORTING_ENCRYPTION_KEY: ${KIBANA_REPORTING_ENCRYPTION_KEY}
-      KIBANA_SECURITY_ENCRYPTION_KEY: ${KIBANA_SECURITY_ENCRYPTION_KEY}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
-    networks:
-      - elk
-    entrypoint: [ "/bin/sh", "-c", "sh /usr/share/kibana/config/kibana-entrypoint.sh" ]
-    restart: on-failure
-    healthcheck:
-      test:
-        - CMD-SHELL
-        - 'curl -kfsS https://127.0.0.1:5601/api/status | grep -q ''"level":"available"'' '
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 100s
-    user: '1000:0'
-    mem_limit: 768m
+    kibana:
+        image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+        volumes:
+            - ./docker/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+            - ./docker/elasticsearch/certs:/usr/share/kibana/config/certs:ro
+            - ./docker/kibana/bootstrap/generate-kibana-certs.sh:/usr/share/kibana/config/bootstrap-generate-kibana-certs.sh:ro
+            - ./docker/kibana/bootstrap/kibana-entrypoint.sh:/usr/share/kibana/config/kibana-entrypoint.sh:ro
+            - ./docker/kibana/bootstrap/import-dashboards.sh:/scripts/import-dashboards.sh:ro
+            - ./docker/kibana/dashboards:/usr/share/kibana/dashboards:ro
+            - kibana_data:/usr/share/kibana/data
+        environment:
+            KIBANA_SYSTEM_USERNAME: ${KIBANA_SYSTEM_USERNAME}
+            KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
+            KIBANA_URL: ${KIBANA_URL}
+            KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY}
+            KIBANA_REPORTING_ENCRYPTION_KEY: ${KIBANA_REPORTING_ENCRYPTION_KEY}
+            KIBANA_SECURITY_ENCRYPTION_KEY: ${KIBANA_SECURITY_ENCRYPTION_KEY}
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+            ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+        networks:
+            - elk
+        entrypoint: ['/bin/sh', '-c', 'sh /usr/share/kibana/config/kibana-entrypoint.sh']
+        restart: on-failure
+        healthcheck:
+            test:
+                - CMD-SHELL
+                - 'curl -kfsS https://127.0.0.1:5601/api/status | grep -q ''"level":"available"'' '
+            interval: 30s
+            timeout: 10s
+            retries: 10
+            start_period: 100s
+        user: '1000:0'
+        mem_limit: 768m
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    volumes:
-      - ./docker/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./docker/logstash/pipeline:/usr/share/logstash/pipeline:ro
-      - ./docker/elasticsearch/certs:/usr/share/logstash/config/certs:ro
-    environment:
-      LOGSTASH_USERNAME: ${LOGSTASH_USERNAME}
-      LOGSTASH_PASSWORD: ${LOGSTASH_PASSWORD}
-    networks:
-      - elk
-    restart: on-failure
-    healthcheck:
-      test:
-        - CMD-SHELL
-        - 'curl -fsS http://127.0.0.1:9600/_node/pipelines/main | grep -q ''"status":"green"'' '
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 60s
-    mem_limit: 1g
+    logstash:
+        image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+        volumes:
+            - ./docker/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+            - ./docker/logstash/pipeline:/usr/share/logstash/pipeline:ro
+            - ./docker/elasticsearch/certs:/usr/share/logstash/config/certs:ro
+        environment:
+            LOGSTASH_USERNAME: ${LOGSTASH_USERNAME}
+            LOGSTASH_PASSWORD: ${LOGSTASH_PASSWORD}
+        networks:
+            - elk
+        restart: on-failure
+        healthcheck:
+            test:
+                - CMD-SHELL
+                - 'curl -fsS http://127.0.0.1:9600/_node/pipelines/main | grep -q ''"status":"green"'' '
+            interval: 30s
+            timeout: 10s
+            retries: 10
+            start_period: 60s
+        mem_limit: 1g
 
-  telegraf:
-    image: telegraf:1.31
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-      logstash:
-        condition: service_healthy
-    volumes:
-      - ./docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-      - ./docker/elasticsearch/certs:/etc/telegraf/certs:ro
-    environment:
-      ELASTIC_USERNAME: ${ELASTIC_USERNAME}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-    networks:
-      - elk
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:9273/metrics >/dev/null 2>&1' ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
-    mem_limit: 256m
-    security_opt:
-      - no-new-privileges:true
+    telegraf:
+        image: telegraf:1.31
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+            logstash:
+                condition: service_healthy
+        volumes:
+            - ./docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+            - ./docker/elasticsearch/certs:/etc/telegraf/certs:ro
+        environment:
+            ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+        networks:
+            - elk
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:9273/metrics >/dev/null 2>&1']
+            interval: 30s
+            timeout: 5s
+            retries: 5
+            start_period: 15s
+        mem_limit: 256m
+        security_opt:
+            - no-new-privileges:true
 
-  nginx:
-    image: owasp/modsecurity-crs:nginx
-    depends_on:
-      node:
-        condition: service_healthy
-    volumes:
-      - ./docker/nginx/nginx.conf.template:/opt/custom/nginx.conf.template:ro
-      - ./docker/nginx/modsecurity.conf:/opt/custom/modsecurity.conf:ro
-      - ./docker/nginx/modsecurity-exclusions.conf:/opt/custom/modsecurity-exclusions.conf:ro
-      - ./docker/nginx/crs-setup.conf:/opt/custom/crs-setup.conf:ro
-      - ./docker/nginx/entrypoint.sh:/opt/custom/entrypoint.sh:ro
-      - ./docker/nginx/modsecurity-kibana-crs-exclusions.conf:/etc/modsecurity.d/owasp-crs/rules/000-kibana-exclusions.conf:ro
-      - nginx_logs:/var/log/nginx
-      - nginx_certs:/etc/nginx/certs
-    ports:
-      - '127.0.0.1:8080:8080'
-    networks:
-      - edge
-      - app
-      - elk
-      - vault_net
-    entrypoint: [ "/bin/sh", "/opt/custom/entrypoint.sh" ]
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'curl -fsS http://127.0.0.1:8081/stub_status >/dev/null' ]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    user: root
-    mem_limit: 256m
-    security_opt:
-      - no-new-privileges:true
+    nginx:
+        image: owasp/modsecurity-crs:nginx
+        depends_on:
+            node:
+                condition: service_healthy
+        volumes:
+            - ./docker/nginx/nginx.conf.template:/opt/custom/nginx.conf.template:ro
+            - ./docker/nginx/modsecurity.conf:/opt/custom/modsecurity.conf:ro
+            - ./docker/nginx/modsecurity-exclusions.conf:/opt/custom/modsecurity-exclusions.conf:ro
+            - ./docker/nginx/crs-setup.conf:/opt/custom/crs-setup.conf:ro
+            - ./docker/nginx/entrypoint.sh:/opt/custom/entrypoint.sh:ro
+            - ./docker/nginx/modsecurity-kibana-crs-exclusions.conf:/etc/modsecurity.d/owasp-crs/rules/000-kibana-exclusions.conf:ro
+            - nginx_logs:/var/log/nginx
+            - nginx_certs:/etc/nginx/certs
+        ports:
+            - '127.0.0.1:8080:8080'
+        networks:
+            - edge
+            - app
+            - elk
+            - vault_net
+        entrypoint: ['/bin/sh', '/opt/custom/entrypoint.sh']
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'curl -fsS http://127.0.0.1:8081/stub_status >/dev/null']
+            interval: 15s
+            timeout: 5s
+            retries: 3
+            start_period: 10s
+        user: root
+        mem_limit: 256m
+        security_opt:
+            - no-new-privileges:true
 
-  node:
-    build:
-      context: .
-      dockerfile: docker/node/Dockerfile
-      target: ${NODE_TARGET:-dev}
-      args:
-        NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
-        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
-    depends_on:
-      postgres:
-        condition: service_healthy
-      vault-agent:
-        condition: service_healthy
-    volumes:
-      - node_modules:/home/node/app/node_modules
-      - vault_agent_data:/vault/agent:ro
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-    networks:
-      - app
-      - edge
-    working_dir: /home/node/app
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'curl -fsS http://127.0.0.1:3000/ >/dev/null 2>&1' ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
-    mem_limit: 2g
-    security_opt:
-      - no-new-privileges:true
+    node:
+        build:
+            context: .
+            dockerfile: docker/node/Dockerfile
+            target: ${NODE_TARGET:-dev}
+            args:
+                NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+                NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+        depends_on:
+            postgres:
+                condition: service_healthy
+            vault-agent:
+                condition: service_healthy
+        volumes:
+            - node_modules:/home/node/app/node_modules
+            - vault_agent_data:/vault/agent:ro
+        environment:
+            DATABASE_URL: ${DATABASE_URL}
+        networks:
+            - app
+            - edge
+        working_dir: /home/node/app
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'curl -fsS http://127.0.0.1:3000/ >/dev/null 2>&1']
+            interval: 15s
+            timeout: 5s
+            retries: 5
+            start_period: 60s
+        mem_limit: 2g
+        security_opt:
+            - no-new-privileges:true
 
-  portainer:
-    image: portainer/portainer-ce:sts
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - portainer_data:/data
-    ports:
-      - '127.0.0.1:9443:9443'
-    networks:
-      - edge
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD', '/portainer', '--version' ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
-    mem_limit: 128m
+    portainer:
+        image: portainer/portainer-ce:sts
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - portainer_data:/data
+        ports:
+            - '127.0.0.1:9443:9443'
+        networks:
+            - edge
+        restart: on-failure
+        healthcheck:
+            test: ['CMD', '/portainer', '--version']
+            interval: 30s
+            timeout: 5s
+            retries: 5
+            start_period: 15s
+        mem_limit: 128m
 
-  postgres:
-    image: postgres:17-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATA: ${PGDATA}
-    networks:
-      - app
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB' ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    mem_limit: 512m
-    security_opt:
-      - no-new-privileges:true
-    shm_size: 128m
+    postgres:
+        image: postgres:17-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            PGDATA: ${PGDATA}
+        networks:
+            - app
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+        mem_limit: 512m
+        security_opt:
+            - no-new-privileges:true
+        shm_size: 128m
 
-  vault:
-    image: hashicorp/vault:1.17
-    environment:
-      VAULT_ADDR: ${VAULT_ADDR}
-      VAULT_API_ADDR: ${VAULT_API_ADDR}
-    networks:
-      - vault_net
-    command:
-      - server
-      - -dev
-      - -dev-listen-address=0.0.0.0:8200
-      - -dev-root-token-id=${VAULT_DEV_ROOT_TOKEN_ID}
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:8200/v1/sys/health?standbyok=true >/dev/null 2>&1' ]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 10s
-    cap_add:
-      - IPC_LOCK
-    mem_limit: 1g
+    vault:
+        image: hashicorp/vault:1.17
+        environment:
+            VAULT_ADDR: ${VAULT_ADDR}
+            VAULT_API_ADDR: ${VAULT_API_ADDR}
+        networks:
+            - vault_net
+        command:
+            - server
+            - -dev
+            - -dev-listen-address=0.0.0.0:8200
+            - -dev-root-token-id=${VAULT_DEV_ROOT_TOKEN_ID}
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -qO- http://127.0.0.1:8200/v1/sys/health?standbyok=true >/dev/null 2>&1']
+            interval: 10s
+            timeout: 5s
+            retries: 12
+            start_period: 10s
+        cap_add:
+            - IPC_LOCK
+        mem_limit: 1g
 
-  vault-agent:
-    image: hashicorp/vault:1.17
-    depends_on:
-      vault:
-        condition: service_healthy
-    volumes:
-      - ./docker/vault-agent/agent.hcl:/etc/vault/agent.hcl:ro
-      - ./docker/vault-agent/bootstrap-vault-agent.sh:/scripts/bootstrap-vault-agent.sh:ro
-      - ./docker/vault-agent/templates:/etc/vault/templates:ro
-      - vault_agent_data:/vault/agent
-    environment:
-      VAULT_ADDR: http://vault:8200
-      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
-      VAULT_APP_SECRET: ${VAULT_APP_SECRET}
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY}
-    networks:
-      - vault_net
-    command: sh -c 'sh /scripts/bootstrap-vault-agent.sh'
-    restart: on-failure
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget -qO- http://127.0.0.1:8100/agent/v1/metrics >/dev/null 2>&1 && test -f /vault/agent/rendered/app-config.env' ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    mem_limit: 512m
+    vault-agent:
+        image: hashicorp/vault:1.17
+        depends_on:
+            vault:
+                condition: service_healthy
+        volumes:
+            - ./docker/vault-agent/agent.hcl:/etc/vault/agent.hcl:ro
+            - ./docker/vault-agent/bootstrap-vault-agent.sh:/scripts/bootstrap-vault-agent.sh:ro
+            - ./docker/vault-agent/templates:/etc/vault/templates:ro
+            - vault_agent_data:/vault/agent
+        environment:
+            VAULT_ADDR: http://vault:8200
+            VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
+            VAULT_APP_SECRET: ${VAULT_APP_SECRET}
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+            KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY}
+        networks:
+            - vault_net
+        command: sh -c 'sh /scripts/bootstrap-vault-agent.sh'
+        restart: on-failure
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'wget -qO- http://127.0.0.1:8100/agent/v1/metrics >/dev/null 2>&1 && test -f /vault/agent/rendered/app-config.env',
+                ]
+            interval: 15s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+        mem_limit: 512m
 
 networks:
-  edge:
-    driver: bridge
-  elk:
-    driver: bridge
-    internal: true
-  app:
-    driver: bridge
-    internal: true
-  vault_net:
-    driver: bridge
+    edge:
+        driver: bridge
+    elk:
+        driver: bridge
+        internal: true
+    app:
+        driver: bridge
+        internal: true
+    vault_net:
+        driver: bridge
 
 volumes:
-  elastic_data:
-  postgres_data:
-  node_modules:
-  nginx_logs:
-  nginx_certs:
-  filebeat_data:
-  portainer_data:
-  kibana_data:
-  vault_agent_data:
+    elastic_data:
+    postgres_data:
+    node_modules:
+    nginx_logs:
+    nginx_certs:
+    filebeat_data:
+    portainer_data:
+    kibana_data:
+    vault_agent_data:
