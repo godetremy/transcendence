@@ -2,7 +2,7 @@
 
 import './page.scss';
 import { EventFormSchema, EventSearchFormSchema } from '@/schema/EventForm';
-import { CreateEventType, Event } from '@/types/bde/Event';
+import { CreateEventType, Event, SearchEvent } from '@/types/bde/Event';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -24,13 +24,13 @@ function Basic({ event }: { event: Event }) {
 	const report = async (form: FormData) => {
 		const reason = form.get('reason');
 		if (!reason) {
-			console.error("Error: reason not set");
+			console.error('Error: reason not set');
 			return;
 		}
 		await fetch(`/app/api/events/${event.id}/photos/report`, {
 			method: 'POST',
 			headers: {
-					'Content-Type': 'application/json',
+				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				name: acceptedFiles[0].name,
@@ -64,7 +64,7 @@ function Basic({ event }: { event: Event }) {
 					const formData = new FormData(e.currentTarget);
 					report(formData);
 				}}
-				>
+			>
 				<p>raison</p>
 				<input type="text" name="reason"></input>
 				<button type="submit">find</button>
@@ -163,30 +163,24 @@ function Card({ event, eventmodify }: { event: Event; eventmodify: CreateEventTy
 	);
 }
 
-function CardList({
-	from,
-	to,
-	limit,
-	event,
-}: {
-	from: Date | undefined;
-	to: Date | undefined;
-	limit: number | undefined;
-	event: CreateEventType;
-}) {
+function CardList({ search, event }: { search: SearchEvent; event: CreateEventType }) {
 	const [events, setEvents] = useState<Event[]>();
 
 	useEffect(() => {
 		const fetchEvents = async () => {
-			const response = await fetch(
-				`/app/api/events?from=${from?.toISOString()}&to=${to?.toISOString()}&limit=${limit?.toString()}`,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
+			let params = `from=${search.from.toString()}&to=${search.to.toString()}`;
+
+			if (search.limit != null && search.limit != 0) params += `&limit=${search.limit}`;
+			if (search.search != null && search.search !== '') params += `&search=${search.search}`;
+			if (search.club != null && search.club !== '') params += `&club=${search.club}`;
+			if (search.subscribe != null) params += `&subscribe=${search.subscribe}`;
+
+			const response = await fetch(`/app/api/events?${params}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
 			if (response.ok) {
 				const value = await response.json();
 				setEvents(value);
@@ -196,7 +190,7 @@ function CardList({
 		};
 
 		fetchEvents();
-	}, [from, to, limit]);
+	}, [search.from, search.to, search.limit, search.club, search.search, search.subscribe]);
 
 	return (
 		<div>
@@ -208,10 +202,9 @@ function CardList({
 }
 
 export default function Page() {
-	const [from, setFrom] = useState<Date>();
-	const [to, setTo] = useState<Date>();
-	const [limit, setLimit] = useState<number>();
-	const [searched, setSearched] = useState<boolean>(false);
+	const [searched, setSearched] = useState<Boolean>(false);
+	const [searchValue, setSearchValue] = useState<SearchEvent>();
+
 	const [event, setEvent] = useState<CreateEventType>({
 		title: '',
 		description: '',
@@ -229,7 +222,7 @@ export default function Page() {
 			max_inscription: form.get('max_inscription'),
 		});
 		if (!fields.success) {
-			console.log(fields.error.issues[0].message);
+			console.error(fields.error.issues[0].message);
 			return;
 		}
 		if (fields.data == null) return;
@@ -251,15 +244,16 @@ export default function Page() {
 			from: form.get('from'),
 			to: form.get('to'),
 			limit: form.get('limit'),
+			search: form.get('search'),
+			subscribe: form.get('subscribe'),
+			club: form.get('club'),
 		});
 		if (!fields.success) {
 			console.log(fields.error.issues[0].message);
 			return;
 		}
 		if (fields.data == null) return;
-		setFrom(fields.data.from);
-		setTo(fields.data.to);
-		setLimit(fields.data.limit);
+		setSearchValue(fields.data);
 		setSearched(true);
 	};
 
@@ -321,13 +315,15 @@ export default function Page() {
 					<input type="date" name="to"></input>
 					<p>limit</p>
 					<input type="number" name="limit"></input>
+					<p>search</p>
+					<input type="text" name="search"></input>
+					<p>club</p>
+					<input type="text" name="club"></input>
+					<p>subscribe</p>
+					<input type="checkbox" name="subscribe"></input>
 					<button type="submit">find</button>
 				</form>
-				{searched && from && to ? (
-					<CardList from={new Date(from)} to={new Date(to)} limit={limit} event={event} />
-				) : (
-					<p>Not found</p>
-				)}
+				{searched && searchValue ? <CardList search={searchValue} event={event} /> : <p>Not found</p>}
 			</div>
 		</>
 	);
