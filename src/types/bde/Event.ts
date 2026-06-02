@@ -21,3 +21,12 @@ export interface CreateEventType {
 	start_at: Date;
 	end_at: Date;
 }
+
+export interface SearchEvent {
+	from: Date;
+	to: Date;
+	limit: number | null;
+	search: string | null;
+	subscribe: boolean | null;
+	club: string | null;
+}
