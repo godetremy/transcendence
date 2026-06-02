@@ -11,7 +11,7 @@ export async function GET(
 	try {
 		const cookie = req.cookies.get('session');
 		await decrypt(cookie?.value);
-		
+
 		const { event_id } = await params;
 		const value = await prisma.event.findFirst({
 			include: {
@@ -76,7 +76,7 @@ export async function POST(
 				registered: true,
 			},
 		});
-		return NextResponse.json({success: true});
+		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to delete event.', {
@@ -117,7 +117,7 @@ export async function DELETE(
 		});
 
 		await rm(`imageStore/events/${event_id}/${body.name}`);
-		return NextResponse.json({success: true});
+		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to download image.', {

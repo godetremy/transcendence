@@ -11,7 +11,7 @@ export async function GET(
 
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
-		
+
 		await prisma.registered_event.delete({
 			where: {
 				registered_event_id: event_id,
@@ -19,7 +19,7 @@ export async function GET(
 			},
 		});
 
-		return NextResponse.json({success: true});
+		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to unsubscribe to event.', {

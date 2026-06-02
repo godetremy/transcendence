@@ -27,7 +27,7 @@ export async function GET(
 				},
 			},
 		});
-		return NextResponse.json({success: true});
+		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to subscribe to event.', {

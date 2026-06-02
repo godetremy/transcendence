@@ -21,10 +21,9 @@ export async function getMe(): Promise<User | null> {
 		if (row != null) return UserFormatting(row);
 	} catch (error: unknown) {
 		console.error(error);
-	} 
+	}
 	return null;
 }
-
 
 export async function getUserFromSession(session: JWTSessionPayload): Promise<User | null> {
 	return getUserById(session.user_id);
@@ -46,7 +45,7 @@ export async function getUserById(id: string): Promise<User | null> {
 	return null;
 }
 
-export function UserFormatting(row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User | null {
+export function UserFormatting(row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User {
 	return {
 		id: row.id,
 		mail: row.mail,

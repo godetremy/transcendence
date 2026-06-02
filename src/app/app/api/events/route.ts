@@ -89,7 +89,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 			},
 		});
 
-		return NextResponse.json({success: true});
+		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to delete event.', {
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			},
 		});
 
-		return NextResponse.json({success: true});
+		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to create event.', {

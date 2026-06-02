@@ -43,7 +43,7 @@ export async function POST(
 				},
 			},
 		});
-		return NextResponse.json({success: true});
+		return NextResponse.json({ success: true });
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to download image.', {
