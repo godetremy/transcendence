@@ -185,6 +185,7 @@ export type registered_eventOrderByWithRelationInput = {
   registered_event_id?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.usersOrderByWithRelationInput
   event?: Prisma.eventOrderByWithRelationInput
+  _relevance?: Prisma.registered_eventOrderByRelevanceInput
 }
 
 export type registered_eventWhereUniqueInput = Prisma.AtLeast<{
@@ -264,6 +265,12 @@ export type registered_eventUncheckedUpdateManyInput = {
   user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_event_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type registered_eventOrderByRelevanceInput = {
+  fields: Prisma.registered_eventOrderByRelevanceFieldEnum | Prisma.registered_eventOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type registered_eventCountOrderByAggregateInput = {

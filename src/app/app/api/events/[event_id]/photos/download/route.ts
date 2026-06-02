@@ -8,11 +8,17 @@ export async function POST(
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
 	try {
-		const { event_id } = await params;
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
+		const { event_id } = await params;
+
 		const formData = await req.formData();
+		if (formData == null)
+			return new NextResponse('Error, formData not found.', {
+				status: 404,
+			});
+
 		const file = formData.get('file') as File;
 		const name = formData.get('name') as string;
 

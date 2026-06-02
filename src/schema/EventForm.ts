@@ -22,5 +22,8 @@ export const EventFormSchema = z.object({
 export const EventSearchFormSchema = z.object({
 	from: z.coerce.date({ error: 'Please enter a valid date.' }),
 	to: z.coerce.date({ error: 'Please enter a valid date.' }),
-	limit: z.coerce.number({ error: 'Please entry a number.' }),
+	limit: z.coerce.number({ error: 'Please entry a number.' }).nullable(),
+	search: z.coerce.string({ error: 'Please enter a valid string' }).nullable(),
+	subscribe: z.coerce.boolean({ error: 'Please enter a valid boolean' }).nullable(),
+	club: z.coerce.string({ error: 'Please enter a valid boolean' }).nullable(),
 });

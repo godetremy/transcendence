@@ -8,18 +8,21 @@ export async function GET(
 ): Promise<NextResponse> {
 	try {
 		const { event_id } = await params;
+
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
-		const value = await prisma.registered_event.delete({
+		
+		await prisma.registered_event.delete({
 			where: {
 				registered_event_id: event_id,
 				user_id: session.user_id,
 			},
 		});
-		return NextResponse.json(value);
+
+		return NextResponse.json({success: true});
 	} catch (error: unknown) {
 		console.error(error);
-		return new NextResponse('Error, failed to subscribe to event.', {
+		return new NextResponse('Error, failed to unsubscribe to event.', {
 			status: 500,
 		});
 	}

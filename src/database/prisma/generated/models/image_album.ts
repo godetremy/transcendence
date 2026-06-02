@@ -196,6 +196,7 @@ export type image_albumOrderByWithRelationInput = {
   user?: Prisma.usersOrderByWithRelationInput
   event?: Prisma.eventOrderByWithRelationInput
   image_report?: Prisma.image_reportOrderByWithRelationInput
+  _relevance?: Prisma.image_albumOrderByRelevanceInput
 }
 
 export type image_albumWhereUniqueInput = Prisma.AtLeast<{
@@ -290,6 +291,12 @@ export type image_albumUncheckedUpdateManyInput = {
   event_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image_path?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type image_albumOrderByRelevanceInput = {
+  fields: Prisma.image_albumOrderByRelevanceFieldEnum | Prisma.image_albumOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type image_albumCountOrderByAggregateInput = {

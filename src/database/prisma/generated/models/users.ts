@@ -326,6 +326,7 @@ export type usersOrderByWithRelationInput = {
   image_album?: Prisma.image_albumOrderByRelationAggregateInput
   registered_event?: Prisma.registered_eventOrderByRelationAggregateInput
   image_report?: Prisma.image_reportOrderByRelationAggregateInput
+  _relevance?: Prisma.usersOrderByRelevanceInput
 }
 
 export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -557,6 +558,12 @@ export type UsersNullableScalarRelationFilter = {
 export type UsersScalarRelationFilter = {
   is?: Prisma.usersWhereInput
   isNot?: Prisma.usersWhereInput
+}
+
+export type usersOrderByRelevanceInput = {
+  fields: Prisma.usersOrderByRelevanceFieldEnum | Prisma.usersOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type usersCountOrderByAggregateInput = {

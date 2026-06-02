@@ -183,6 +183,7 @@ export type oauth_fortytwoOrderByWithRelationInput = {
   refresh_token?: Prisma.SortOrderInput | Prisma.SortOrder
   valid_until?: Prisma.SortOrder
   MemberUsers?: Prisma.usersOrderByRelationAggregateInput
+  _relevance?: Prisma.oauth_fortytwoOrderByRelevanceInput
 }
 
 export type oauth_fortytwoWhereUniqueInput = Prisma.AtLeast<{
@@ -267,6 +268,12 @@ export type oauth_fortytwoUncheckedUpdateManyInput = {
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   valid_until?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type oauth_fortytwoOrderByRelevanceInput = {
+  fields: Prisma.oauth_fortytwoOrderByRelevanceFieldEnum | Prisma.oauth_fortytwoOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type oauth_fortytwoCountOrderByAggregateInput = {

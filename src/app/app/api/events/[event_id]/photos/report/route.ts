@@ -8,11 +8,16 @@ export async function POST(
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
 	try {
-		const { event_id } = await params;
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
+		const { event_id } = await params;
+
 		const body = await req.json();
+		if (body.name == null)
+			return new NextResponse('Error, name not found.', {
+				status: 404,
+			});
 
 		try {
 			await access(`imageStore/events/${event_id}/${body.name}`);
@@ -22,7 +27,7 @@ export async function POST(
 				status: 404,
 			});
 		}
-		const value = await prisma.image_album.update({
+		await prisma.image_album.update({
 			where: {
 				image_path: `imageStore/events/${event_id}/${body.name}`,
 			},
@@ -30,15 +35,15 @@ export async function POST(
 				image_report: true,
 			},
 			data: {
-				image_report : {
+				image_report: {
 					create: {
-						signaling_id : session.user_id,
+						signaling_id: session.user_id,
 						reason: body.reason,
-					}
-				}
-			}
+					},
+				},
+			},
 		});
-		return NextResponse.json(value);
+		return NextResponse.json({success: true});
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to download image.', {

@@ -13,10 +13,6 @@ export async function GET(
 		await decrypt(cookie?.value);
 		
 		const { event_id } = await params;
-		if (event_id == null)
-			return new NextResponse('Error, event_id not found.', {
-				status: 404,
-			});
 		const value = await prisma.event.findFirst({
 			include: {
 				registered: {},
@@ -45,11 +41,6 @@ export async function POST(
 		await decrypt(cookie?.value);
 
 		const { event_id } = await params;
-		if (event_id == null)
-			return new NextResponse('Error, event_id not found.', {
-				status: 404,
-			});
-
 		const body = await req.json();
 
 		const fields = EventFormSchema.safeParse({
@@ -105,8 +96,8 @@ export async function DELETE(
 		const { event_id } = await params;
 		const body = await req.json();
 
-		if (event_id == null || body.name == null)
-			return new NextResponse('Error, event_id or name not found.', {
+		if (body.name == null)
+			return new NextResponse('Error, name not found.', {
 				status: 404,
 			});
 

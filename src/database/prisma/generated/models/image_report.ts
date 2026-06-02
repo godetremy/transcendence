@@ -194,6 +194,7 @@ export type image_reportOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   image_album?: Prisma.image_albumOrderByWithRelationInput
   signaling?: Prisma.usersOrderByWithRelationInput
+  _relevance?: Prisma.image_reportOrderByRelevanceInput
 }
 
 export type image_reportWhereUniqueInput = Prisma.AtLeast<{
@@ -288,6 +289,12 @@ export type image_reportUncheckedUpdateManyInput = {
 export type Image_reportNullableScalarRelationFilter = {
   is?: Prisma.image_reportWhereInput | null
   isNot?: Prisma.image_reportWhereInput | null
+}
+
+export type image_reportOrderByRelevanceInput = {
+  fields: Prisma.image_reportOrderByRelevanceFieldEnum | Prisma.image_reportOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type image_reportCountOrderByAggregateInput = {

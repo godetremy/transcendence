@@ -257,6 +257,7 @@ export type eventOrderByWithRelationInput = {
   author?: Prisma.usersOrderByWithRelationInput
   registered?: Prisma.registered_eventOrderByWithRelationInput
   image_album?: Prisma.image_albumOrderByWithRelationInput
+  _relevance?: Prisma.eventOrderByRelevanceInput
 }
 
 export type eventWhereUniqueInput = Prisma.AtLeast<{
@@ -393,6 +394,12 @@ export type eventUncheckedUpdateManyInput = {
 export type EventNullableScalarRelationFilter = {
   is?: Prisma.eventWhereInput | null
   isNot?: Prisma.eventWhereInput | null
+}
+
+export type eventOrderByRelevanceInput = {
+  fields: Prisma.eventOrderByRelevanceFieldEnum | Prisma.eventOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type eventCountOrderByAggregateInput = {
