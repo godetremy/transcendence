@@ -3,9 +3,12 @@
 import { User } from '@/types/bde/User';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useMembership } from '@/components/membership/MembershipProvider/MembershipProvider';
 
 export default function Page() {
 	const [user, setUser] = useState<User | null>(null);
+
+	const membership = useMembership();
 
 	useEffect(() => {
 		fetch('/app/api/users/me')
@@ -30,6 +33,13 @@ export default function Page() {
 				</div>
 			</div>
 			<section className={'content'}>
+				<button
+					onClick={() => {
+						membership.showCard();
+					}}
+				>
+					Show membership
+				</button>
 				{user === null ? (
 					<p>Loading...</p>
 				) : (

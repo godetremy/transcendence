@@ -4,6 +4,7 @@ import { getUserFromSession } from '@/database/users/getUser';
 import Sidebar from '@/components/globals/Sidebar/Sidebar';
 import { cookies } from 'next/headers';
 import { decrypt } from '@/lib/session';
+import { MembershipProvider } from '@/components/membership/MembershipProvider/MembershipProvider';
 
 export default async function RootLayout({
 	children,
@@ -19,9 +20,11 @@ export default async function RootLayout({
 
 	return (
 		<UserProvider user={user}>
-			<Sidebar />
+			<MembershipProvider>
+				<Sidebar />
 
-			<main>{children}</main>
+				<main>{children}</main>
+			</MembershipProvider>
 		</UserProvider>
 	);
 }
