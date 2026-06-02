@@ -1,5 +1,8 @@
-#!/bin/sh
-set -eu
+#!/bin/bash
+set -euo pipefail
+
+# shellcheck source=/opt/wait-utils.sh
+source /opt/wait-utils.sh
 
 umask 077
 
@@ -11,15 +14,7 @@ UNSEAL_KEY_FILE="/vault/agent/token/unseal.key"
 ROOT_TOKEN_FILE="/vault/agent/token/root.token"
 
 wait_for_vault() {
-	tries=0
-	while ! nc -z vault 8200 >/dev/null 2>&1; do
-		tries=$((tries + 1))
-		if [ "${tries}" -ge 30 ]; then
-			echo "ERROR: Vault is not reachable at ${VAULT_ADDR}" >&2
-			exit 1
-		fi
-		sleep 2
-	done
+	wait_for_tcp vault 8200 60
 }
 
 echo "Initializing Vault Agent..."

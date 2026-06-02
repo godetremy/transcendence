@@ -7,6 +7,7 @@ services:
             - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
             - elastic_data:/usr/share/elasticsearch/data
             - ./docker/elasticsearch/bootstrap:/scripts:ro
+            - ./docker/common/wait-utils.sh:/opt/wait-utils.sh:ro
             - ./docker/elasticsearch/certs:/usr/share/elasticsearch/config/certs
         environment:
             ELASTIC_USERNAME: ${ELASTIC_USERNAME}
@@ -16,19 +17,7 @@ services:
             ES_JAVA_OPTS: '-Xms512m -Xmx512m'
         networks:
             - elk
-        entrypoint:
-            - /bin/bash
-            - -c
-            - |
-                bash /scripts/00-generate-certs.sh
-                chown -R 1000:0 /usr/share/elasticsearch/data /usr/share/elasticsearch/config/certs /usr/share/elasticsearch/logs
-                su elasticsearch -s /bin/bash -c 'export PATH="/usr/share/elasticsearch/bin:$$PATH" && /usr/local/bin/docker-entrypoint.sh elasticsearch' &
-                ES_PID=$$!
-                until curl -fsSk -u "$$ELASTIC_USERNAME:$$ELASTIC_PASSWORD" https://127.0.0.1:9200/_cluster/health >/dev/null 2>&1; do
-                  sleep 2
-                done
-                bash /scripts/01-retention.sh || echo "WARNING: ES retention setup failed, continuing"
-                wait $$ES_PID
+        entrypoint: ['/bin/bash', '/scripts/entrypoint-wrapper.sh']
         restart: on-failure
         healthcheck:
             test:
@@ -295,6 +284,7 @@ services:
         volumes:
             - ./docker/vault-agent/agent.hcl:/etc/vault/agent.hcl:ro
             - ./docker/vault-agent/bootstrap-vault-agent.sh:/scripts/bootstrap-vault-agent.sh:ro
+            - ./docker/common/wait-utils.sh:/opt/wait-utils.sh:ro
             - ./docker/vault-agent/templates:/etc/vault/templates:ro
             - vault_agent_data:/vault/agent
         environment:
