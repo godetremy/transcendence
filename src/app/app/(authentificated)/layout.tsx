@@ -1,4 +1,4 @@
-import './layout.scss';
+import styles from './layout.module.scss';
 import { UserProvider } from '@/contexts/UserContext';
 import { getUserFromSession } from '@/database/users/getUser';
 import Sidebar from '@/components/globals/Sidebar/Sidebar';
@@ -21,7 +21,7 @@ export default async function RootLayout({
 		<UserProvider user={user}>
 			<Sidebar />
 
-			<main>{children}</main>
+			<main className={styles.main}>{children}</main>
 		</UserProvider>
 	);
 }
