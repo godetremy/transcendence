@@ -67,6 +67,7 @@ prod:
 
 down:
 	@echo "$(YELLOW)Stopping all environments...$(RESET)"
+	@echo "$(BLUE)Note: volumes are preserved. Use 'make clean' to remove them.$(RESET)"
 	-@$(COMPOSE_DEV) down --remove-orphans 2>/dev/null || true
 	-@$(COMPOSE_PROD) down --remove-orphans 2>/dev/null || true
 	@echo "$(GREEN)✓ All environments stopped$(RESET)"

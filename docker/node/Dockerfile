@@ -7,8 +7,10 @@ FROM base AS dev
 COPY package.json package-lock.json ./
 RUN npm ci
 RUN cp -r node_modules /home/node/node_modules_backup
+RUN chown -R node:node /home/node/app
 COPY docker/node/entrypoint-dev.sh /entrypoint-dev.sh
 RUN chmod +x /entrypoint-dev.sh
+USER node
 ENTRYPOINT ["/entrypoint-dev.sh"]
 CMD ["npm", "run", "dev"]
 

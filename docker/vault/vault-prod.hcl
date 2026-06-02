@@ -1,4 +1,4 @@
-ui = false
+ui = true
 
 storage "file" {
   path = "/vault/file"
@@ -11,4 +11,4 @@ listener "tcp" {
 
 disable_mlock = false
 
-api_addr = "http://127.0.0.1:8200"
+api_addr = "http://vault:8200"

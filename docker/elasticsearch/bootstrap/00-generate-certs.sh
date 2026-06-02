@@ -92,6 +92,9 @@ openssl pkcs12 -export \
 	-certfile "${CA_CRT}" -out "${CERTS_DIR}/elastic-certificates.p12" \
 	-passout pass:"${CERT_PASSWORD}" -name "elastic"
 
+# Elasticsearch official image runs as UID 1000 (user elasticsearch).
+# GID 0 (root) is used so the container runtime can still read certs
+# when securityContext or user directives vary between environments.
 chown -R 1000:0 "${CERTS_DIR}"
 
 echo "Certificate generation complete."

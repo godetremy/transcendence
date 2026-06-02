@@ -78,6 +78,7 @@ services:
             - ./docker/kibana/bootstrap/generate-kibana-certs.sh:/usr/share/kibana/config/bootstrap-generate-kibana-certs.sh:ro
             - ./docker/kibana/bootstrap/kibana-entrypoint.sh:/usr/share/kibana/config/kibana-entrypoint.sh:ro
             - ./docker/kibana/bootstrap/import-dashboards.sh:/scripts/import-dashboards.sh:ro
+            - ./docker/common/wait-utils.sh:/scripts/wait-utils.sh:ro
             - ./docker/kibana/dashboards:/usr/share/kibana/dashboards:ro
             - kibana_data:/usr/share/kibana/data
         environment:
@@ -91,7 +92,7 @@ services:
             ELASTIC_USERNAME: ${ELASTIC_USERNAME}
         networks:
             - elk
-        entrypoint: ['/bin/sh', '-c', 'sh /usr/share/kibana/config/kibana-entrypoint.sh']
+        entrypoint: ['/bin/bash', '-c', 'bash /usr/share/kibana/config/kibana-entrypoint.sh']
         restart: on-failure
         healthcheck:
             test:

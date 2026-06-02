@@ -1,5 +1,8 @@
-#!/bin/sh
-set -e
+#!/bin/bash
+set -euo pipefail
+
+# shellcheck source=/scripts/wait-utils.sh
+source /scripts/wait-utils.sh
 
 # Generate Kibana certificates (original bootstrap)
 /usr/share/kibana/config/bootstrap-generate-kibana-certs.sh
@@ -12,14 +15,20 @@ set -e
 	# elastic superuser is required for saved-objects import API
 	ADMIN_AUTH="${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
 
-	for i in $(seq 1 60); do
-		code=$(curl -sSk -o /dev/null -w "%{http_code}" "${KIBANA_INTERNAL_URL}/api/status" -u "${AUTH}" || true)
-		if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-			echo "[kibana] Kibana is ready, importing dashboards..."
-			break
-		fi
-		sleep 2
-	done
+	if ! wait_for_http "${KIBANA_INTERNAL_URL}/api/status" 120 200; then
+		echo "[kibana] ERROR: Kibana never became ready after 120s, aborting dashboard import." >&2
+		exit 1
+	fi
+
+	# Accept 302 as ready as well
+	local code
+	code=$(curl -sSk -o /dev/null -w "%{http_code}" "${KIBANA_INTERNAL_URL}/api/status" -u "${AUTH}" 2>/dev/null || true)
+	if [ "$code" != "200" ] && [ "$code" != "302" ]; then
+		echo "[kibana] ERROR: Kibana status check failed (HTTP ${code}), aborting dashboard import." >&2
+		exit 1
+	fi
+
+	echo "[kibana] Kibana is ready, importing dashboards..."
 
 	DASHBOARD_DIR="/usr/share/kibana/dashboards"
 	if [ -d "$DASHBOARD_DIR" ]; then

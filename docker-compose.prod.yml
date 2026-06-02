@@ -56,6 +56,18 @@ services:
     vault:
         volumes:
             - vault_data:/vault/file
+            - ./docker/vault/vault-prod.hcl:/vault/config/vault-prod.hcl:ro
+        command: ["vault", "server", "-config=/vault/config/vault-prod.hcl"]
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'wget -qO- http://127.0.0.1:8200/v1/sys/health?standbyok=true >/dev/null 2>&1; true',
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 12
+            start_period: 10s
 
 volumes:
     vault_data:
