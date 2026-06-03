@@ -2,7 +2,7 @@ import { prisma } from '@/database/prisma/prisma';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 import * as bcrypt from 'bcrypt';
-import { agentFormatting } from './getAgent';
+import { agentFormatting } from './agentFormatting';
 import { User } from '@/types/bde/User';
 
 export async function createUser(me: FortyTwoCursusUserDetails, authorization: FortyTwoOauthToken) {

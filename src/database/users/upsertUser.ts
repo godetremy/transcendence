@@ -43,17 +43,6 @@ export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: F
 	});
 
 	return {
-		id: row.id,
-		mail: row.mail,
-		first_name: row.first_name,
-		last_name: row.last_name,
-		full_name: row.full_name,
-		profile_picture: row.profile_picture,
-		is_agent: row.is_agent,
-		is_agent_verified: row.is_agent_verified,
-		reason: row.reason,
-		memberships_id: row.memberships_id,
-		memberships: null,
-		oauth_fortytwo_id: row.oauth_fortytwo_id,
+		...row, memberships: null
 	};
 }

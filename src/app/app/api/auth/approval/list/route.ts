@@ -1,5 +1,5 @@
 import { prisma } from '@/database/prisma/prisma';
-import { agentFormatting } from '@/database/users/getAgent';
+import { agentFormatting } from '@/database/users/agentFormatting';
 import { decrypt } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
 
