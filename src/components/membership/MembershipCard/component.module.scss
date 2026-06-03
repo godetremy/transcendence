@@ -24,6 +24,9 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	perspective: 100px;
+	z-index: 1000;
+	transition: scale .2s;
 
 	& > img {
 		border-radius: 50%;
@@ -45,5 +48,22 @@
 		background-color: #FFF;
 		border-radius: 20px;
 		margin-top: 30px;
+	}
+
+	.pointer_overlay {
+		position: absolute;
+		pointer-events: none;
+		inset: 0;
+		background: radial-gradient(at var(--x) var(--y), rgba(255,255,255,0.3) 20%, transparent 80%);
+		opacity: 0;
+		transition: opacity .5s;
+	}
+
+	&:hover {
+		transform: scale(1.05) rotateX(var(--x-rotation)) rotateY(var(--y-rotation));
+
+		& > .pointer_overlay:hover {
+			opacity: 1;
+		}
 	}
 }
