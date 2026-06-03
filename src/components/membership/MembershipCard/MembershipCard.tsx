@@ -11,13 +11,20 @@ export interface MembershipCardProps {
 export function MembershipCard(props: MembershipCardProps) {
 	const user = useUser();
 
-	const openOverlayStateAnimation: TargetAndTransition = { opacity: 1 };
-	const closeOverlayStateAnimation: TargetAndTransition = { opacity: 0 };
+	const openOverlayStateAnimation: TargetAndTransition = { opacity: 1, pointerEvents: 'auto' };
+	const closeOverlayStateAnimation: TargetAndTransition = { opacity: 0, pointerEvents: 'none' };
 
-	const openCardStateAnimation: TargetAndTransition = { translateY: 0, scale: 1, filter: 'blur(0px)', opacity: 1 };
+	const openCardStateAnimation: TargetAndTransition = {
+		transform: 'translateY(0px) scaleX(1) scaleY(1)',
+		filter: 'blur(0px)',
+		opacity: 1,
+		transition: {
+			duration: 0.6,
+			ease: [0.5, 0, 0, 1.15],
+		},
+	};
 	const closeCardStateAnimation: TargetAndTransition = {
-		translateY: 300,
-		scale: 0.9,
+		transform: 'translateY(300px) scaleX(0.5) scaleY(1.2)',
 		filter: 'blur(10px)',
 		opacity: 0,
 	};
