@@ -4,9 +4,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
 	try {
-		const { id } = await params;
 		const cookie = req.cookies.get('session');
 		await decrypt(cookie?.value);
+
+		const { id } = await params;
+
 		await prisma.users.update({
 			where: { id: id },
 			data: { is_agent_verified: false },
@@ -17,7 +19,5 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 			status: 500,
 		});
 	}
-	return new NextResponse('Agent status set', {
-		status: 200,
-	});
+	return NextResponse.json({ success: true });
 }

@@ -27,7 +27,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			});
 		const status = await isAccountExist(session.user_id);
 		if (!status)
-			return new NextResponse(`The account not exist.`, {
+			return new NextResponse(`The account does not exist.`, {
 				status: 400,
 			});
 		const value = await prisma.users.update({

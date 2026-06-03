@@ -35,7 +35,7 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 
 	useEffect(() => {
 		const fetchusers = async () => {
-			const response = await fetch(`/app/api/auth/approval/list/`, {
+			const response = await fetch(`/app/api/auth/approval/list/?limit=10&page=2`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
