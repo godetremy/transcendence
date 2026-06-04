@@ -4,7 +4,6 @@ import { isAccountExist } from '@/database/users/isAccountExist';
 import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/database/prisma/prisma';
 import { UserFormSchema } from '@/schema/UserForm';
-import { Prisma } from '@/database/prisma/generated/client';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {
