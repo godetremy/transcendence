@@ -41,7 +41,6 @@ services:
         environment:
             NODE_ENV: production
             HOSTNAME: '0.0.0.0'
-            # PORT is already set in the Dockerfile runner stage
             DATABASE_URL: ${DATABASE_URL}
             NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
             NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
@@ -58,8 +57,9 @@ services:
             - vault_data:/vault/file
             - ./docker/vault/vault-prod.hcl:/vault/config/vault-prod.hcl:ro
         command: ["vault", "server", "-config=/vault/config/vault-prod.hcl"]
-        # vault starts uninitialized in prod; the agent bootstraps it afterwards.
-        # we just check the tcp port is open — nc is lighter than curl/wget here.
+        cap_add:
+            - IPC_LOCK
+        restart: on-failure
         healthcheck:
             test: ['CMD-SHELL', 'nc -z 127.0.0.1 8200']
             interval: 10s

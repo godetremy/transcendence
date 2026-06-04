@@ -7,7 +7,9 @@ set -eu
 # Apply custom ModSecurity configs
 cp /opt/custom/modsecurity.conf /etc/nginx/modsecurity.d/modsecurity-override.conf
 cp /opt/custom/modsecurity-exclusions.conf /etc/nginx/modsecurity.d/modsecurity-exclusions.conf
-cp /opt/custom/crs-setup.conf /etc/modsecurity.d/owasp-crs/crs-setup.conf
+# Append custom CRS tuning instead of overwriting the upstream file
+# (the original contains Include rules/*.conf which must be preserved)
+cat /opt/custom/crs-setup.conf >> /etc/modsecurity.d/owasp-crs/crs-setup.conf
 
 # Ensure custom exclusions are actually loaded by ModSecurity
 if ! grep -q "modsecurity-exclusions.conf" /etc/nginx/modsecurity.d/setup.conf 2>/dev/null; then

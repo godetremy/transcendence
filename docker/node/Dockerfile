@@ -40,6 +40,11 @@ COPY --from=builder --chown=node:node /home/node/app/.next/static ./.next/static
 COPY --from=builder /home/node/app/src/database/prisma ./src/database/prisma
 COPY --from=builder /home/node/app/package.json ./
 
+# Prisma binaries + client aren't traced by next standalone output
+COPY --from=builder --chown=node:node /home/node/app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder --chown=node:node /home/node/app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder --chown=node:node /home/node/app/node_modules/pg ./node_modules/pg
+
 USER node
 EXPOSE 3000
 CMD HOSTNAME="0.0.0.0" node server.js

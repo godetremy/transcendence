@@ -56,7 +56,6 @@ services:
             timeout: 10s
             retries: 5
             start_period: 30s
-        # this image runs as root by default anyway
         mem_limit: 128m
 
     kibana:
@@ -164,7 +163,6 @@ services:
             - ./docker/nginx/modsecurity-kibana-crs-exclusions.conf:/etc/modsecurity.d/owasp-crs/rules/000-kibana-exclusions.conf:ro
             - nginx_logs:/var/log/nginx
             - nginx_certs:/etc/nginx/certs
-        # ports are added by the dev/prod overrides depending on SSL mode
         networks:
             - edge
             - app
@@ -261,7 +259,6 @@ services:
         image: hashicorp/vault:1.17
         environment:
             VAULT_ADDR: ${VAULT_ADDR}
-            # vault ignores this env var in our setup — dev listens via flag, prod via HCL
         networks:
             - vault_net
         command:
