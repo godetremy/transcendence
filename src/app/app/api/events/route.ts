@@ -1,7 +1,7 @@
 import { EventFormatting } from '@/database/event/createEvent';
 import { prisma } from '@/database/prisma/prisma';
 import { decrypt } from '@/lib/session';
-import { EventFormSchema, EventSearchFormSchema } from '@/schema/EventForm';
+import { CreateEventSchema, SearchEventSchema } from '@/schema/EventForm';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -9,21 +9,24 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
-		const fields = EventSearchFormSchema.safeParse({
+		const fields = SearchEventSchema.safeParse({
 			from: req.nextUrl.searchParams.get('from'),
 			to: req.nextUrl.searchParams.get('to'),
 			limit: req.nextUrl.searchParams.get('limit'),
 			search: req.nextUrl.searchParams.get('search'),
 			club: req.nextUrl.searchParams.get('club'),
 			subscribe: req.nextUrl.searchParams.get('subscribe'),
+			page: req.nextUrl.searchParams.get('page'),
 		});
 
-		if (!fields.success)
+		if (!fields.success) {
+			console.log(fields);
 			return new NextResponse(fields.error.message[0], {
 				status: 401,
 			});
-		if (fields.data.limit == null) fields.data.limit = 100;
-		else fields.data.limit > 0 && fields.data.limit <= 100 ? {} : (fields.data.limit = 100);
+		}
+		if (fields.data.limit == null) fields.data.limit = 20;
+		else fields.data.limit > 0 && fields.data.limit <= 20 ? {} : (fields.data.limit = 20);
 
 		const value = await prisma.event.findMany({
 			take: fields.data.limit,
@@ -55,6 +58,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 					sort: 'desc',
 				},
 			},
+			skip: fields.data.page == null ? 0 : fields.data.page * fields.data.limit,
 		});
 
 		const events = await Promise.all(value.map(EventFormatting));
@@ -105,7 +109,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 		const body = await req.json();
 
-		const fields = EventFormSchema.safeParse({
+		const fields = CreateEventSchema.safeParse({
 			title: body.title,
 			description: body.description,
 			start_at: body.start_at,

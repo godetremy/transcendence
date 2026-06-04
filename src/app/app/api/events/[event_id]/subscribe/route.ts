@@ -12,9 +12,26 @@ export async function GET(
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
+		const event = await prisma.event.findUnique({
+			include: {
+				registered: true,
+			},
+			where: {
+				id: event_id,
+			}
+		});
+
+		if (event == null)
+			return new NextResponse('Error, event not found.', {
+				status: 404,
+			});
+		if (event.registered) {
+			if ((event.registered))
+		}
+
 		await prisma.event.update({
 			include: {
-				registered: {},
+				registered: true,
 			},
 			where: {
 				id: event_id,

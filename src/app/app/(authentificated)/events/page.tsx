@@ -1,7 +1,7 @@
 'use client';
 
 import './page.scss';
-import { EventFormSchema, EventSearchFormSchema } from '@/schema/EventForm';
+import { CreateEventSchema, SearchEventSchema } from '@/schema/EventForm';
 import { CreateEventType, Event, SearchEvent } from '@/types/bde/Event';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -105,7 +105,7 @@ function Card({ event, eventmodify }: { event: Event; eventmodify: CreateEventTy
 						body: JSON.stringify({
 							title: eventmodify.title,
 							description: eventmodify.description,
-							max_inscription: eventmodify.max_inscription,
+							max_inscription: null,
 							start_at: eventmodify.start_at,
 							end_at: eventmodify.end_at,
 						}),
@@ -174,6 +174,7 @@ function CardList({ search, event }: { search: SearchEvent; event: CreateEventTy
 			if (search.search != null && search.search !== '') params += `&search=${search.search}`;
 			if (search.club != null && search.club !== '') params += `&club=${search.club}`;
 			if (search.subscribe != null) params += `&subscribe=${search.subscribe}`;
+			params += '&page=0';
 
 			const response = await fetch(`/app/api/events?${params}`, {
 				method: 'GET',
@@ -214,7 +215,7 @@ export default function Page() {
 	});
 
 	const create = async (form: FormData) => {
-		const fields = EventFormSchema.safeParse({
+		const fields = CreateEventSchema.safeParse({
 			title: form.get('title'),
 			description: form.get('describe'),
 			start_at: form.get('start'),
@@ -240,7 +241,7 @@ export default function Page() {
 	};
 
 	const search = (form: FormData) => {
-		const fields = EventSearchFormSchema.safeParse({
+		const fields = SearchEventSchema.safeParse({
 			from: form.get('from'),
 			to: form.get('to'),
 			limit: form.get('limit'),
