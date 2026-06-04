@@ -51,7 +51,7 @@ services:
             - '127.0.0.1:5066:5066'
         restart: on-failure
         healthcheck:
-            test: ['CMD-SHELL', 'timeout 5 bash -c "</dev/tcp/logstash/5044"']
+            test: ['CMD-SHELL', 'curl -fsS http://127.0.0.1:5066 >/dev/null 2>&1']
             interval: 30s
             timeout: 10s
             retries: 5
@@ -127,8 +127,6 @@ services:
             elasticsearch:
                 condition: service_healthy
             logstash:
-                condition: service_healthy
-            filebeat:
                 condition: service_healthy
         volumes:
             - ./docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
@@ -217,7 +215,7 @@ services:
     portainer:
         image: portainer/portainer-ce:sts
         volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /var/run/docker.sock:/var/run/docker.sock
             - portainer_data:/data
         ports:
             - '127.0.0.1:9443:9443'
@@ -225,7 +223,7 @@ services:
             - edge
         restart: on-failure
         healthcheck:
-            test: ['CMD', '/portainer', '--version']
+            test: ['CMD-SHELL', 'wget -qO- --no-check-certificate https://127.0.0.1:9443/ >/dev/null 2>&1']
             interval: 30s
             timeout: 5s
             retries: 5
@@ -321,6 +319,7 @@ networks:
         internal: true
     vault_net:
         driver: bridge
+        internal: true
 
 volumes:
     elastic_data:
