@@ -1,6 +1,7 @@
 import styles from './component.module.scss';
 import { useMembership } from '@/components/membership/MembershipProvider/MembershipProvider';
 import { useUser } from '@/contexts/UserContext';
+import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
 function CardDemo(props: { color: string; image: string; className?: string }) {
 	return (
@@ -162,13 +163,14 @@ function CardDemo(props: { color: string; image: string; className?: string }) {
 	);
 }
 
-export function MembershipButton() {
+export function MembershipButton(props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) {
 	const user = useUser();
 	const membership = useMembership();
 
 	return (
 		<button
-			className={styles.membershipButton}
+			{...props}
+			className={`${styles.membershipButton} ${props.className ?? ''}`}
 			onClick={() => {
 				membership.showCard();
 			}}
