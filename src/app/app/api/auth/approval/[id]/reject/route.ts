@@ -1,6 +1,7 @@
 import { prisma } from '@/database/prisma/prisma';
 import { decrypt } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
 	try {
@@ -9,10 +10,21 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 		const { id } = await params;
 
-		await prisma.users.update({
-			where: { id: id },
-			data: { is_agent_verified: false },
-		});
+		try {
+			await prisma.users.update({
+				where: { id: id },
+				data: { is_agent_verified: false },
+			});
+		} catch (err) {
+			if (err instanceof PrismaClientKnownRequestError && err.code == 'P2025') {
+				return NextResponse.json(
+					{ success: false, message: 'User does not exist' },
+					{
+						status: 400,
+					}
+				);
+			}
+		}
 	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse('Error, failed to set agent status.', {
