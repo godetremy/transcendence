@@ -9,8 +9,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		await decrypt(cookie?.value);
 
 		let limit = Number(req.nextUrl.searchParams.get('limit'));
-		if (limit <= 0 || limit > 20) limit = 20;
-		const page = Number(req.nextUrl.searchParams.get('page'));
+		if (limit <= 0 || limit > 100) limit = 20;
+		const page = Number(req.nextUrl.searchParams.get('page') ?? 1) - 1;
 		if (page < 0)
 			return new NextResponse('Error: page must be a positive number.', {
 				status: 400,
