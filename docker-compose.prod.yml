@@ -56,7 +56,7 @@ services:
         volumes:
             - vault_data:/vault/file
             - ./docker/vault/vault-prod.hcl:/vault/config/vault-prod.hcl:ro
-        command: ["vault", "server", "-config=/vault/config/vault-prod.hcl"]
+        command: ['vault', 'server', '-config=/vault/config/vault-prod.hcl']
         cap_add:
             - IPC_LOCK
         restart: on-failure

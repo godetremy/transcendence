@@ -1,51 +1,51 @@
 {
-  "index_patterns": ["elastic-stack-logs-*"],
-  "template": {
-    "settings": {
-      "number_of_shards": 1,
-      "number_of_replicas": 0,
-      "index.lifecycle.name": "logs-policy",
-      "index.lifecycle.rollover_alias": "elastic-stack-logs"
-    },
-    "mappings": {
-      "dynamic_templates": [
-        {
-          "strings_as_keywords": {
-            "match_mapping_type": "string",
-            "mapping": {
-              "type": "keyword",
-              "ignore_above": 1024
-            }
-          }
-        }
-      ],
-      "properties": {
-        "@timestamp": {
-          "type": "date"
-        },
-        "service": {
-          "type": "keyword"
-        },
-        "log_level": {
-          "type": "keyword"
-        },
-        "log_type": {
-          "type": "keyword"
-        },
-        "message": {
-          "type": "text"
-        },
-        "app": {
-          "type": "object",
-          "dynamic": true
-        }
-      }
-    }
-  },
-  "priority": 500,
-  "composed_of": [],
-  "version": 1,
-  "_meta": {
-    "description": "Template for Elastic Stack component logs"
-  }
+	"index_patterns": ["elastic-stack-logs-*"],
+	"template": {
+		"settings": {
+			"number_of_shards": 1,
+			"number_of_replicas": 0,
+			"index.lifecycle.name": "logs-policy",
+			"index.lifecycle.rollover_alias": "elastic-stack-logs"
+		},
+		"mappings": {
+			"dynamic_templates": [
+				{
+					"strings_as_keywords": {
+						"match_mapping_type": "string",
+						"mapping": {
+							"type": "keyword",
+							"ignore_above": 1024
+						}
+					}
+				}
+			],
+			"properties": {
+				"@timestamp": {
+					"type": "date"
+				},
+				"service": {
+					"type": "keyword"
+				},
+				"log_level": {
+					"type": "keyword"
+				},
+				"log_type": {
+					"type": "keyword"
+				},
+				"message": {
+					"type": "text"
+				},
+				"app": {
+					"type": "object",
+					"dynamic": true
+				}
+			}
+		}
+	},
+	"priority": 500,
+	"composed_of": [],
+	"version": 1,
+	"_meta": {
+		"description": "Template for Elastic Stack component logs"
+	}
 }
