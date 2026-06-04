@@ -12,21 +12,24 @@ export async function GET(
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
-		const event = await prisma.event.findUnique({
+		const register = await prisma.registered_event.findMany({
 			include: {
-				registered: true,
+				event: true,
 			},
 			where: {
-				id: event_id,
+				registered_event_id: event_id,
 			}
 		});
 
-		if (event == null)
-			return new NextResponse('Error, event not found.', {
-				status: 404,
-			});
-		if (event.registered) {
-			if ((event.registered))
+		if (register != null && register[0] != null) {
+			console.log(register[0]);
+			if (register[0].event) {
+				const max = register[0].event?.max_inscription;
+				if (register.length >= max)
+					return new NextResponse('Error, to many subscribe.', {
+						status: 400,
+					});
+			}
 		}
 
 		await prisma.event.update({
