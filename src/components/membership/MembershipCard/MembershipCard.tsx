@@ -19,7 +19,7 @@ export function MembershipCard(props: MembershipCardProps) {
 		filter: 'blur(0px)',
 		opacity: 1,
 		transition: {
-			duration: 0.6,
+			duration: 0.4,
 			ease: [0.5, 0, 0, 1.15],
 		},
 	};
