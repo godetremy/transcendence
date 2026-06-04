@@ -25,3 +25,44 @@
 	margin-top: 5px;
 	opacity: .6;
 }
+
+.card_2fA {
+	width: 100%;
+	max-width: 600px;
+	border-radius: 15px;
+	background-color: rgba(var(--color-rgb-primary-white), 0.1);
+	padding: 20px 20px;
+	display: flex;
+	gap: 20px;
+
+	& > div {
+		display: flex;
+		flex-direction: column;
+
+		gap: 10px;
+
+		h3 {
+			font: 700 18px var(--font-paragraph);
+			margin-bottom: -10px;
+		}
+
+		p {
+			font: 400 14px var(--font-paragraph);
+			opacity: .6;
+			margin-bottom: 10px;
+		}
+
+		span {
+			position: relative;
+			display: flex;
+			gap: 5px;
+			width: fit-content;
+			align-items: center;
+			opacity: .6;
+
+			&.disabled {
+				color: rgba(var(--color-rgb-primary-white), 0.15);
+			}
+		}
+	}
+}
