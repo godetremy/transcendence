@@ -29,7 +29,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			reason: body.reason == null ? null : body.reason,
 			profile_picture: body.profile_picture == null ? null : body.profile_picture,
 		});
-		console.log(fields);
+
 		if (fields.data == null)
 			return new NextResponse(`Error fields is null.`, {
 				status: 404,
