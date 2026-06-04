@@ -25,10 +25,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const fields = UserFormSchema.safeParse({
 			mail: body.mail == null ? null : body.mail,
 			first_name: body.first_name == null ? null : body.first_name,
-			last_name: body.last_name  == null ? null : body.last_name,
-			full_name: body.full_name  == null ? null : body.full_name,
-			reason: body.reason  == null ? null : body.reason,
-			profile_picture: body.profile_picture  == null ? null : body.profile_picture,
+			last_name: body.last_name == null ? null : body.last_name,
+			full_name: body.full_name == null ? null : body.full_name,
+			reason: body.reason == null ? null : body.reason,
+			profile_picture: body.profile_picture == null ? null : body.profile_picture,
 		});
 		console.log(fields);
 		if (fields.data == null)
@@ -43,16 +43,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			return new NextResponse(`The account does not exist.`, {
 				status: 400,
 			});
-		
+
 		await prisma.users.update({
 			where: { id: session.user_id },
 			data: {
-				...(fields.data.mail && {mail: fields.data.mail}),
-				...(fields.data.first_name && {first_name: fields.data.first_name}),
-				...(fields.data.last_name && {last_name: fields.data.last_name}),
-				...(fields.data.full_name && {full_name: fields.data.full_name}),
-				...(fields.data.reason && {reason: fields.data.reason}),
-				...(fields.data.profile_picture && {profile_picture: fields.data.profile_picture}),
+				...(fields.data.mail && { mail: fields.data.mail }),
+				...(fields.data.first_name && { first_name: fields.data.first_name }),
+				...(fields.data.last_name && { last_name: fields.data.last_name }),
+				...(fields.data.full_name && { full_name: fields.data.full_name }),
+				...(fields.data.reason && { reason: fields.data.reason }),
+				...(fields.data.profile_picture && { profile_picture: fields.data.profile_picture }),
 			},
 		});
 		return NextResponse.json({ success: true });

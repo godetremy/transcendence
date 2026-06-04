@@ -43,6 +43,7 @@ export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: F
 	});
 
 	return {
-		...row, memberships: null
+		...row,
+		memberships: null,
 	};
 }
