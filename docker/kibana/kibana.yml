@@ -7,7 +7,7 @@ server.ssl.enabled: true
 server.ssl.certificate: /usr/share/kibana/config/certs/kibana.crt
 server.ssl.key: /usr/share/kibana/config/certs/kibana.key
 
-server.publicBaseUrl: https://kibana.localhost
+server.publicBaseUrl: ${KIBANA_URL}
 
 server.maxPayload: 1048576
 

@@ -10,9 +10,9 @@ chown -R 1000:0 /usr/share/elasticsearch/data /usr/share/elasticsearch/config/ce
 su elasticsearch -s /bin/bash -c 'export PATH="/usr/share/elasticsearch/bin:$PATH" && /usr/local/bin/docker-entrypoint.sh elasticsearch' &
 ES_PID=$!
 
-# Wait for Elasticsearch API to be reachable before running retention setup
+# ES needs to be up before we run the retention/bootstrap scripts
 wait_for_http "https://127.0.0.1:9200/_cluster/health" 120 200 \
-	-k -u "${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}" || true
+	-k -u "${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
 
 bash /scripts/01-retention.sh || echo "WARNING: ES retention setup failed, continuing"
 wait "$ES_PID"

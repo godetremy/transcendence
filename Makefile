@@ -9,7 +9,7 @@ COMPOSE_PROD_FILE		= docker-compose.prod.yml
 #=================================================================#
 #                      COMPOSE COMMANDS                           #
 #=================================================================#
-# Project names are defined in each compose file (trans, trans-dev, trans-prod)
+# Project names: base=transcendence, dev=trans-dev, prod=trans-prod
 COMPOSE_BASE			= docker compose -f $(COMPOSE_FILE)
 COMPOSE_DEV				= $(COMPOSE_BASE) -f $(COMPOSE_DEV_FILE)
 COMPOSE_PROD			= $(COMPOSE_BASE) -f $(COMPOSE_PROD_FILE)
@@ -19,7 +19,7 @@ ELASTICSEARCH_CERTS_DIR	= docker/elasticsearch/certs
 #=================================================================#
 #                         DOCKER TOOLS                            #
 #=================================================================#
-DOCKER					= docker
+# docker CLI is used directly below; no need for a variable alias
 DOCKER_STATS			= docker stats
 
 #=================================================================#
@@ -74,21 +74,21 @@ down:
 
 ps:
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	@echo "$(BLUE)  Containers$(RESET)"
+	@echo "$(BLUE)  Running containers$(RESET)"
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	-@$(COMPOSE_BASE) ps -a 2>/dev/null || echo "  (not running)"
+	-@docker ps --filter "name=trans-" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "  (none)"
 	@echo ""
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
 	@echo "$(BLUE)  Memory Usage$(RESET)"
 	@echo "$(BLUE)═══════════════════════════════════════════════════════$(RESET)"
-	-@$(DOCKER_STATS) --no-stream --format "table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.CPUPerc}}" 2>/dev/null || true
+	-@docker stats --no-stream --format "table {{.Name}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.CPUPerc}}" 2>/dev/null || true
 
 clean:
 	@echo "$(RED)WARNING: This will remove all volumes and certificates (data loss!)$(RESET)"
 	@read -p "Continue? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
 	@echo "$(YELLOW)Removing containers and volumes...$(RESET)"
-	@$(COMPOSE_DEV) down -v 2>/dev/null || true
-	@$(COMPOSE_PROD) down -v 2>/dev/null || true
+	-@$(COMPOSE_DEV) down -v --remove-orphans 2>/dev/null || true
+	-@$(COMPOSE_PROD) down -v --remove-orphans 2>/dev/null || true
 	@echo "$(GREEN)✓ Cleanup complete$(RESET)"
 
 prune:
@@ -106,17 +106,12 @@ prune:
 	-@$(COMPOSE_DEV) down -v --remove-orphans 2>/dev/null || true
 	@echo "$(YELLOW)[2/7] Stopping and removing prod environment...$(RESET)"
 	-@$(COMPOSE_PROD) down -v --remove-orphans 2>/dev/null || true
-	@echo "$(YELLOW)[3/7] Removing project volumes...$(RESET)"
-	-@docker volume ls -q --filter "name=trans-" | xargs -r docker volume rm 2>/dev/null || true
-	@echo "$(YELLOW)[4/7] Removing project images...$(RESET)"
-	-@docker images --filter "reference=transcendence*" --format '{{.ID}}' | xargs -r docker rmi -f 2>/dev/null || true
-	-@docker images --filter "dangling=true" --format '{{.ID}}' | xargs -r docker rmi -f 2>/dev/null || true
-	@echo "$(YELLOW)[5/7] Removing generated certificates...$(RESET)"
+	@echo "$(YELLOW)[3/5] Removing generated certificates...$(RESET)"
 	@rm -rf $(KIBANA_CERTS_DIR) $(ELASTICSEARCH_CERTS_DIR)
-	@echo "$(YELLOW)[6/7] Pruning unused Docker resources (volumes, networks, images)...$(RESET)"
-	@docker system prune -a --volumes -f
-	@echo "$(YELLOW)[7/7] Pruning build cache...$(RESET)"
-	@docker builder prune -f
+	@echo "$(YELLOW)[4/5] Pruning unused Docker resources (volumes, networks, images)...$(RESET)"
+	-@docker system prune -a --volumes -f
+	@echo "$(YELLOW)[5/5] Pruning build cache...$(RESET)"
+	-@docker builder prune -f
 	@echo ""
 	@echo "$(GREEN)✓ Full purge complete. All project resources removed.$(RESET)"
 

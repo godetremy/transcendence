@@ -15,20 +15,13 @@ services:
             - node_modules:/home/node/app/node_modules
         environment:
             NODE_ENV: development
-            DATABASE_URL: ${DATABASE_URL}
-            NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
-            NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+            # the rest (db url, base url, client id) comes from the base compose
             OAUTH_42_SECRET: ${OAUTH_42_SECRET}
             SESSION_SECRET: ${SESSION_SECRET}
         command: npm run dev
 
     vault:
-        environment:
-            VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
-            VAULT_ADDR: ${VAULT_ADDR}
-        command:
-            - server
-            - -dev
+        # don't override the command here — we need the full dev args from the base file
 
 networks:
     app:

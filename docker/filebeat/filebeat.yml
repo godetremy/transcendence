@@ -122,30 +122,6 @@ filebeat.autodiscover:
 
               - condition:
                     contains:
-                        docker.container.name: postgres-exporter
-                config:
-                    - type: container
-                      paths:
-                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
-                      fields:
-                          service: postgres-exporter
-                          log_type: container
-                      fields_under_root: true
-
-              - condition:
-                    contains:
-                        docker.container.name: nginx-exporter
-                config:
-                    - type: container
-                      paths:
-                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
-                      fields:
-                          service: nginx-exporter
-                          log_type: container
-                      fields_under_root: true
-
-              - condition:
-                    contains:
                         docker.container.name: vault-agent
                 config:
                     - type: container
@@ -169,30 +145,6 @@ filebeat.autodiscover:
                           - /var/lib/docker/containers/${data.docker.container.id}/*.log
                       fields:
                           service: vault
-                          log_type: container
-                      fields_under_root: true
-
-              - condition:
-                    contains:
-                        docker.container.name: prometheus
-                config:
-                    - type: container
-                      paths:
-                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
-                      fields:
-                          service: prometheus
-                          log_type: container
-                      fields_under_root: true
-
-              - condition:
-                    contains:
-                        docker.container.name: grafana
-                config:
-                    - type: container
-                      paths:
-                          - /var/lib/docker/containers/${data.docker.container.id}/*.log
-                      fields:
-                          service: grafana
                           log_type: container
                       fields_under_root: true
 
@@ -227,6 +179,20 @@ queue.mem:
     flush.timeout: 5s
 
 max_procs: 1
+
+# send metrics to ES so kibana shows us in stack monitoring
+# (logs still go through logstash — this is just for beat self-monitoring)
+monitoring:
+    enabled: true
+    elasticsearch:
+        hosts: ['https://elasticsearch:9200']
+        username: '${ELASTIC_USERNAME}'
+        password: '${ELASTIC_PASSWORD}'
+        ssl:
+            enabled: true
+            certificate_authorities: ['/usr/share/filebeat/config/certs/ca.crt']
+            certificate: '/usr/share/filebeat/config/certs/filebeat.crt'
+            key: '/usr/share/filebeat/config/certs/filebeat.key'
 
 logging.level: warning
 logging.to_stderr: true

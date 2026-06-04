@@ -35,6 +35,9 @@ services:
         depends_on:
             logstash:
                 condition: service_healthy
+        environment:
+            ELASTIC_USERNAME: ${ELASTIC_USERNAME}
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
         volumes:
             - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
             - nginx_logs:/var/log/nginx:ro
@@ -53,7 +56,7 @@ services:
             timeout: 10s
             retries: 5
             start_period: 30s
-        user: root
+        # this image runs as root by default anyway
         mem_limit: 128m
 
     kibana:
@@ -81,7 +84,7 @@ services:
             ELASTIC_USERNAME: ${ELASTIC_USERNAME}
         networks:
             - elk
-        entrypoint: ['/bin/bash', '-c', 'bash /usr/share/kibana/config/kibana-entrypoint.sh']
+        entrypoint: ['/bin/bash', '/usr/share/kibana/config/kibana-entrypoint.sh']
         restart: on-failure
         healthcheck:
             test:
@@ -126,6 +129,8 @@ services:
                 condition: service_healthy
             logstash:
                 condition: service_healthy
+            filebeat:
+                condition: service_healthy
         volumes:
             - ./docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
             - ./docker/elasticsearch/certs:/etc/telegraf/certs:ro
@@ -159,8 +164,7 @@ services:
             - ./docker/nginx/modsecurity-kibana-crs-exclusions.conf:/etc/modsecurity.d/owasp-crs/rules/000-kibana-exclusions.conf:ro
             - nginx_logs:/var/log/nginx
             - nginx_certs:/etc/nginx/certs
-        ports:
-            - '127.0.0.1:8080:8080'
+        # ports are added by the dev/prod overrides depending on SSL mode
         networks:
             - edge
             - app
@@ -257,7 +261,7 @@ services:
         image: hashicorp/vault:1.17
         environment:
             VAULT_ADDR: ${VAULT_ADDR}
-            VAULT_API_ADDR: ${VAULT_API_ADDR}
+            # vault ignores this env var in our setup — dev listens via flag, prod via HCL
         networks:
             - vault_net
         command:
@@ -295,7 +299,7 @@ services:
             KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY}
         networks:
             - vault_net
-        command: sh -c 'sh /scripts/bootstrap-vault-agent.sh'
+        command: ['/bin/sh', '/scripts/bootstrap-vault-agent.sh']
         restart: on-failure
         healthcheck:
             test:

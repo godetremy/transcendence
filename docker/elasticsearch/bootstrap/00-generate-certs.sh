@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -euo pipefail
 
 CERTS_DIR="/usr/share/elasticsearch/config/certs"
 CA_KEY="${CERTS_DIR}/ca.key"

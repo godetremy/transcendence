@@ -4,49 +4,15 @@ set -euo pipefail
 # shellcheck source=/scripts/wait-utils.sh
 source /scripts/wait-utils.sh
 
-# Generate Kibana certificates (original bootstrap)
+# generate certs if they don't exist yet
 /usr/share/kibana/config/bootstrap-generate-kibana-certs.sh
 
-# Import dashboards in background after Kibana is ready
+# import dashboards once kibana is actually up
 (
-	# Use internal URL for container-side API calls; KIBANA_URL is only for publicBaseUrl
-	KIBANA_INTERNAL_URL="https://127.0.0.1:5601"
-	AUTH="${KIBANA_SYSTEM_USERNAME}:${KIBANA_SYSTEM_PASSWORD}"
-	# elastic superuser is required for saved-objects import API
-	ADMIN_AUTH="${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
-
-	if ! wait_for_http "${KIBANA_INTERNAL_URL}/api/status" 120 200; then
-		echo "[kibana] ERROR: Kibana never became ready after 120s, aborting dashboard import." >&2
-		exit 1
-	fi
-
-	# Accept 302 as ready as well
-	local code
-	code=$(curl -sSk -o /dev/null -w "%{http_code}" "${KIBANA_INTERNAL_URL}/api/status" -u "${AUTH}" 2>/dev/null || true)
-	if [ "$code" != "200" ] && [ "$code" != "302" ]; then
-		echo "[kibana] ERROR: Kibana status check failed (HTTP ${code}), aborting dashboard import." >&2
-		exit 1
-	fi
-
-	echo "[kibana] Kibana is ready, importing dashboards..."
-
-	DASHBOARD_DIR="/usr/share/kibana/dashboards"
-	if [ -d "$DASHBOARD_DIR" ]; then
-		for f in "$DASHBOARD_DIR"/*.ndjson; do
-			[ -f "$f" ] || continue
-			echo "[kibana] Importing dashboard file: $f"
-			curl -sSk -X POST "${KIBANA_INTERNAL_URL}/api/saved_objects/_import?overwrite=true" \
-				-H "kbn-xsrf: true" \
-				-u "${ADMIN_AUTH}" \
-				--form "file=@$f" \
-				-o /dev/null -w "%{http_code}"
-			echo ""
-		done
-		echo "[kibana] Dashboard import complete."
-	else
-		echo "[kibana] No dashboard directory found, skipping import."
-	fi
+	# shellcheck source=/scripts/wait-utils.sh
+	source /scripts/wait-utils.sh
+	/scripts/import-dashboards.sh
 ) &
 
-# Start Kibana in foreground (PID 1) for graceful shutdown
+# keep kibana in foreground so docker can stop it cleanly
 exec /usr/local/bin/kibana-docker
