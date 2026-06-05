@@ -1,25 +1,13 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { NextResponse } from 'next/server';
+import { unsetSession } from '@/lib/session';
+import { serverError } from '@/utils/errors';
 
 export async function GET(): Promise<NextResponse> {
 	try {
-		const cookieStore = await cookies();
-		const cookie = cookieStore.get('session');
-		if (cookie != null) {
-			cookieStore.set('session', cookie.value, {
-				httpOnly: true,
-				secure: true,
-				expires: Date.now(),
-				sameSite: 'lax',
-				path: '/',
-			});
-		}
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse(`Failed to logout. Please try again later.`, {
-			status: 500,
-		});
+		await unsetSession();
+	} catch (err: unknown) {
+		serverError(err);
 	}
 	return redirect('/app/login');
 }
