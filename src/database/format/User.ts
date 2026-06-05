@@ -1,12 +1,32 @@
 import { Prisma } from '../prisma/generated/client';
-import { User } from '@/types/User';
+import { User, PublicUser } from '@/types/User';
 import formatMembership from '@/database/format/Membership';
 
-const formatUser = (row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User => {
+const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPayload<{ include: T }>): User => {
+	// This filter private database data.
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const { oauth_fortytwo_id, fortytwo_user_id, password, is_agent_verified, ...user } = row;
+
 	return {
-		...row,
-		memberships: row.memberships ? formatMembership(row.memberships) : null,
+		...user,
+		membership:
+			'membership' in row
+				? row.membership
+					? formatMembership(row.membership as Prisma.membershipsGetPayload<object>)
+					: null
+				: null,
 	};
 };
 
-export default formatUser;
+const formatPublicUser = (row: Prisma.usersGetPayload<object>): PublicUser => {
+	return {
+		id: row.id,
+		first_name: row.first_name,
+		last_name: row.last_name,
+		full_name: row.full_name,
+		profile_picture: row.full_name,
+		is_agent: row.is_agent,
+	};
+};
+
+export { formatPrivateUser, formatPublicUser };
