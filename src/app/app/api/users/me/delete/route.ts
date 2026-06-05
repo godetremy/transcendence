@@ -13,5 +13,5 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		console.error(error);
 		return NextResponse.redirect(new URL('/app/home', req.url), { status: 308 });
 	}
-	return redirect('/app/logout');
+	return redirect('/app/api/auth/logout/');
 }
