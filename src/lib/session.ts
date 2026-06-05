@@ -1,6 +1,7 @@
 import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { SessionPayload, JWTSessionPayload } from '@/types/session/SessionPayload';
+import { cookies } from 'next/headers';
 
 const encodedKey = new TextEncoder().encode(process.env.SESSION_SECRET);
 
@@ -31,4 +32,18 @@ export async function createSession(payload: SessionPayload): Promise<{ body: st
 		...payload,
 	});
 	return { body, expirationDate };
+}
+
+export async function createAndSetSession(payload: SessionPayload): Promise<void> {
+	const session = await createSession(payload);
+
+	const cookieStore = await cookies();
+
+	cookieStore.set('session', session.body, {
+		httpOnly: true,
+		secure: true,
+		expires: session.expirationDate,
+		sameSite: 'lax',
+		path: '/',
+	});
 }
