@@ -12,6 +12,7 @@ const ERRORS_DETAILS = {
 	account_already_exists: () => 'This account already exists.',
 	account_does_not_exists: () => 'This account does not exists.',
 	account_exist_with_mail: () => 'An account is already linked to this email address.',
+	account_unsupported_action: () => 'This action is unsupported for this account',
 };
 
 const apiError = (message?: string, status?: number): NextResponse => {

@@ -89,6 +89,16 @@ const createOrUpdateStudentUser = async (
 	});
 };
 
+const updateUserApproval = async (
+	id: string,
+	approve: boolean
+): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
+	return prisma.users.update({
+		where: { id },
+		data: { is_agent_verified: approve },
+	});
+};
+
 const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.delete({
 		where: { id: id },
@@ -138,6 +148,7 @@ export {
 	createStudentUser,
 	createAgentsUser,
 	createOrUpdateStudentUser,
+	updateUserApproval,
 	deleteUser,
 	getUserById,
 	getUserFromSession,
