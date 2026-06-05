@@ -1,7 +1,7 @@
 import { Prisma } from '../prisma/generated/client';
-import { Memberships } from '@/types/Memberships';
+import { Membership } from '@/types/Membership';
 
-const formatMembership = (memberships: Prisma.membershipsGetPayload<object>): Memberships => {
+const formatMembership = (memberships: Prisma.membershipsGetPayload<object>): Membership => {
 	return {
 		...memberships,
 	};
