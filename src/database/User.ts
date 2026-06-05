@@ -4,6 +4,8 @@ import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDe
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 import * as bcrypt from 'bcrypt';
 import { JWTSessionPayload } from '@/types/session/SessionPayload';
+import { PaginationParameters } from '@/types/PaginationParameters';
+import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 
 interface UserInclude {
 	memberships?: boolean;
@@ -136,6 +138,28 @@ const getUserByMail = async <T extends Prisma.usersInclude>(
 	});
 };
 
+const getUsersByFilter = async <T extends Prisma.usersInclude>(
+	filter: Prisma.usersWhereInput,
+	include: T,
+	pagination?: PaginationParameters
+): Promise<Prisma.usersGetPayload<{ include: T }>[]> => {
+	return prisma.users.findMany({
+		where: filter,
+		include: include,
+		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+	});
+};
+
+const countUsersByFilter = async (
+	filter: Prisma.usersWhereInput,
+	pagination?: PaginationParameters
+): Promise<number> => {
+	return prisma.users.count({
+		where: filter,
+		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+	});
+};
+
 const existUserById = async (id: string): Promise<boolean> => {
 	return (await getUserById(id, {})) !== null;
 };
@@ -153,6 +177,8 @@ export {
 	getUserById,
 	getUserFromSession,
 	getUserByMail,
+	getUsersByFilter,
+	countUsersByFilter,
 	existUserById,
 	existUserByMail,
 };
