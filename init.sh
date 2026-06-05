@@ -29,8 +29,11 @@ else
 	sudo apt update && sudo apt install nodejs npm -y
 fi
 
+
 echo "[Npm] init project"
 npm i > /dev/null
+echo "[Prisma] delete migrate"
+rm -rf src/database/prisma/migrations/*
 echo "[Prisma] Reset data"
 npx prisma migrate reset --force
 echo "[Prisma] Generate data"

@@ -45,7 +45,7 @@ export default function Page() {
 						<p>end at : {user.memberships?.end_at.toLocaleDateString() ?? '-'}</p>
 					</>
 				)}
-				<Link href={'/app/logout/'}>Log out</Link>
+				<Link href={'/app/api/auth/logout/'}>Log out</Link>
 				<p>or</p>
 				<Link href={'/app/api/users/me/delete/'}>Delete account</Link>
 			</section>
