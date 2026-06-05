@@ -1,41 +1,32 @@
-import { prisma } from '@/database/prisma/prisma';
-import { createSession } from '@/lib/session';
-import { cookies } from 'next/headers';
+import { createAndSetSession } from '@/lib/session';
 import * as bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
+import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
+import { getUserByEmail } from '@/database/users/getUser';
+import { parseBody } from '@/utils/body';
+import { AgentsSignInParametersSchema } from '@/schema/AgentsSignInParametersSchema';
+import { AgentsSignInParameters } from '@/types/AgentsSignInParameters';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
-		const body = await req.json();
-		if (body.email == null || body.password == null)
-			return NextResponse.json({ message: 'Error, fields not set' }, { status: 400 });
+		const body = await parseBody<AgentsSignInParameters>(req, AgentsSignInParametersSchema);
 
-		const row = await prisma.users.findFirst({
-			where: { mail: body.email },
-		});
-		if (row == null || row.password == null)
-			return NextResponse.json({ message: 'Error, agent account not found ' }, { status: 404 });
+		const user = await getUserByEmail(body.mail);
 
-		const result = await bcrypt.compare(body.password, row.password);
-		if (!result) return NextResponse.json({ message: 'Error, password not good' }, { status: 400 });
+		if (user == null) return apiError(ERRORS_DETAILS.invalid_mail_password(), 401);
+		if (user.password == null) return apiError(ERRORS_DETAILS.password_not_set(), 400);
 
-		const session = await createSession({
-			user_id: row.id,
-			is_agent: row.is_agent,
-			is_agent_verified: row.is_agent_verified,
-		});
+		const password_ok = await bcrypt.compare(body.password, user.password);
+		if (!password_ok) return apiError(ERRORS_DETAILS.invalid_mail_password(), 401);
 
-		const cookieStore = await cookies();
-
-		cookieStore.set('session', session.body, {
-			httpOnly: true,
-			secure: true,
-			expires: session.expirationDate,
-			sameSite: 'lax',
-			path: '/',
+		await createAndSetSession({
+			user_id: user.id,
+			is_agent: user.is_agent,
+			is_agent_verified: user.is_agent_verified,
 		});
 	} catch (error: unknown) {
-		return NextResponse.json({ message: error instanceof Error ? error.message : 'Unknown type' }, { status: 500 });
+		if (typeof error === 'string') return apiError(error, 400);
+		return serverError(error);
 	}
-	return NextResponse.json({ message: 'Succeed to sign in account' }, { status: 200 });
+	return NextResponse.json({ success: true }, { status: 200 });
 }

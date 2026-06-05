@@ -1,54 +1,28 @@
 import { createUserAgent } from '@/database/users/createUser';
 import { isAccountExistByMail } from '@/database/users/isAccountExist';
-import { createSession } from '@/lib/session';
-import { SignupFormSchema } from '@/schema/SignupForm';
-import { cookies } from 'next/headers';
+import { createAndSetSession } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
+import { parseBody } from '@/utils/body';
+import { AgentsSignUpParametersSchema } from '@/schema/AgentsSignUpParametersSchema';
+import { AgentsSignUpParameters } from '@/types/AgentsSignUpParameters';
+import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
-		const body = await req.json();
-		const fields = SignupFormSchema.safeParse({
-			email: body.email,
-			password: body.password,
-			passwordCheck: body.passwordCheck,
-		});
+		const body = await parseBody<AgentsSignUpParameters>(req, AgentsSignUpParametersSchema);
 
-		if (!fields.success)
-			return NextResponse.json(
-				{
-					message: fields.error.issues[0].message,
-				},
-				{ status: 400 }
-			);
+		if (await isAccountExistByMail(body.mail)) return apiError(ERRORS_DETAILS.account_already_exists());
 
-		const exist = await isAccountExistByMail(fields.data.email);
-		if (exist) return NextResponse.json({ message: 'This account already exist.' }, { status: 400 });
+		const user = await createUserAgent(body.mail, body.password);
 
-		const user = await createUserAgent(fields.data.email, fields.data.password);
-
-		const session = await createSession({
+		await createAndSetSession({
 			user_id: user.id,
 			is_agent: user.is_agent,
 			is_agent_verified: user.is_agent_verified,
 		});
-
-		const cookieStore = await cookies();
-
-		cookieStore.set('session', session.body, {
-			httpOnly: true,
-			secure: true,
-			expires: session.expirationDate,
-			sameSite: 'lax',
-			path: '/',
-		});
 	} catch (error: unknown) {
-		console.error(error);
-		return NextResponse.json(`Failed to signup account. Try again :(`, {
-			status: 500,
-		});
+		if (typeof error === 'string') return apiError(error, 400);
+		return serverError(error);
 	}
-	return NextResponse.json(`Succeed to sign up account`, {
-		status: 200,
-	});
+	return NextResponse.json({ success: true });
 }

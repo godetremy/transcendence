@@ -1,13 +1,9 @@
+import { Prisma } from '../prisma/generated/client';
 import { prisma } from '@/database/prisma/prisma';
-import { User } from '@/types/bde/User';
+import { User } from '@/types/User';
 import { JWTSessionPayload } from '@/types/session/SessionPayload';
 
-export async function getUserFromSession(session: JWTSessionPayload): Promise<User | null> {
-	return getUserById(session.user_id);
-}
-import { Prisma } from '../prisma/generated/client';
-
-export async function getUserById(id: string): Promise<User | null> {
+async function getUserById(id: string): Promise<User | null> {
 	const row = await prisma.users.findUnique({
 		where: {
 			id: id,
@@ -23,7 +19,17 @@ export async function getUserById(id: string): Promise<User | null> {
 	return null;
 }
 
-export function UserFormatting(row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User | null {
+async function getUserFromSession(session: JWTSessionPayload): Promise<User | null> {
+	return getUserById(session.user_id);
+}
+
+async function getUserByEmail(email: string): Promise<Prisma.usersGetPayload<object> | null> {
+	return prisma.users.findFirst({
+		where: { mail: email },
+	});
+}
+
+function UserFormatting(row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User | null {
 	return {
 		id: row.id,
 		mail: row.mail,
@@ -39,3 +45,5 @@ export function UserFormatting(row: Prisma.usersGetPayload<{ include: { membersh
 		memberships: row.memberships,
 	};
 }
+
+export { getUserById, getUserFromSession, getUserByEmail, UserFormatting };
