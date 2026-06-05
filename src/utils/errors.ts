@@ -10,6 +10,7 @@ const ERRORS_DETAILS = {
 	invalid_mail_password: () => 'Invalid email or password',
 	password_not_set: () => "It's look like your password is not set. Are you a student ?",
 	account_already_exists: () => 'This account already exists.',
+	account_does_not_exists: () => 'This account does not exists.',
 };
 
 const apiError = (message?: string, status?: number): NextResponse => {
