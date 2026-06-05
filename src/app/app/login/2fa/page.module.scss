@@ -1,0 +1,33 @@
+@use '../../../supports';
+
+:global(section.content) {
+	height: 100%;
+	justify-content: flex-start;
+
+	form {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		.test {
+			margin-top: auto;
+		}
+	}
+}
+
+.inputs {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	gap: 10px;
+}
+
+@media (max-width: supports.$breakpoints-desktop) {
+	.content {
+		form {
+			flex: 1;
+			.inputs {
+			}
+		}
+	}
+}
