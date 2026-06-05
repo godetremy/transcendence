@@ -1,64 +1,56 @@
-import { getUserById } from '@/database/users/getUser';
 import { decrypt } from '@/lib/session';
-import { isAccountExist } from '@/database/users/isAccountExist';
+import { getUserById } from '@/database/User';
 import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/database/prisma/prisma';
-import { UserFormSchema } from '@/schema/UserForm';
+import { UserUpdateParametersSchema } from '@/schema/UserUpdateParametersSchema';
+import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
+import formatUser from '@/database/format/User';
+import { parseBody } from '@/utils/body';
+import { UserUpdateParameters } from '@/types/UserUpdateParameters';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {
 		const session = await decrypt(req.cookies.get('session')?.value);
-		const value = await getUserById(session.user_id);
-		return NextResponse.json(value);
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse(`Failed to login. Please try again later.`, {
-			status: 500,
-		});
+
+		const user = await getUserById(session.user_id, { memberships: true });
+		if (user === null) return apiError(ERRORS_DETAILS.account_does_not_exists(), 404);
+		const formated_user = formatUser(user);
+
+		return NextResponse.json(formated_user);
+	} catch (err: unknown) {
+		return serverError(err);
 	}
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
-		const body = await req.json();
-		const fields = UserFormSchema.safeParse({
-			mail: body.mail == null ? null : body.mail,
-			first_name: body.first_name == null ? null : body.first_name,
-			last_name: body.last_name == null ? null : body.last_name,
-			full_name: body.full_name == null ? null : body.full_name,
-			reason: body.reason == null ? null : body.reason,
-			profile_picture: body.profile_picture == null ? null : body.profile_picture,
-		});
-
-		if (fields.data == null)
-			return new NextResponse(`Error fields is null.`, {
-				status: 404,
-			});
-
 		const session = await decrypt(req.cookies.get('session')?.value);
-		const status = await isAccountExist(session.user_id);
-
-		if (!status)
-			return new NextResponse(`The account does not exist.`, {
-				status: 400,
-			});
+		const body = await parseBody<UserUpdateParameters>(req, UserUpdateParametersSchema);
 
 		await prisma.users.update({
 			where: { id: session.user_id },
 			data: {
-				...(fields.data.mail && { mail: fields.data.mail }),
-				...(fields.data.first_name && { first_name: fields.data.first_name }),
-				...(fields.data.last_name && { last_name: fields.data.last_name }),
-				...(fields.data.full_name && { full_name: fields.data.full_name }),
-				...(fields.data.reason && { reason: fields.data.reason }),
-				...(fields.data.profile_picture && { profile_picture: fields.data.profile_picture }),
+				...(body.mail && { mail: body.mail }),
+				...(body.first_name && { first_name: body.first_name }),
+				...(body.last_name && { last_name: body.last_name }),
+				...(body.full_name && { full_name: body.full_name }),
+				...(body.reason && { reason: body.reason }),
+				...(body.profile_picture && { profile_picture: body.profile_picture }),
 			},
 		});
+
 		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse(`Failed to set name for agent. Please try again later.`, {
-			status: 500,
-		});
+	} catch (err: unknown) {
+		if (typeof err === 'string') return apiError(err, 400);
+		if (err instanceof PrismaClientKnownRequestError) {
+			switch (err.code) {
+				case 'P2025':
+					return apiError(ERRORS_DETAILS.account_does_not_exists(), 404);
+				case 'P2002':
+					return apiError(ERRORS_DETAILS.account_exist_with_mail(), 400);
+			}
+		}
+		return serverError(err);
 	}
 }

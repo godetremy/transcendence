@@ -11,6 +11,7 @@ const ERRORS_DETAILS = {
 	password_not_set: () => "It's look like your password is not set. Are you a student ?",
 	account_already_exists: () => 'This account already exists.',
 	account_does_not_exists: () => 'This account does not exists.',
+	account_exist_with_mail: () => 'An account is already linked to this email address.',
 };
 
 const apiError = (message?: string, status?: number): NextResponse => {
