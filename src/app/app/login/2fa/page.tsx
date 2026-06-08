@@ -6,14 +6,14 @@ import { useState } from 'react';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 
-function frontCounterValue() {
-	return console.log('hello');
-}
-
 function Page() {
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
+	const [counter, setCounter] = useState(20);
+	function frontCounterValue() {
+		setCounter(counter - 1);
+	}
 
 	return (
 		<LoginTemplate
@@ -30,7 +30,9 @@ function Page() {
 			<form>
 				<div className={styles.inputs}></div>
 				<div className={styles.test}>
-					<Sublinks links={[{ text: 'Renvoyer un code (20sec)', onClick: () => frontCounterValue() }]} />
+					<Sublinks
+						links={[{ text: `Renvoyer un code (${counter}sec)`, onClick: () => frontCounterValue() }]}
+					/>
 				</div>
 			</form>
 		</LoginTemplate>
