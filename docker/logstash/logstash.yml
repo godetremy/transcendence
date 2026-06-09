@@ -9,7 +9,6 @@ pipeline.ecs_compatibility: v1
 
 log.level: info
 
-# Stack Monitoring: ship Logstash metrics to Elasticsearch
 xpack.monitoring.enabled: true
 xpack.monitoring.elasticsearch.hosts: ['https://elasticsearch:9200']
 xpack.monitoring.elasticsearch.username: '${LOGSTASH_USERNAME}'

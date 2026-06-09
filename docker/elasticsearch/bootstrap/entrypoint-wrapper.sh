@@ -1,7 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# shellcheck source=/opt/wait-utils.sh
 source /opt/wait-utils.sh
 
 bash /scripts/00-generate-certs.sh
@@ -10,7 +9,6 @@ chown -R 1000:0 /usr/share/elasticsearch/data /usr/share/elasticsearch/config/ce
 su elasticsearch -s /bin/bash -c 'export PATH="/usr/share/elasticsearch/bin:$PATH" && /usr/local/bin/docker-entrypoint.sh elasticsearch' &
 ES_PID=$!
 
-# ES needs to be up before we run the retention/bootstrap scripts
 wait_for_http "https://127.0.0.1:9200/_cluster/health" 120 200 \
 	-k -u "${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
 

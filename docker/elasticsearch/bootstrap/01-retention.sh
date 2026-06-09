@@ -24,7 +24,6 @@ es_api() {
 	fi
 }
 
-# Same as es_api but ignores 400 errors (useful for idempotent index creation)
 es_api_ignore_400() {
 	method="$1"
 	path="$2"
@@ -51,32 +50,26 @@ es_api_ignore_400() {
 	fi
 }
 
-# 1. Set kibana_system password
 es_api POST "/_security/user/kibana_system/_password" \
 	"{\"password\":\"${KIBANA_SYSTEM_PASSWORD}\"}" \
 	"Configuring kibana_system password"
 
-# 2. Create ILM policy with rollover
 es_api PUT "/_ilm/policy/logs-policy" \
 	"$(cat /scripts/policies/logs-policy.json)" \
 	"Creating ILM policy for logs"
 
-# 3. Create index template for the transcendence alias
 es_api PUT "/_index_template/transcendence-template" \
 	"$(cat /scripts/templates/transcendence-template.json)" \
 	"Creating index template for transcendence"
 
-# 4. Bootstrap the first write index for the alias
 es_api_ignore_400 PUT "/transcendence-000001" \
 	"$(cat /scripts/bootstrap/transcendence-alias.json)" \
 	"Bootstrapping first transcendence index"
 
-# 5. Create index template for elastic-stack-logs (ES / Kibana / Logstash logs)
 es_api PUT "/_index_template/elastic-stack-logs-template" \
 	"$(cat /scripts/templates/elastic-stack-logs-template.json)" \
 	"Creating index template for elastic-stack-logs"
 
-# 6. Bootstrap the first write index for elastic-stack-logs
 es_api_ignore_400 PUT "/elastic-stack-logs-000001" \
 	"$(cat /scripts/bootstrap/elastic-stack-logs-alias.json)" \
 	"Bootstrapping first elastic-stack-logs index"

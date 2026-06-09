@@ -32,7 +32,6 @@ gen_service_cert() {
 
 	echo "Generating certificate for ${name}..."
 
-	# Build OpenSSL config file with proper SAN entries
 	cat > "${cnf}" <<EOF
 [req]
 distinguished_name = req_distinguished_name
@@ -65,7 +64,6 @@ EOF
 		esac
 	done
 
-	# Generate key in traditional RSA format, then convert to PKCS#8 for Java clients
 	openssl genrsa -out "${key}.rsa" 4096
 	openssl pkcs8 -topk8 -nocrypt -in "${key}.rsa" -out "${key}"
 	rm -f "${key}.rsa"
@@ -80,21 +78,16 @@ EOF
 	chmod 644 "${crt}"
 }
 
-# Generate per-service certificates
 gen_service_cert "elasticsearch" "DNS:elasticsearch" "DNS:localhost" "IP:127.0.0.1"
 gen_service_cert "kibana" "DNS:kibana" "DNS:localhost" "IP:127.0.0.1"
 gen_service_cert "logstash" "DNS:logstash" "DNS:localhost" "IP:127.0.0.1"
 gen_service_cert "filebeat" "DNS:filebeat" "DNS:localhost" "IP:127.0.0.1"
 
-# Backward-compatible PKCS#12 keystore for ES itself
 openssl pkcs12 -export \
 	-in "${CERTS_DIR}/elasticsearch.crt" -inkey "${CERTS_DIR}/elasticsearch.key" \
 	-certfile "${CA_CRT}" -out "${CERTS_DIR}/elastic-certificates.p12" \
 	-passout pass:"${CERT_PASSWORD}" -name "elastic"
 
-# Elasticsearch official image runs as UID 1000 (user elasticsearch).
-# GID 0 (root) is used so the container runtime can still read certs
-# when securityContext or user directives vary between environments.
 chown -R 1000:0 "${CERTS_DIR}"
 
 echo "Certificate generation complete."

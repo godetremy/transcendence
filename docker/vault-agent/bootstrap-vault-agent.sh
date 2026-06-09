@@ -1,7 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# shellcheck source=/opt/wait-utils.sh
 source /opt/wait-utils.sh
 
 umask 077
@@ -21,7 +20,6 @@ echo "Initializing Vault Agent..."
 
 wait_for_vault
 
-# Determine Vault status
 init_status=$(vault status -address="${VAULT_ADDR}" -format=json 2>/dev/null | tr ',' '\n' | grep '"initialized"' | cut -d':' -f2 | tr -d ' \n' || true)
 
 if [ "${init_status}" = "false" ]; then

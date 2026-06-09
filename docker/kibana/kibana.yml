@@ -15,7 +15,6 @@ elasticsearch.hosts: ['https://elasticsearch:9200']
 elasticsearch.username: ${KIBANA_SYSTEM_USERNAME}
 elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
 
-# mTLS to Elasticsearch
 elasticsearch.ssl.certificateAuthorities: ['/usr/share/kibana/config/certs/ca.crt']
 elasticsearch.ssl.certificate: /usr/share/kibana/config/certs/kibana.crt
 elasticsearch.ssl.key: /usr/share/kibana/config/certs/kibana.key

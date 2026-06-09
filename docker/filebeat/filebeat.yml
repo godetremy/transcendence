@@ -167,12 +167,10 @@ output.logstash:
     ssl.certificate: '/usr/share/filebeat/config/certs/filebeat.crt'
     ssl.key: '/usr/share/filebeat/config/certs/filebeat.key'
 
-# Expose monitoring API for Telegraf
 http.enabled: true
 http.host: 0.0.0.0
 http.port: 5066
 
-# Memory queue tuning for high throughput
 queue.mem:
     events: 4096
     flush.min_events: 512
@@ -180,8 +178,6 @@ queue.mem:
 
 max_procs: 1
 
-# send metrics to ES so kibana shows us in stack monitoring
-# (logs still go through logstash — this is just for beat self-monitoring)
 monitoring:
     enabled: true
     elasticsearch:

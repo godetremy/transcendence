@@ -50,7 +50,6 @@ http {
 
 	${NGINX_SSL_REDIRECT}
 
-	# Kibana — kibana.localhost (with optional port)
 	server {
 		listen ${NGINX_PORT};
 		${NGINX_SSL_CERT}
@@ -66,10 +65,8 @@ http {
 		add_header X-XSS-Protection "1; mode=block" always;
 		add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
-		# Disable ModSecurity for Kibana internal security API to avoid
-		# false positives on login JSON payloads containing URL-encoded values
 		location /internal/security/ {
-			modsecurity off;
+			modsecurity on;
 			proxy_pass https://kibana_backend/internal/security/;
 			proxy_ssl_verify off;
 			proxy_http_version 1.1;
@@ -92,7 +89,6 @@ http {
 		}
 	}
 
-	# Vault — vault.localhost (with optional port)
 	server {
 		listen ${NGINX_PORT};
 		${NGINX_SSL_CERT}
@@ -118,7 +114,6 @@ http {
 		}
 	}
 
-	# Main app — localhost / app.localhost / 127.0.0.1 (catch-all)
 	server {
 		listen ${NGINX_PORT} default_server;
 		${NGINX_SSL_CERT}
@@ -191,7 +186,6 @@ http {
 		}
 	}
 
-	# Internal healthcheck & metrics server (always on 8081)
 	server {
 		listen 8081;
 		server_name _;
