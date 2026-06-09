@@ -16,7 +16,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		};
 
 		const total = await countUsersByFilter(db_filter);
-		const list = await getUsersByFilter(db_filter, {});
+		const list = await getUsersByFilter(db_filter, {}, pagination);
 
 		return NextResponse.json(generatePaginationResponse(list.map(formatPublicUser), total, pagination));
 	} catch (err: unknown) {
