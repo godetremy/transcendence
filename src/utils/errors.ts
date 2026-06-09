@@ -28,7 +28,7 @@ const apiError = (message?: string, status?: number): NextResponse => {
 
 const serverError = (error: unknown, status?: number): NextResponse => {
 	console.error(error);
-	return NextResponse.json({ success: false, message: ERRORS_DETAILS.internal_error }, { status: status ?? 500 });
+	return NextResponse.json({ success: false, message: ERRORS_DETAILS.internal_error() }, { status: status ?? 500 });
 };
 
 export { apiError, serverError, ERRORS_DETAILS };
