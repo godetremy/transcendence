@@ -13,6 +13,7 @@ const ERRORS_DETAILS = {
 	account_does_not_exists: () => 'This account does not exists.',
 	account_exist_with_mail: () => 'An account is already linked to this email address.',
 	account_unsupported_action: () => 'This action is unsupported for this account',
+	permission_denied: () => 'You do not have permission to perform this action.',
 };
 
 const apiError = (message?: string, status?: number): NextResponse => {

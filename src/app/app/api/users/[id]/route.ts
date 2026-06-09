@@ -1,21 +1,26 @@
-import { decrypt } from '@/lib/session';
+import { decrypt, parseUserId } from '@/lib/session';
 import { getUserById } from '@/database/User';
 import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/database/prisma/prisma';
 import { UserUpdateParametersSchema } from '@/schema/UserUpdateParametersSchema';
 import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
-import { formatPublicUser } from '@/database/format/User';
+import { formatPrivateUser, formatPublicUser } from '@/database/format/User';
 import { parseBody } from '@/utils/body';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { PublicUser, User } from '@/types/User';
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
 	try {
+		const { id } = await params;
 		const session = await decrypt(req.cookies.get('session')?.value);
+		const user_id = parseUserId(id, session);
 
-		const user = await getUserById(session.user_id, { memberships: true });
+		const user = await getUserById(user_id.id, { memberships: true });
 		if (user === null) return apiError(ERRORS_DETAILS.account_does_not_exists(), 404);
-		const formated_user = formatPublicUser(user);
+		const formated_user: User | PublicUser = user_id.is_me
+			? formatPrivateUser<{ memberships: true }>(user)
+			: formatPublicUser(user);
 
 		return NextResponse.json(formated_user);
 	} catch (err: unknown) {
@@ -23,10 +28,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 	}
 }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
 	try {
+		const { id } = await params;
 		const session = await decrypt(req.cookies.get('session')?.value);
 		const body = await parseBody<UserUpdateParameters>(req, UserUpdateParametersSchema);
+		const user_id = parseUserId(id, session);
+
+		if (!user_id.is_me) return apiError(ERRORS_DETAILS.permission_denied(), 401);
 
 		await prisma.users.update({
 			where: { id: session.user_id },

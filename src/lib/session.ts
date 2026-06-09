@@ -70,4 +70,11 @@ const createAndSetSession = async (payload: SessionPayload): Promise<void> => {
 	await setSession(await createSession(payload));
 };
 
-export { encrypt, decrypt, createSession, setSession, unsetSession, createAndSetSession };
+const parseUserId = (id: string, session: JWTSessionPayload): { id: string; is_me: boolean } => {
+	if (id === 'me') {
+		return { id: session.user_id, is_me: true };
+	}
+	return { id: id, is_me: session.user_id === id };
+};
+
+export { encrypt, decrypt, createSession, setSession, unsetSession, createAndSetSession, parseUserId };
