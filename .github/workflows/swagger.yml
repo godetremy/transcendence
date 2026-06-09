@@ -42,3 +42,14 @@ jobs:
               uses: actions/upload-pages-artifact@v3
               with:
                 path: swagger
+
+    deploy:
+        needs: swagger
+        runs-on: ubuntu-latest
+
+        environment:
+            name: github-pages
+
+        steps:
+            - name: Deploy to GitHub Pages
+              uses: actions/deploy-pages@v4
