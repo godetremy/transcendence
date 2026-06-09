@@ -1,5 +1,5 @@
 'use client';
-import { User } from '@/types/bde/User';
+import { User } from '@/types/User';
 import { useEffect, useState } from 'react';
 
 function Card({ user, onResult }: { user: User; onResult: (msg: string) => void }) {
@@ -63,7 +63,7 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 
 async function approvedAgent(id: string, status: boolean, Onresult: (msg: string) => void) {
 	let statustostring = 'approve';
-	if (status == false) statustostring = 'reject';
+	if (!status) statustostring = 'reject';
 	const response = await fetch(`/app/api/auth/approval/${id}/${statustostring}/`, {
 		method: 'GET',
 		headers: {

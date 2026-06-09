@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@/types/bde/User';
+import { User } from '@/types/User';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -41,8 +41,8 @@ export default function Page() {
 						<p>id : {user.id}</p>
 						<p>is agent : {user.is_agent ? 'true' : 'false'}</p>
 						<p>memberships id : {user.memberships_id ?? '-'}</p>
-						<p>start at : {user.memberships?.start_at.toLocaleDateString() ?? '-'}</p>
-						<p>end at : {user.memberships?.end_at.toLocaleDateString() ?? '-'}</p>
+						<p>start at : {user.membership?.start_at.toLocaleDateString() ?? '-'}</p>
+						<p>end at : {user.membership?.end_at.toLocaleDateString() ?? '-'}</p>
 					</>
 				)}
 				<Link href={'/app/api/auth/logout/'}>Log out</Link>

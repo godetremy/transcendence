@@ -7,11 +7,6 @@ import { JWTSessionPayload } from '@/types/session/SessionPayload';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 
-interface UserInclude {
-	memberships?: boolean;
-	oauth_fortytwo?: boolean;
-}
-
 const createStudentUser = async (
 	me: FortyTwoCursusUserDetails,
 	authorization: FortyTwoOauthToken
@@ -121,10 +116,10 @@ const getUserById = async <T extends Prisma.usersInclude>(
 	});
 };
 
-const getUserFromSession = async (
+const getUserFromSession = async <T extends Prisma.usersInclude>(
 	session: JWTSessionPayload,
-	include: UserInclude = {}
-): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs> | null> => {
+	include: T
+): Promise<Prisma.usersGetPayload<{ include: T }> | null> => {
 	return getUserById(session.user_id, include);
 };
 
