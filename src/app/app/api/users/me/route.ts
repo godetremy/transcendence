@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/database/prisma/prisma';
 import { UserUpdateParametersSchema } from '@/schema/UserUpdateParametersSchema';
 import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
-import formatUser from '@/database/format/User';
+import { formatPublicUser } from '@/database/format/User';
 import { parseBody } from '@/utils/body';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 		const user = await getUserById(session.user_id, { memberships: true });
 		if (user === null) return apiError(ERRORS_DETAILS.account_does_not_exists(), 404);
-		const formated_user = formatUser(user);
+		const formated_user = formatPublicUser(user);
 
 		return NextResponse.json(formated_user);
 	} catch (err: unknown) {
