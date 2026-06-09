@@ -27,7 +27,7 @@ export default function Page() {
 			setError(fields.error.issues[0].message);
 			return;
 		}
-		const message = await fetch('/app/api/auth/agents/signin/', {
+		const message = await fetch('/app/api/auth/signin/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

@@ -1,11 +1,33 @@
 import { prisma } from '@/database/prisma/prisma';
 import { User } from '@/types/bde/User';
 import { JWTSessionPayload } from '@/types/session/SessionPayload';
+import { Prisma } from '../prisma/generated/client';
+import { decrypt } from '@/lib/session';
+import { cookies } from 'next/headers';
+
+export async function getMe(): Promise<User | null> {
+	try {
+		const cookieStore = await cookies();
+		const session = await decrypt(cookieStore.get('session')?.value);
+		const row = await prisma.users.findUnique({
+			where: {
+				id: session.user_id,
+			},
+			include: {
+				memberships: true,
+				oauth_fortytwo: true,
+			},
+		});
+		if (row != null) return UserFormatting(row);
+	} catch (error: unknown) {
+		console.error(error);
+	}
+	return null;
+}
 
 export async function getUserFromSession(session: JWTSessionPayload): Promise<User | null> {
 	return getUserById(session.user_id);
 }
-import { Prisma } from '../prisma/generated/client';
 
 export async function getUserById(id: string): Promise<User | null> {
 	const row = await prisma.users.findUnique({
@@ -23,7 +45,7 @@ export async function getUserById(id: string): Promise<User | null> {
 	return null;
 }
 
-export function UserFormatting(row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User | null {
+export function UserFormatting(row: Prisma.usersGetPayload<{ include: { memberships: true } }>): User {
 	return {
 		id: row.id,
 		mail: row.mail,

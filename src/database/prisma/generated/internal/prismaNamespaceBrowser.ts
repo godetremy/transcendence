@@ -53,6 +53,10 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   memberships: 'memberships',
   oauth_fortytwo: 'oauth_fortytwo',
+  registered_event: 'registered_event',
+  image_album: 'image_album',
+  image_report: 'image_report',
+  event: 'event',
   users: 'users'
 } as const
 
@@ -89,6 +93,52 @@ export const Oauth_fortytwoScalarFieldEnum = {
 } as const
 
 export type Oauth_fortytwoScalarFieldEnum = (typeof Oauth_fortytwoScalarFieldEnum)[keyof typeof Oauth_fortytwoScalarFieldEnum]
+
+
+export const Registered_eventScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  created_at: 'created_at',
+  registered_event_id: 'registered_event_id'
+} as const
+
+export type Registered_eventScalarFieldEnum = (typeof Registered_eventScalarFieldEnum)[keyof typeof Registered_eventScalarFieldEnum]
+
+
+export const Image_albumScalarFieldEnum = {
+  id: 'id',
+  upload_user_id: 'upload_user_id',
+  event_id: 'event_id',
+  image_path: 'image_path',
+  created_at: 'created_at'
+} as const
+
+export type Image_albumScalarFieldEnum = (typeof Image_albumScalarFieldEnum)[keyof typeof Image_albumScalarFieldEnum]
+
+
+export const Image_reportScalarFieldEnum = {
+  id: 'id',
+  image_album_id: 'image_album_id',
+  signaling_id: 'signaling_id',
+  reason: 'reason',
+  created_at: 'created_at'
+} as const
+
+export type Image_reportScalarFieldEnum = (typeof Image_reportScalarFieldEnum)[keyof typeof Image_reportScalarFieldEnum]
+
+
+export const EventScalarFieldEnum = {
+  id: 'id',
+  author_id: 'author_id',
+  title: 'title',
+  description: 'description',
+  max_inscription: 'max_inscription',
+  start_at: 'start_at',
+  end_at: 'end_at',
+  created_at: 'created_at'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const UsersScalarFieldEnum = {
@@ -128,10 +178,81 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const membershipsOrderByRelevanceFieldEnum = {
+  id: 'id'
+} as const
+
+export type membershipsOrderByRelevanceFieldEnum = (typeof membershipsOrderByRelevanceFieldEnum)[keyof typeof membershipsOrderByRelevanceFieldEnum]
+
+
 export const NullsOrder = {
   first: 'first',
   last: 'last'
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const oauth_fortytwoOrderByRelevanceFieldEnum = {
+  id: 'id',
+  access_token: 'access_token',
+  refresh_token: 'refresh_token'
+} as const
+
+export type oauth_fortytwoOrderByRelevanceFieldEnum = (typeof oauth_fortytwoOrderByRelevanceFieldEnum)[keyof typeof oauth_fortytwoOrderByRelevanceFieldEnum]
+
+
+export const registered_eventOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  registered_event_id: 'registered_event_id'
+} as const
+
+export type registered_eventOrderByRelevanceFieldEnum = (typeof registered_eventOrderByRelevanceFieldEnum)[keyof typeof registered_eventOrderByRelevanceFieldEnum]
+
+
+export const image_albumOrderByRelevanceFieldEnum = {
+  id: 'id',
+  upload_user_id: 'upload_user_id',
+  event_id: 'event_id',
+  image_path: 'image_path'
+} as const
+
+export type image_albumOrderByRelevanceFieldEnum = (typeof image_albumOrderByRelevanceFieldEnum)[keyof typeof image_albumOrderByRelevanceFieldEnum]
+
+
+export const image_reportOrderByRelevanceFieldEnum = {
+  id: 'id',
+  image_album_id: 'image_album_id',
+  signaling_id: 'signaling_id',
+  reason: 'reason'
+} as const
+
+export type image_reportOrderByRelevanceFieldEnum = (typeof image_reportOrderByRelevanceFieldEnum)[keyof typeof image_reportOrderByRelevanceFieldEnum]
+
+
+export const eventOrderByRelevanceFieldEnum = {
+  id: 'id',
+  author_id: 'author_id',
+  title: 'title',
+  description: 'description'
+} as const
+
+export type eventOrderByRelevanceFieldEnum = (typeof eventOrderByRelevanceFieldEnum)[keyof typeof eventOrderByRelevanceFieldEnum]
+
+
+export const usersOrderByRelevanceFieldEnum = {
+  id: 'id',
+  oauth_fortytwo_id: 'oauth_fortytwo_id',
+  memberships_id: 'memberships_id',
+  reason: 'reason',
+  mail: 'mail',
+  password: 'password',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  full_name: 'full_name',
+  profile_picture: 'profile_picture'
+} as const
+
+export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
 

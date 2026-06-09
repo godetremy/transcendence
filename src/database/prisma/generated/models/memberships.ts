@@ -174,6 +174,7 @@ export type membershipsOrderByWithRelationInput = {
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
   MemberUsers?: Prisma.usersOrderByRelationAggregateInput
+  _relevance?: Prisma.membershipsOrderByRelevanceInput
 }
 
 export type membershipsWhereUniqueInput = Prisma.AtLeast<{
@@ -248,6 +249,12 @@ export type membershipsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type membershipsOrderByRelevanceInput = {
+  fields: Prisma.membershipsOrderByRelevanceFieldEnum | Prisma.membershipsOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type membershipsCountOrderByAggregateInput = {
