@@ -24,12 +24,14 @@ export const EditEventSchema = z.object({
 		.string({ error: 'Please enter a valid string.' })
 		.min(0, { error: 'Please min size is 0' })
 		.max(20, { error: 'plaese max size is 20' })
-		.trim().nullable(),
+		.trim()
+		.nullable(),
 	description: z
 		.string({ error: 'Please enter a valid string.' })
 		.min(0, { error: 'Please min size is 0' })
 		.max(200, { error: 'plaese max size is 200' })
-		.trim().nullable(),
+		.trim()
+		.nullable(),
 	max_inscription: z.coerce
 		.number({ error: 'Please enter a valid number.' })
 		.min(0, { error: 'Please min size is 0' })

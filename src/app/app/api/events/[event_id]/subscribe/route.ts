@@ -18,7 +18,7 @@ export async function GET(
 			},
 			where: {
 				registered_event_id: event_id,
-			}
+			},
 		});
 
 		if (register != null && register[0] != null) {

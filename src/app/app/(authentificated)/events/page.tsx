@@ -203,7 +203,7 @@ function CardList({ search, event }: { search: SearchEvent; event: CreateEventTy
 }
 
 export default function Page() {
-	const [searched, setSearched] = useState<Boolean>(false);
+	const [searched, setSearched] = useState<boolean>(false);
 	const [searchValue, setSearchValue] = useState<SearchEvent>();
 
 	const [event, setEvent] = useState<CreateEventType>({

@@ -63,8 +63,8 @@ export async function PATCH(
 				title: fields.data.title,
 				description: fields.data.description,
 				max_inscription: fields.data.max_inscription,
-				...(fields.data.start_at && {start_at: fields.data.start_at}),
-				...(fields.data.end_at && {end_at: fields.data.end_at}),
+				...(fields.data.start_at && { start_at: fields.data.start_at }),
+				...(fields.data.end_at && { end_at: fields.data.end_at }),
 			},
 			include: {
 				author: {
@@ -83,4 +83,3 @@ export async function PATCH(
 		});
 	}
 }
-

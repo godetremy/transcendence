@@ -1,7 +1,7 @@
-import { prisma } from "@/database/prisma/prisma";
-import { decrypt } from "@/lib/session";
-import { access, rm } from "fs/promises";
-import { NextRequest, NextResponse } from "next/server";
+import { prisma } from '@/database/prisma/prisma';
+import { decrypt } from '@/lib/session';
+import { access, rm } from 'fs/promises';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function DELETE(
 	req: NextRequest,
