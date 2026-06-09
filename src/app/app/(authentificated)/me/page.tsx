@@ -77,7 +77,10 @@ export default function Page() {
 									{
 										text: 'Se déconnecter',
 										negative: true,
-										onClick: () => router.push('/app/api/auth/logout'),
+										onClick: () => {
+											closeModal();
+											router.push('/app/api/auth/logout');
+										},
 									},
 								],
 							});
