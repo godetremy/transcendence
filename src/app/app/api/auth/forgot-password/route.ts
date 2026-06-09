@@ -1,6 +1,8 @@
 import { isAccountExistByMail } from '@/database/users/isAccountExist';
-import { sendEmail } from '@/email/sendEmail';
+import { sendEmailCode } from '@/email/sendEmail';
+import { createEmailToken } from '@/lib/EmailToken';
 import { forgotPasswordForm } from '@/schema/ForgotPasswordForm';
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -31,15 +33,27 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			);
 		}
 
-		sendEmail(body.email);
+		sendEmailCode(body.email);
+
+		const Token = await createEmailToken({ email: field.data.email });
+
+		const cookieStore = await cookies();
+
+		cookieStore.set('EmailToken', Token.body, {
+			httpOnly: true,
+			secure: true,
+			expires: Token.expirationDate,
+			sameSite: 'lax',
+			path: '/',
+		});
 
 		return NextResponse.json(
-			{ message: `Success` },
+			{ message: `Success`, redirect: '/app/login/agents/forgot-password/claim-code' },
 			{
 				status: 200,
 			}
 		);
-	} catch (err) {
+	} catch (err: unknown) {
 		return NextResponse.json(
 			{ message: err },
 			{

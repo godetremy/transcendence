@@ -1,7 +1,8 @@
 import { random_code } from '@/database/numerous_code/random_code';
+import { prisma } from '@/database/prisma/prisma';
 import * as nodemailer from 'nodemailer';
 
-export async function sendEmail(adress: string) {
+export async function sendEmailCode(adress: string) {
 	const transporter = nodemailer.createTransport({
 		host: process.env.SMTP_HOST,
 		port: Number(process.env.SMTP_PORT),
@@ -19,5 +20,10 @@ export async function sendEmail(adress: string) {
 		to: adress,
 		subject: 'Code',
 		text: code,
+	});
+
+	await prisma.users.update({
+		where: { mail: adress },
+		data: { code: code },
 	});
 }

@@ -7,12 +7,14 @@ import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput
 import { LoginText } from '@/components/login/LoginText/LoginText';
 import { forgotPasswordForm } from '@/schema/ForgotPasswordForm';
 import { User2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
 	const [error, setError] = useState<string | null>(null);
+	const route = useRouter();
 
 	const getEmail = async (form: FormData) => {
 		const field = forgotPasswordForm.safeParse({
@@ -37,6 +39,7 @@ export default function Page() {
 		if (response.ok) {
 			const data = await response.json();
 			setError(data.message);
+			route.push(data.redirect);
 		}
 
 		return;
