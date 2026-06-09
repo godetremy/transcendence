@@ -146,11 +146,6 @@ body > .overlay {
 }
 
 @media (max-width: supports.$breakpoints-tablets) {
-	body {
-		overflow: hidden;
-		padding-left: 0;
-	}
-
 	.sidebar {
 		top: auto;
 		bottom: 0;

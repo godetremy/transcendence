@@ -1,17 +1,5 @@
-import { prisma } from '@/database/prisma/prisma';
 import { User } from '@/types/bde/User';
-import * as bcrypt from 'bcrypt';
 import { Prisma } from '@/database/prisma/generated/client';
-
-export async function getAgent(mail: string, password: string): Promise<User | null> {
-	const row = await prisma.users.findFirst({
-		where: { mail: mail },
-	});
-	if (row == null || row.password == null) return null;
-	const result = await bcrypt.compare(password, row.password);
-	if (result == true) return agentFormatting(row);
-	return null;
-}
 
 export function agentFormatting(row: Prisma.usersGetPayload<{ include: { memberships: false } }>): User {
 	return {

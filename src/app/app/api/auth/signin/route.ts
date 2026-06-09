@@ -1,6 +1,7 @@
-import { getAgent } from '@/database/users/getAgent';
+import { prisma } from '@/database/prisma/prisma';
 import { createSession } from '@/lib/session';
 import { cookies } from 'next/headers';
+import * as bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -8,12 +9,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const body = await req.json();
 		if (body.email == null || body.password == null)
 			return NextResponse.json({ message: 'Error, fields not set' }, { status: 400 });
-		const user = await getAgent(body.email, body.password);
-		if (user == null) return NextResponse.json({ message: 'Agent account not found' }, { status: 404 });
+
+		const row = await prisma.users.findFirst({
+			where: { mail: body.email },
+		});
+		if (row == null || row.password == null)
+			return NextResponse.json({ message: 'Error, agent account not found ' }, { status: 404 });
+
+		const result = await bcrypt.compare(body.password, row.password);
+		if (!result) return NextResponse.json({ message: 'Error, password not good' }, { status: 400 });
+
 		const session = await createSession({
-			user_id: user.id,
-			is_agent: user.is_agent,
-			is_agent_verified: user.is_agent_verified,
+			user_id: row.id,
+			is_agent: row.is_agent,
+			is_agent_verified: row.is_agent_verified,
 		});
 
 		const cookieStore = await cookies();
