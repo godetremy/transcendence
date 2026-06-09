@@ -11,8 +11,20 @@ function Page() {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
 	const [counter, setCounter] = useState(20);
-	function frontCounterValue() {
-		setCounter(counter - 1);
+	const [isRunning, setIsRunning] = useState(false);
+	function startCountDown() {
+		if (isRunning) return;
+		setIsRunning(true);
+		const interval = setInterval(() => {
+			setCounter((prev) => {
+				if (prev <= 0) {
+					clearInterval(interval);
+					setIsRunning(false);
+					return 20;
+				}
+				return prev - 1;
+			});
+		}, 1000);
 	}
 
 	return (
@@ -26,13 +38,11 @@ function Page() {
 				title={'verification identite'}
 				description={'Pour vérifier votre identité, nous avons envoyer un code à l’adresse tcy***@g***.c**'}
 			/>
-
 			<form>
 				<div className={styles.inputs}></div>
 				<div className={styles.test}>
-					<Sublinks
-						links={[{ text: `Renvoyer un code (${counter}sec)`, onClick: () => frontCounterValue() }]}
-					/>
+					<p> Code de vérification </p>
+					<Sublinks links={[{ text: `Renvoyer un code (${counter}s)`, onClick: () => startCountDown() }]} />
 				</div>
 			</form>
 		</LoginTemplate>
