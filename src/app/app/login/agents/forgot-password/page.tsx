@@ -1,11 +1,13 @@
 'use client';
-import './page.scss';
+import './page.module.scss';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
 import { User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { LoginText } from '@/components/login/LoginText/LoginText';
+import styles from '@/app/app/login/agents/forgot-password/[token]/page.module.scss';
+import { LoginForm } from '@/components/login/LoginForm/LoginForm';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -18,6 +20,7 @@ export default function Page() {
 				source: image.source,
 				alt: image.alt,
 			}}
+			contentClassName={styles.main_container}
 		>
 			<LoginText
 				title={"Verification d'identite"}
@@ -26,18 +29,18 @@ export default function Page() {
 				}
 			/>
 
-			<form>
-				<div className={'inputs'}>
+			<LoginForm
+				action={() => {}}
+				inputs={
 					<LoginTextInput
 						type={'email'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
-				</div>
-
-				<input type={'submit'} value={'Réinitialiser mon mot de passe'} />
-			</form>
+				}
+				submitText={'Réinitialiser mon mot de passe'}
+			/>
 		</LoginTemplate>
 	);
 }
