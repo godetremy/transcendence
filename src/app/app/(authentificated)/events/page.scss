@@ -1,0 +1,20 @@
+.container {
+	background-color: rgb(160, 0, 0);
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.dropzone {
+	background-color: rgb(33, 143, 0);
+	padding: 15px;
+}
+
+.search {
+	background-color: blue;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 15px;
+}

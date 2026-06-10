@@ -6,6 +6,7 @@
 generator client {
 	provider = "prisma-client"
 	output   = "generated/"
+	previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource bde {
@@ -31,6 +32,68 @@ model oauth_fortytwo {
 	MemberUsers		users[]
 }
 
+model registered_event {
+	id							String		@id @default(uuid())
+
+	user_id						String?
+	user						users?		@relation(fields: [user_id], references: [id])
+
+	created_at					DateTime	@default(now())
+
+	registered_event_id			String? 	@unique
+	event						event?		@relation(fields: [registered_event_id], references: [id])
+
+}
+
+model image_album {
+	id							String		@id @default(uuid())
+
+	upload_user_id				String?
+	user						users?		@relation(fields: [upload_user_id], references: [id])
+	
+	event_id					String? 	@unique
+	event						event?		@relation(fields: [event_id], references: [id])
+
+	image_path					String		@unique
+
+	image_report				image_report?
+
+	created_at					DateTime	@default(now())
+}
+
+model image_report {
+	id							String			@id @default(uuid())
+
+	image_album_id				String? 		@unique
+	image_album					image_album?	@relation(fields: [image_album_id], references: [id])
+
+	signaling_id				String
+	signaling					users			@relation(fields: [signaling_id], references: [id])
+
+	reason						String?
+
+	created_at					DateTime		@default(now())
+}
+
+model event {
+	id						String			@id @default(uuid())
+
+	author_id				String
+	author					users			@relation(fields: [author_id], references: [id])
+
+	registered				registered_event?
+	image_album				image_album?
+
+	title					String?
+	description				String?
+
+	max_inscription			Int			@default(0)
+
+	start_at				DateTime	@default(now())
+	end_at					DateTime	@default(now())
+	created_at				DateTime	@default(now())
+}
+
 model users {
 	id					String				@id	@default(uuid())
 	
@@ -39,6 +102,11 @@ model users {
 	
 	memberships_id		String?
 	memberships			memberships?		@relation(fields: [memberships_id], references: [id])
+
+	events				event[]
+	image_album			image_album[]
+	registered_event	registered_event[]
+	image_report		image_report[]
 	
 	fortytwo_user_id	Int?				@unique
 

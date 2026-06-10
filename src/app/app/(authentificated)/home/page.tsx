@@ -3,6 +3,7 @@
 import { User } from '@/types/User';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
 
 export default function Page() {
 	const [user, setUser] = useState<User | null>(null);
@@ -30,6 +31,7 @@ export default function Page() {
 				</div>
 			</div>
 			<section className={'content'}>
+				<MembershipButton />
 				{user === null ? (
 					<p>Loading...</p>
 				) : (
