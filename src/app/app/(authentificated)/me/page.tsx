@@ -6,6 +6,7 @@ import { ListItem } from '@/components/globals/ListItem/ListItem';
 import { BadgeDollarSign, BookOpenText, FileLock, GitCommitVerticalIcon, Lock, LogOut, User2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
+import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
 
 export default function Page() {
 	const router = useRouter();
@@ -20,6 +21,7 @@ export default function Page() {
 				mail={user?.mail ?? 'Recharge la page pour te reconnecter'}
 				subscribed={false}
 			/>
+			<MembershipButton className={styles.card_button} />
 			<section className={styles.section}>
 				<div className={styles.list}>
 					<ListItem icon={User2} title={'Mon compte'} description={'Mail, mot de passe'} />
@@ -77,7 +79,7 @@ export default function Page() {
 									{
 										text: 'Se déconnecter',
 										negative: true,
-										onClick: () => router.push('/app/logout'),
+										onClick: () => router.push('/app/api/auth/logout'),
 									},
 								],
 							});

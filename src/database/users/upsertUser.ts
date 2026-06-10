@@ -1,8 +1,9 @@
 import { prisma } from '@/database/prisma/prisma';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
+import { User } from '@/types/bde/User';
 
-export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: FortyTwoOauthToken): Promise<string> {
+export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: FortyTwoOauthToken): Promise<User> {
 	const body = {
 		fortytwo_user_id: me.id,
 		mail: me.email,
@@ -41,5 +42,8 @@ export async function upsertUser(me: FortyTwoCursusUserDetails, authorization: F
 		},
 	});
 
-	return row.id;
+	return {
+		...row,
+		memberships: null,
+	};
 }
