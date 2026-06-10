@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/database/prisma/prisma';
 import { UserFormSchema } from '@/schema/UserForm';
+import { isAccountExist } from '@/database/users/isAccountExist';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {
@@ -39,12 +40,13 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 			return NextResponse.json(user);
 		}
 		return NextResponse.json(session);
-  } catch (error: unknown) {
+	} catch (error: unknown) {
 		console.error(error);
 		return new NextResponse(`Failed to set name for agent. Please try again later.`, {
 			status: 500,
 		});
 	}
+}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
