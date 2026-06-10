@@ -18,7 +18,7 @@ export default function Page() {
 
 	const signUp = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
-			email: form.get('email'),
+			mail: form.get('mail'),
 			password: form.get('password'),
 			passwordCheck: form.get('passwordCheck'),
 		});
@@ -33,7 +33,7 @@ export default function Page() {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				email: fields.data.email,
+				mail: fields.data.mail,
 				password: fields.data.password,
 				passwordCheck: fields.data.passwordCheck,
 			}),
@@ -55,8 +55,8 @@ export default function Page() {
 			<form action={signUp}>
 				<div className={'inputs'}>
 					<LoginTextInput
-						name={'email'}
-						type={'email'}
+						name={'mail'}
+						type={'mail'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}

@@ -29,7 +29,7 @@ export default function Page() {
 			<form>
 				<div className={'inputs'}>
 					<LoginTextInput
-						type={'email'}
+						type={'mail'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
