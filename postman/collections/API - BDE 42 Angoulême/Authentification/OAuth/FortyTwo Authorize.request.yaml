@@ -1,4 +1,5 @@
 $kind: http-request
+name: FortyTwo Authorize
 description: |-
   Handles the OAuth 2.0 authorization callback from the 42 API provider.
 
@@ -9,4 +10,16 @@ queryParams:
   - key: code
     value: fd60a3cf9217f91a7fef89ee9a12c49ffae584ea2b77d1298a2de0de7cca183f
     description: Required code from the 42 OAuth server
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      }
 order: 1000

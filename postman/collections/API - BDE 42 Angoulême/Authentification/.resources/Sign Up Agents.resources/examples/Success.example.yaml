@@ -18,7 +18,6 @@ response:
     Alt-Svc: h3=":443"; ma=2592000
     Content-Type: application/json
     Date: Wed, 10 Jun 2026 09:01:26 GMT
-    Set-Cookie: session=eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3ODEwODkyODYzNTIsImlhdCI6MTc4MTA4MjA4NiwiaXNzIjoiQkRFLTQyIiwidXNlcl9pZCI6IjE2M2NhMjk4LTEyM2MtNDhjNi1iMTk0LTMzNGIzY2Q0ZGZjMiIsImlzX2FnZW50Ijp0cnVlLCJpc19hZ2VudF92ZXJpZmllZCI6bnVsbH0.nxerLBHes-Ka9-ecVtaf5Z4TLFoRTDJ-AnSam9zwXsQ; Path=/; Expires=Wed, 10 Jun 2026 11:01:26 GMT; Secure; HttpOnly; SameSite=lax
     Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
     Via: 1.1 Caddy
     Transfer-Encoding: chunked

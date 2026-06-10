@@ -1,4 +1,5 @@
 $kind: http-request
+name: Sign Up Agents
 url: "{{baseUrl}}/auth/agents/signin"
 method: POST
 body:
@@ -6,9 +7,11 @@ body:
   content:
     - key: mail
       value: demo@bde.42angouleme.fr
-      description: Mail used by the agent to login
+      disabled: false
+      description: Mail to use by the agent to login
     - key: password
       value: Demo1234*
-      description: Password in clear of the agent
+      disabled: false
+      description: Password in clear for the agent
 examples: ./.resources/Sign Up Agents.resources/examples
 order: 3000

@@ -1,8 +1,34 @@
 $kind: http-request
+name: List pending request
 url: "{{baseUrl}}/users/approval/pending?page=1&limit=20"
 method: GET
 queryParams:
-  page: "1"
-  limit: "20"
+  - key: page
+    value: "1"
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "default": "1",
+            "minimum": "1"
+          }
+        }
+      }
+  - key: limit
+    value: "20"
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "maximum": "100",
+            "minimum": "0",
+            "default": "20"
+          }
+        }
+      }
 examples: ./.resources/List pending request.resources/examples
 order: 2000

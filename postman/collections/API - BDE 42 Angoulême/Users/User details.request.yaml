@@ -1,9 +1,24 @@
 $kind: http-request
+name: User details
 url: "{{baseUrl}}/users/:id"
 method: GET
 pathVariables:
   - key: id
     value: me
     description: Id of the user or `me` for the current logged in user
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "uuid",
+            "default": "me"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      }
 examples: ./.resources/User details.resources/examples
 order: 2000
