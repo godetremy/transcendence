@@ -1,0 +1,37 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:id"
+  method: GET
+  pathVariables:
+    - key: id
+      value: me
+      description: Id of the user or `me` for the current logged in user
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Alt-Svc: h3=":443"; ma=2592000
+    Content-Type: application/json
+    Date: Wed, 10 Jun 2026 09:35:24 GMT
+    Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+    Via: 1.1 Caddy
+    Transfer-Encoding: chunked
+  body:
+    type: json
+    content: |-
+      {
+          "id": "163ca298-123c-48c6-b194-334b3cd4dfc2",
+          "memberships_id": null,
+          "is_agent": true,
+          "reason": "Hey, i'm a developper of this services",
+          "mail": "demo@bde.42angouleme.fr",
+          "first_name": "Rémy",
+          "last_name": "Godet",
+          "full_name": "Rémy Godet",
+          "profile_picture": "/images/default_user.png",
+          "created_at": "2026-06-10T09:01:26.331Z",
+          "updated_at": "2026-06-10T09:01:26.331Z",
+          "memberships": null,
+          "membership": null
+      }
+order: 1000

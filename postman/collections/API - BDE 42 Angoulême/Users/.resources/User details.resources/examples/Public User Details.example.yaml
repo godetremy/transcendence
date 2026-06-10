@@ -1,0 +1,30 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:id"
+  method: GET
+  pathVariables:
+    - key: id
+      value: 38037cf5-6def-42d2-9606-ba7c757f87bf
+      description: Id of the user or `me` for the current logged in user
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Alt-Svc: h3=":443"; ma=2592000
+    Content-Type: application/json
+    Date: Wed, 10 Jun 2026 09:35:55 GMT
+    Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+    Via: 1.1 Caddy
+    Transfer-Encoding: chunked
+  body:
+    type: json
+    content: |-
+      {
+          "id": "38037cf5-6def-42d2-9606-ba7c757f87bf",
+          "first_name": "Rémy",
+          "last_name": "Godet",
+          "full_name": "Rémy Godet",
+          "profile_picture": "Rémy Godet",
+          "is_agent": false
+      }
+order: 2000

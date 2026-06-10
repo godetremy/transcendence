@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/agents/signin"
+method: POST
+body:
+  type: urlencoded
+  content:
+    - key: mail
+      value: demo@bde.42angouleme.fr
+      description: Mail used by the agent to login
+    - key: password
+      value: Demo1234*
+      description: Password in clear of the agent
+examples: ./.resources/Login Agents.resources/examples
+order: 2000

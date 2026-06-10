@@ -1,0 +1,12 @@
+$kind: http-request
+description: |-
+  Handles the OAuth 2.0 authorization callback from the 42 API provider.
+
+  After the user authenticates on the 42 platform, 42's OAuth server redirects back to this endpoint with a temporary authorization `code`. The backend exchanges this code for an access token and completes the login flow and redirecting the user to the application's main page upon success else get back to login page.
+url: "{{baseUrl}}/auth/oauth/fortytwo/authorize?code=fd60a3cf9217f91a7fef89ee9a12c49ffae584ea2b77d1298a2de0de7cca183f"
+method: GET
+queryParams:
+  - key: code
+    value: fd60a3cf9217f91a7fef89ee9a12c49ffae584ea2b77d1298a2de0de7cca183f
+    description: Required code from the 42 OAuth server
+order: 1000

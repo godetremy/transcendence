@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/users/approval/:id"
+method: PATCH
+pathVariables:
+  id: 38037cf5-6def-42d2-9606-ba7c757f87bf
+body:
+  type: json
+  content: |-
+    {
+        "approve": true
+    }
+examples: ./.resources/Approve or reject a user.resources/examples
+order: 1000

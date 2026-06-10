@@ -1,0 +1,5 @@
+$kind: http-request
+description: Logs out the currently authenticated user by clearing the server-side session, then redirects the user to the login page. If session does not exist, you will be redirected to the login page.
+url: "{{baseUrl}}/auth/logout"
+method: GET
+order: 4000

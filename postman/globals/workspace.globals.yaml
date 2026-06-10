@@ -1,0 +1,7 @@
+name: Globals
+values:
+  - key: baseUrl
+    value: 'https://localhost/app/api'
+    enabled: true
+    type: default
+    description: Base URL of the API server

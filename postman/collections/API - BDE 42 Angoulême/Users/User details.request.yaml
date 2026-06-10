@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{baseUrl}}/users/:id"
+method: GET
+pathVariables:
+  - key: id
+    value: me
+    description: Id of the user or `me` for the current logged in user
+examples: ./.resources/User details.resources/examples
+order: 2000

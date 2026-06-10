@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{baseUrl}}/users/approval/pending?page=1&limit=20"
+method: GET
+queryParams:
+  page: "1"
+  limit: "20"
+examples: ./.resources/List pending request.resources/examples
+order: 2000

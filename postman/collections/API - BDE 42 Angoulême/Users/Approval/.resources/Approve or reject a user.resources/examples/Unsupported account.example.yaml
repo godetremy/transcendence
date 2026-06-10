@@ -1,0 +1,30 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/approval/:id"
+  method: PATCH
+  pathVariables:
+    id: 38037cf5-6def-42d2-9606-ba7c757f87bf
+  body:
+    type: json
+    content: |-
+      {
+          "approve": true
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Alt-Svc: h3=":443"; ma=2592000
+    Content-Type: application/json
+    Date: Wed, 10 Jun 2026 09:24:23 GMT
+    Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+    Via: 1.1 Caddy
+    Transfer-Encoding: chunked
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "This action is unsupported for this account"
+      }
+order: 2000

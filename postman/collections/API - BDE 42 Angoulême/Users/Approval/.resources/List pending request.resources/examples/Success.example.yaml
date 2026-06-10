@@ -1,0 +1,33 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/approval/pending"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Alt-Svc: h3=":443"; ma=2592000
+    Content-Type: application/json
+    Date: Wed, 10 Jun 2026 09:32:49 GMT
+    Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+    Via: 1.1 Caddy
+    Transfer-Encoding: chunked
+  body:
+    type: json
+    content: |-
+      {
+          "data": [
+              {
+                  "id": "163ca298-123c-48c6-b194-334b3cd4dfc2",
+                  "first_name": "Rémy",
+                  "last_name": "Godet",
+                  "full_name": "Rémy Godet",
+                  "profile_picture": "Rémy Godet",
+                  "is_agent": true
+              }
+          ],
+          "page": 1,
+          "page_size": 20,
+          "total_pages": 1
+      }
+order: 1000
