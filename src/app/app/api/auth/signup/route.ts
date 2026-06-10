@@ -8,11 +8,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
 		const body = await req.json();
-
 		const fields = SignupFormSchema.safeParse({
-			email: body.mail,
+			email: body.email,
 			password: body.password,
-			passwordCheck: body.password,
+			passwordCheck: body.passwordCheck,
 		});
 
 		if (!fields.success)
@@ -23,12 +22,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 				{ status: 400 }
 			);
 
-		const exist = await isAccountExistByMail(body.mail);
+		const exist = await isAccountExistByMail(fields.data.email);
 		if (exist) return NextResponse.json({ message: 'This account already exist.' }, { status: 400 });
 
-		const user_id = await createUserAgent(body.password, body.mail);
+		const user = await createUserAgent(fields.data.email, fields.data.password);
 
-		const session = await createSession({ user_id });
+		const session = await createSession({
+			user_id: user.id,
+			is_agent: user.is_agent,
+			is_agent_verified: user.is_agent_verified,
+		});
 
 		const cookieStore = await cookies();
 
@@ -39,12 +42,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			sameSite: 'lax',
 			path: '/',
 		});
-
-		return NextResponse.json({ message: 'Account created !' }, { status: 201 });
 	} catch (error: unknown) {
 		console.error(error);
-		return new NextResponse(`Failed to create account. Try again :(`, {
+		return NextResponse.json(`Failed to signup account. Try again :(`, {
 			status: 500,
 		});
 	}
+	return NextResponse.json(`Succeed to sign up account`, {
+		status: 200,
+	});
 }

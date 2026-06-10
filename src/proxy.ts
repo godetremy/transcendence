@@ -43,6 +43,14 @@ export default async function proxy(req: NextRequest) {
 
 	if (session === null) return NextResponse.redirect(new URL('/app/login', req.nextUrl));
 
+	if (
+		session.is_agent == true &&
+		(session.is_agent_verified === null || session.is_agent_verified == false) &&
+		!req.nextUrl.pathname.startsWith('/app/agents/approval') &&
+		!req.nextUrl.pathname.startsWith('/app/api')
+	)
+		return NextResponse.redirect(new URL('/app/agents/approval', req.nextUrl));
+
 	return NextResponse.next();
 }
 

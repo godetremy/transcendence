@@ -3,6 +3,7 @@
 import { User } from '@/types/bde/User';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
 
 export default function Page() {
 	const [user, setUser] = useState<User | null>(null);
@@ -30,6 +31,7 @@ export default function Page() {
 				</div>
 			</div>
 			<section className={'content'}>
+				<MembershipButton />
 				{user === null ? (
 					<p>Loading...</p>
 				) : (
@@ -45,7 +47,7 @@ export default function Page() {
 						<p>end at : {user.memberships?.end_at.toLocaleDateString() ?? '-'}</p>
 					</>
 				)}
-				<Link href={'/app/logout/'}>Log out</Link>
+				<Link href={'/app/api/auth/logout/'}>Log out</Link>
 				<p>or</p>
 				<Link href={'/app/api/users/me/delete/'}>Delete account</Link>
 			</section>

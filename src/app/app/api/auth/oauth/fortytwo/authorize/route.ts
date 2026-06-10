@@ -14,8 +14,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 		const authorization = await getFortyTwoOauthToken(code);
 		const me = await getFortyTwoMe(authorization.access_token);
 
-		const user_id = await upsertUser(me, authorization);
-		const session = await createSession({ user_id });
+		const user = await upsertUser(me, authorization);
+		const session = await createSession({
+			user_id: user.id,
+			is_agent: user.is_agent,
+			is_agent_verified: user.is_agent_verified,
+		});
 
 		const cookieStore = await cookies();
 
@@ -27,7 +31,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 			path: '/',
 		});
 	} catch (err: unknown) {
-		console.log(err);
+		console.error(err);
 		return new NextResponse(`Failed to login. Please try again later.`, {
 			status: 500,
 		});
