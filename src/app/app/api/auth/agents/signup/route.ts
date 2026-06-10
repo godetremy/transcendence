@@ -10,7 +10,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	try {
 		const body = await parseBody<AgentsSignUpParameters>(req, AgentsSignUpParametersSchema);
 
-		if (await existUserByMail(body.mail)) return apiError(ERRORS_DETAILS.account_already_exists());
+		if (await existUserByMail(body.mail)) return apiError(ERRORS_DETAILS.account_already_exists(), 400);
 
 		const user = await createAgentsUser(body.mail, body.password);
 
