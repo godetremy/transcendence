@@ -36,12 +36,13 @@ function Page() {
 		>
 			<LoginText
 				title={'verification identite'}
-				description={'Pour vérifier votre identité, nous avons envoyer un code à l’adresse tcy***@g***.c**'}
+				description={'Pour vérifier votre identité, nous avons envoyer un code à l adresse tcy***@g***.c**'}
 			/>
 			<form>
 				<div className={styles.inputs}></div>
 				<div className={styles.test}>
-					<p> Code de vérification </p>
+					{/*<p> Code de vérification </p>*/}
+					{/*<input type={'number'} />*/}
 					<Sublinks links={[{ text: `Renvoyer un code (${counter}s)`, onClick: () => startCountDown() }]} />
 				</div>
 			</form>

@@ -6,8 +6,10 @@ import { useState } from 'react';
 import { User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { LoginText } from '@/components/login/LoginText/LoginText';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+	const router = useRouter();
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
@@ -36,7 +38,11 @@ export default function Page() {
 					/>
 				</div>
 
-				<input type={'submit'} value={'Réinitialiser mon mot de passe'} />
+				<input
+					type={'submit'}
+					value={'Réinitialiser mon mot de passe'}
+					onClick={() => router.push('app/login/agents/forgot-password/Code')}
+				/>
 			</form>
 		</LoginTemplate>
 	);

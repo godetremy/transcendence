@@ -1,5 +1,4 @@
-import './components.scss';
-import Link from 'next/link';
+import './component.module.scss';
 
 export interface SublinksProps {
 	links: Array<{

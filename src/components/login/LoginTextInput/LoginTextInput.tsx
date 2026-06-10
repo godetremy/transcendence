@@ -1,4 +1,4 @@
-import './components.scss';
+import './component.scss';
 import { DetailedHTMLProps, InputHTMLAttributes, JSX } from 'react';
 
 export interface LoginTextInputProps extends DetailedHTMLProps<

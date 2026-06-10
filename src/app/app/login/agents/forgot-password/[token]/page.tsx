@@ -39,8 +39,7 @@ export default function Page() {
 						placeholder={'••••••••••••'}
 					/>
 				</div>
-
-				<input type={'submit'} value={'Réinitialiser mon mot de passe'} />
+				<input type={'button'} value={'Réinitialiser mon mot de passe'} />
 			</form>
 		</LoginTemplate>
 	);
