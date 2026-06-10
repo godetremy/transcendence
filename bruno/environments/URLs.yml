@@ -1,0 +1,4 @@
+name: URLs
+variables:
+  - name: BaseURL
+    value: https://localhost/app/api
