@@ -1,4 +1,4 @@
-import './component.module.scss';
+import styles from './component.module.scss';
 
 export interface SublinksProps {
 	links: Array<{
@@ -10,7 +10,7 @@ export interface SublinksProps {
 
 export function Sublinks(props: SublinksProps) {
 	return (
-		<div className={'sublinks'}>
+		<div className={styles.sublinks}>
 			{props.links.map((link, index) => (
 				<a href={link.href} onClick={link.onClick} key={index}>
 					{link.text}

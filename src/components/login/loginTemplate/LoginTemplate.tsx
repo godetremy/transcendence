@@ -1,4 +1,4 @@
-import './components.scss';
+import styles from './component.module.scss';
 import Image from 'next/image';
 import { JSX } from 'react';
 
@@ -8,12 +8,17 @@ export interface LoginTemplateProps extends React.DetailedHTMLProps<React.HTMLAt
 
 export function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 	return (
-		<main>
-			<section className={'content'} {...props}>
+		<main className={styles.main}>
+			<section className={styles.content} {...props}>
 				{props.children}
 			</section>
-			<section className={'background'}>
-				<Image src={props.background.source} alt={props.background.alt} className={'background_img'} fill />
+			<section className={styles.background}>
+				<Image
+					src={props.background.source}
+					alt={props.background.alt}
+					className={styles.background_img}
+					fill
+				/>
 			</section>
 		</main>
 	);
