@@ -35,7 +35,7 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 
 	useEffect(() => {
 		const fetchusers = async () => {
-			const response = await fetch(`/app/api/auth/approval/list/?limit=10&page=0`, {
+			const response = await fetch(`/app/api/users/approval/pending/?limit=10&page=1`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -43,7 +43,8 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 			});
 			if (response.ok) {
 				const value = await response.json();
-				setUsers(value);
+				console.log(value);
+				setUsers(value.data);
 				return;
 			}
 			return;
@@ -64,7 +65,7 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 async function approvedAgent(id: string, status: boolean, Onresult: (msg: string) => void) {
 	let statustostring = 'approve';
 	if (!status) statustostring = 'reject';
-	const response = await fetch(`/app/api/auth/approval/${id}/${statustostring}/`, {
+	const response = await fetch(`/app/api/users/approval/${id}/pending/`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
