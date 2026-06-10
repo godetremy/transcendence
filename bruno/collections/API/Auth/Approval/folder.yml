@@ -1,0 +1,7 @@
+info:
+  name: Approval
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit

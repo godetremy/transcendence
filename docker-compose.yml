@@ -21,6 +21,10 @@ services:
             - ./docker/Caddyfile:/etc/caddy/Caddyfile
             - caddy_data:/data
             - caddy_config:/config
+        networks: 
+            - main
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
 volumes:
     postgres_data:
