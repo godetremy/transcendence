@@ -1,5 +1,5 @@
-import { SortingOption } from "@/types/SortingParameters";
-import { ERRORS_DETAILS } from "./errors";
+import { SortingOption } from '@/types/SortingParameters';
+import { ERRORS_DETAILS } from './errors';
 
 const DEFAULT_SORTINGOPTIONS: SortingOption[] = [];
 const DEFAULT_SORTINGOPTION: SortingOption = { id: '', sort: 'desc' };
@@ -10,7 +10,7 @@ const getSortingParams = (params: URLSearchParams): SortingOption[] => {
 	if (params.has('sort')) {
 		const sort = params.get('sort')!;
 
-		const fields = sort.split(',').map(s => s.trim());
+		const fields = sort.split(',').map((s) => s.trim());
 
 		for (const field of fields) {
 			const detail = field.split(' ');
@@ -27,32 +27,24 @@ const getSortingParams = (params: URLSearchParams): SortingOption[] => {
 };
 
 const matchBetweenTables = (sorting: SortingOption[], matchList: string[]): void => {
-	for (let rowSorting of sorting) {	
+	for (let rowSorting of sorting) {
 		const valueFind = matchList.find((e) => e == rowSorting.id);
-		if (valueFind == null)
-			throw (ERRORS_DETAILS.invalid_parameter(rowSorting.id));
+		if (valueFind == null) throw ERRORS_DETAILS.invalid_parameter(rowSorting.id);
 	}
-}
-
+};
 
 const sortingToPrisma = (sorting: SortingOption[], matchList: string[]) => {
 	if (matchList.length <= 0) return {};
 	matchBetweenTables(sorting, matchList);
-	let value: {[x: string]: string}[] = [];
+	let value: { [x: string]: string }[] = [];
 	for (const s of sorting) {
-		value.push({[s.id]: s.sort});
+		value.push({ [s.id]: s.sort });
 	}
-	if (value.length <= 0)
-		return null;
+	if (value.length <= 0) return null;
 	console.error(value);
 	return {
 		orderBy: value,
 	};
-}
+};
 
-
-export {
-	DEFAULT_SORTINGOPTIONS,
-	getSortingParams,
-	sortingToPrisma
-}
+export { DEFAULT_SORTINGOPTIONS, getSortingParams, sortingToPrisma };

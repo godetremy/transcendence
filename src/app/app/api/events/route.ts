@@ -2,38 +2,29 @@ import { getEventsByFilter } from '@/database/Event';
 import { EventFormatting } from '@/database/event/createEvent';
 import { prisma } from '@/database/prisma/prisma';
 import { decrypt } from '@/lib/session';
-import { ClubEventParamSchema, CreateEventSchema } from '@/schema/EventForm';
+import { ClubAndSubscribeEventParamSchema, CreateEventSchema } from '@/schema/EventForm';
 import { apiError, serverError } from '@/utils/errors';
 import { getDateParams } from '@/utils/date';
 import { getPaginationParams } from '@/utils/pagination';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
+import { parseParams } from '@/utils/parsing';
+import { ClubAndSubscribeEvent } from '@/types/Event';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {
 		const params = req.nextUrl.searchParams;
-		
+
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
 
-		const fields = ClubEventParamSchema.safeParse({
-			club: params.get('club'),
-			subscribe: params.get('subscribe'),
-		});
-
-		if (!fields.success) {
-			console.log(fields);
-			return new NextResponse(fields.error.message[0], {
-				status: 401,
-			});
-		}
-		
+		const data = parseParams<ClubAndSubscribeEvent>(params, ClubAndSubscribeEventParamSchema);
 		const date = getDateParams(params);
 		const sorting = getSortingParams(params);
 		const pagination = getPaginationParams(params);
-		
-		const value = await getEventsByFilter({...fields.data, user_id}, date, sorting, pagination);
-		
+
+		const value = await getEventsByFilter({ ...data, user_id }, date, sorting, pagination);
+
 		const events = await Promise.all(value.map(EventFormatting));
 		return NextResponse.json(events);
 	} catch (err: unknown) {
@@ -41,7 +32,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		return serverError(err);
 	}
 }
-
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
 	try {

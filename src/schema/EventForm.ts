@@ -40,23 +40,9 @@ export const EditEventSchema = z.object({
 	end_at: z.coerce.date({ error: 'Please enter a valid date.' }).nullable(),
 });
 
-export const SearchEventSchema = z.object({
-	from: z.coerce.date({ error: 'Please enter a valid date.' }),
-	to: z.coerce.date({ error: 'Please enter a valid date.' }),
-	limit: z.coerce.number({ error: 'Please entry a valid number.' }).default(20).nullable(),
-	page: z.coerce.number({ error: 'Please enter a valid number' }).default(0).nullable(),
-	search: z.coerce.string({ error: 'Please enter a valid string' }).nullable(),
-	subscribe: z.coerce.boolean({ error: 'Please enter a valid boolean' }).default(false).nullable(),
-	club: z.coerce.string({ error: 'Please enter a valid boolean' }).nullable(),
-});
-
-export const ClubEventParamSchema = z.object({
-	club: z.coerce.string({ error: 'Please enter a valid boolean' }).nullable(),
-	subscribe: z.coerce.boolean({ error: 'Please enter a valid boolean' }).default(false).nullable(),
-});
-
-export const SubscribeEventParamSchema = z.object({
-	subscribe: z.coerce.boolean({ error: 'Please enter a valid boolean' }).default(false).nullable(),
+export const ClubAndSubscribeEventParamSchema = z.object({
+	subscribe: z.coerce.boolean().default(false).nullable(),
+	club: z.coerce.string().nullable(),
 });
 
 export const DateEventParamSchema = z.object({

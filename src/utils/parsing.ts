@@ -43,7 +43,7 @@ const parseParams = <T>(param: URLSearchParams, schema: z.ZodObject): T => {
 
 	let tab: object = {};
 	for (const field of fields) {
-		tab = { ...tab, ...Object({[field]: param.get(field)})};
+		tab = { ...tab, ...Object({ [field]: param.get(field) }) };
 	}
 
 	const data = schema.safeParse(tab);
@@ -55,8 +55,8 @@ const parseParams = <T>(param: URLSearchParams, schema: z.ZodObject): T => {
 		if (error.code === 'invalid_type') throw ERRORS_DETAILS.missing_parameter(field);
 		throw ERRORS_DETAILS.invalid_parameter(field);
 	}
-		
+
 	return tab as T;
-}
+};
 
 export { parseBody, parseParams };
