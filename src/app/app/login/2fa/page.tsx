@@ -13,10 +13,12 @@ export default function Page() {
 	});
 
 	const [checking, setChecking] = useState(false);
+	const [error, setError] = useState('');
 
 	const checkCode = (code: string) => {
 		setChecking(true);
 		setTimeout(() => {
+			setError('Le code est invalide.');
 			setChecking(false);
 		}, 2000);
 	};
@@ -35,9 +37,12 @@ export default function Page() {
 			/>
 
 			<LoginForm
-				action={() => {}}
+				action={() => setError('Le code de vérification est incomplet.')}
 				inputs={<TwoFactorAuthentificationInput submit={checkCode} disable={checking} />}
-				submitText={'Valider'}
+				submitText={checking ? 'Vérification...' : 'Valider'}
+				submitDisabled={checking}
+				loading={checking}
+				error={error}
 			/>
 		</LoginTemplate>
 	);
