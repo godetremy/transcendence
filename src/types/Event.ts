@@ -23,7 +23,7 @@ export interface PublicEvent {
 	author: PublicUser;
 }
 
-export interface CreateEventType {
+export interface CreateOrUpdateEventType {
 	title: string;
 	description: string;
 	max_inscription: number;

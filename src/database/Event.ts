@@ -5,7 +5,7 @@ import { DEFAULT_SORTINGOPTIONS, sortingToPrisma } from '@/utils/sorting';
 import { SortingOption } from '@/types/SortingParameters';
 import { DateOption } from '@/types/DateParameters';
 import { DEFAULT_DATEOPTION, dateToPrisma } from '@/utils/date';
-import { AuthorEvent, CreateEventType, IdEvent } from '@/types/Event';
+import { AuthorEvent, CreateOrUpdateEventType } from '@/types/Event';
 import { Prisma } from './prisma/generated/client';
 
 const getEventsByFilter = async <T extends Prisma.eventInclude>(
@@ -33,13 +33,29 @@ const getEventsByFilter = async <T extends Prisma.eventInclude>(
 };
 
 const createEvent = async <T extends Prisma.eventInclude>(
-	data: CreateEventType,
+	data: CreateOrUpdateEventType,
 	author_id: string,
 	include: T
 ): Promise<void> => {
 	await prisma.event.create({
 		data: {
 			author_id: author_id,
+			...data,
+		},
+		include: include,
+	});
+};
+
+const UpdateEvent = async <T extends Prisma.eventInclude>(
+	data: CreateOrUpdateEventType,
+	event_id: string,
+	include: T
+): Promise<void> => {
+	await prisma.event.update({
+		where: {
+			id: event_id,
+		},
+		data: {
 			...data,
 		},
 		include: include,
@@ -67,4 +83,4 @@ const getEventById = async <T extends Prisma.eventInclude>(
 	});
 };
 
-export { getEventsByFilter, createEvent, deleteEventById, getEventById };
+export { getEventsByFilter, createEvent, deleteEventById, getEventById, UpdateEvent };

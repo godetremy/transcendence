@@ -7,7 +7,7 @@ import { getPaginationParams } from '@/utils/pagination';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseBody, parseParams } from '@/utils/parsing';
-import { ClubAndSubscribeEvent, CreateEventType, IdEvent } from '@/types/Event';
+import { ClubAndSubscribeEvent, CreateOrUpdateEventType, IdEvent } from '@/types/Event';
 import { EventFormatting } from '@/utils/formatting';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -39,7 +39,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 
 		const data = await parseBody<IdEvent>(req, IdEventParamSchema);
 
-		deleteEventById(data.event_id, { registered: true, image_album: true });
+		await deleteEventById(data.event_id, { registered: true, image_album: true });
 
 		return NextResponse.json({ success: true });
 	} catch (err: unknown) {
@@ -53,9 +53,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
-		const data = await parseBody<CreateEventType>(req, CreateEventSchema);
+		const data = await parseBody<CreateOrUpdateEventType>(req, CreateEventSchema);
 
-		createEvent(data, session.user_id, { author: true });
+		await createEvent(data, session.user_id, { author: true });
 
 		return NextResponse.json({ success: true });
 	} catch (err: unknown) {
