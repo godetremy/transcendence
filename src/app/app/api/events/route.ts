@@ -1,14 +1,13 @@
-import { getEventsByFilter } from '@/database/Event';
-import { prisma } from '@/database/prisma/prisma';
+import { createEvent, deleteEvent, getEventsByFilter } from '@/database/Event';
 import { decrypt } from '@/lib/session';
-import { ClubAndSubscribeEventParamSchema, CreateEventSchema } from '@/schema/EventForm';
+import { ClubAndSubscribeEventParamSchema, CreateEventSchema, IdEventParamSchema } from '@/schema/EventForm';
 import { apiError, serverError } from '@/utils/errors';
 import { getDateParams } from '@/utils/date';
 import { getPaginationParams } from '@/utils/pagination';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
-import { parseParams } from '@/utils/parsing';
-import { ClubAndSubscribeEvent } from '@/types/Event';
+import { parseBody, parseParams } from '@/utils/parsing';
+import { ClubAndSubscribeEvent, CreateEventType, IdEvent } from '@/types/Event';
 import { EventFormatting } from '@/utils/formatting';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -23,7 +22,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const sorting = getSortingParams(params);
 		const pagination = getPaginationParams(params);
 
-		const value = await getEventsByFilter({ ...data, user_id }, date, sorting, pagination);
+		const value = await getEventsByFilter({author: true}, { ...data, user_id }, date, sorting, pagination);
 
 		const events = await Promise.all(value.map(EventFormatting));
 		return NextResponse.json(events);
@@ -38,29 +37,14 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 		const cookie = req.cookies.get('session');
 		await decrypt(cookie?.value);
 
-		const body = await req.json();
+		const data = await parseBody<IdEvent>(req, IdEventParamSchema);
 
-		if (body.id == null)
-			return new NextResponse('Error, id not found.', {
-				status: 404,
-			});
-
-		await prisma.event.delete({
-			where: {
-				id: body.id,
-			},
-			include: {
-				registered: true,
-				image_album: true,
-			},
-		});
+		deleteEvent(data.event_id, {registered: true, image_album: true});
 
 		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to delete event.', {
-			status: 500,
-		});
+	} catch (err: unknown) {
+		if (typeof err === 'string') return apiError(err, 400);
+		return serverError(err);
 	}
 }
 
@@ -69,46 +53,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
-		const body = await req.json();
+		const data = await parseBody<CreateEventType>(req, CreateEventSchema);
 
-		const fields = CreateEventSchema.safeParse({
-			title: body.title,
-			description: body.description,
-			start_at: body.start_at,
-			end_at: body.end_at,
-			max_inscription: body.max_inscription,
-		});
-		if (!fields.success) {
-			console.error(fields.error.issues[0].message);
-			return new NextResponse(fields.error.issues[0].message, {
-				status: 401,
-			});
-		}
-
-		await prisma.event.create({
-			data: {
-				author_id: session.user_id,
-				title: fields.data.title,
-				description: fields.data.description,
-				max_inscription: fields.data.max_inscription,
-				start_at: fields.data.start_at,
-				end_at: fields.data.end_at,
-			},
-			include: {
-				author: {
-					include: {
-						memberships: true,
-					},
-				},
-				registered: true,
-			},
-		});
+		createEvent(data, session.user_id, {author: true});
 
 		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to create event.', {
-			status: 500,
-		});
+	} catch (err: unknown) {
+		if (typeof err === 'string') return apiError(err, 400);
+		return serverError(err);
 	}
 }

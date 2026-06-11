@@ -39,3 +39,7 @@ export interface ClubAndSubscribeEvent {
 export interface AuthorEvent extends ClubAndSubscribeEvent {
 	user_id: string;
 }
+
+export interface IdEvent {
+	event_id: string,
+}
