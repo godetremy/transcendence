@@ -27,8 +27,8 @@ const getEventsByFilter = async (
 				...(data.club ? { full_name: data.club } : {}),
 			},
 			...dateToPrisma(time ?? DEFAULT_DATEOPTION),
-			...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, []),
 		},
+		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 	return value;

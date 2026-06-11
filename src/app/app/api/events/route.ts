@@ -1,5 +1,4 @@
 import { getEventsByFilter } from '@/database/Event';
-import { EventFormatting } from '@/database/event/createEvent';
 import { prisma } from '@/database/prisma/prisma';
 import { decrypt } from '@/lib/session';
 import { ClubAndSubscribeEventParamSchema, CreateEventSchema } from '@/schema/EventForm';
@@ -10,6 +9,7 @@ import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseParams } from '@/utils/parsing';
 import { ClubAndSubscribeEvent } from '@/types/Event';
+import { EventFormatting } from '@/utils/formatting';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {

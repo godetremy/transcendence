@@ -1,5 +1,5 @@
 import { RegisteredEvent } from './RegisteredEvent';
-import { User } from './User';
+import { PublicUser, User } from './User';
 
 export interface PrivateEvent {
 	id: string;
@@ -20,6 +20,7 @@ export interface PublicEvent {
 	max_inscription: number;
 	start_at: Date;
 	end_at: Date;
+	author: PublicUser;
 }
 
 export interface CreateEventType {
