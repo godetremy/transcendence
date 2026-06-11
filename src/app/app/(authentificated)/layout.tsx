@@ -1,6 +1,6 @@
 import styles from './layout.module.scss';
 import { UserProvider } from '@/contexts/UserContext';
-import { getUserFromSession } from '@/database/users/getUser';
+import { getUserFromSession } from '@/database/User';
 import Sidebar from '@/components/globals/Sidebar/Sidebar';
 import { cookies } from 'next/headers';
 import { decrypt } from '@/lib/session';

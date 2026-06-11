@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
 import { getUserById, updateUserApproval } from '@/database/User';
 import { ApprovalParametersSchema } from '@/schema/ApprovalParametersSchema';
-import { parseBody } from '@/utils/body';
+import { parseBody } from '@/utils/parsing';
 import { ApprovalParameters } from '@/types/ApprovalParameters';
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {

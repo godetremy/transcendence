@@ -1,7 +1,7 @@
 import { createAgentsUser, existUserByMail } from '@/database/User';
 import { createAndSetSession } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
-import { parseBody } from '@/utils/body';
+import { parseBody } from '@/utils/parsing';
 import { AgentsSignUpParametersSchema } from '@/schema/AgentsSignUpParametersSchema';
 import { AgentsSignUpParameters } from '@/types/AgentsSignUpParameters';
 import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';

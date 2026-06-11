@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
 import { getUserByMail } from '@/database/User';
-import { parseBody } from '@/utils/body';
+import { parseBody } from '@/utils/parsing';
 import { AgentsSignInParametersSchema } from '@/schema/AgentsSignInParametersSchema';
 import { AgentsSignInParameters } from '@/types/AgentsSignInParameters';
 

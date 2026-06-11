@@ -49,3 +49,17 @@ export const SearchEventSchema = z.object({
 	subscribe: z.coerce.boolean({ error: 'Please enter a valid boolean' }).default(false).nullable(),
 	club: z.coerce.string({ error: 'Please enter a valid boolean' }).nullable(),
 });
+
+export const ClubEventParamSchema = z.object({
+	club: z.coerce.string({ error: 'Please enter a valid boolean' }).nullable(),
+	subscribe: z.coerce.boolean({ error: 'Please enter a valid boolean' }).default(false).nullable(),
+});
+
+export const SubscribeEventParamSchema = z.object({
+	subscribe: z.coerce.boolean({ error: 'Please enter a valid boolean' }).default(false).nullable(),
+});
+
+export const DateEventParamSchema = z.object({
+	from: z.coerce.date(),
+	to: z.coerce.date(),
+});

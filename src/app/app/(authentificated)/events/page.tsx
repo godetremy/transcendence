@@ -2,7 +2,7 @@
 
 import './page.scss';
 import { CreateEventSchema, SearchEventSchema } from '@/schema/EventForm';
-import { CreateEventType, Event, SearchEvent } from '@/types/bde/Event';
+import { CreateEventType, Event, SearchEvent } from '@/types/Event';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 

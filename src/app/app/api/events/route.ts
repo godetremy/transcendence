@@ -1,22 +1,24 @@
+import { getEventsByFilter } from '@/database/Event';
 import { EventFormatting } from '@/database/event/createEvent';
 import { prisma } from '@/database/prisma/prisma';
 import { decrypt } from '@/lib/session';
-import { CreateEventSchema, SearchEventSchema } from '@/schema/EventForm';
+import { ClubEventParamSchema, CreateEventSchema } from '@/schema/EventForm';
+import { apiError, serverError } from '@/utils/errors';
+import { getDateParams } from '@/utils/date';
+import { getPaginationParams } from '@/utils/pagination';
+import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {
+		const params = req.nextUrl.searchParams;
+		
 		const cookie = req.cookies.get('session');
-		const session = await decrypt(cookie?.value);
+		const user_id = (await decrypt(cookie?.value)).user_id;
 
-		const fields = SearchEventSchema.safeParse({
-			from: req.nextUrl.searchParams.get('from'),
-			to: req.nextUrl.searchParams.get('to'),
-			limit: req.nextUrl.searchParams.get('limit'),
-			search: req.nextUrl.searchParams.get('search'),
-			club: req.nextUrl.searchParams.get('club'),
-			subscribe: req.nextUrl.searchParams.get('subscribe'),
-			page: req.nextUrl.searchParams.get('page'),
+		const fields = ClubEventParamSchema.safeParse({
+			club: params.get('club'),
+			subscribe: params.get('subscribe'),
 		});
 
 		if (!fields.success) {
@@ -25,51 +27,21 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 				status: 401,
 			});
 		}
-		if (fields.data.limit == null) fields.data.limit = 20;
-		else fields.data.limit > 0 && fields.data.limit <= 20 ? {} : (fields.data.limit = 20);
-
-		const value = await prisma.event.findMany({
-			take: fields.data.limit,
-			include: {
-				author: {
-					include: { memberships: true },
-				},
-				registered: true,
-				image_album: true,
-			},
-			where: {
-				start_at: {
-					gte: fields.data.from,
-				},
-				end_at: {
-					lte: fields.data.to,
-				},
-				registered: {
-					...(fields.data.subscribe ? { user_id: session.user_id } : {}),
-				},
-				author: {
-					...(fields.data.club ? { full_name: fields.data.club } : {}),
-				},
-			},
-			orderBy: {
-				_relevance: {
-					fields: ['title'],
-					search: fields.data.search ? fields.data.search?.trim().split(/\s+/).join(' & ') : '',
-					sort: 'desc',
-				},
-			},
-			skip: fields.data.page == null ? 0 : fields.data.page * fields.data.limit,
-		});
-
+		
+		const date = getDateParams(params);
+		const sorting = getSortingParams(params);
+		const pagination = getPaginationParams(params);
+		
+		const value = await getEventsByFilter({...fields.data, user_id}, date, sorting, pagination);
+		
 		const events = await Promise.all(value.map(EventFormatting));
 		return NextResponse.json(events);
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to get list event.', {
-			status: 500,
-		});
+	} catch (err: unknown) {
+		if (typeof err === 'string') return apiError(err, 400);
+		return serverError(err);
 	}
 }
+
 
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
 	try {

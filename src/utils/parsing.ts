@@ -26,7 +26,6 @@ async function parseBody<T>(req: NextRequest, schema: z.ZodSchema): Promise<T> {
 		default:
 			throw ERRORS_DETAILS.unsupported_content_type();
 	}
-
 	const data = schema.safeParse(body);
 	if (!data.success) {
 		const error = data.error.issues[0];
@@ -39,4 +38,25 @@ async function parseBody<T>(req: NextRequest, schema: z.ZodSchema): Promise<T> {
 	return data.data as T;
 }
 
-export { parseBody };
+const parseParams = <T>(param: URLSearchParams, schema: z.ZodObject): T => {
+	const fields = Object.keys(schema.shape);
+
+	let tab: object = {};
+	for (const field of fields) {
+		tab = { ...tab, ...Object({[field]: param.get(field)})};
+	}
+
+	const data = schema.safeParse(tab);
+
+	if (!data.success) {
+		const error = data.error.issues[0];
+		const field = error.path[error.path.length - 1].toString();
+
+		if (error.code === 'invalid_type') throw ERRORS_DETAILS.missing_parameter(field);
+		throw ERRORS_DETAILS.invalid_parameter(field);
+	}
+		
+	return tab as T;
+}
+
+export { parseBody, parseParams };

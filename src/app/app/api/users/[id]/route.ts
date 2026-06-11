@@ -5,7 +5,7 @@ import { prisma } from '@/database/prisma/prisma';
 import { UserUpdateParametersSchema } from '@/schema/UserUpdateParametersSchema';
 import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
 import { formatPrivateUser, formatPublicUser } from '@/database/format/User';
-import { parseBody } from '@/utils/body';
+import { parseBody } from '@/utils/parsing';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { PublicUser, User } from '@/types/User';
