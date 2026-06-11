@@ -240,6 +240,14 @@ export default function Page() {
 		console.log(value);
 	};
 
+	const importFile = async (form: FormData) => {
+		const val = await fetch(`/app/api/events/import`, {
+			method: 'POST',
+			body: form,
+		});
+		console.log(val);
+	};
+
 	const search = (form: FormData) => {
 		const fields = SearchEventSchema.safeParse({
 			from: form.get('from'),
@@ -301,6 +309,18 @@ export default function Page() {
 				></input>
 				<button type="submit">créer</button>
 			</form>
+
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					const formData = new FormData(e.currentTarget);
+					importFile(formData);
+				}}
+			>
+				<input type="file" name="file" />
+				<button type="submit">Importer un fichier</button>
+			</form>
+
 			<div className="search">
 				<h2>search event</h2>
 				<form
