@@ -31,8 +31,8 @@ export function NavigationBarHeader(props: NavigationBarHeaderProps) {
 					borderColor: `rgba(var(--color-rgb-primary-white), ${Math.min(titleProgression * 0.7, 0.1)})`,
 				}}
 			>
-				<div className={styles.headerContainer} onClick={() => router.back()}>
-					<button>
+				<div className={styles.headerContainer}>
+					<button onClick={() => router.back()}>
 						<ChevronLeft color={'currentColor'} size={24} />
 					</button>
 					<p
