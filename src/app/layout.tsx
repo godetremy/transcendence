@@ -9,7 +9,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-	title: 'BDE 42',
+	title: '42BDE',
 	description: 'BDE website',
 };
 
