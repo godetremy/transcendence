@@ -1,0 +1,55 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+
+	.label {
+		color: var(--color-primary-white);
+		opacity: 0.7;
+		font-size: 15px;
+		font-weight: 600;
+	}
+
+	.two_factor_authentification_container {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 10px;
+		position: relative;
+
+		.input {
+			appearance: none;
+			width: 50px;
+			height: 70px;
+			font: 600 32px var(--font-paragraph);
+			display: flex;
+			text-align: center;
+			padding: 0;
+			background-color: #00000094;
+			backdrop-filter: blur(5px);
+			border-radius: 16px;
+			border: 1px solid var(--color-border-dark);
+			transition: .1s;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.focus {
+			border: 2px solid var(--color-primary-purple);
+		}
+
+		input {
+			position: absolute;
+			inset: 0;
+			right: -80;
+			opacity: 0;
+			font: 600 32px var(--font-paragraph);
+			padding-left: 15px;
+			letter-spacing: 41px;
+			overflow: hidden;
+			display: flex;
+			border: none;
+			outline: none;
+		}
+	}
+}
