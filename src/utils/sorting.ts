@@ -18,7 +18,7 @@ const getSortingParams = (params: URLSearchParams): SortingOption[] => {
 
 			if (detail.length >= 1) option.id = detail[0];
 			if (detail.length >= 2) option.sort = detail[1];
-			sorting.push({...option});
+			sorting.push({ ...option });
 		}
 	}
 	return sorting;

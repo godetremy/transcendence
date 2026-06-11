@@ -44,22 +44,27 @@ const createEvent = async <T extends Prisma.eventInclude>(
 		},
 		include: include,
 	});
-}
+};
 
-const deleteEvent = async <T extends Prisma.eventInclude>(
-	event_id: string,
-	include: T
-): Promise<void> => {
+const deleteEventById = async <T extends Prisma.eventInclude>(event_id: string, include: T): Promise<void> => {
 	await prisma.event.delete({
 		where: {
 			id: event_id,
 		},
 		include: include,
 	});
-}
-
-export {
-	getEventsByFilter,
-	createEvent,
-	deleteEvent
 };
+
+const getEventById = async <T extends Prisma.eventInclude>(
+	event_id: string,
+	include: T
+): Promise<Prisma.eventGetPayload<{ include: T }> | null> => {
+	return await prisma.event.findUnique({
+		where: {
+			id: event_id,
+		},
+		include: include,
+	});
+};
+
+export { getEventsByFilter, createEvent, deleteEventById, getEventById };

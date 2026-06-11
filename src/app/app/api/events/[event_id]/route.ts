@@ -1,6 +1,7 @@
+import { getEventById } from '@/database/Event';
 import { prisma } from '@/database/prisma/prisma';
-import { decrypt } from '@/lib/session';
 import { EditEventSchema } from '@/schema/EventForm';
+import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -8,26 +9,14 @@ export async function GET(
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
 	try {
-		const cookie = req.cookies.get('session');
-		await decrypt(cookie?.value);
-
 		const { event_id } = await params;
-		const value = await prisma.event.findFirst({
-			include: {
-				registered: {},
-				image_album: {},
-			},
-			where: {
-				id: event_id,
-			},
-		});
 
-		return NextResponse.json(value);
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to get event.', {
-			status: 500,
-		});
+		const event = getEventById(event_id, { registered: true, image_album: true });
+		if (event === null) return apiError(ERRORS_DETAILS.event_does_not_exists(), 404);
+
+		return NextResponse.json(event);
+	} catch (err: unknown) {
+		return serverError(err);
 	}
 }
 
@@ -36,9 +25,6 @@ export async function PATCH(
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
 	try {
-		const cookie = req.cookies.get('session');
-		await decrypt(cookie?.value);
-
 		const { event_id } = await params;
 		const body = await req.json();
 

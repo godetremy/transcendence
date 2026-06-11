@@ -9,12 +9,9 @@ export const CreateEventSchema = z.object({
 });
 
 export const EditEventSchema = z.object({
-	title: z
-		.string().min(0).max(20).trim().nullable(),
-	description: z
-		.string().min(0).max(200).trim().nullable(),
-	max_inscription: z.coerce
-		.number().min(0).max(200),
+	title: z.string().min(0).max(20).trim().nullable(),
+	description: z.string().min(0).max(200).trim().nullable(),
+	max_inscription: z.coerce.number().min(0).max(200),
 	start_at: z.coerce.date().nullable(),
 	end_at: z.coerce.date().nullable(),
 });

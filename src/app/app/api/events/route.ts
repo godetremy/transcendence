@@ -1,4 +1,4 @@
-import { createEvent, deleteEvent, getEventsByFilter } from '@/database/Event';
+import { createEvent, deleteEventById, getEventsByFilter } from '@/database/Event';
 import { decrypt } from '@/lib/session';
 import { ClubAndSubscribeEventParamSchema, CreateEventSchema, IdEventParamSchema } from '@/schema/EventForm';
 import { apiError, serverError } from '@/utils/errors';
@@ -22,9 +22,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const sorting = getSortingParams(params);
 		const pagination = getPaginationParams(params);
 
-		const value = await getEventsByFilter({author: true}, { ...data, user_id }, date, sorting, pagination);
+		const value = await getEventsByFilter({ author: true }, { ...data, user_id }, date, sorting, pagination);
 
-		const events = await Promise.all(value.map(EventFormatting));
+		const events = value.map(EventFormatting);
 		return NextResponse.json(events);
 	} catch (err: unknown) {
 		if (typeof err === 'string') return apiError(err, 400);
@@ -39,7 +39,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
 
 		const data = await parseBody<IdEvent>(req, IdEventParamSchema);
 
-		deleteEvent(data.event_id, {registered: true, image_album: true});
+		deleteEventById(data.event_id, { registered: true, image_album: true });
 
 		return NextResponse.json({ success: true });
 	} catch (err: unknown) {
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 		const data = await parseBody<CreateEventType>(req, CreateEventSchema);
 
-		createEvent(data, session.user_id, {author: true});
+		createEvent(data, session.user_id, { author: true });
 
 		return NextResponse.json({ success: true });
 	} catch (err: unknown) {

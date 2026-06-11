@@ -13,6 +13,7 @@ const ERRORS_DETAILS = {
 	account_does_not_exists: () => 'This account does not exists.',
 	account_exist_with_mail: () => 'An account is already linked to this mail address.',
 	account_unsupported_action: () => 'This action is unsupported for this account',
+	event_does_not_exists: () => 'This event does not exists.',
 	permission_denied: () => 'You do not have permission to perform this action.',
 };
 

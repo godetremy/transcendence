@@ -1,9 +1,9 @@
 import { Prisma } from '@/database/prisma/generated/client';
 import { PublicEvent } from '@/types/Event';
 
-export async function EventFormatting(
+export function EventFormatting(
 	row: Prisma.eventGetPayload<{ include: { registered: false; author: true } }>
-): Promise<PublicEvent> {
+): PublicEvent {
 	return {
 		id: row.id,
 		title: row.title,
@@ -18,6 +18,6 @@ export async function EventFormatting(
 			full_name: row.author.full_name,
 			profile_picture: row.author.profile_picture,
 			is_agent: row.author.is_agent,
-		}
+		},
 	};
 }
