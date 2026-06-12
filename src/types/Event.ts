@@ -1,4 +1,4 @@
-import { RegisteredEvent } from './RegisteredEvent';
+import { RegisteredEventPrivate } from './RegisteredEvent';
 import { PublicUser } from './User';
 
 export interface PrivateEvent {
@@ -10,7 +10,7 @@ export interface PrivateEvent {
 	end_at: Date;
 	create_at?: Date;
 	author_id: string;
-	registered: RegisteredEvent | null;
+	registered: RegisteredEventPrivate | null;
 }
 
 export interface PublicEvent {
