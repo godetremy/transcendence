@@ -9,12 +9,12 @@ export interface LoginTextInputProps extends DetailedHTMLProps<
 	nameLabel: string;
 }
 
-export function LoginTextInput(props: LoginTextInputProps): JSX.Element {
+export function LoginTextInput({ nameLabel, icon, ...props }: LoginTextInputProps): JSX.Element {
 	return (
 		<>
-			<label htmlFor="name">{props.nameLabel}</label>
+			<label htmlFor="name">{nameLabel}</label>
 			<div className={'userInput'}>
-				{props.icon}
+				{icon}
 				<input {...props} />
 			</div>
 		</>

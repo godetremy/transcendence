@@ -1,6 +1,6 @@
 @use '../../../app/supports';
 
-main {
+.main_container {
 	height: 100vh;
 	position: relative;
 	display: flex;
@@ -23,7 +23,7 @@ main {
 }
 
 @media (max-width: supports.$breakpoints-desktop) {
-	main {
+	.main_container {
 		justify-content: center;
 
 		section.background {

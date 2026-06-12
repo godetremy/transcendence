@@ -1,19 +1,25 @@
-import './components.scss';
+import styles from './component.module.scss';
 import Image from 'next/image';
-import { JSX } from 'react';
+import React, { JSX } from 'react';
 
-export interface LoginTemplateProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+export interface LoginTemplateProps {
 	background: { source: string; alt: string };
+	contentClassName?: string;
+	children: React.ReactNode;
 }
 
 export function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 	return (
-		<main>
-			<section className={'content'} {...props}>
-				{props.children}
-			</section>
-			<section className={'background'}>
-				<Image src={props.background.source} alt={props.background.alt} className={'background_img'} fill />
+		<main className={styles.main_container}>
+			<section className={`${styles.content} ${props.contentClassName ?? ''}`}>{props.children}</section>
+			<section className={styles.background}>
+				<Image
+					src={props.background.source}
+					alt={props.background.alt}
+					className={styles.background_img}
+					fill
+					loading="eager"
+				/>
 			</section>
 		</main>
 	);
