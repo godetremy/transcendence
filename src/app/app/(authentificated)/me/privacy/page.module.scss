@@ -23,7 +23,7 @@
 	font: 600 14px var(--font-paragraph);
 	margin-bottom: -10px;
 	margin-top: 5px;
-	opacity: .6;
+	opacity: 0.6;
 }
 
 .card_2fA {
@@ -48,7 +48,7 @@
 
 		p {
 			font: 400 14px var(--font-paragraph);
-			opacity: .6;
+			opacity: 0.6;
 			margin-bottom: 10px;
 		}
 
@@ -58,7 +58,7 @@
 			gap: 5px;
 			width: fit-content;
 			align-items: center;
-			opacity: .6;
+			opacity: 0.6;
 
 			&.disabled {
 				color: rgba(var(--color-rgb-primary-white), 0.15);
