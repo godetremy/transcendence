@@ -14,6 +14,8 @@ const ERRORS_DETAILS = {
 	account_exist_with_mail: () => 'An account is already linked to this mail address.',
 	account_unsupported_action: () => 'This action is unsupported for this account',
 	event_does_not_exists: () => 'This event does not exists.',
+	event_max_inscription: () => 'This event is full.',
+	event_does_not_register: () => 'This event does not register user.',
 	permission_denied: () => 'You do not have permission to perform this action.',
 };
 
