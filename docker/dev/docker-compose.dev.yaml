@@ -1,14 +1,51 @@
+
+x-defaults: &default-settings
+  environment:
+    SERVER_NAME: bde
+    PARANOIA: 1
+    BLOCKING_PARANOIA: 1
+    ANOMALY_INBOUND: 5
+    ANOMALY_OUTBOUND: 4
+    REPORTING_LEVEL: 2
+    
+name: trans-dev
+
 services:
+
+  crs-nginx:
+    image: owasp/modsecurity-crs:nginx
+    ports:
+      - '443:8443'
+      - '8080:8080'
+    volumes:
+      - ./docker/dev/nginx/nginx.conf.template:/etc/nginx/conf.d/nginx.conf
+    <<: *default-settings
+
   node:
     build:
       context: ../../
       dockerfile: docker/dev/node/Dockerfile
     ports:
       - '3001:3000'
+
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: $DB_NAME_POSTGRES
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_USER: $USER_POSTGRES
+  #     POSTGRES_PASSWORD: $PASSWORD_POSTGRES
+  #     POSTGRES_DB: $DB_NAME_POSTGRES
+  #   ports:
+  #     - '$PORT_POSTGRES:5432'
+  #   networks:
+  #     - main
+  #   restart: on-failure
+
 networks:
   main:
     driver: bridge
 
 volumes:
   postgres_data:
-
