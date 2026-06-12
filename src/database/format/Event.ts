@@ -1,7 +1,7 @@
 import { Prisma } from '@/database/prisma/generated/client';
 import { PublicEvent } from '@/types/Event';
 
-export function EventFormatting(
+export function formatPublicEvent(
 	row: Prisma.eventGetPayload<{ include: { registered: false; author: true } }>
 ): PublicEvent {
 	return {

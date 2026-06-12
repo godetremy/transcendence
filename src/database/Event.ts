@@ -83,4 +83,10 @@ const getEventById = async <T extends Prisma.eventInclude>(
 	});
 };
 
-export { getEventsByFilter, createEvent, deleteEventById, getEventById, UpdateEvent };
+const countEventsByFilter = async (): Promise<number> =>
+	{
+		return prisma.event.count({
+		});
+	};
+
+export { getEventsByFilter, createEvent, deleteEventById, getEventById, UpdateEvent, countEventsByFilter };

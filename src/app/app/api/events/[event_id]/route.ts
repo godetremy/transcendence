@@ -1,5 +1,5 @@
 import { getEventById, UpdateEvent } from '@/database/Event';
-import { EditEventSchema } from '@/schema/EventForm';
+import { EditEventSchema } from '@/schema/EventSchema';
 import { CreateOrUpdateEventType } from '@/types/Event';
 import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
@@ -31,10 +31,8 @@ export async function PATCH(
 
 		await UpdateEvent(body, event_id, {});
 		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to delete event.', {
-			status: 500,
-		});
+	} catch (err: unknown) {
+		if (typeof err === 'string') return apiError(err, 400);
+		return serverError(err);
 	}
 }

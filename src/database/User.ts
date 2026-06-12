@@ -145,13 +145,9 @@ const getUsersByFilter = async <T extends Prisma.usersInclude>(
 	});
 };
 
-const countUsersByFilter = async (
-	filter: Prisma.usersWhereInput,
-	pagination?: PaginationParameters
-): Promise<number> => {
+const countUsersByFilter = async (filter: Prisma.usersWhereInput): Promise<number> => {
 	return prisma.users.count({
 		where: filter,
-		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 };
 

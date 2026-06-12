@@ -1,5 +1,5 @@
 import { DateOption } from '@/types/DateParameters';
-import { DateEventParamSchema } from '@/schema/EventForm';
+import { DateEventParamSchema } from '@/schema/EventSchema';
 import { parseParams } from './parsing';
 
 const DEFAULT_DATEOPTION: DateOption = {

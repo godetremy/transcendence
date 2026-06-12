@@ -13,14 +13,14 @@ function Card({ user, onResult }: { user: User; onResult: (msg: string) => void 
 			<p>{user.mail}</p>
 			<button
 				onClick={async () => {
-					await approvedAgent(user.id, true, onResult);
+					await approvedAgent(user.id, onResult);
 				}}
 			>
 				valider compte
 			</button>
 			<button
 				onClick={async () => {
-					await approvedAgent(user.id, false, onResult);
+					await approvedAgent(user.id, onResult);
 				}}
 			>
 				refuser compte
@@ -62,9 +62,7 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 	);
 }
 
-async function approvedAgent(id: string, status: boolean, Onresult: (msg: string) => void) {
-	let statustostring = 'approve';
-	if (!status) statustostring = 'reject';
+async function approvedAgent(id: string, Onresult: (msg: string) => void) {
 	const response = await fetch(`/app/api/users/approval/${id}/pending/`, {
 		method: 'GET',
 		headers: {

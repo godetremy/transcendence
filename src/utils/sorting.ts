@@ -14,7 +14,7 @@ const getSortingParams = (params: URLSearchParams): SortingOption[] => {
 		for (const field of fields) {
 			const detail = field.split(' ');
 
-			let option: SortingOption = DEFAULT_SORTINGOPTION;
+			const option: SortingOption = DEFAULT_SORTINGOPTION;
 
 			if (detail.length >= 1) option.id = detail[0];
 			if (detail.length >= 2) option.sort = detail[1];
@@ -25,7 +25,7 @@ const getSortingParams = (params: URLSearchParams): SortingOption[] => {
 };
 
 const matchBetweenTables = (sorting: SortingOption[], matchList: string[]): void => {
-	for (let rowSorting of sorting) {
+	for (const rowSorting of sorting) {
 		const valueFind = matchList.find((e) => e == rowSorting.id);
 		if (valueFind == null) throw ERRORS_DETAILS.invalid_parameter(rowSorting.id);
 	}
@@ -34,7 +34,7 @@ const matchBetweenTables = (sorting: SortingOption[], matchList: string[]): void
 const sortingToPrisma = (sorting: SortingOption[], matchList: string[]): object | null => {
 	if (matchList.length <= 0) return {};
 	matchBetweenTables(sorting, matchList);
-	let value: { [x: string]: string }[] = [];
+	const value: { [x: string]: string }[] = [];
 	for (const s of sorting) {
 		value.push({ [s.id]: s.sort });
 	}

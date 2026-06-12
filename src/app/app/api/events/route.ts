@@ -1,14 +1,14 @@
-import { createEvent, deleteEventById, getEventsByFilter } from '@/database/Event';
+import { countEventsByFilter, createEvent, deleteEventById, getEventsByFilter } from '@/database/Event';
 import { decrypt } from '@/lib/session';
-import { ClubAndSubscribeEventParamSchema, CreateEventSchema, IdEventParamSchema } from '@/schema/EventForm';
+import { ClubAndSubscribeEventParamSchema, CreateEventSchema, IdEventParamSchema } from '@/schema/EventSchema';
 import { apiError, serverError } from '@/utils/errors';
 import { getDateParams } from '@/utils/date';
-import { getPaginationParams } from '@/utils/pagination';
+import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseBody, parseParams } from '@/utils/parsing';
 import { ClubAndSubscribeEvent, CreateOrUpdateEventType, IdEvent } from '@/types/Event';
-import { EventFormatting } from '@/utils/formatting';
+import { formatPublicEvent } from '@/database/format/Event';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	try {
@@ -22,10 +22,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const sorting = getSortingParams(params);
 		const pagination = getPaginationParams(params);
 
+		const count = await countEventsByFilter();
 		const value = await getEventsByFilter({ author: true }, { ...data, user_id }, date, sorting, pagination);
 
-		const events = value.map(EventFormatting);
-		return NextResponse.json(events);
+		return NextResponse.json(generatePaginationResponse(value.map(formatPublicEvent), count, pagination));
 	} catch (err: unknown) {
 		if (typeof err === 'string') return apiError(err, 400);
 		return serverError(err);

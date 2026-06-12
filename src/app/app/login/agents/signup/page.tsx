@@ -7,7 +7,7 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { SignupFormSchema } from '@/schema/SignupForm';
+import { SignupFormSchema } from '@/schema/SignupSchema';
 import { redirect } from 'next/navigation';
 
 export default function Page() {

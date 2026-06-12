@@ -1,5 +1,5 @@
 import { RegisteredEvent } from './RegisteredEvent';
-import { PublicUser, User } from './User';
+import { PublicUser } from './User';
 
 export interface PrivateEvent {
 	id: string;
