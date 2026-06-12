@@ -1,5 +1,5 @@
 'use client';
-import './page.scss';
+import styles from './page.module.scss';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
@@ -7,8 +7,9 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { SignupFormSchema } from '@/schema/SignupForm';
+import { SignupFormSchema } from '@/schema/SignupSchema';
 import { redirect } from 'next/navigation';
+import { LoginForm } from '@/components/login/LoginForm/LoginForm';
 
 export default function Page() {
 	const [image] = useState(() => {
@@ -18,7 +19,7 @@ export default function Page() {
 
 	const login = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
-			email: form.get('email'),
+			mail: form.get('mail'),
 			password: form.get('password'),
 			passwordCheck: form.get('password'),
 		});
@@ -33,7 +34,7 @@ export default function Page() {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				email: fields.data.email,
+				mail: fields.data.mail,
 				password: fields.data.password,
 			}),
 		});
@@ -48,42 +49,45 @@ export default function Page() {
 				source: image.source,
 				alt: image.alt,
 			}}
+			contentClassName={styles.main_container}
 		>
 			<LoginText
 				title={'Connexion Agents'}
 				description={'Pour accéder à vos services connectez vous avec vos identifiants.'}
 			/>
 
-			<form action={login}>
-				<div className={'inputs'}>
-					<LoginTextInput
-						type={'email'}
-						icon={<User2 />}
-						nameLabel={'Adresse e-mail'}
-						placeholder={'michel.doe@bde.42angouleme.fr'}
-						name="email"
+			<LoginForm
+				inputs={
+					<>
+						<LoginTextInput
+							type={'mail'}
+							icon={<User2 />}
+							nameLabel={'Adresse e-mail'}
+							placeholder={'michel.doe@bde.42angouleme.fr'}
+							name="mail"
+						/>
+						<LoginTextInput
+							type={'password'}
+							icon={<KeyRound />}
+							nameLabel={'Mot de passe'}
+							placeholder={'••••••••••••'}
+							name="password"
+						/>
+					</>
+				}
+				sublinks={
+					<Sublinks
+						links={[
+							{ text: 'Mots de passe oublié ?', href: '/app/login/agents/forgot-password' },
+							{ text: 'Crée un nouveau compte.', href: '/app/login/agents/signup' },
+							{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login' },
+						]}
 					/>
-					<LoginTextInput
-						type={'password'}
-						icon={<KeyRound />}
-						nameLabel={'Mot de passe'}
-						placeholder={'••••••••••••'}
-						name="password"
-					/>
-				</div>
-
-				{error && <p>{error}</p>}
-
-				<Sublinks
-					links={[
-						{ text: 'Mots de passe oublié ?', href: '/app/login/agents/forgot-password' },
-						{ text: 'Crée un nouveau compte.', href: '/app/login/agents/signup' },
-						{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login' },
-					]}
-				/>
-
-				<input type={'submit'} value={'Connexion'} />
-			</form>
+				}
+				error={error}
+				submitText={'Connexion'}
+				action={login}
+			/>
 		</LoginTemplate>
 	);
 }

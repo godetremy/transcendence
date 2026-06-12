@@ -1,12 +1,12 @@
 'use client';
-import './page.scss';
+import styles from './page.module.scss';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { LoginText } from '@/components/login/LoginText/LoginText';
+import { LoginForm } from '@/components/login/LoginForm/LoginForm';
 import { forgotPasswordForm } from '@/schema/ForgotPasswordForm';
-import { User2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
@@ -51,6 +51,7 @@ export default function Page() {
 				source: image.source,
 				alt: image.alt,
 			}}
+			contentClassName={styles.main_container}
 		>
 			<LoginText
 				title={"Verification d'identite"}
@@ -59,21 +60,19 @@ export default function Page() {
 				}
 			/>
 
-			<form action={getEmail}>
-				<div className={'inputs'}>
+			<LoginForm
+				action={getEmail}
+				inputs={
 					<LoginTextInput
-						name={'email'}
-						type={'email'}
+						type={'mail'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
-				</div>
-
-				{error && <p>{error}</p>}
-
-				<input type={'submit'} value={'Réinitialiser mon mot de passe'} />
-			</form>
+				}
+				error={error}
+				submitText={'Réinitialiser mon mot de passe'}
+			/>
 		</LoginTemplate>
 	);
 }

@@ -1,5 +1,5 @@
 'use client';
-import './page.scss';
+import styles from './page.module.scss';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
@@ -7,24 +7,25 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { SignupFormSchema } from '@/schema/SignupForm';
+import { SignupFormSchema } from '@/schema/SignupSchema';
 import { redirect } from 'next/navigation';
+import { LoginForm } from '@/components/login/LoginForm/LoginForm';
 
 export default function Page() {
-	const [message, setMessage] = useState<string | null>(null);
+	const [error, setError] = useState<string | undefined>(undefined);
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
 
 	const signUp = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
-			email: form.get('email'),
+			mail: form.get('mail'),
 			password: form.get('password'),
 			passwordCheck: form.get('passwordCheck'),
 		});
 
 		if (!fields.success) {
-			setMessage(fields.error.issues[0].message);
+			setError(fields.error.issues[0].message);
 			return;
 		}
 		const message = await fetch('/app/api/auth/signup/', {
@@ -33,14 +34,14 @@ export default function Page() {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				email: fields.data.email,
+				mail: fields.data.mail,
 				password: fields.data.password,
 				passwordCheck: fields.data.passwordCheck,
 			}),
 		});
 		const body = await message.json();
-		setMessage(body.message);
 		if (message.ok) return redirect('/app/home/');
+		setError(body.message);
 	};
 
 	return (
@@ -49,45 +50,48 @@ export default function Page() {
 				source: image.source,
 				alt: image.alt,
 			}}
+			contentClassName={styles.main_container}
 		>
 			<LoginText title={'Cree un compte'} description={'Pour accéder à vos services inscrivez vous.'} />
 
-			<form action={signUp}>
-				<div className={'inputs'}>
-					<LoginTextInput
-						name={'email'}
-						type={'email'}
-						icon={<User2 />}
-						nameLabel={'Adresse e-mail'}
-						placeholder={'michel.doe@bde.42angouleme.fr'}
+			<LoginForm
+				action={signUp}
+				inputs={
+					<>
+						<LoginTextInput
+							name={'mail'}
+							type={'mail'}
+							icon={<User2 />}
+							nameLabel={'Adresse e-mail'}
+							placeholder={'michel.doe@bde.42angouleme.fr'}
+						/>
+						<LoginTextInput
+							name={'password'}
+							type={'password'}
+							icon={<KeyRound />}
+							nameLabel={'Mot de passe'}
+							placeholder={'••••••••••••'}
+						/>
+						<LoginTextInput
+							name={'passwordCheck'}
+							type={'password'}
+							icon={<KeyRound />}
+							nameLabel={'Confirmation du mot de passe'}
+							placeholder={'••••••••••••'}
+						/>
+					</>
+				}
+				sublinks={
+					<Sublinks
+						links={[
+							{ text: "J'ai déjà un compte.", href: '/app/login/agents' },
+							{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login' },
+						]}
 					/>
-					<LoginTextInput
-						name={'password'}
-						type={'password'}
-						icon={<KeyRound />}
-						nameLabel={'Mot de passe'}
-						placeholder={'••••••••••••'}
-					/>
-					<LoginTextInput
-						name={'passwordCheck'}
-						type={'password'}
-						icon={<KeyRound />}
-						nameLabel={'Confirmation du mot de passe'}
-						placeholder={'••••••••••••'}
-					/>
-				</div>
-
-				{message && <p>{message}</p>}
-
-				<Sublinks
-					links={[
-						{ text: "J'ai déjà un compte.", href: '/app/login/agents' },
-						{ text: 'Tu es étudiants ? C’est par ici.', href: '/app/login' },
-					]}
-				/>
-
-				<input type={'submit'} value={'Crée un compte'} />
-			</form>
+				}
+				submitText={'Crée un compte'}
+				error={error}
+			/>
 		</LoginTemplate>
 	);
 }

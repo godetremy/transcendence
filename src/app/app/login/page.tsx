@@ -1,5 +1,5 @@
 'use client';
-import './page.scss';
+import styles from './page.module.scss';
 import { useState } from 'react';
 import { StudentLoginPagesImages } from '@/const/StudentLoginPagesImages';
 import { generateFortyTwoAuthorizationUrl } from '@/rest/fortytwo';
@@ -20,12 +20,13 @@ export default function Page() {
 				source: image.source,
 				alt: image.alt,
 			}}
+			contentClassName={styles.container}
 		>
 			<LoginText title={'Connexion'} description={'Pour accéder à tes services connecte toi avec 42.'} />
 
-			<div className={'actions'}>
-				<Link href={generateFortyTwoAuthorizationUrl()} className={'primary'}>
-					<FortyTwo className={'icon'} />
+			<div className={styles.actions}>
+				<Link href={generateFortyTwoAuthorizationUrl()} className={styles.primary}>
+					<FortyTwo className={styles.icon} />
 					Connexion avec 42
 				</Link>
 			</div>

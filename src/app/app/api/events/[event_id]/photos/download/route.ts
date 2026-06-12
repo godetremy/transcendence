@@ -2,12 +2,13 @@ import { prisma } from '@/database/prisma/prisma';
 import { decrypt } from '@/lib/session';
 import { mkdir, writeFile } from 'fs/promises';
 import { NextRequest, NextResponse } from 'next/server';
+import { errorHandler } from '@/utils/errors';
 
 export async function POST(
 	req: NextRequest,
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		const cookie = req.cookies.get('session');
 		const session = await decrypt(cookie?.value);
 
@@ -43,10 +44,5 @@ export async function POST(
 			},
 		});
 		return NextResponse.json(value);
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to download image.', {
-			status: 500,
-		});
-	}
+	});
 }
