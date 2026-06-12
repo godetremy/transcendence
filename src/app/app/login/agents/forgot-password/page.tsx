@@ -1,18 +1,49 @@
 'use client';
-import './page.module.scss';
+import styles from './page.module.scss';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { StaffLoginPagesImages } from '@/const/StaffLoginPagesImages';
 import { useState } from 'react';
-import { User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import styles from '@/app/app/login/agents/forgot-password/[token]/page.module.scss';
 import { LoginForm } from '@/components/login/LoginForm/LoginForm';
+import { forgotPasswordForm } from '@/schema/ForgotPasswordForm';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
+	const [error, setError] = useState<string | null>(null);
+	const route = useRouter();
+
+	const getEmail = async (form: FormData) => {
+		const field = forgotPasswordForm.safeParse({
+			email: form.get('email'),
+		});
+
+		if (!field.success) {
+			setError(field.error.issues[0].message);
+			return;
+		}
+
+		const response = await fetch('/app/api/auth/forgot-password', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email: field.data.email,
+			}),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			setError(data.message);
+			route.push(data.redirect);
+		}
+
+		return;
+	};
 
 	return (
 		<LoginTemplate
@@ -30,7 +61,7 @@ export default function Page() {
 			/>
 
 			<LoginForm
-				action={() => {}}
+				action={getEmail}
 				inputs={
 					<LoginTextInput
 						type={'mail'}
@@ -39,6 +70,7 @@ export default function Page() {
 						placeholder={'michel.doe@bde.42angouleme.fr'}
 					/>
 				}
+				error={error}
 				submitText={'Réinitialiser mon mot de passe'}
 			/>
 		</LoginTemplate>
