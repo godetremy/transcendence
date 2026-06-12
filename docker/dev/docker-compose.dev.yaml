@@ -1,0 +1,14 @@
+services:
+  node:
+    build:
+      context: ../../
+      dockerfile: docker/dev/node/Dockerfile
+    ports:
+      - '3001:3000'
+networks:
+  main:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
