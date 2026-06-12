@@ -4,14 +4,13 @@ import { ReactNode, Suspense, useState } from 'react';
 import { StudentLoginPagesImages } from '@/const/StudentLoginPagesImages';
 import { LoginTemplate } from '@/components/login/loginTemplate/LoginTemplate';
 import { Loader } from '@/components/globals/Loader/Loader';
-import { AnimatePresence, motion, TargetAndTransition } from 'motion/react';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { useRouter } from 'next/navigation';
-import { LoginText } from '@/components/login/LoginText/LoginText';
 import { ApprobationRequired } from '@/app/app/approval/pages/approbationRequired';
 import { WhoAreYou } from '@/app/app/approval/pages/whoAreYou';
 import { AccessMotivation } from '@/app/app/approval/pages/accessMotivation';
 import { Processing } from '@/app/app/approval/pages/processing';
+import {ApprobationResult} from "@/app/app/approval/pages/approbationResult";
 
 export interface ApprovalButton {
 	title: string;
@@ -60,13 +59,12 @@ export default function Page() {
 		setPage((p) => p + 1);
 	};
 
-
-
 	const content: ApprovalPage[] = [
 		ApprobationRequired(logout, nextPage),
 		WhoAreYou(logout, nextPage, loading, setLoading),
 		AccessMotivation(logout, nextPage, loading, setLoading),
 		Processing(logout, nextPage),
+		ApprobationResult(true, logout, nextPage),
 	];
 
 	return (
