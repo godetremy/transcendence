@@ -1,12 +1,23 @@
 @use '../../../app/supports';
 
-label {
-	margin-bottom: -5px;
+.label {
 	padding: 0 15px;
-	color: var(--color-primary-white);
-	opacity: 0.7;
+	color: rgba(var(--color-rgb-primary-white), 0.7);
 	font-size: 15px;
 	font-weight: 500;
+
+	span {
+		font-weight: 600;
+		color: var(--color-primary-pink);
+		margin-left: 2px;
+	}
+}
+
+.input_container {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	width: 100%;
 }
 
 .userInput {
@@ -36,11 +47,28 @@ label {
 		border: none;
 		color: currentColor;
 		outline: none;
+
+		&:disabled {
+			opacity: 0.7;
+		}
 	}
 }
 
+.textArea {
+	padding: 15px 20px;
+	border: 1px solid var(--color-border-light);
+	background-color: var(--color-card);
+	border-radius: 20px;
+	font-family: var(--font-paragraph), sans-serif;
+	font-size: 15px;
+	line-height: 20px;
+	color: currentColor;
+	outline: none;
+	resize: none;
+}
+
 @media (max-width: supports.$breakpoints-desktop) {
-	.userInput {
+	.userInput, .textArea {
 		background-color: var(--color-input-background-light) !important;
 		color: var(--color-primary-black) !important;
 	}

@@ -1,22 +1,34 @@
-import './component.scss';
+import styles from './component.module.scss';
 import { DetailedHTMLProps, InputHTMLAttributes, JSX } from 'react';
 
 export interface LoginTextInputProps extends DetailedHTMLProps<
 	InputHTMLAttributes<HTMLInputElement>,
 	HTMLInputElement
 > {
-	icon: JSX.Element;
+	icon?: JSX.Element;
 	nameLabel: string;
+	useTextArea?: boolean;
 }
 
-export function LoginTextInput({ nameLabel, icon, ...props }: LoginTextInputProps): JSX.Element {
+export function LoginTextInput({ nameLabel, icon, useTextArea, ...props }: LoginTextInputProps): JSX.Element {
 	return (
-		<>
-			<label htmlFor="name">{nameLabel}</label>
-			<div className={'userInput'}>
-				{icon}
-				<input {...props} />
-			</div>
-		</>
+		<div className={styles.input_container}>
+			<label htmlFor="name" className={styles.label}>
+				{nameLabel}
+				{props.required && <span>*</span>}
+			</label>
+			{useTextArea ? (
+				<textarea
+					className={styles.textArea}
+					rows={5}
+					{...(props as DetailedHTMLProps<InputHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>)}
+				/>
+			) : (
+				<div className={styles.userInput}>
+					{icon}
+					<input {...props} />
+				</div>
+			)}
+		</div>
 	);
 }
