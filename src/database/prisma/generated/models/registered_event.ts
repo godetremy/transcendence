@@ -841,14 +841,14 @@ export interface registered_eventDelegate<ExtArgs extends runtime.Types.Extensio
    * @param {Registered_eventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
    * @example
    * // Ordered by age ascending
-   * // Where email contains prisma.io
+   * // Where mail contains prisma.io
    * // Limited to the 10 users
    * const aggregations = await prisma.user.aggregate({
    *   _avg: {
    *     age: true,
    *   },
    *   where: {
-   *     email: {
+   *     mail: {
    *       contains: "prisma.io",
    *     },
    *   },

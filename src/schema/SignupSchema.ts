@@ -1,16 +1,10 @@
 import * as z from 'zod';
+import { PasswordSchema } from '@/schema/PasswordSchema';
 
 export const SignupFormSchema = z
 	.object({
 		mail: z.email({ error: 'Please enter a valid mail.' }).trim(),
-		password: z
-			.string()
-			.min(8, { error: 'Password must be at least 8 characters long' })
-			.regex(/[a-zA-Z]/, { error: 'Password must contain at least one letter.' })
-			.regex(/[0-9]/, { error: 'Password must contain at least one number.' })
-			.regex(/[^a-zA-Z0-9]/, {
-				error: 'Password must contain at least one special character.',
-			}),
+		password: PasswordSchema,
 		passwordCheck: z.string(),
 	})
 	.refine((data) => data.password === data.passwordCheck, {

@@ -126,7 +126,7 @@ export interface PrismaClient<
    * Executes a prepared raw query and returns the number of affected rows.
    * @example
    * ```
-   * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
+   * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE mail = ${'user@mail.com'};`
    * ```
    *
    * Read more in our [docs](https://pris.ly/d/raw-queries).
@@ -138,7 +138,7 @@ export interface PrismaClient<
    * Susceptible to SQL injections, see documentation.
    * @example
    * ```
-   * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
+   * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE mail = $2 ;', true, 'user@mail.com')
    * ```
    *
    * Read more in our [docs](https://pris.ly/d/raw-queries).
@@ -149,7 +149,7 @@ export interface PrismaClient<
    * Performs a prepared raw query and returns the `SELECT` data.
    * @example
    * ```
-   * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
+   * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR mail = ${'user@mail.com'};`
    * ```
    *
    * Read more in our [docs](https://pris.ly/d/raw-queries).
@@ -161,7 +161,7 @@ export interface PrismaClient<
    * Susceptible to SQL injections, see documentation.
    * @example
    * ```
-   * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
+   * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR mail = $2;', 1, 'user@mail.com')
    * ```
    *
    * Read more in our [docs](https://pris.ly/d/raw-queries).

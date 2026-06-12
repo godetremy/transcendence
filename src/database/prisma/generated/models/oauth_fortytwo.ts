@@ -730,14 +730,14 @@ export interface oauth_fortytwoDelegate<ExtArgs extends runtime.Types.Extensions
    * @param {Oauth_fortytwoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
    * @example
    * // Ordered by age ascending
-   * // Where email contains prisma.io
+   * // Where mail contains prisma.io
    * // Limited to the 10 users
    * const aggregations = await prisma.user.aggregate({
    *   _avg: {
    *     age: true,
    *   },
    *   where: {
-   *     email: {
+   *     mail: {
    *       contains: "prisma.io",
    *     },
    *   },

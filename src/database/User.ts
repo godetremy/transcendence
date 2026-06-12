@@ -96,6 +96,16 @@ const updateUserApproval = async (
 	});
 };
 
+const updateUserPassword = async (
+	id: string,
+	password: string
+): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
+	return prisma.users.update({
+		where: { id },
+		data: { password: await bcrypt.hash(password, 10) },
+	});
+};
+
 const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.delete({
 		where: { id: id },
@@ -164,6 +174,7 @@ export {
 	createAgentsUser,
 	createOrUpdateStudentUser,
 	updateUserApproval,
+	updateUserPassword,
 	deleteUser,
 	getUserById,
 	getUserFromSession,

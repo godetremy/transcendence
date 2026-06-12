@@ -1,64 +1,55 @@
-import { isAccountExistByMail } from '@/database/users/isAccountExist';
-import { sendEmailCode } from '@/email/sendEmail';
-import { createEmailToken } from '@/lib/EmailToken';
-import { forgotPasswordForm } from '@/schema/ForgotPasswordForm';
-import { cookies } from 'next/headers';
+import { decodePasswordResetToken, generatePasswordResetToken } from '@/lib/password';
+import { ForgotPasswordParametersSchema } from '@/schema/ForgotPasswordParametersSchema';
 import { NextRequest, NextResponse } from 'next/server';
+import { errorHandler } from '@/utils/errors';
+import { parseBody, parseParams } from '@/utils/parsing';
+import { ForgotPasswordParameters } from '@/types/ForgotPasswordParameters';
+import { getUserByMail, updateUserPassword } from '@/database/User';
+import { sendMail } from '@/lib/email';
+import ForgotPasswordMail from '@/mail/ForgotPassword';
+import { ForgotPasswordEditParameters } from '@/types/ForgotPasswordEditParameters';
+import { ForgotPasswordEditParametersSchema } from '@/schema/ForgotPasswordEditParametersSchema';
+import { ForgotPasswordTokenParameters } from '@/types/ForgotPasswordTokenParameters';
+import { ForgotPasswordTokenParametersSchema } from '@/schema/ForgotPasswordTokenParametersSchema';
+
+export async function GET(req: NextRequest): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const parameters = parseParams<ForgotPasswordTokenParameters>(
+			req.nextUrl.searchParams,
+			ForgotPasswordTokenParametersSchema
+		);
+		await decodePasswordResetToken(parameters.token);
+
+		return NextResponse.json({ success: true });
+	});
+}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-	try {
-		const body = await req.json();
+	return errorHandler(async () => {
+		const body = await parseBody<ForgotPasswordParameters>(req, ForgotPasswordParametersSchema);
 
-		const field = forgotPasswordForm.safeParse({
-			email: body.email,
-		});
+		const user = await getUserByMail(body.mail, {});
 
-		if (!field.success) {
-			return NextResponse.json(
-				{
-					message: field.error.issues[0].message,
-				},
-				{ status: 400 }
-			);
+		if (user !== null) {
+			const token = await generatePasswordResetToken(user.id);
+
+			sendMail({
+				to: [body.mail],
+				content: ForgotPasswordMail(token),
+			});
 		}
 
-		const exist = await isAccountExistByMail(field.data.email);
+		return NextResponse.json({ success: true });
+	});
+}
 
-		if (!exist) {
-			return NextResponse.json(
-				{
-					message: `Error: Email not in database`,
-				},
-				{ status: 400 }
-			);
-		}
+export async function PUT(req: NextRequest): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const body = await parseBody<ForgotPasswordEditParameters>(req, ForgotPasswordEditParametersSchema);
+		const payload = await decodePasswordResetToken(body.token);
 
-		sendEmailCode(body.email);
+		await updateUserPassword(payload.id, body.password);
 
-		const Token = await createEmailToken({ email: field.data.email });
-
-		const cookieStore = await cookies();
-
-		cookieStore.set('EmailToken', Token.body, {
-			httpOnly: true,
-			secure: true,
-			expires: Token.expirationDate,
-			sameSite: 'lax',
-			path: '/',
-		});
-
-		return NextResponse.json(
-			{ message: `Success`, redirect: '/app/login/agents/forgot-password/claim-code' },
-			{
-				status: 200,
-			}
-		);
-	} catch (err: unknown) {
-		return NextResponse.json(
-			{ message: err },
-			{
-				status: 500,
-			}
-		);
-	}
+		return NextResponse.json({ success: true });
+	});
 }

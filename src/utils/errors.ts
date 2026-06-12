@@ -18,6 +18,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	event_does_not_register: () => new ApiError(400, 'This event does not register user.'),
 	permission_denied: () => new ApiError(403, 'You do not have permission to perform this action.'),
 	file_not_found: () => new ApiError(404, 'This file does not exist.'),
+	session_expired: () => new ApiError(401, 'This session expired.'),
 };
 
 const formatError = (error: ApiError) => {
@@ -29,6 +30,7 @@ const errorHandler = async (fn: () => Promise<NextResponse>): Promise<NextRespon
 		return await fn();
 	} catch (error: unknown) {
 		if (error instanceof ApiError) return formatError(error);
+		console.error(error);
 		return formatError(ERRORS_DETAILS.internal_error());
 	}
 };
