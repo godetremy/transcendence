@@ -1,13 +1,11 @@
 import { redirect } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import { unsetSession } from '@/lib/session';
-import { serverError } from '@/utils/errors';
+import { errorHandler } from '@/utils/errors';
 
 export async function GET(): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		await unsetSession();
-	} catch (err: unknown) {
-		serverError(err);
-	}
-	return redirect('/app/login');
+		return redirect('/app/login');
+	});
 }

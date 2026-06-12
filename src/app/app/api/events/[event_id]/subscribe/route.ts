@@ -11,16 +11,16 @@ import {
 import { decrypt } from '@/lib/session';
 import { RegisteredEventParamSchema } from '@/schema/RegisteredEventSchema';
 import { RegisteredEventParam } from '@/types/RegisteredEvent';
-import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 
 export async function PATCH(
 	req: NextRequest,
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		const { event_id } = await params;
 		const body = await parseBody<RegisteredEventParam>(req, RegisteredEventParamSchema);
 
@@ -32,7 +32,7 @@ export async function PATCH(
 
 		const registered = await getRegisteredEventById(event_id, user_id, { event: true });
 
-		if (body.register == true) {
+		if (body.register) {
 			if (registered != null) throw ERRORS_DETAILS.event_does_not_register();
 
 			const count = await countRegisteredEventsByFilter({ registered_event_id: event_id });
@@ -53,33 +53,24 @@ export async function PATCH(
 		}
 
 		return NextResponse.json({ success: true });
-	} catch (err: unknown) {
-		if (typeof err === 'string') return apiError(err, 400);
-		return serverError(err);
-	}
+	});
 }
 
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		const { event_id } = await params;
 
-		
 		const event = await getEventById(event_id, { registered: true });
 		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
 
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 		const count = await countRegisteredEventsByFilter({ registered_event_id: event_id });
 
-		const list = await getRegistersToEventById({event: true}, event_id, pagination);
-		console.error(list);
-		
-		return NextResponse.json(generatePaginationResponse(list.map(formatPublicRegisteredEvent), count, pagination));
+		const list = await getRegistersToEventById({ event: true }, event_id, pagination);
 
-	} catch (err: unknown) {
-		if (typeof err === 'string') return apiError(err, 400);
-		return serverError(err);
-	}
+		return NextResponse.json(generatePaginationResponse(list.map(formatPublicRegisteredEvent), count, pagination));
+	});
 }

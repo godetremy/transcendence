@@ -4,13 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { parseBody } from '@/utils/parsing';
 import { AgentsSignUpParametersSchema } from '@/schema/AgentsSignUpParametersSchema';
 import { AgentsSignUpParameters } from '@/types/AgentsSignUpParameters';
-import { apiError, ERRORS_DETAILS, serverError } from '@/utils/errors';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		const body = await parseBody<AgentsSignUpParameters>(req, AgentsSignUpParametersSchema);
 
-		if (await existUserByMail(body.mail)) return apiError(ERRORS_DETAILS.account_already_exists());
+		if (await existUserByMail(body.mail)) throw ERRORS_DETAILS.account_already_exists();
 
 		const user = await createAgentsUser(body.mail, body.password);
 
@@ -19,9 +19,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			is_agent: user.is_agent,
 			is_agent_verified: user.is_agent_verified,
 		});
-	} catch (error: unknown) {
-		if (typeof error === 'string') return apiError(error, 400);
-		return serverError(error);
-	}
-	return NextResponse.json({ success: true });
+		return NextResponse.json({ success: true });
+	});
 }

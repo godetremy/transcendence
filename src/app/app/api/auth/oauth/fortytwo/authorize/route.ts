@@ -3,12 +3,12 @@ import { redirect } from 'next/navigation';
 import { getFortyTwoMe, getFortyTwoOauthToken } from '@/rest/fortytwo';
 import { createAndSetSession } from '@/lib/session';
 import { createOrUpdateStudentUser } from '@/database/User';
-import { serverError } from '@/utils/errors';
+import { errorHandler } from '@/utils/errors';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		const code: string | null = request.nextUrl.searchParams.get('code');
 		if (code === null) return redirect('/app/login');
 
@@ -22,8 +22,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 			is_agent: user.is_agent,
 			is_agent_verified: user.is_agent_verified,
 		});
-	} catch (err: unknown) {
-		serverError(err);
-	}
-	return redirect('/app/home');
+		return redirect('/app/home');
+	});
 }

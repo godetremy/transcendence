@@ -14,7 +14,7 @@ const getRegisteredEventById = async <T extends Prisma.registered_eventInclude>(
 	user_id: string,
 	include: T
 ): Promise<Prisma.registered_eventGetPayload<{ include: T }> | null> => {
-	return await prisma.registered_event.findUnique({
+	return prisma.registered_event.findUnique({
 		include: include,
 		where: {
 			registered_event_id: event_id,
@@ -28,7 +28,7 @@ const createRegisteredEventById = async <T extends Prisma.registered_eventInclud
 	user_id: string,
 	include: T
 ): Promise<Prisma.registered_eventGetPayload<{ include: T }> | null> => {
-	return await prisma.registered_event.create({
+	return prisma.registered_event.create({
 		include: include,
 		data: {
 			registered_event_id: event_id,
@@ -41,7 +41,7 @@ const deleteRegisteredEventById = async <T extends Prisma.registered_eventInclud
 	filter: Prisma.registered_eventWhereUniqueInput,
 	include: T
 ): Promise<Prisma.registered_eventGetPayload<{ include: T }> | null> => {
-	return await prisma.registered_event.delete({
+	return prisma.registered_event.delete({
 		include: include,
 		where: filter,
 	});
@@ -52,14 +52,19 @@ const getRegistersToEventById = async <T extends Prisma.registered_eventInclude>
 	event_id: string,
 	pagination?: PaginationParameters
 ): Promise<Prisma.registered_eventGetPayload<{ include: T }>[]> => {
-	const value = await prisma.registered_event.findMany({
+	return prisma.registered_event.findMany({
 		include: include,
 		where: {
 			registered_event_id: event_id,
 		},
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
-	return value;
 };
 
-export { countRegisteredEventsByFilter, getRegisteredEventById, createRegisteredEventById, deleteRegisteredEventById, getRegistersToEventById };
+export {
+	countRegisteredEventsByFilter,
+	getRegisteredEventById,
+	createRegisteredEventById,
+	deleteRegisteredEventById,
+	getRegistersToEventById,
+};
