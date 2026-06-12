@@ -1,40 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { redirect } from 'next/navigation';
 import { getFortyTwoMe, getFortyTwoOauthToken } from '@/rest/fortytwo';
-import { upsertUser } from '@/database/users/upsertUser';
-import { createSession } from '@/lib/session';
-import { cookies } from 'next/headers';
+import { createAndSetSession } from '@/lib/session';
+import { createOrUpdateStudentUser } from '@/database/User';
+import { errorHandler } from '@/utils/errors';
+import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
+import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-	const params: URLSearchParams = request.nextUrl.searchParams;
-	const code: string | null = params.get('code');
+	return errorHandler(async () => {
+		const code: string | null = request.nextUrl.searchParams.get('code');
+		if (code === null) return redirect('/app/login');
 
-	if (code === null) return redirect('/app/login');
-	try {
-		const authorization = await getFortyTwoOauthToken(code);
-		const me = await getFortyTwoMe(authorization.access_token);
+		const authorization: FortyTwoOauthToken = await getFortyTwoOauthToken(code);
+		const me: FortyTwoCursusUserDetails = await getFortyTwoMe(authorization.access_token);
 
-		const user = await upsertUser(me, authorization);
-		const session = await createSession({
+		const user = await createOrUpdateStudentUser(me, authorization);
+
+		await createAndSetSession({
 			user_id: user.id,
 			is_agent: user.is_agent,
 			is_agent_verified: user.is_agent_verified,
 		});
-
-		const cookieStore = await cookies();
-
-		cookieStore.set('session', session.body, {
-			httpOnly: true,
-			secure: true,
-			expires: session.expirationDate,
-			sameSite: 'lax',
-			path: '/',
-		});
-	} catch (err: unknown) {
-		console.error(err);
-		return new NextResponse(`Failed to login. Please try again later.`, {
-			status: 500,
-		});
-	}
-	return redirect('/app/home');
+		return redirect('/app/home');
+	});
 }

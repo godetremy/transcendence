@@ -16,6 +16,6 @@ export interface FortyTwoCampus {
 	twitter: string;
 	active: boolean;
 	public: boolean;
-	email_extension: string;
+	mail_extension: string;
 	default_hidden_phone: boolean;
 }

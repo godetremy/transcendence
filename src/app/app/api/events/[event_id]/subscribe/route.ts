@@ -1,57 +1,76 @@
-import { prisma } from '@/database/prisma/prisma';
+import { getEventById } from '@/database/Event';
+import { formatPublicRegisteredEvent } from '@/database/format/RegisteredEvent';
+import { registered_eventWhereUniqueInput } from '@/database/prisma/generated/models';
+import {
+	countRegisteredEventsByFilter,
+	createRegisteredEventById,
+	deleteRegisteredEventById,
+	getRegisteredEventById,
+	getRegistersToEventById,
+} from '@/database/RegisteredEvent';
 import { decrypt } from '@/lib/session';
+import { RegisteredEventParamSchema } from '@/schema/RegisteredEventSchema';
+import { RegisteredEventParam } from '@/types/RegisteredEvent';
+import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
+import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+
+export async function PATCH(
+	req: NextRequest,
+	{ params }: { params: Promise<{ event_id: string }> }
+): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { event_id } = await params;
+		const body = await parseBody<RegisteredEventParam>(req, RegisteredEventParamSchema);
+
+		const cookie = req.cookies.get('session');
+		const user_id = (await decrypt(cookie?.value)).user_id;
+
+		const event = await getEventById(event_id, { registered: true });
+		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
+
+		const registered = await getRegisteredEventById(event_id, user_id, { event: true });
+
+		if (body.register) {
+			if (registered != null) throw ERRORS_DETAILS.event_does_not_register();
+
+			const count = await countRegisteredEventsByFilter({ registered_event_id: event_id });
+			if (count >= event.max_inscription) throw ERRORS_DETAILS.event_max_inscription();
+
+			const value = await createRegisteredEventById(event_id, user_id, {});
+			if (value == null) throw ERRORS_DETAILS.event_does_not_exists();
+		} else {
+			if (registered == null) throw ERRORS_DETAILS.event_does_not_register();
+
+			const db_filter: registered_eventWhereUniqueInput = {
+				user_id: user_id,
+				registered_event_id: event_id,
+			};
+
+			const value = await deleteRegisteredEventById(db_filter, {});
+			if (value == null) throw ERRORS_DETAILS.event_does_not_exists();
+		}
+
+		return NextResponse.json({ success: true });
+	});
+}
 
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		const { event_id } = await params;
 
-		const cookie = req.cookies.get('session');
-		const session = await decrypt(cookie?.value);
+		const event = await getEventById(event_id, { registered: true });
+		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
 
-		const register = await prisma.registered_event.findMany({
-			include: {
-				event: true,
-			},
-			where: {
-				registered_event_id: event_id,
-			},
-		});
+		const pagination = getPaginationParams(req.nextUrl.searchParams);
+		const count = await countRegisteredEventsByFilter({ registered_event_id: event_id });
 
-		if (register != null && register[0] != null) {
-			console.log(register[0]);
-			if (register[0].event) {
-				const max = register[0].event?.max_inscription;
-				if (register.length >= max)
-					return new NextResponse('Error, to many subscribe.', {
-						status: 400,
-					});
-			}
-		}
+		const list = await getRegistersToEventById({ event: true }, event_id, pagination);
 
-		await prisma.event.update({
-			include: {
-				registered: true,
-			},
-			where: {
-				id: event_id,
-			},
-			data: {
-				registered: {
-					create: {
-						user_id: session.user_id,
-					},
-				},
-			},
-		});
-		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to subscribe to event.', {
-			status: 500,
-		});
-	}
+		return NextResponse.json(generatePaginationResponse(list.map(formatPublicRegisteredEvent), count, pagination));
+	});
 }

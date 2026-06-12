@@ -33,7 +33,7 @@ export default function Page() {
 				action={() => {}}
 				inputs={
 					<LoginTextInput
-						type={'email'}
+						type={'mail'}
 						icon={<User2 />}
 						nameLabel={'Adresse e-mail'}
 						placeholder={'michel.doe@bde.42angouleme.fr'}
