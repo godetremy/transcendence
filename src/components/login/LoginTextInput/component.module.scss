@@ -68,7 +68,8 @@
 }
 
 @media (max-width: supports.$breakpoints-desktop) {
-	.userInput, .textArea {
+	.userInput,
+	.textArea {
 		background-color: var(--color-input-background-light) !important;
 		color: var(--color-primary-black) !important;
 	}

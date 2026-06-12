@@ -10,7 +10,7 @@ import { ApprobationRequired } from '@/app/app/approval/pages/approbationRequire
 import { WhoAreYou } from '@/app/app/approval/pages/whoAreYou';
 import { AccessMotivation } from '@/app/app/approval/pages/accessMotivation';
 import { Processing } from '@/app/app/approval/pages/processing';
-import {ApprobationResult} from "@/app/app/approval/pages/approbationResult";
+import { ApprobationResult } from '@/app/app/approval/pages/approbationResult';
 
 export interface ApprovalButton {
 	title: string;

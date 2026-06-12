@@ -25,7 +25,7 @@
 		top: 0;
 		bottom: 0;
 		width: 0;
-		transition: .3s;
+		transition: 0.3s;
 		opacity: 0;
 		border-radius: 8px;
 	}
@@ -46,14 +46,14 @@
 		flex: 1;
 		position: absolute;
 		inset: 0;
-		transition: .3s;
+		transition: 0.3s;
 		display: flex;
 	}
 
 	.page.hidden {
 		opacity: 0;
 		filter: blur(10px);
-		scale: .98;
+		scale: 0.98;
 		pointer-events: none;
 	}
 }
@@ -67,7 +67,7 @@
 	height: 50px;
 	font: 600 15px var(--font-paragraph);
 	border-radius: 25px;
-	transition: .1s;
+	transition: 0.1s;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -78,7 +78,7 @@
 	}
 
 	&:active {
-		scale: .95;
+		scale: 0.95;
 	}
 
 	&:disabled {
