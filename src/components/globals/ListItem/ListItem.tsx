@@ -3,16 +3,17 @@ import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { ChevronRight, LucideProps } from 'lucide-react';
 
 export interface ListItemProps {
-	icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
+	icon?: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
 	title: string;
 	description?: string;
 	showChevron?: boolean;
 	last?: boolean;
 	negative?: boolean;
 	onPress?: () => void;
+	rightElement?: React.ReactNode;
 }
 
-export function ListItem({
+function ListItem({
 	icon: Icon,
 	title,
 	description,
@@ -20,6 +21,7 @@ export function ListItem({
 	last = false,
 	negative = false,
 	onPress,
+	rightElement,
 }: ListItemProps) {
 	return (
 		<button
@@ -30,16 +32,21 @@ export function ListItem({
 			}}
 			onClick={onPress}
 		>
-			<div className={styles.left}>
-				<Icon width={24} height={24} color={'currentColor'} />
-			</div>
+			{Icon && (
+				<div className={styles.left}>
+					<Icon width={24} height={24} color={'currentColor'} />
+				</div>
+			)}
 			<div className={styles.main}>
 				<p>{title}</p>
 				{description && <span>{description}</span>}
 			</div>
 			<div className={styles.right}>
+				{rightElement && <div className={styles.rightElement}>{rightElement}</div>}
 				{showChevron && <ChevronRight width={24} height={24} color={'currentColor'} />}
 			</div>
 		</button>
 	);
 }
+
+export default ListItem;

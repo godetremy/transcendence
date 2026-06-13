@@ -18,7 +18,6 @@ export default async function RootLayout({
 	const user = await getUserFromSession(session, { membership: true });
 
 	if (!user) return null;
-
 	return (
 		<UserProvider user={formatPrivateUser<{ membership: true }>(user)}>
 			<MembershipProvider>

@@ -17,10 +17,15 @@
 		color: #fe8484;
 	}
 
-	> .left,
-	> .right {
+	> .left {
 		width: 24px;
 		height: 24px;
+	}
+	> .right {
+		height: 24px;
+		color: rgba(255, 255, 255, 0.4);
+		display: flex;
+		align-items: center;
 	}
 
 	> .main {
@@ -37,10 +42,6 @@
 			font: 400 13px var(--font-paragraph);
 			opacity: 0.6;
 		}
-	}
-
-	> .right {
-		opacity: 0.4;
 	}
 }
 
