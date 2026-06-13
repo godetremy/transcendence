@@ -18,13 +18,13 @@ const createStudentUser = async (
 			first_name: me.usual_first_name,
 			last_name: me.last_name,
 			full_name: me.usual_full_name,
-			oauth_fortytwo: {
+			fortytwo_oauth: {
 				create: {
 					access_token: authorization.access_token,
 					refresh_token: authorization.refresh_token,
 				},
 			},
-			memberships: {
+			membership: {
 				create: {},
 			},
 		},
@@ -40,11 +40,11 @@ const createAgentsUser = async (
 			fortytwo_user_id: null,
 			mail: mail,
 			password: await bcrypt.hash(password, 10),
-			oauth_fortytwo: undefined,
-			memberships: undefined,
-			oauth_fortytwo_id: null,
+			fortytwo_oauth: undefined,
+			membership: undefined,
+			fortytwo_oauth_id: null,
 			memberships_id: null,
-			is_agent: true,
+			agent: true,
 		},
 	});
 };
@@ -60,7 +60,7 @@ const createOrUpdateStudentUser = async (
 		last_name: me.last_name,
 		full_name: me.usual_full_name,
 		profile_picture: me.image.link,
-		memberships: {},
+		membership: {},
 	};
 
 	const token_body = {
@@ -72,11 +72,11 @@ const createOrUpdateStudentUser = async (
 		where: { fortytwo_user_id: me.id },
 		create: {
 			...user_body,
-			oauth_fortytwo: { create: { ...token_body } },
+			fortytwo_oauth: { create: { ...token_body } },
 		},
 		update: {
 			...user_body,
-			oauth_fortytwo: {
+			fortytwo_oauth: {
 				upsert: {
 					update: { ...token_body },
 					create: { ...token_body },
@@ -92,7 +92,7 @@ const updateUserApproval = async (
 ): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.update({
 		where: { id },
-		data: { is_agent_verified: approve },
+		data: { agent_verified: approve },
 	});
 };
 
@@ -110,8 +110,8 @@ const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.use
 	return prisma.users.delete({
 		where: { id: id },
 		include: {
-			memberships: true,
-			oauth_fortytwo: true,
+			membership: true,
+			fortytwo_oauth: true,
 		},
 	});
 };

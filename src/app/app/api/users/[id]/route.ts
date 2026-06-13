@@ -16,10 +16,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 		const session = await decrypt(req.cookies.get('session')?.value);
 		const user_id = parseUserId(id, session);
 
-		const user = await getUserById(user_id.id, { memberships: true });
+		const user = await getUserById(user_id.id, { membership: true });
 		if (user === null) throw ERRORS_DETAILS.account_does_not_exists();
 		const formated_user: User | PublicUser = user_id.is_me
-			? formatPrivateUser<{ memberships: true }>(user)
+			? formatPrivateUser<{ membership: true }>(user)
 			: formatPublicUser(user);
 
 		return NextResponse.json(formated_user);

@@ -7,8 +7,8 @@ export interface User {
 	last_name: string | null;
 	full_name: string | null;
 	profile_picture: string;
-	is_agent: boolean;
-	reason: string | null;
+	agent: boolean;
+	agent_reason: string | null;
 	memberships_id: string | null;
 	membership: Membership | null;
 }
@@ -19,5 +19,5 @@ export interface PublicUser {
 	last_name: string | null;
 	full_name: string | null;
 	profile_picture: string | null;
-	is_agent: boolean;
+	agent: boolean;
 }

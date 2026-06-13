@@ -19,8 +19,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
 		await createAndSetSession({
 			user_id: user.id,
-			is_agent: user.is_agent,
-			is_agent_verified: user.is_agent_verified,
+			agent: user.agent,
+			agent_verified: user.agent_verified,
 		});
 		return redirect('/app/home');
 	});

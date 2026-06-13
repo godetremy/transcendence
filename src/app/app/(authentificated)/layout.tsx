@@ -15,12 +15,12 @@ export default async function RootLayout({
 	const Cookies = await cookies();
 	const sessionCookie = Cookies.get('session');
 	const session = await decrypt(sessionCookie?.value ?? '');
-	const user = await getUserFromSession(session, { memberships: true });
+	const user = await getUserFromSession(session, { membership: true });
 
 	if (!user) return null;
 
 	return (
-		<UserProvider user={formatPrivateUser<{ memberships: true }>(user)}>
+		<UserProvider user={formatPrivateUser<{ membership: true }>(user)}>
 			<MembershipProvider>
 				<Sidebar />
 

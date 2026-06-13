@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ApiError } from 'next/dist/server/api-utils';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	internal_error: () => new ApiError(500, 'Internal server error'),
@@ -29,6 +30,7 @@ const errorHandler = async (fn: () => Promise<NextResponse>): Promise<NextRespon
 	try {
 		return await fn();
 	} catch (error: unknown) {
+		if (isRedirectError(error)) throw error;
 		if (error instanceof ApiError) return formatError(error);
 		console.error(error);
 		return formatError(ERRORS_DETAILS.internal_error());
