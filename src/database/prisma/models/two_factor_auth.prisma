@@ -3,6 +3,7 @@ model two_factor_auth {
 
 	mail_enabled				Boolean					@default(true)
 
+	totp_enabled				Boolean					@default(false)
 	totp_secret					String?
 
 	webauthn_credential_id		String?					@unique

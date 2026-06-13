@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { decrypt, parseUserId } from '@/lib/session';
 import { verify, generateSecret } from 'otplib';
-import { saveTotpSecret } from '@/database/TwoFactorAuth';
+import { saveTotpSecret, toggleTotp } from '@/database/TwoFactorAuth';
 import { getUserById } from '@/database/User';
 import { parseBody } from '@/utils/parsing';
 import { TwoFactorAuthTotpBodySchema } from '@/schema/TwoFactorAuthTotpBodySchema';
@@ -49,6 +49,8 @@ export function POST(req: NextRequest, { params }: { params: Promise<{ id: strin
 		const result = await verify({ secret: user.two_factor_auth.totp_secret, token: body.code });
 
 		if (!result.valid) throw ERRORS_DETAILS.invalid_totp_code();
+
+		await toggleTotp(user_id.id, true);
 
 		return NextResponse.json({
 			success: true,
