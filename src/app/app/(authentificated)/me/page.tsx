@@ -21,8 +21,9 @@ export default function Page() {
 				mail={user?.mail ?? 'Recharge la page pour te reconnecter'}
 				subscribed={false}
 			/>
-			<MembershipButton className={styles.card_button} />
 			<section className={styles.section}>
+				<MembershipButton className={styles.card_button} />
+
 				<div className={styles.list}>
 					<ListItem
 						icon={User2}
