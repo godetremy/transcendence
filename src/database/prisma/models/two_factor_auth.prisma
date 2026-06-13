@@ -1,0 +1,13 @@
+model two_factor_auth {
+	id							String					@id			@default(uuid())
+
+	mail_enabled				Boolean					@default(true)
+
+	totp_secret					String?
+
+	webauthn_credential_id		String?					@unique
+
+	webauthn_credential			webauthn_credentials?	@relation(fields: [webauthn_credential_id], references: [id])
+
+	user						users?
+}

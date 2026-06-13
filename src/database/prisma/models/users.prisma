@@ -3,6 +3,7 @@ model users {
 
 	mail						String			@unique
 	password					String?
+	two_factor_auth_id			String?			@unique
 
 	first_name					String?
 	last_name					String?
@@ -28,6 +29,8 @@ model users {
 	image_report     image_report[]
 	/* -------------------------------------------- */
 
-	fortytwo_oauth				fortytwo_oauth?		@relation(fields: [fortytwo_oauth_id], references: [id])
-	membership					memberships?		@relation(fields: [memberships_id], references: [id])
+	fortytwo_oauth				fortytwo_oauth?			@relation(fields: [fortytwo_oauth_id], references: [id])
+	membership					memberships?			@relation(fields: [memberships_id], references: [id])
+	two_factor_auth				two_factor_auth?		@relation(fields: [two_factor_auth_id], references: [id])
+	webauthn_credential			webauthn_credentials?
 }
