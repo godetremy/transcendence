@@ -1,25 +1,27 @@
-
-x-defaults: &default-settings
+x-defaults-settings : &default-settings
   environment:
-    SERVER_NAME: bde
+    SERVER_NAME: bde42angouleme.dev.fr
+    BACKEND: http://node:3000
     PARANOIA: 1
     BLOCKING_PARANOIA: 1
     ANOMALY_INBOUND: 5
     ANOMALY_OUTBOUND: 4
     REPORTING_LEVEL: 2
-    
-name: trans-dev
+
+name: dev
 
 services:
 
   crs-nginx:
+    <<: *default-settings
     image: owasp/modsecurity-crs:nginx
     ports:
       - '443:8443'
-      - '8080:8080'
-    volumes:
-      - ./docker/dev/nginx/nginx.conf.template:/etc/nginx/conf.d/nginx.conf
-    <<: *default-settings
+    networks:
+      - server-dev
+    depends_on:
+      node:
+        condition: service_healthy
 
   node:
     build:
@@ -27,24 +29,39 @@ services:
       dockerfile: docker/dev/node/Dockerfile
     ports:
       - '3001:3000'
+    networks:
+      - server-dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "cd /app/ && npx prisma generate && npx prisma migrate dev --name init && HOSTNAME="0.0.0.0" node server.js"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://node:3000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
-  # postgres:
-  #   image: postgres:15-alpine
-  #   container_name: $DB_NAME_POSTGRES
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_USER: $USER_POSTGRES
-  #     POSTGRES_PASSWORD: $PASSWORD_POSTGRES
-  #     POSTGRES_DB: $DB_NAME_POSTGRES
-  #   ports:
-  #     - '$PORT_POSTGRES:5432'
-  #   networks:
-  #     - main
-  #   restart: on-failure
+  postgres:
+    image: postgres:15-alpine
+    container_name: bde
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: president
+      POSTGRES_PASSWORD: president1234
+      POSTGRES_DB: bde
+    ports:
+      - '8080:5432'
+    networks:
+      - server-dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U president -d bde"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 networks:
-  main:
+  server-dev:
     driver: bridge
 
 volumes:

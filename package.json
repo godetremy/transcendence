@@ -10,6 +10,9 @@
 		"prepare": "husky",
 		"test": "commitlint --from=origin/main --to=HEAD; npx prettier . --check; eslint .; tsc --noEmit"
 	},
+	"prisma": {
+    	"schema": "src/database/prisma/schema.prisma"
+  	},
 	"dependencies": {
 		"@mdx-js/loader": "^3.1.1",
 		"@mdx-js/react": "^3.1.1",
