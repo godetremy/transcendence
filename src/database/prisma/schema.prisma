@@ -4,126 +4,72 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-	provider = "prisma-client"
-	output   = "generated/"
-	previewFeatures = ["fullTextSearchPostgres"]
+  provider        = "prisma-client"
+  output          = "generated/"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource bde {
-	provider = "postgresql"
-}
-
-model memberships {
-	id				String		@id	@default(uuid())
-	
-	start_at		DateTime	@default(now())
-	end_at			DateTime	@default(now())
-	
-	MemberUsers	users[]
-}
-
-model oauth_fortytwo {
-	id				String		@id	@default(uuid())
-	
-	access_token 	String?
-	refresh_token	String?
-	valid_until		DateTime	@default(now())
-	
-	MemberUsers		users[]
+  provider = "postgresql"
 }
 
 model registered_event {
-	id							String		@id @default(uuid())
+  id String @id @default(uuid())
 
-	user_id						String?
-	user						users?		@relation(fields: [user_id], references: [id])
+  user_id String?
+  user    users?  @relation(fields: [user_id], references: [id])
 
-	created_at					DateTime	@default(now())
+  created_at DateTime @default(now())
 
-	registered_event_id			String? 	@unique
-	event						event?		@relation(fields: [registered_event_id], references: [id])
-
+  registered_event_id String? @unique
+  event               event?  @relation(fields: [registered_event_id], references: [id])
 }
 
 model image_album {
-	id							String		@id @default(uuid())
+  id String @id @default(uuid())
 
-	upload_user_id				String?
-	user						users?		@relation(fields: [upload_user_id], references: [id])
-	
-	event_id					String? 	@unique
-	event						event?		@relation(fields: [event_id], references: [id])
+  upload_user_id String?
+  user           users?  @relation(fields: [upload_user_id], references: [id])
 
-	image_path					String		@unique
+  event_id String? @unique
+  event    event?  @relation(fields: [event_id], references: [id])
 
-	image_report				image_report?
+  image_path String @unique
 
-	created_at					DateTime	@default(now())
+  image_report image_report?
+
+  created_at DateTime @default(now())
 }
 
 model image_report {
-	id							String			@id @default(uuid())
+  id String @id @default(uuid())
 
-	image_album_id				String? 		@unique
-	image_album					image_album?	@relation(fields: [image_album_id], references: [id])
+  image_album_id String?      @unique
+  image_album    image_album? @relation(fields: [image_album_id], references: [id])
 
-	signaling_id				String
-	signaling					users			@relation(fields: [signaling_id], references: [id])
+  signaling_id String
+  signaling    users  @relation(fields: [signaling_id], references: [id])
 
-	reason						String?
+  reason String?
 
-	created_at					DateTime		@default(now())
+  created_at DateTime @default(now())
 }
 
 model event {
-	id						String			@id @default(uuid())
+  id String @id @default(uuid())
 
-	author_id				String
-	author					users			@relation(fields: [author_id], references: [id])
+  author_id String
+  author    users  @relation(fields: [author_id], references: [id])
 
-	registered				registered_event?
-	image_album				image_album?
+  registered  registered_event?
+  image_album image_album?
 
-	title					String?
-	description				String?
+  title       String?
+  description String?
 
-	max_inscription			Int			@default(0)
+  max_inscription Int @default(0)
 
-	start_at				DateTime	@default(now())
-	end_at					DateTime	@default(now())
-	created_at				DateTime	@default(now())
-}
-
-model users {
-	id					String				@id	@default(uuid())
-	
-	oauth_fortytwo_id	String?
-	oauth_fortytwo		oauth_fortytwo?		@relation(fields: [oauth_fortytwo_id], references: [id])
-	
-	memberships_id		String?
-	memberships			memberships?		@relation(fields: [memberships_id], references: [id])
-
-	events				event[]
-	image_album			image_album[]
-	registered_event	registered_event[]
-	image_report		image_report[]
-	
-	fortytwo_user_id	Int?				@unique
-
-	is_agent			Boolean				@default(false)
-	is_agent_verified	Boolean?
-	reason				String?
-
-	mail				String				@unique
-	password			String?
-	first_name			String?
-	last_name			String?
-	full_name			String?
-  
-  code              String?
-
-	profile_picture		String				@default("/images/default_user.png")
-
-	created_at			DateTime			@default(now())
-	updated_at			DateTime			@default(now())
+  start_at   DateTime @default(now())
+  end_at     DateTime @default(now())
+  created_at DateTime @default(now())
 }

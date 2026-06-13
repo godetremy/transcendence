@@ -1,0 +1,33 @@
+model users {
+    id							String			@id			@default(uuid())
+
+	mail						String			@unique
+	password					String?
+
+	first_name					String?
+	last_name					String?
+	full_name					String?
+	profile_picture				String			@default("/images/default_user.png")
+
+	fortytwo_user_id			Int?			@unique
+	fortytwo_oauth_id			String?			@unique
+
+    memberships_id				String?      	@unique
+
+    agent						Boolean			@default(false)
+    agent_verified				Boolean?
+    agent_reason				String?
+
+	created_at					DateTime		@default(now())
+	updated_at					DateTime		@updatedAt
+
+	/* --- WILL BE MOVED LATER - IGNORE FOR NOW --- */
+	events           event[]
+	image_album      image_album[]
+	registered_event registered_event[]
+	image_report     image_report[]
+	/* -------------------------------------------- */
+
+	fortytwo_oauth				fortytwo_oauth?		@relation(fields: [fortytwo_oauth_id], references: [id])
+	membership					memberships?		@relation(fields: [memberships_id], references: [id])
+}
