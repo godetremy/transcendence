@@ -1,6 +1,6 @@
 x-defaults-settings : &default-settings
   environment:
-    SERVER_NAME: bde42angouleme.fr
+    SERVER_NAME: bde42angouleme.dev.fr
     BACKEND: http://node:3000
     PARANOIA: 1
     BLOCKING_PARANOIA: 1
@@ -8,7 +8,7 @@ x-defaults-settings : &default-settings
     ANOMALY_OUTBOUND: 4
     REPORTING_LEVEL: 2
 
-name: prod
+name: staging
 
 services:
 
@@ -18,23 +18,23 @@ services:
     ports:
       - '443:8443'
     networks:
-      - server-prod
+      - server
     depends_on:
       node:
         condition: service_healthy
-  
+
   node:
     build:
       context: ../../
-      dockerfile: docker/dev/node/Dockerfile
+      dockerfile: docker/staging/node/Dockerfile
     ports:
-      - '3003:3000'
+      - '3001:3000'
     networks:
-      - server-prod
+      - server
     depends_on:
       postgres:
         condition: service_healthy
-    command: sh -c "cd /app/ && npx prisma generate && npx prisma migrate dev --name init && HOSTNAME="0.0.0.0" node server.js"
+    command: sh -c "cd /app/ && npx prisma generate && npx prisma migrate staging --name init && HOSTNAME="0.0.0.0" node server.js"
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://node:3000 || exit 1"]
       interval: 10s
@@ -43,17 +43,15 @@ services:
 
   postgres:
     image: postgres:15-alpine
-    container_name: postgres-prod
+    container_name: bde
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: president
-      POSTGRES_PASSWORD: president1234
-      POSTGRES_DB: bde
+    env_file:
+      - secret/.env
     ports:
-      - '8081:5432'
+      - '8080:5432'
     networks:
-      - server-prod
+      - server
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U president -d bde"]
       interval: 10s
@@ -61,9 +59,8 @@ services:
       retries: 10
 
 networks:
-  server-prod:
+  server:
     driver: bridge
 
 volumes:
   postgres_data:
-

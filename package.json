@@ -3,16 +3,14 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"dev": "dotenv -e docker/development/secret/.env -- next dev",
+		"prisma-dev": "dotenv -e docker/development/secret/.env -- npx prisma migrate dev",
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint",
 		"prepare": "husky",
 		"test": "commitlint --from=origin/main --to=HEAD; npx prettier . --check; eslint .; tsc --noEmit"
 	},
-	"prisma": {
-    	"schema": "src/database/prisma/schema.prisma"
-  	},
 	"dependencies": {
 		"@mdx-js/loader": "^3.1.1",
 		"@mdx-js/react": "^3.1.1",
@@ -40,6 +38,7 @@
 		"@types/pg": "^8.20.0",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"dotenv-cli": "^11.0.0",
 		"eslint": "^9",
 		"eslint-config-next": "16.2.2",
 		"eslint-config-prettier": "^10.1.8",

@@ -13,12 +13,12 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-COPY docker/dev/secret/.env .env.production
+COPY docker/production/secret.env .env.production
 RUN npm run build
 
 FROM base AS runner
@@ -34,13 +34,14 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-RUN npm install --save-dev dotenv
-
 COPY --from=builder --chown=nextjs:nodejs /app/src/database/prisma/ ./src/database/prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
+RUN npx prisma generate
 
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
+
+CMD HOSTNAME="0.0.0.0" node server.js

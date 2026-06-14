@@ -1,0 +1,47 @@
+x-defaults-settings : &default-settings
+  environment:
+    SERVER_NAME: bde42angouleme.dev.fr
+    BACKEND: http://host.docker.internal:3000
+    PARANOIA: 1
+    BLOCKING_PARANOIA: 1
+    ANOMALY_INBOUND: 5
+    ANOMALY_OUTBOUND: 4
+    REPORTING_LEVEL: 2
+
+name: dev
+
+services:
+
+  crs-nginx:
+    <<: *default-settings
+    image: owasp/modsecurity-crs:nginx
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - '443:8443'
+    networks:
+      - server
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: bde
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - secret/.env
+    ports:
+      - '8080:5432'
+    networks:
+      - server
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U president -d bde"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  server:
+    driver: bridge
+
+volumes:
+  postgres_data:
