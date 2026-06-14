@@ -30,4 +30,16 @@ const put = async <T>(route: string, body: object): Promise<T> => {
 	return j as T;
 };
 
-export { get, post, put };
+const deletef = async <T>(route: string, body: object): Promise<T> => {
+	const f = await fetch(`/app/api${route}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(body),
+	});
+	const j = await f.json();
+	return j as T;
+};
+
+export { get, post, put, deletef };

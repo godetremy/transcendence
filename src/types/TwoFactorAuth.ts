@@ -1,4 +1,4 @@
-export interface TwoFactorAuthResponse {
+export interface TwoFactorAuth {
 	mail: boolean;
 	totp: boolean;
 	passkey: boolean;

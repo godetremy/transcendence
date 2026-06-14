@@ -16,12 +16,15 @@ export function GET(req: NextRequest, { params }: { params: Promise<{ id: string
 
 		if (!user_id.is_me) throw ERRORS_DETAILS.permission_denied();
 
+		const user = await getUserById(user_id.id, { two_factor_auth: true });
+
+		if (!user) throw ERRORS_DETAILS.permission_denied();
+		if (user.two_factor_auth && user.two_factor_auth.totp_enabled) throw ERRORS_DETAILS.permission_denied();
+
 		const secret = generateSecret();
 		const two_factor_auth = await saveTotpSecret(user_id.id, secret);
 
 		if (!two_factor_auth) throw ERRORS_DETAILS.failed_to_configure_totp();
-
-		const user = await getUserById(user_id.id, {});
 
 		return NextResponse.json({
 			success: true,
@@ -50,7 +53,7 @@ export function POST(req: NextRequest, { params }: { params: Promise<{ id: strin
 
 		if (!result.valid) throw ERRORS_DETAILS.invalid_totp_code();
 
-		await toggleTotp(user_id.id, true);
+		await toggleTotp(user_id.id, body.enable);
 
 		return NextResponse.json({
 			success: true,

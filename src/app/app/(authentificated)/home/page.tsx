@@ -45,7 +45,7 @@ export default function Page() {
 						<p>full name : {user.full_name}</p>
 						<p>mail : {user.mail}</p>
 						<p>id : {user.id}</p>
-						<p>is agent : {user.is_agent ? 'true' : 'false'}</p>
+						<p>is agent : {user.agent ? 'true' : 'false'}</p>
 						<p>memberships id : {user.memberships_id ?? '-'}</p>
 						<p>start at : {user.membership?.start_at.toLocaleDateString() ?? '-'}</p>
 						<p>end at : {user.membership?.end_at.toLocaleDateString() ?? '-'}</p>

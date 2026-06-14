@@ -75,6 +75,7 @@ export function TwoFactorAuthentificationInput({
 					onBlur={() => setFocused(Array(CODE_SIZE).fill(false))}
 					onSelect={selectionHandler}
 					disabled={disable ?? false}
+					autoComplete="one-time-code"
 				/>
 			</div>
 		</div>
