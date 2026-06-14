@@ -1,67 +1,65 @@
-x-defaults-settings : &default-settings
-  environment:
-    SERVER_NAME: bde42angouleme.fr
-    BACKEND: http://node:3000
-    PARANOIA: 1
-    BLOCKING_PARANOIA: 1
-    ANOMALY_INBOUND: 5
-    ANOMALY_OUTBOUND: 4
-    REPORTING_LEVEL: 2
+x-defaults-settings: &default-settings
+    environment:
+        SERVER_NAME: bde42angouleme.fr
+        BACKEND: http://node:3000
+        PARANOIA: 1
+        BLOCKING_PARANOIA: 1
+        ANOMALY_INBOUND: 5
+        ANOMALY_OUTBOUND: 4
+        REPORTING_LEVEL: 2
 
 name: prod
 
 services:
+    crs-nginx:
+        <<: *default-settings
+        image: owasp/modsecurity-crs:nginx
+        ports:
+            - '443:8443'
+        networks:
+            - server-prod
+        depends_on:
+            node:
+                condition: service_healthy
 
-  crs-nginx:
-    <<: *default-settings
-    image: owasp/modsecurity-crs:nginx
-    ports:
-      - '443:8443'
-    networks:
-      - server-prod
-    depends_on:
-      node:
-        condition: service_healthy
-  
-  node:
-    build:
-      context: ../../
-      dockerfile: docker/production/node/Dockerfile
-    ports:
-      - '3003:3000'
-    networks:
-      - server-prod
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: sh -c "cd /app/ && npx prisma generate && npx prisma migrate dev --name init && HOSTNAME="0.0.0.0" node server.js"
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://node:3000 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    node:
+        build:
+            context: ../../
+            dockerfile: docker/production/node/Dockerfile
+        ports:
+            - '3003:3000'
+        networks:
+            - server-prod
+        depends_on:
+            postgres:
+                condition: service_healthy
+        command: sh -c "cd /app/ && npx prisma generate && npx prisma migrate dev --name init && HOSTNAME="0.0.0.0" node server.js"
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -qO- http://node:3000 || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
-  postgres:
-    image: postgres:15-alpine
-    container_name: postgres-prod
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    env_file:
-      - secret/.env
-    ports:
-      - '8081:5432'
-    networks:
-      - server-prod
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U president -d bde"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    postgres:
+        image: postgres:15-alpine
+        container_name: postgres-prod
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        env_file:
+            - secret/.env
+        ports:
+            - '8081:5432'
+        networks:
+            - server-prod
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U president -d bde']
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
 networks:
-  server-prod:
-    driver: bridge
+    server-prod:
+        driver: bridge
 
 volumes:
-  postgres_data:
-
+    postgres_data:
