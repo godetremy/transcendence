@@ -391,6 +391,16 @@ export type eventUncheckedUpdateManyInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type EventListRelationFilter = {
+  every?: Prisma.eventWhereInput
+  some?: Prisma.eventWhereInput
+  none?: Prisma.eventWhereInput
+}
+
+export type eventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type EventNullableScalarRelationFilter = {
   is?: Prisma.eventWhereInput | null
   isNot?: Prisma.eventWhereInput | null
@@ -443,14 +453,46 @@ export type eventSumOrderByAggregateInput = {
   max_inscription?: Prisma.SortOrder
 }
 
-export type EventListRelationFilter = {
-  every?: Prisma.eventWhereInput
-  some?: Prisma.eventWhereInput
-  none?: Prisma.eventWhereInput
+export type eventCreateNestedManyWithoutAuthorInput = {
+  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
+  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
+  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
+  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
 }
 
-export type eventOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type eventUncheckedCreateNestedManyWithoutAuthorInput = {
+  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
+  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
+  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
+  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+}
+
+export type eventUpdateManyWithoutAuthorNestedInput = {
+  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
+  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
+  upsert?: Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput | Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput[]
+  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
+  set?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  disconnect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  delete?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  update?: Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput | Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput[]
+  updateMany?: Prisma.eventUpdateManyWithWhereWithoutAuthorInput | Prisma.eventUpdateManyWithWhereWithoutAuthorInput[]
+  deleteMany?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
+}
+
+export type eventUncheckedUpdateManyWithoutAuthorNestedInput = {
+  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
+  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
+  upsert?: Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput | Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput[]
+  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
+  set?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  disconnect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  delete?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+  update?: Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput | Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput[]
+  updateMany?: Prisma.eventUpdateManyWithWhereWithoutAuthorInput | Prisma.eventUpdateManyWithWhereWithoutAuthorInput[]
+  deleteMany?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
 }
 
 export type eventCreateNestedOneWithoutRegisteredInput = {
@@ -493,46 +535,68 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type eventCreateNestedManyWithoutAuthorInput = {
-  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
-  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
-  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
-  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+export type eventCreateWithoutAuthorInput = {
+  id?: string
+  title?: string | null
+  description?: string | null
+  max_inscription?: number
+  start_at?: Date | string
+  end_at?: Date | string
+  created_at?: Date | string
+  registered?: Prisma.registered_eventCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumCreateNestedOneWithoutEventInput
 }
 
-export type eventUncheckedCreateNestedManyWithoutAuthorInput = {
-  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
-  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
-  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
-  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
+export type eventUncheckedCreateWithoutAuthorInput = {
+  id?: string
+  title?: string | null
+  description?: string | null
+  max_inscription?: number
+  start_at?: Date | string
+  end_at?: Date | string
+  created_at?: Date | string
+  registered?: Prisma.registered_eventUncheckedCreateNestedOneWithoutEventInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedOneWithoutEventInput
 }
 
-export type eventUpdateManyWithoutAuthorNestedInput = {
-  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
-  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
-  upsert?: Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput | Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput[]
-  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
-  set?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  disconnect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  delete?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  update?: Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput | Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput[]
-  updateMany?: Prisma.eventUpdateManyWithWhereWithoutAuthorInput | Prisma.eventUpdateManyWithWhereWithoutAuthorInput[]
-  deleteMany?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
+export type eventCreateOrConnectWithoutAuthorInput = {
+  where: Prisma.eventWhereUniqueInput
+  create: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput>
 }
 
-export type eventUncheckedUpdateManyWithoutAuthorNestedInput = {
-  create?: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput> | Prisma.eventCreateWithoutAuthorInput[] | Prisma.eventUncheckedCreateWithoutAuthorInput[]
-  connectOrCreate?: Prisma.eventCreateOrConnectWithoutAuthorInput | Prisma.eventCreateOrConnectWithoutAuthorInput[]
-  upsert?: Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput | Prisma.eventUpsertWithWhereUniqueWithoutAuthorInput[]
-  createMany?: Prisma.eventCreateManyAuthorInputEnvelope
-  set?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  disconnect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  delete?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  connect?: Prisma.eventWhereUniqueInput | Prisma.eventWhereUniqueInput[]
-  update?: Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput | Prisma.eventUpdateWithWhereUniqueWithoutAuthorInput[]
-  updateMany?: Prisma.eventUpdateManyWithWhereWithoutAuthorInput | Prisma.eventUpdateManyWithWhereWithoutAuthorInput[]
-  deleteMany?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
+export type eventCreateManyAuthorInputEnvelope = {
+  data: Prisma.eventCreateManyAuthorInput | Prisma.eventCreateManyAuthorInput[]
+  skipDuplicates?: boolean
+}
+
+export type eventUpsertWithWhereUniqueWithoutAuthorInput = {
+  where: Prisma.eventWhereUniqueInput
+  update: Prisma.XOR<Prisma.eventUpdateWithoutAuthorInput, Prisma.eventUncheckedUpdateWithoutAuthorInput>
+  create: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput>
+}
+
+export type eventUpdateWithWhereUniqueWithoutAuthorInput = {
+  where: Prisma.eventWhereUniqueInput
+  data: Prisma.XOR<Prisma.eventUpdateWithoutAuthorInput, Prisma.eventUncheckedUpdateWithoutAuthorInput>
+}
+
+export type eventUpdateManyWithWhereWithoutAuthorInput = {
+  where: Prisma.eventScalarWhereInput
+  data: Prisma.XOR<Prisma.eventUpdateManyMutationInput, Prisma.eventUncheckedUpdateManyWithoutAuthorInput>
+}
+
+export type eventScalarWhereInput = {
+  AND?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
+  OR?: Prisma.eventScalarWhereInput[]
+  NOT?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
+  id?: Prisma.StringFilter<"event"> | string
+  author_id?: Prisma.StringFilter<"event"> | string
+  title?: Prisma.StringNullableFilter<"event"> | string | null
+  description?: Prisma.StringNullableFilter<"event"> | string | null
+  max_inscription?: Prisma.IntFilter<"event"> | number
+  start_at?: Prisma.DateTimeFilter<"event"> | Date | string
+  end_at?: Prisma.DateTimeFilter<"event"> | Date | string
+  created_at?: Prisma.DateTimeFilter<"event"> | Date | string
 }
 
 export type eventCreateWithoutRegisteredInput = {
@@ -661,70 +725,6 @@ export type eventUncheckedUpdateWithoutImage_albumInput = {
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered?: Prisma.registered_eventUncheckedUpdateOneWithoutEventNestedInput
-}
-
-export type eventCreateWithoutAuthorInput = {
-  id?: string
-  title?: string | null
-  description?: string | null
-  max_inscription?: number
-  start_at?: Date | string
-  end_at?: Date | string
-  created_at?: Date | string
-  registered?: Prisma.registered_eventCreateNestedOneWithoutEventInput
-  image_album?: Prisma.image_albumCreateNestedOneWithoutEventInput
-}
-
-export type eventUncheckedCreateWithoutAuthorInput = {
-  id?: string
-  title?: string | null
-  description?: string | null
-  max_inscription?: number
-  start_at?: Date | string
-  end_at?: Date | string
-  created_at?: Date | string
-  registered?: Prisma.registered_eventUncheckedCreateNestedOneWithoutEventInput
-  image_album?: Prisma.image_albumUncheckedCreateNestedOneWithoutEventInput
-}
-
-export type eventCreateOrConnectWithoutAuthorInput = {
-  where: Prisma.eventWhereUniqueInput
-  create: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput>
-}
-
-export type eventCreateManyAuthorInputEnvelope = {
-  data: Prisma.eventCreateManyAuthorInput | Prisma.eventCreateManyAuthorInput[]
-  skipDuplicates?: boolean
-}
-
-export type eventUpsertWithWhereUniqueWithoutAuthorInput = {
-  where: Prisma.eventWhereUniqueInput
-  update: Prisma.XOR<Prisma.eventUpdateWithoutAuthorInput, Prisma.eventUncheckedUpdateWithoutAuthorInput>
-  create: Prisma.XOR<Prisma.eventCreateWithoutAuthorInput, Prisma.eventUncheckedCreateWithoutAuthorInput>
-}
-
-export type eventUpdateWithWhereUniqueWithoutAuthorInput = {
-  where: Prisma.eventWhereUniqueInput
-  data: Prisma.XOR<Prisma.eventUpdateWithoutAuthorInput, Prisma.eventUncheckedUpdateWithoutAuthorInput>
-}
-
-export type eventUpdateManyWithWhereWithoutAuthorInput = {
-  where: Prisma.eventScalarWhereInput
-  data: Prisma.XOR<Prisma.eventUpdateManyMutationInput, Prisma.eventUncheckedUpdateManyWithoutAuthorInput>
-}
-
-export type eventScalarWhereInput = {
-  AND?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
-  OR?: Prisma.eventScalarWhereInput[]
-  NOT?: Prisma.eventScalarWhereInput | Prisma.eventScalarWhereInput[]
-  id?: Prisma.StringFilter<"event"> | string
-  author_id?: Prisma.StringFilter<"event"> | string
-  title?: Prisma.StringNullableFilter<"event"> | string | null
-  description?: Prisma.StringNullableFilter<"event"> | string | null
-  max_inscription?: Prisma.IntFilter<"event"> | number
-  start_at?: Prisma.DateTimeFilter<"event"> | Date | string
-  end_at?: Prisma.DateTimeFilter<"event"> | Date | string
-  created_at?: Prisma.DateTimeFilter<"event"> | Date | string
 }
 
 export type eventCreateManyAuthorInput = {
@@ -1136,14 +1136,14 @@ export interface eventDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * @param {EventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
    * @example
    * // Ordered by age ascending
-   * // Where mail contains prisma.io
+   * // Where email contains prisma.io
    * // Limited to the 10 users
    * const aggregations = await prisma.user.aggregate({
    *   _avg: {
    *     age: true,
    *   },
    *   where: {
-   *     mail: {
+   *     email: {
    *       contains: "prisma.io",
    *     },
    *   },

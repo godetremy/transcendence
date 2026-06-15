@@ -286,6 +286,16 @@ export type image_reportUncheckedUpdateManyInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type Image_reportListRelationFilter = {
+  every?: Prisma.image_reportWhereInput
+  some?: Prisma.image_reportWhereInput
+  none?: Prisma.image_reportWhereInput
+}
+
+export type image_reportOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type Image_reportNullableScalarRelationFilter = {
   is?: Prisma.image_reportWhereInput | null
   isNot?: Prisma.image_reportWhereInput | null
@@ -319,48 +329,6 @@ export type image_reportMinOrderByAggregateInput = {
   signaling_id?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
-}
-
-export type Image_reportListRelationFilter = {
-  every?: Prisma.image_reportWhereInput
-  some?: Prisma.image_reportWhereInput
-  none?: Prisma.image_reportWhereInput
-}
-
-export type image_reportOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
-export type image_reportCreateNestedOneWithoutImage_albumInput = {
-  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
-  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
-  connect?: Prisma.image_reportWhereUniqueInput
-}
-
-export type image_reportUncheckedCreateNestedOneWithoutImage_albumInput = {
-  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
-  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
-  connect?: Prisma.image_reportWhereUniqueInput
-}
-
-export type image_reportUpdateOneWithoutImage_albumNestedInput = {
-  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
-  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
-  upsert?: Prisma.image_reportUpsertWithoutImage_albumInput
-  disconnect?: Prisma.image_reportWhereInput | boolean
-  delete?: Prisma.image_reportWhereInput | boolean
-  connect?: Prisma.image_reportWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.image_reportUpdateToOneWithWhereWithoutImage_albumInput, Prisma.image_reportUpdateWithoutImage_albumInput>, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
-}
-
-export type image_reportUncheckedUpdateOneWithoutImage_albumNestedInput = {
-  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
-  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
-  upsert?: Prisma.image_reportUpsertWithoutImage_albumInput
-  disconnect?: Prisma.image_reportWhereInput | boolean
-  delete?: Prisma.image_reportWhereInput | boolean
-  connect?: Prisma.image_reportWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.image_reportUpdateToOneWithWhereWithoutImage_albumInput, Prisma.image_reportUpdateWithoutImage_albumInput>, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
 }
 
 export type image_reportCreateNestedManyWithoutSignalingInput = {
@@ -405,48 +373,36 @@ export type image_reportUncheckedUpdateManyWithoutSignalingNestedInput = {
   deleteMany?: Prisma.image_reportScalarWhereInput | Prisma.image_reportScalarWhereInput[]
 }
 
-export type image_reportCreateWithoutImage_albumInput = {
-  id?: string
-  reason?: string | null
-  created_at?: Date | string
-  signaling: Prisma.usersCreateNestedOneWithoutImage_reportInput
+export type image_reportCreateNestedOneWithoutImage_albumInput = {
+  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
+  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
+  connect?: Prisma.image_reportWhereUniqueInput
 }
 
-export type image_reportUncheckedCreateWithoutImage_albumInput = {
-  id?: string
-  signaling_id: string
-  reason?: string | null
-  created_at?: Date | string
+export type image_reportUncheckedCreateNestedOneWithoutImage_albumInput = {
+  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
+  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
+  connect?: Prisma.image_reportWhereUniqueInput
 }
 
-export type image_reportCreateOrConnectWithoutImage_albumInput = {
-  where: Prisma.image_reportWhereUniqueInput
-  create: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
+export type image_reportUpdateOneWithoutImage_albumNestedInput = {
+  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
+  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
+  upsert?: Prisma.image_reportUpsertWithoutImage_albumInput
+  disconnect?: Prisma.image_reportWhereInput | boolean
+  delete?: Prisma.image_reportWhereInput | boolean
+  connect?: Prisma.image_reportWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.image_reportUpdateToOneWithWhereWithoutImage_albumInput, Prisma.image_reportUpdateWithoutImage_albumInput>, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
 }
 
-export type image_reportUpsertWithoutImage_albumInput = {
-  update: Prisma.XOR<Prisma.image_reportUpdateWithoutImage_albumInput, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
-  create: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
-  where?: Prisma.image_reportWhereInput
-}
-
-export type image_reportUpdateToOneWithWhereWithoutImage_albumInput = {
-  where?: Prisma.image_reportWhereInput
-  data: Prisma.XOR<Prisma.image_reportUpdateWithoutImage_albumInput, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
-}
-
-export type image_reportUpdateWithoutImage_albumInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  signaling?: Prisma.usersUpdateOneRequiredWithoutImage_reportNestedInput
-}
-
-export type image_reportUncheckedUpdateWithoutImage_albumInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  signaling_id?: Prisma.StringFieldUpdateOperationsInput | string
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type image_reportUncheckedUpdateOneWithoutImage_albumNestedInput = {
+  create?: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
+  connectOrCreate?: Prisma.image_reportCreateOrConnectWithoutImage_albumInput
+  upsert?: Prisma.image_reportUpsertWithoutImage_albumInput
+  disconnect?: Prisma.image_reportWhereInput | boolean
+  delete?: Prisma.image_reportWhereInput | boolean
+  connect?: Prisma.image_reportWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.image_reportUpdateToOneWithWhereWithoutImage_albumInput, Prisma.image_reportUpdateWithoutImage_albumInput>, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
 }
 
 export type image_reportCreateWithoutSignalingInput = {
@@ -498,6 +454,50 @@ export type image_reportScalarWhereInput = {
   signaling_id?: Prisma.StringFilter<"image_report"> | string
   reason?: Prisma.StringNullableFilter<"image_report"> | string | null
   created_at?: Prisma.DateTimeFilter<"image_report"> | Date | string
+}
+
+export type image_reportCreateWithoutImage_albumInput = {
+  id?: string
+  reason?: string | null
+  created_at?: Date | string
+  signaling: Prisma.usersCreateNestedOneWithoutImage_reportInput
+}
+
+export type image_reportUncheckedCreateWithoutImage_albumInput = {
+  id?: string
+  signaling_id: string
+  reason?: string | null
+  created_at?: Date | string
+}
+
+export type image_reportCreateOrConnectWithoutImage_albumInput = {
+  where: Prisma.image_reportWhereUniqueInput
+  create: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
+}
+
+export type image_reportUpsertWithoutImage_albumInput = {
+  update: Prisma.XOR<Prisma.image_reportUpdateWithoutImage_albumInput, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
+  create: Prisma.XOR<Prisma.image_reportCreateWithoutImage_albumInput, Prisma.image_reportUncheckedCreateWithoutImage_albumInput>
+  where?: Prisma.image_reportWhereInput
+}
+
+export type image_reportUpdateToOneWithWhereWithoutImage_albumInput = {
+  where?: Prisma.image_reportWhereInput
+  data: Prisma.XOR<Prisma.image_reportUpdateWithoutImage_albumInput, Prisma.image_reportUncheckedUpdateWithoutImage_albumInput>
+}
+
+export type image_reportUpdateWithoutImage_albumInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  signaling?: Prisma.usersUpdateOneRequiredWithoutImage_reportNestedInput
+}
+
+export type image_reportUncheckedUpdateWithoutImage_albumInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  signaling_id?: Prisma.StringFieldUpdateOperationsInput | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type image_reportCreateManySignalingInput = {
@@ -879,14 +879,14 @@ export interface image_reportDelegate<ExtArgs extends runtime.Types.Extensions.I
    * @param {Image_reportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
    * @example
    * // Ordered by age ascending
-   * // Where mail contains prisma.io
+   * // Where email contains prisma.io
    * // Limited to the 10 users
    * const aggregations = await prisma.user.aggregate({
    *   _avg: {
    *     age: true,
    *   },
    *   where: {
-   *     mail: {
+   *     email: {
    *       contains: "prisma.io",
    *     },
    *   },

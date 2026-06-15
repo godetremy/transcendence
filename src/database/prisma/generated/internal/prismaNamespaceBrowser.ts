@@ -51,13 +51,15 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  fortytwo_oauth: 'fortytwo_oauth',
   memberships: 'memberships',
-  oauth_fortytwo: 'oauth_fortytwo',
+  two_factor_auth: 'two_factor_auth',
+  users: 'users',
+  webauthn_credentials: 'webauthn_credentials',
   registered_event: 'registered_event',
   image_album: 'image_album',
   image_report: 'image_report',
-  event: 'event',
-  users: 'users'
+  event: 'event'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -76,6 +78,16 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const Fortytwo_oauthScalarFieldEnum = {
+  id: 'id',
+  access_token: 'access_token',
+  refresh_token: 'refresh_token',
+  valid_until: 'valid_until'
+} as const
+
+export type Fortytwo_oauthScalarFieldEnum = (typeof Fortytwo_oauthScalarFieldEnum)[keyof typeof Fortytwo_oauthScalarFieldEnum]
+
+
 export const MembershipsScalarFieldEnum = {
   id: 'id',
   start_at: 'start_at',
@@ -85,14 +97,50 @@ export const MembershipsScalarFieldEnum = {
 export type MembershipsScalarFieldEnum = (typeof MembershipsScalarFieldEnum)[keyof typeof MembershipsScalarFieldEnum]
 
 
-export const Oauth_fortytwoScalarFieldEnum = {
+export const Two_factor_authScalarFieldEnum = {
   id: 'id',
-  access_token: 'access_token',
-  refresh_token: 'refresh_token',
-  valid_until: 'valid_until'
+  mail_enabled: 'mail_enabled',
+  totp_enabled: 'totp_enabled',
+  totp_secret: 'totp_secret',
+  webauthn_credential_id: 'webauthn_credential_id'
 } as const
 
-export type Oauth_fortytwoScalarFieldEnum = (typeof Oauth_fortytwoScalarFieldEnum)[keyof typeof Oauth_fortytwoScalarFieldEnum]
+export type Two_factor_authScalarFieldEnum = (typeof Two_factor_authScalarFieldEnum)[keyof typeof Two_factor_authScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  mail: 'mail',
+  password: 'password',
+  two_factor_auth_id: 'two_factor_auth_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  full_name: 'full_name',
+  profile_picture: 'profile_picture',
+  fortytwo_user_id: 'fortytwo_user_id',
+  fortytwo_oauth_id: 'fortytwo_oauth_id',
+  memberships_id: 'memberships_id',
+  agent: 'agent',
+  agent_verified: 'agent_verified',
+  agent_reason: 'agent_reason',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const Webauthn_credentialsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  credential_id: 'credential_id',
+  public_key: 'public_key',
+  sign_count: 'sign_count',
+  created_at: 'created_at',
+  last_used_at: 'last_used_at'
+} as const
+
+export type Webauthn_credentialsScalarFieldEnum = (typeof Webauthn_credentialsScalarFieldEnum)[keyof typeof Webauthn_credentialsScalarFieldEnum]
 
 
 export const Registered_eventScalarFieldEnum = {
@@ -141,28 +189,6 @@ export const EventScalarFieldEnum = {
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
-export const UsersScalarFieldEnum = {
-  id: 'id',
-  oauth_fortytwo_id: 'oauth_fortytwo_id',
-  memberships_id: 'memberships_id',
-  fortytwo_user_id: 'fortytwo_user_id',
-  is_agent: 'is_agent',
-  is_agent_verified: 'is_agent_verified',
-  reason: 'reason',
-  mail: 'mail',
-  password: 'password',
-  first_name: 'first_name',
-  last_name: 'last_name',
-  full_name: 'full_name',
-  code: 'code',
-  profile_picture: 'profile_picture',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-} as const
-
-export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
-
-
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -179,13 +205,6 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-export const membershipsOrderByRelevanceFieldEnum = {
-  id: 'id'
-} as const
-
-export type membershipsOrderByRelevanceFieldEnum = (typeof membershipsOrderByRelevanceFieldEnum)[keyof typeof membershipsOrderByRelevanceFieldEnum]
-
-
 export const NullsOrder = {
   first: 'first',
   last: 'last'
@@ -194,13 +213,57 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
-export const oauth_fortytwoOrderByRelevanceFieldEnum = {
+export const fortytwo_oauthOrderByRelevanceFieldEnum = {
   id: 'id',
   access_token: 'access_token',
   refresh_token: 'refresh_token'
 } as const
 
-export type oauth_fortytwoOrderByRelevanceFieldEnum = (typeof oauth_fortytwoOrderByRelevanceFieldEnum)[keyof typeof oauth_fortytwoOrderByRelevanceFieldEnum]
+export type fortytwo_oauthOrderByRelevanceFieldEnum = (typeof fortytwo_oauthOrderByRelevanceFieldEnum)[keyof typeof fortytwo_oauthOrderByRelevanceFieldEnum]
+
+
+export const membershipsOrderByRelevanceFieldEnum = {
+  id: 'id'
+} as const
+
+export type membershipsOrderByRelevanceFieldEnum = (typeof membershipsOrderByRelevanceFieldEnum)[keyof typeof membershipsOrderByRelevanceFieldEnum]
+
+
+export const two_factor_authOrderByRelevanceFieldEnum = {
+  id: 'id',
+  totp_secret: 'totp_secret',
+  webauthn_credential_id: 'webauthn_credential_id'
+} as const
+
+export type two_factor_authOrderByRelevanceFieldEnum = (typeof two_factor_authOrderByRelevanceFieldEnum)[keyof typeof two_factor_authOrderByRelevanceFieldEnum]
+
+
+export const usersOrderByRelevanceFieldEnum = {
+  id: 'id',
+  mail: 'mail',
+  password: 'password',
+  two_factor_auth_id: 'two_factor_auth_id',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  full_name: 'full_name',
+  profile_picture: 'profile_picture',
+  fortytwo_oauth_id: 'fortytwo_oauth_id',
+  memberships_id: 'memberships_id',
+  agent_reason: 'agent_reason'
+} as const
+
+export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
+
+
+export const webauthn_credentialsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  credential_id: 'credential_id',
+  public_key: 'public_key',
+  sign_count: 'sign_count'
+} as const
+
+export type webauthn_credentialsOrderByRelevanceFieldEnum = (typeof webauthn_credentialsOrderByRelevanceFieldEnum)[keyof typeof webauthn_credentialsOrderByRelevanceFieldEnum]
 
 
 export const registered_eventOrderByRelevanceFieldEnum = {
@@ -240,20 +303,4 @@ export const eventOrderByRelevanceFieldEnum = {
 } as const
 
 export type eventOrderByRelevanceFieldEnum = (typeof eventOrderByRelevanceFieldEnum)[keyof typeof eventOrderByRelevanceFieldEnum]
-
-
-export const usersOrderByRelevanceFieldEnum = {
-  id: 'id',
-  oauth_fortytwo_id: 'oauth_fortytwo_id',
-  memberships_id: 'memberships_id',
-  reason: 'reason',
-  mail: 'mail',
-  password: 'password',
-  first_name: 'first_name',
-  last_name: 'last_name',
-  full_name: 'full_name',
-  profile_picture: 'profile_picture'
-} as const
-
-export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
 
