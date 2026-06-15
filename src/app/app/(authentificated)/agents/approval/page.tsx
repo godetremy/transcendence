@@ -8,7 +8,7 @@ function Card({ user, onResult }: { user: User; onResult: (msg: string) => void 
 			<h2>Name</h2>
 			<p>{user.full_name}</p>
 			<h2>Reason</h2>
-			<p>{user.reason}</p>
+			<p>{user.agent_reason}</p>
 			<h2>Mail</h2>
 			<p>{user.mail}</p>
 			<button

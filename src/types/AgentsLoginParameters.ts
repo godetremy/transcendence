@@ -1,4 +1,4 @@
-export interface AgentsSignInParameters {
+export interface AgentsLoginParameters {
 	mail: string;
 	password: string;
 	method?: string;

@@ -4,10 +4,12 @@ import { NavigationBarHeader } from '@/components/globals/NavigationBarHeader/Na
 import styles from './page.module.scss';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { ArrowUpRight, Plus } from 'lucide-react';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 export default function Page() {
-	const balanceHistory: { title: string; history: { name: string; cost: number }[] }[] = [];
+	const [balanceHistory, setBalanceHistory] = useState<
+		{ title: string; history: { name: string; cost: number }[] }[]
+	>([]);
 
 	function generateRandomMonth() {
 		const credits = [];
@@ -23,12 +25,17 @@ export default function Page() {
 		return credits;
 	}
 
-	for (let i = 0; i < 10; i++) {
-		balanceHistory.push({
-			title: `Mai 2026`,
-			history: generateRandomMonth(),
-		});
-	}
+	useEffect(() => {
+		const balanceHistory: { title: string; history: { name: string; cost: number }[] }[] = [];
+		for (let i = 0; i < 10; i++) {
+			balanceHistory.push({
+				title: `Mai 2026`,
+				history: generateRandomMonth(),
+			});
+		}
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setBalanceHistory(balanceHistory);
+	}, []);
 
 	return (
 		<>

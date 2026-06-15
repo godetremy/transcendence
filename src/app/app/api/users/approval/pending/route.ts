@@ -10,9 +10,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
 		const db_filter: usersWhereInput = {
-			is_agent: true,
-			is_agent_verified: null,
-			reason: { not: null },
+			agent: true,
+			agent_verified: null,
+			agent_reason: { not: null },
 		};
 
 		const total = await countUsersByFilter(db_filter);

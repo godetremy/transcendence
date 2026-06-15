@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 		if (!user_id.is_me) throw ERRORS_DETAILS.permission_denied();
 
 		const user = await deleteUser(user_id.id);
-		if (user.oauth_fortytwo_id) await deleteOauthFortyTwo(user.oauth_fortytwo_id);
+		if (user.fortytwo_oauth_id) await deleteOauthFortyTwo(user.fortytwo_oauth_id);
 		if (user.memberships_id) await deleteMembership(user.memberships_id);
 		return redirect('/app/api/auth/logout/');
 	});

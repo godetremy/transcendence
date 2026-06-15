@@ -48,8 +48,8 @@ export default async function proxy(req: NextRequest) {
 	}
 
 	if (
-		session.is_agent &&
-		(session.is_agent_verified === null || !session.is_agent_verified) &&
+		session.agent &&
+		(session.agent_verified === null || !session.agent_verified) &&
 		!req.nextUrl.pathname.startsWith('/app/agents/approval') &&
 		!req.nextUrl.pathname.startsWith('/app/api')
 	)

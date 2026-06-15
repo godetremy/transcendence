@@ -17,7 +17,7 @@ export function formatPublicEvent(
 			last_name: row.author.last_name,
 			full_name: row.author.full_name,
 			profile_picture: row.author.profile_picture,
-			is_agent: row.author.is_agent,
+			agent: row.author.agent,
 		},
 	};
 }

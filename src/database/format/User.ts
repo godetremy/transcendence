@@ -25,7 +25,7 @@ const formatPublicUser = (row: Prisma.usersGetPayload<object>): PublicUser => {
 		last_name: row.last_name,
 		full_name: row.full_name,
 		profile_picture: row.full_name,
-		is_agent: row.is_agent,
+		agent: row.agent,
 	};
 };
 
