@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 	});
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { id } = await params;
 		const session = await decrypt(req.cookies.get('session')?.value);
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 					...(body.first_name && { first_name: body.first_name }),
 					...(body.last_name && { last_name: body.last_name }),
 					...(body.full_name && { full_name: body.full_name }),
-					...(body.reason && { reason: body.reason }),
+					...(body.agent_reason && { agent_reason: body.agent_reason }),
 					...(body.profile_picture && { profile_picture: body.profile_picture }),
 				},
 			});
@@ -56,6 +56,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 						throw ERRORS_DETAILS.account_does_not_exists();
 				}
 			}
+			throw err;
 		}
 
 		return NextResponse.json({ success: true });
