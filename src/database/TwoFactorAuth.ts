@@ -1,5 +1,7 @@
 import { Prisma } from '@/database/prisma/generated/client';
 import { prisma } from '@/database/prisma/prisma';
+import { ERRORS_DETAILS } from '@/utils/errors';
+import { verify } from 'otplib';
 
 const createTwoFactorAuth = async (user_id: string): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.update({
@@ -39,4 +41,13 @@ const toggleTotp = async (
 	});
 };
 
-export { createTwoFactorAuth, saveTotpSecret, toggleTotp };
+const checkTotp = async (
+	two_factor_auth: Prisma.two_factor_authGetPayload<Prisma.two_factor_authDefaultArgs> | null,
+	code: string
+): Promise<boolean> => {
+	if (!two_factor_auth || !two_factor_auth.totp_secret) throw ERRORS_DETAILS.two_factor_auth_not_configured();
+
+	return (await verify({ secret: two_factor_auth.totp_secret, token: code })).valid;
+};
+
+export { createTwoFactorAuth, saveTotpSecret, toggleTotp, checkTotp };

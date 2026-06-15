@@ -21,8 +21,12 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	file_not_found: () => new ApiError(404, 'This file does not exist.'),
 	session_expired: () => new ApiError(401, 'This session expired.'),
 	two_factor_auth_not_configured: () => new ApiError(409, 'The 2FA is not configured on this account.'),
+	two_factor_auth_method_not_enabled: () =>
+		new ApiError(403, 'The 2FA method you use is not configured on this account.'),
 	failed_to_configure_totp: () => new ApiError(500, 'An error occured while configuring your one time based code.'),
 	invalid_totp_code: () => new ApiError(401, 'The code you entered is invalid.'),
+	two_factor_auth_required: () => new ApiError(401, 'Two factor auth is required for this account.'),
+	two_factor_auth_not_implemented: () => new ApiError(501, 'This 2FA method is not implemented yet.'),
 };
 
 const formatError = (error: ApiError) => {
