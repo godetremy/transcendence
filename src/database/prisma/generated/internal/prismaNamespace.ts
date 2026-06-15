@@ -1143,6 +1143,7 @@ export const usersOrderByRelevanceFieldEnum = {
   first_name: 'first_name',
   last_name: 'last_name',
   full_name: 'full_name',
+  code: 'code',
   profile_picture: 'profile_picture'
 } as const
 

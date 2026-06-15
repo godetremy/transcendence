@@ -205,6 +205,7 @@ function CardList({ search, event }: { search: SearchEvent; event: CreateEventTy
 export default function Page() {
 	const [searched, setSearched] = useState<boolean>(false);
 	const [searchValue, setSearchValue] = useState<SearchEvent>();
+	const [error, setError] = useState<string>();
 
 	const [event, setEvent] = useState<CreateEventType>({
 		title: '',
@@ -245,7 +246,8 @@ export default function Page() {
 			method: 'POST',
 			body: form,
 		});
-		console.log(val);
+		const response = await val.json();
+		setError(response.error);
 	};
 
 	const search = (form: FormData) => {
@@ -319,6 +321,7 @@ export default function Page() {
 			>
 				<input type="file" name="file" />
 				<button type="submit">Importer un fichier</button>
+				<p>{error}</p>
 			</form>
 
 			<div className="search">
