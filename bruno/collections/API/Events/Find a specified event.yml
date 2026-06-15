@@ -1,0 +1,19 @@
+info:
+  name: Find a specified event
+  type: http
+  seq: 15
+
+http:
+  method: GET
+  url: "{{BaseURL}}/events/:event_id"
+  params:
+    - name: event_id
+      value: idtest
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
