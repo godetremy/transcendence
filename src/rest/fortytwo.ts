@@ -1,5 +1,6 @@
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
+import { ERRORS_DETAILS } from '@/utils/errors';
 
 const FORTY_TWO_BASE_URL = 'https://api.intra.42.fr';
 
@@ -30,6 +31,7 @@ export async function getFortyTwoOauthToken(code: string): Promise<FortyTwoOauth
 			'Content-Type': 'application/json',
 		},
 	});
+	if (authorize_fetch.status === 401) throw ERRORS_DETAILS.invalid_oauth_error();
 	if (!authorize_fetch.ok) throw new Error(`42 API repond with status code ${authorize_fetch.status}`);
 	return await authorize_fetch.json();
 }
