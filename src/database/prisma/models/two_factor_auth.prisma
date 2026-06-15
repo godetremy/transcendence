@@ -1,7 +1,7 @@
 model two_factor_auth {
 	id							String					@id			@default(uuid())
 
-	mail_enabled				Boolean					@default(true)
+	mail_enabled				Boolean					@default(false)
 
 	totp_enabled				Boolean					@default(false)
 	totp_secret					String?
