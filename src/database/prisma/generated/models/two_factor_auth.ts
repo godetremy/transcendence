@@ -326,10 +326,6 @@ export type Two_factor_authNullableScalarRelationFilter = {
   isNot?: Prisma.two_factor_authWhereInput | null
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type two_factor_authCreateNestedOneWithoutUserInput = {
   create?: Prisma.XOR<Prisma.two_factor_authCreateWithoutUserInput, Prisma.two_factor_authUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.two_factor_authCreateOrConnectWithoutUserInput

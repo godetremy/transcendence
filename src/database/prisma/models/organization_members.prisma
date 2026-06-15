@@ -1,0 +1,13 @@
+model organization_members {
+	id									String			@id			@default(uuid())
+
+	organization_id						String
+	user_id								String
+	permission_id						String
+
+	registered_at						DateTime		@default(now())
+
+	organization						organizations					@relation(fields: [organization_id], references: [id])
+	user								users							@relation(fields: [user_id], references: [id])
+	organization_permission				organization_permission			@relation(fields: [permission_id], references: [id])
+}

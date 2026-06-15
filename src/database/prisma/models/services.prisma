@@ -1,0 +1,33 @@
+model services {
+	id						String					@id		@default(uuid())
+
+	organization_id			String
+	category_id				String
+
+	image					String
+	title					String
+	subtitle				String?
+	edition					Int
+
+	description				String?
+	address					String?
+
+	start_at				DateTime?
+	end_at					DateTime?
+
+	registration_required	Boolean					@default(false)
+	registration_details	String
+	registration_link		String
+	registration_full		Boolean					@default(false)
+
+	photo_album_id			String?					@unique
+
+	source_link				String?
+
+	created_at				DateTime				@default(now())
+	updated_at				DateTime				@updatedAt
+
+	organization			organizations			@relation(fields: [organization_id], references: [id])
+	category				service_catreogries		@relation(fields: [category_id], references: [id])
+	photo_album				photos_album?			@relation(fields: [photo_album_id], references: [id])
+}

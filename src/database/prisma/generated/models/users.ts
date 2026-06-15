@@ -312,6 +312,11 @@ export type usersWhereInput = {
   membership?: Prisma.XOR<Prisma.MembershipsNullableScalarRelationFilter, Prisma.membershipsWhereInput> | null
   two_factor_auth?: Prisma.XOR<Prisma.Two_factor_authNullableScalarRelationFilter, Prisma.two_factor_authWhereInput> | null
   webauthn_credential?: Prisma.XOR<Prisma.Webauthn_credentialsNullableScalarRelationFilter, Prisma.webauthn_credentialsWhereInput> | null
+  organization_members?: Prisma.Organization_membersListRelationFilter
+  organization_followers?: Prisma.Organization_followersListRelationFilter
+  event_registrations?: Prisma.Event_registrationsListRelationFilter
+  photos?: Prisma.PhotosListRelationFilter
+  photos_album_reports?: Prisma.Photos_album_reportsListRelationFilter
 }
 
 export type usersOrderByWithRelationInput = {
@@ -339,6 +344,11 @@ export type usersOrderByWithRelationInput = {
   membership?: Prisma.membershipsOrderByWithRelationInput
   two_factor_auth?: Prisma.two_factor_authOrderByWithRelationInput
   webauthn_credential?: Prisma.webauthn_credentialsOrderByWithRelationInput
+  organization_members?: Prisma.organization_membersOrderByRelationAggregateInput
+  organization_followers?: Prisma.organization_followersOrderByRelationAggregateInput
+  event_registrations?: Prisma.event_registrationsOrderByRelationAggregateInput
+  photos?: Prisma.photosOrderByRelationAggregateInput
+  photos_album_reports?: Prisma.photos_album_reportsOrderByRelationAggregateInput
   _relevance?: Prisma.usersOrderByRelevanceInput
 }
 
@@ -370,6 +380,11 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   membership?: Prisma.XOR<Prisma.MembershipsNullableScalarRelationFilter, Prisma.membershipsWhereInput> | null
   two_factor_auth?: Prisma.XOR<Prisma.Two_factor_authNullableScalarRelationFilter, Prisma.two_factor_authWhereInput> | null
   webauthn_credential?: Prisma.XOR<Prisma.Webauthn_credentialsNullableScalarRelationFilter, Prisma.webauthn_credentialsWhereInput> | null
+  organization_members?: Prisma.Organization_membersListRelationFilter
+  organization_followers?: Prisma.Organization_followersListRelationFilter
+  event_registrations?: Prisma.Event_registrationsListRelationFilter
+  photos?: Prisma.PhotosListRelationFilter
+  photos_album_reports?: Prisma.Photos_album_reportsListRelationFilter
 }, "id" | "mail" | "two_factor_auth_id" | "fortytwo_user_id" | "fortytwo_oauth_id" | "memberships_id">
 
 export type usersOrderByWithAggregationInput = {
@@ -440,6 +455,11 @@ export type usersCreateInput = {
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateInput = {
@@ -464,6 +484,11 @@ export type usersUncheckedCreateInput = {
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersUpdateInput = {
@@ -488,6 +513,11 @@ export type usersUpdateInput = {
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateInput = {
@@ -512,6 +542,11 @@ export type usersUncheckedUpdateInput = {
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateManyInput = {
@@ -566,6 +601,11 @@ export type usersUncheckedUpdateManyInput = {
   agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UsersScalarRelationFilter = {
+  is?: Prisma.usersWhereInput
+  isNot?: Prisma.usersWhereInput
 }
 
 export type UsersNullableScalarRelationFilter = {
@@ -644,9 +684,18 @@ export type usersSumOrderByAggregateInput = {
   fortytwo_user_id?: Prisma.SortOrder
 }
 
-export type UsersScalarRelationFilter = {
-  is?: Prisma.usersWhereInput
-  isNot?: Prisma.usersWhereInput
+export type usersCreateNestedOneWithoutEvent_registrationsInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutEvent_registrationsInput, Prisma.usersUncheckedCreateWithoutEvent_registrationsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutEvent_registrationsInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutEvent_registrationsNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutEvent_registrationsInput, Prisma.usersUncheckedCreateWithoutEvent_registrationsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutEvent_registrationsInput
+  upsert?: Prisma.usersUpsertWithoutEvent_registrationsInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutEvent_registrationsInput, Prisma.usersUpdateWithoutEvent_registrationsInput>, Prisma.usersUncheckedUpdateWithoutEvent_registrationsInput>
 }
 
 export type usersCreateNestedOneWithoutFortytwo_oauthInput = {
@@ -713,6 +762,62 @@ export type usersUncheckedUpdateOneWithoutMembershipNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutMembershipInput, Prisma.usersUpdateWithoutMembershipInput>, Prisma.usersUncheckedUpdateWithoutMembershipInput>
 }
 
+export type usersCreateNestedOneWithoutOrganization_followersInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutOrganization_followersInput, Prisma.usersUncheckedCreateWithoutOrganization_followersInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutOrganization_followersInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutOrganization_followersNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutOrganization_followersInput, Prisma.usersUncheckedCreateWithoutOrganization_followersInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutOrganization_followersInput
+  upsert?: Prisma.usersUpsertWithoutOrganization_followersInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutOrganization_followersInput, Prisma.usersUpdateWithoutOrganization_followersInput>, Prisma.usersUncheckedUpdateWithoutOrganization_followersInput>
+}
+
+export type usersCreateNestedOneWithoutOrganization_membersInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutOrganization_membersInput, Prisma.usersUncheckedCreateWithoutOrganization_membersInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutOrganization_membersInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutOrganization_membersNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutOrganization_membersInput, Prisma.usersUncheckedCreateWithoutOrganization_membersInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutOrganization_membersInput
+  upsert?: Prisma.usersUpsertWithoutOrganization_membersInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutOrganization_membersInput, Prisma.usersUpdateWithoutOrganization_membersInput>, Prisma.usersUncheckedUpdateWithoutOrganization_membersInput>
+}
+
+export type usersCreateNestedOneWithoutPhotosInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPhotosInput, Prisma.usersUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPhotosInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutPhotosNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPhotosInput, Prisma.usersUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPhotosInput
+  upsert?: Prisma.usersUpsertWithoutPhotosInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutPhotosInput, Prisma.usersUpdateWithoutPhotosInput>, Prisma.usersUncheckedUpdateWithoutPhotosInput>
+}
+
+export type usersCreateNestedOneWithoutPhotos_album_reportsInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPhotos_album_reportsInput, Prisma.usersUncheckedCreateWithoutPhotos_album_reportsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPhotos_album_reportsInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutPhotos_album_reportsNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPhotos_album_reportsInput, Prisma.usersUncheckedCreateWithoutPhotos_album_reportsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPhotos_album_reportsInput
+  upsert?: Prisma.usersUpsertWithoutPhotos_album_reportsInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutPhotos_album_reportsInput, Prisma.usersUpdateWithoutPhotos_album_reportsInput>, Prisma.usersUncheckedUpdateWithoutPhotos_album_reportsInput>
+}
+
 export type usersCreateNestedOneWithoutTwo_factor_authInput = {
   create?: Prisma.XOR<Prisma.usersCreateWithoutTwo_factor_authInput, Prisma.usersUncheckedCreateWithoutTwo_factor_authInput>
   connectOrCreate?: Prisma.usersCreateOrConnectWithoutTwo_factor_authInput
@@ -743,14 +848,6 @@ export type usersUncheckedUpdateOneWithoutTwo_factor_authNestedInput = {
   delete?: Prisma.usersWhereInput | boolean
   connect?: Prisma.usersWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutTwo_factor_authInput, Prisma.usersUpdateWithoutTwo_factor_authInput>, Prisma.usersUncheckedUpdateWithoutTwo_factor_authInput>
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type NullableBoolFieldUpdateOperationsInput = {
@@ -833,6 +930,134 @@ export type usersUpdateOneRequiredWithoutEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutEventsInput, Prisma.usersUpdateWithoutEventsInput>, Prisma.usersUncheckedUpdateWithoutEventsInput>
 }
 
+export type usersCreateWithoutEvent_registrationsInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportCreateNestedManyWithoutSignalingInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
+  membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
+  two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
+  webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutEvent_registrationsInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  two_factor_auth_id?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  fortytwo_oauth_id?: string | null
+  memberships_id?: string | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutEvent_registrationsInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutEvent_registrationsInput, Prisma.usersUncheckedCreateWithoutEvent_registrationsInput>
+}
+
+export type usersUpsertWithoutEvent_registrationsInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutEvent_registrationsInput, Prisma.usersUncheckedUpdateWithoutEvent_registrationsInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutEvent_registrationsInput, Prisma.usersUncheckedCreateWithoutEvent_registrationsInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutEvent_registrationsInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutEvent_registrationsInput, Prisma.usersUncheckedUpdateWithoutEvent_registrationsInput>
+}
+
+export type usersUpdateWithoutEvent_registrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUpdateManyWithoutSignalingNestedInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
+  membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
+  two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutEvent_registrationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  two_factor_auth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_oauth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type usersCreateWithoutFortytwo_oauthInput = {
   id?: string
   mail: string
@@ -854,6 +1079,11 @@ export type usersCreateWithoutFortytwo_oauthInput = {
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutFortytwo_oauthInput = {
@@ -877,6 +1107,11 @@ export type usersUncheckedCreateWithoutFortytwo_oauthInput = {
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutFortytwo_oauthInput = {
@@ -916,6 +1151,11 @@ export type usersUpdateWithoutFortytwo_oauthInput = {
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutFortytwo_oauthInput = {
@@ -939,6 +1179,11 @@ export type usersUncheckedUpdateWithoutFortytwo_oauthInput = {
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutMembershipInput = {
@@ -962,6 +1207,11 @@ export type usersCreateWithoutMembershipInput = {
   fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutMembershipInput = {
@@ -985,6 +1235,11 @@ export type usersUncheckedCreateWithoutMembershipInput = {
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutMembershipInput = {
@@ -1024,6 +1279,11 @@ export type usersUpdateWithoutMembershipInput = {
   fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutMembershipInput = {
@@ -1047,6 +1307,523 @@ export type usersUncheckedUpdateWithoutMembershipInput = {
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usersCreateWithoutOrganization_followersInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportCreateNestedManyWithoutSignalingInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
+  membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
+  two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
+  webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutOrganization_followersInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  two_factor_auth_id?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  fortytwo_oauth_id?: string | null
+  memberships_id?: string | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutOrganization_followersInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutOrganization_followersInput, Prisma.usersUncheckedCreateWithoutOrganization_followersInput>
+}
+
+export type usersUpsertWithoutOrganization_followersInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutOrganization_followersInput, Prisma.usersUncheckedUpdateWithoutOrganization_followersInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutOrganization_followersInput, Prisma.usersUncheckedCreateWithoutOrganization_followersInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutOrganization_followersInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutOrganization_followersInput, Prisma.usersUncheckedUpdateWithoutOrganization_followersInput>
+}
+
+export type usersUpdateWithoutOrganization_followersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUpdateManyWithoutSignalingNestedInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
+  membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
+  two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutOrganization_followersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  two_factor_auth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_oauth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usersCreateWithoutOrganization_membersInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportCreateNestedManyWithoutSignalingInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
+  membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
+  two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
+  webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutOrganization_membersInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  two_factor_auth_id?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  fortytwo_oauth_id?: string | null
+  memberships_id?: string | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutOrganization_membersInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutOrganization_membersInput, Prisma.usersUncheckedCreateWithoutOrganization_membersInput>
+}
+
+export type usersUpsertWithoutOrganization_membersInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutOrganization_membersInput, Prisma.usersUncheckedUpdateWithoutOrganization_membersInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutOrganization_membersInput, Prisma.usersUncheckedCreateWithoutOrganization_membersInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutOrganization_membersInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutOrganization_membersInput, Prisma.usersUncheckedUpdateWithoutOrganization_membersInput>
+}
+
+export type usersUpdateWithoutOrganization_membersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUpdateManyWithoutSignalingNestedInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
+  membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
+  two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutOrganization_membersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  two_factor_auth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_oauth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usersCreateWithoutPhotosInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportCreateNestedManyWithoutSignalingInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
+  membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
+  two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
+  webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
+}
+
+export type usersUncheckedCreateWithoutPhotosInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  two_factor_auth_id?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  fortytwo_oauth_id?: string | null
+  memberships_id?: string | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type usersCreateOrConnectWithoutPhotosInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutPhotosInput, Prisma.usersUncheckedCreateWithoutPhotosInput>
+}
+
+export type usersUpsertWithoutPhotosInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutPhotosInput, Prisma.usersUncheckedUpdateWithoutPhotosInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutPhotosInput, Prisma.usersUncheckedCreateWithoutPhotosInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutPhotosInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutPhotosInput, Prisma.usersUncheckedUpdateWithoutPhotosInput>
+}
+
+export type usersUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUpdateManyWithoutSignalingNestedInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
+  membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
+  two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
+}
+
+export type usersUncheckedUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  two_factor_auth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_oauth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type usersCreateWithoutPhotos_album_reportsInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportCreateNestedManyWithoutSignalingInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
+  membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
+  two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
+  webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+}
+
+export type usersUncheckedCreateWithoutPhotos_album_reportsInput = {
+  id?: string
+  mail: string
+  password?: string | null
+  two_factor_auth_id?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  profile_picture?: string
+  fortytwo_user_id?: number | null
+  fortytwo_oauth_id?: string | null
+  memberships_id?: string | null
+  agent?: boolean
+  agent_verified?: boolean | null
+  agent_reason?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  events?: Prisma.eventUncheckedCreateNestedManyWithoutAuthorInput
+  image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
+  registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
+  image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+}
+
+export type usersCreateOrConnectWithoutPhotos_album_reportsInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutPhotos_album_reportsInput, Prisma.usersUncheckedCreateWithoutPhotos_album_reportsInput>
+}
+
+export type usersUpsertWithoutPhotos_album_reportsInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutPhotos_album_reportsInput, Prisma.usersUncheckedUpdateWithoutPhotos_album_reportsInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutPhotos_album_reportsInput, Prisma.usersUncheckedCreateWithoutPhotos_album_reportsInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutPhotos_album_reportsInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutPhotos_album_reportsInput, Prisma.usersUncheckedUpdateWithoutPhotos_album_reportsInput>
+}
+
+export type usersUpdateWithoutPhotos_album_reportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUpdateManyWithoutSignalingNestedInput
+  fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
+  membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
+  two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+}
+
+export type usersUncheckedUpdateWithoutPhotos_album_reportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mail?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  two_factor_auth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  full_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profile_picture?: Prisma.StringFieldUpdateOperationsInput | string
+  fortytwo_user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fortytwo_oauth_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  memberships_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  agent_verified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  agent_reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.eventUncheckedUpdateManyWithoutAuthorNestedInput
+  image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
+  registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
+  image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
+  webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
 }
 
 export type usersCreateWithoutTwo_factor_authInput = {
@@ -1070,6 +1847,11 @@ export type usersCreateWithoutTwo_factor_authInput = {
   fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutTwo_factor_authInput = {
@@ -1093,6 +1875,11 @@ export type usersUncheckedCreateWithoutTwo_factor_authInput = {
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutTwo_factor_authInput = {
@@ -1132,6 +1919,11 @@ export type usersUpdateWithoutTwo_factor_authInput = {
   fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutTwo_factor_authInput = {
@@ -1155,6 +1947,11 @@ export type usersUncheckedUpdateWithoutTwo_factor_authInput = {
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutWebauthn_credentialInput = {
@@ -1178,6 +1975,11 @@ export type usersCreateWithoutWebauthn_credentialInput = {
   fortytwo_oauth?: Prisma.fortytwo_oauthCreateNestedOneWithoutUserInput
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutWebauthn_credentialInput = {
@@ -1201,6 +2003,11 @@ export type usersUncheckedCreateWithoutWebauthn_credentialInput = {
   image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutWebauthn_credentialInput = {
@@ -1240,6 +2047,11 @@ export type usersUpdateWithoutWebauthn_credentialInput = {
   fortytwo_oauth?: Prisma.fortytwo_oauthUpdateOneWithoutUserNestedInput
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutWebauthn_credentialInput = {
@@ -1263,6 +2075,11 @@ export type usersUncheckedUpdateWithoutWebauthn_credentialInput = {
   image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutRegistered_eventInput = {
@@ -1286,6 +2103,11 @@ export type usersCreateWithoutRegistered_eventInput = {
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutRegistered_eventInput = {
@@ -1309,6 +2131,11 @@ export type usersUncheckedCreateWithoutRegistered_eventInput = {
   image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutRegistered_eventInput = {
@@ -1348,6 +2175,11 @@ export type usersUpdateWithoutRegistered_eventInput = {
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutRegistered_eventInput = {
@@ -1371,6 +2203,11 @@ export type usersUncheckedUpdateWithoutRegistered_eventInput = {
   image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutImage_albumInput = {
@@ -1394,6 +2231,11 @@ export type usersCreateWithoutImage_albumInput = {
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutImage_albumInput = {
@@ -1417,6 +2259,11 @@ export type usersUncheckedCreateWithoutImage_albumInput = {
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutImage_albumInput = {
@@ -1456,6 +2303,11 @@ export type usersUpdateWithoutImage_albumInput = {
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutImage_albumInput = {
@@ -1479,6 +2331,11 @@ export type usersUncheckedUpdateWithoutImage_albumInput = {
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutImage_reportInput = {
@@ -1502,6 +2359,11 @@ export type usersCreateWithoutImage_reportInput = {
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutImage_reportInput = {
@@ -1525,6 +2387,11 @@ export type usersUncheckedCreateWithoutImage_reportInput = {
   image_album?: Prisma.image_albumUncheckedCreateNestedManyWithoutUserInput
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutImage_reportInput = {
@@ -1564,6 +2431,11 @@ export type usersUpdateWithoutImage_reportInput = {
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutImage_reportInput = {
@@ -1587,6 +2459,11 @@ export type usersUncheckedUpdateWithoutImage_reportInput = {
   image_album?: Prisma.image_albumUncheckedUpdateManyWithoutUserNestedInput
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type usersCreateWithoutEventsInput = {
@@ -1610,6 +2487,11 @@ export type usersCreateWithoutEventsInput = {
   membership?: Prisma.membershipsCreateNestedOneWithoutUserInput
   two_factor_auth?: Prisma.two_factor_authCreateNestedOneWithoutUserInput
   webauthn_credential?: Prisma.webauthn_credentialsCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsCreateNestedManyWithoutUserInput
 }
 
 export type usersUncheckedCreateWithoutEventsInput = {
@@ -1633,6 +2515,11 @@ export type usersUncheckedCreateWithoutEventsInput = {
   registered_event?: Prisma.registered_eventUncheckedCreateNestedManyWithoutUserInput
   image_report?: Prisma.image_reportUncheckedCreateNestedManyWithoutSignalingInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedCreateNestedOneWithoutUserInput
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutUserInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutUserInput
+  event_registrations?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutUserInput
+  photos?: Prisma.photosUncheckedCreateNestedManyWithoutUpdloaded_byInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type usersCreateOrConnectWithoutEventsInput = {
@@ -1672,6 +2559,11 @@ export type usersUpdateWithoutEventsInput = {
   membership?: Prisma.membershipsUpdateOneWithoutUserNestedInput
   two_factor_auth?: Prisma.two_factor_authUpdateOneWithoutUserNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUpdateManyWithoutUserNestedInput
 }
 
 export type usersUncheckedUpdateWithoutEventsInput = {
@@ -1695,6 +2587,11 @@ export type usersUncheckedUpdateWithoutEventsInput = {
   registered_event?: Prisma.registered_eventUncheckedUpdateManyWithoutUserNestedInput
   image_report?: Prisma.image_reportUncheckedUpdateManyWithoutSignalingNestedInput
   webauthn_credential?: Prisma.webauthn_credentialsUncheckedUpdateOneWithoutUserNestedInput
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutUserNestedInput
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutUserNestedInput
+  event_registrations?: Prisma.event_registrationsUncheckedUpdateManyWithoutUserNestedInput
+  photos?: Prisma.photosUncheckedUpdateManyWithoutUpdloaded_byNestedInput
+  photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1707,6 +2604,11 @@ export type UsersCountOutputType = {
   image_album: number
   registered_event: number
   image_report: number
+  organization_members: number
+  organization_followers: number
+  event_registrations: number
+  photos: number
+  photos_album_reports: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1714,6 +2616,11 @@ export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   image_album?: boolean | UsersCountOutputTypeCountImage_albumArgs
   registered_event?: boolean | UsersCountOutputTypeCountRegistered_eventArgs
   image_report?: boolean | UsersCountOutputTypeCountImage_reportArgs
+  organization_members?: boolean | UsersCountOutputTypeCountOrganization_membersArgs
+  organization_followers?: boolean | UsersCountOutputTypeCountOrganization_followersArgs
+  event_registrations?: boolean | UsersCountOutputTypeCountEvent_registrationsArgs
+  photos?: boolean | UsersCountOutputTypeCountPhotosArgs
+  photos_album_reports?: boolean | UsersCountOutputTypeCountPhotos_album_reportsArgs
 }
 
 /**
@@ -1754,6 +2661,41 @@ export type UsersCountOutputTypeCountImage_reportArgs<ExtArgs extends runtime.Ty
   where?: Prisma.image_reportWhereInput
 }
 
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountOrganization_membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.organization_membersWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountOrganization_followersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.organization_followersWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountEvent_registrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.event_registrationsWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountPhotosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.photosWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountPhotos_album_reportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.photos_album_reportsWhereInput
+}
+
 
 export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1780,6 +2722,11 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   membership?: boolean | Prisma.users$membershipArgs<ExtArgs>
   two_factor_auth?: boolean | Prisma.users$two_factor_authArgs<ExtArgs>
   webauthn_credential?: boolean | Prisma.users$webauthn_credentialArgs<ExtArgs>
+  organization_members?: boolean | Prisma.users$organization_membersArgs<ExtArgs>
+  organization_followers?: boolean | Prisma.users$organization_followersArgs<ExtArgs>
+  event_registrations?: boolean | Prisma.users$event_registrationsArgs<ExtArgs>
+  photos?: boolean | Prisma.users$photosArgs<ExtArgs>
+  photos_album_reports?: boolean | Prisma.users$photos_album_reportsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -1856,6 +2803,11 @@ export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   membership?: boolean | Prisma.users$membershipArgs<ExtArgs>
   two_factor_auth?: boolean | Prisma.users$two_factor_authArgs<ExtArgs>
   webauthn_credential?: boolean | Prisma.users$webauthn_credentialArgs<ExtArgs>
+  organization_members?: boolean | Prisma.users$organization_membersArgs<ExtArgs>
+  organization_followers?: boolean | Prisma.users$organization_followersArgs<ExtArgs>
+  event_registrations?: boolean | Prisma.users$event_registrationsArgs<ExtArgs>
+  photos?: boolean | Prisma.users$photosArgs<ExtArgs>
+  photos_album_reports?: boolean | Prisma.users$photos_album_reportsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1886,6 +2838,11 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     membership: Prisma.$membershipsPayload<ExtArgs> | null
     two_factor_auth: Prisma.$two_factor_authPayload<ExtArgs> | null
     webauthn_credential: Prisma.$webauthn_credentialsPayload<ExtArgs> | null
+    organization_members: Prisma.$organization_membersPayload<ExtArgs>[]
+    organization_followers: Prisma.$organization_followersPayload<ExtArgs>[]
+    event_registrations: Prisma.$event_registrationsPayload<ExtArgs>[]
+    photos: Prisma.$photosPayload<ExtArgs>[]
+    photos_album_reports: Prisma.$photos_album_reportsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2306,6 +3263,11 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   membership<T extends Prisma.users$membershipArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$membershipArgs<ExtArgs>>): Prisma.Prisma__membershipsClient<runtime.Types.Result.GetResult<Prisma.$membershipsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   two_factor_auth<T extends Prisma.users$two_factor_authArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$two_factor_authArgs<ExtArgs>>): Prisma.Prisma__two_factor_authClient<runtime.Types.Result.GetResult<Prisma.$two_factor_authPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   webauthn_credential<T extends Prisma.users$webauthn_credentialArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$webauthn_credentialArgs<ExtArgs>>): Prisma.Prisma__webauthn_credentialsClient<runtime.Types.Result.GetResult<Prisma.$webauthn_credentialsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organization_members<T extends Prisma.users$organization_membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$organization_membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$organization_membersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organization_followers<T extends Prisma.users$organization_followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$organization_followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$organization_followersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  event_registrations<T extends Prisma.users$event_registrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$event_registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$event_registrationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  photos<T extends Prisma.users$photosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$photosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$photosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  photos_album_reports<T extends Prisma.users$photos_album_reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$photos_album_reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$photos_album_reportsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2921,6 +3883,126 @@ export type users$webauthn_credentialArgs<ExtArgs extends runtime.Types.Extensio
    */
   include?: Prisma.webauthn_credentialsInclude<ExtArgs> | null
   where?: Prisma.webauthn_credentialsWhereInput
+}
+
+/**
+ * users.organization_members
+ */
+export type users$organization_membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the organization_members
+   */
+  select?: Prisma.organization_membersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the organization_members
+   */
+  omit?: Prisma.organization_membersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.organization_membersInclude<ExtArgs> | null
+  where?: Prisma.organization_membersWhereInput
+  orderBy?: Prisma.organization_membersOrderByWithRelationInput | Prisma.organization_membersOrderByWithRelationInput[]
+  cursor?: Prisma.organization_membersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Organization_membersScalarFieldEnum | Prisma.Organization_membersScalarFieldEnum[]
+}
+
+/**
+ * users.organization_followers
+ */
+export type users$organization_followersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the organization_followers
+   */
+  select?: Prisma.organization_followersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the organization_followers
+   */
+  omit?: Prisma.organization_followersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.organization_followersInclude<ExtArgs> | null
+  where?: Prisma.organization_followersWhereInput
+  orderBy?: Prisma.organization_followersOrderByWithRelationInput | Prisma.organization_followersOrderByWithRelationInput[]
+  cursor?: Prisma.organization_followersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Organization_followersScalarFieldEnum | Prisma.Organization_followersScalarFieldEnum[]
+}
+
+/**
+ * users.event_registrations
+ */
+export type users$event_registrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the event_registrations
+   */
+  select?: Prisma.event_registrationsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the event_registrations
+   */
+  omit?: Prisma.event_registrationsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.event_registrationsInclude<ExtArgs> | null
+  where?: Prisma.event_registrationsWhereInput
+  orderBy?: Prisma.event_registrationsOrderByWithRelationInput | Prisma.event_registrationsOrderByWithRelationInput[]
+  cursor?: Prisma.event_registrationsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Event_registrationsScalarFieldEnum | Prisma.Event_registrationsScalarFieldEnum[]
+}
+
+/**
+ * users.photos
+ */
+export type users$photosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the photos
+   */
+  select?: Prisma.photosSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the photos
+   */
+  omit?: Prisma.photosOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.photosInclude<ExtArgs> | null
+  where?: Prisma.photosWhereInput
+  orderBy?: Prisma.photosOrderByWithRelationInput | Prisma.photosOrderByWithRelationInput[]
+  cursor?: Prisma.photosWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PhotosScalarFieldEnum | Prisma.PhotosScalarFieldEnum[]
+}
+
+/**
+ * users.photos_album_reports
+ */
+export type users$photos_album_reportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the photos_album_reports
+   */
+  select?: Prisma.photos_album_reportsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the photos_album_reports
+   */
+  omit?: Prisma.photos_album_reportsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.photos_album_reportsInclude<ExtArgs> | null
+  where?: Prisma.photos_album_reportsWhereInput
+  orderBy?: Prisma.photos_album_reportsOrderByWithRelationInput | Prisma.photos_album_reportsOrderByWithRelationInput[]
+  cursor?: Prisma.photos_album_reportsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Photos_album_reportsScalarFieldEnum | Prisma.Photos_album_reportsScalarFieldEnum[]
 }
 
 /**

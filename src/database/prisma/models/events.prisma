@@ -1,0 +1,25 @@
+model events {
+	id								String						@id			@default(uuid())
+
+	organization_id					String
+
+	image							String
+	title							String
+	subtitle						String?
+	description						String?
+
+	max_registration				Int?
+	location						String?
+
+	start_at						DateTime
+	end_at							DateTime
+
+	photos_album_id					String?						@unique
+
+	created_at						DateTime					@default(now())
+	update_at						DateTime					@updatedAt
+
+	organization					organizations				@relation(fields: [organization_id], references: [id])
+	photos_album					photos_album?				@relation(fields: [photos_album_id], references: [id])
+	event_registration				event_registrations[]
+}

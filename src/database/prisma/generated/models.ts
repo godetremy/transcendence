@@ -8,8 +8,19 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/event_registrations'
+export type * from './models/events'
 export type * from './models/fortytwo_oauth'
 export type * from './models/memberships'
+export type * from './models/organization_followers'
+export type * from './models/organization_members'
+export type * from './models/organization_permission'
+export type * from './models/organizations'
+export type * from './models/photos'
+export type * from './models/photos_album_reports'
+export type * from './models/photos_album'
+export type * from './models/service_catreogries'
+export type * from './models/services'
 export type * from './models/two_factor_auth'
 export type * from './models/users'
 export type * from './models/webauthn_credentials'

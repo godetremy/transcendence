@@ -29,8 +29,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Fortytwo_oauths
- * const fortytwo_oauths = await prisma.fortytwo_oauth.findMany()
+ * // Fetch zero or more Event_registrations
+ * const event_registrations = await prisma.event_registrations.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,6 +39,16 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model event_registrations
+ * 
+ */
+export type event_registrations = Prisma.event_registrationsModel
+/**
+ * Model events
+ * 
+ */
+export type events = Prisma.eventsModel
 /**
  * Model fortytwo_oauth
  * 
@@ -49,6 +59,51 @@ export type fortytwo_oauth = Prisma.fortytwo_oauthModel
  * 
  */
 export type memberships = Prisma.membershipsModel
+/**
+ * Model organization_followers
+ * 
+ */
+export type organization_followers = Prisma.organization_followersModel
+/**
+ * Model organization_members
+ * 
+ */
+export type organization_members = Prisma.organization_membersModel
+/**
+ * Model organization_permission
+ * 
+ */
+export type organization_permission = Prisma.organization_permissionModel
+/**
+ * Model organizations
+ * 
+ */
+export type organizations = Prisma.organizationsModel
+/**
+ * Model photos
+ * 
+ */
+export type photos = Prisma.photosModel
+/**
+ * Model photos_album_reports
+ * 
+ */
+export type photos_album_reports = Prisma.photos_album_reportsModel
+/**
+ * Model photos_album
+ * 
+ */
+export type photos_album = Prisma.photos_albumModel
+/**
+ * Model service_catreogries
+ * 
+ */
+export type service_catreogries = Prisma.service_catreogriesModel
+/**
+ * Model services
+ * 
+ */
+export type services = Prisma.servicesModel
 /**
  * Model two_factor_auth
  * 

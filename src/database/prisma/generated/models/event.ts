@@ -527,14 +527,6 @@ export type eventUpdateOneWithoutImage_albumNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.eventUpdateToOneWithWhereWithoutImage_albumInput, Prisma.eventUpdateWithoutImage_albumInput>, Prisma.eventUncheckedUpdateWithoutImage_albumInput>
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type eventCreateWithoutAuthorInput = {
   id?: string
   title?: string | null

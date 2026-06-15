@@ -1,0 +1,11 @@
+model event_registrations {
+	id						String					@id		@default(uuid())
+
+	user_id					String
+	event_id				String
+
+	registered_at			DateTime				@default(now())
+
+	user					users					@relation(fields: [user_id], references: [id])
+	event					events					@relation(fields: [event_id], references: [id])
+}

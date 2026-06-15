@@ -1,0 +1,26 @@
+model organization_permission {
+	id								String			@id			@default(uuid())
+
+	name							String
+	description						String?
+
+	event_create					Boolean			@default(false)
+	event_update					Boolean			@default(false)
+	event_delete					Boolean			@default(false)
+
+	service_create					Boolean			@default(false)
+	service_update					Boolean			@default(false)
+	service_delete					Boolean			@default(false)
+
+	members_invite					Boolean			@default(false)
+	members_manage					Boolean			@default(false)
+
+	organization_update_info		Boolean			@default(false)
+	organization_manage				Boolean			@default(false)
+	organization_manage_permission	Boolean			@default(false)
+
+	created_at						DateTime		@default(now())
+	update_at						DateTime		@updatedAt
+
+	organization_members			organization_members[]
+}

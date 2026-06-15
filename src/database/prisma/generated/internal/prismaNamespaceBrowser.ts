@@ -51,8 +51,19 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  event_registrations: 'event_registrations',
+  events: 'events',
   fortytwo_oauth: 'fortytwo_oauth',
   memberships: 'memberships',
+  organization_followers: 'organization_followers',
+  organization_members: 'organization_members',
+  organization_permission: 'organization_permission',
+  organizations: 'organizations',
+  photos: 'photos',
+  photos_album_reports: 'photos_album_reports',
+  photos_album: 'photos_album',
+  service_catreogries: 'service_catreogries',
+  services: 'services',
   two_factor_auth: 'two_factor_auth',
   users: 'users',
   webauthn_credentials: 'webauthn_credentials',
@@ -78,6 +89,35 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const Event_registrationsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  event_id: 'event_id',
+  registered_at: 'registered_at'
+} as const
+
+export type Event_registrationsScalarFieldEnum = (typeof Event_registrationsScalarFieldEnum)[keyof typeof Event_registrationsScalarFieldEnum]
+
+
+export const EventsScalarFieldEnum = {
+  id: 'id',
+  organization_id: 'organization_id',
+  image: 'image',
+  title: 'title',
+  subtitle: 'subtitle',
+  description: 'description',
+  max_registration: 'max_registration',
+  location: 'location',
+  start_at: 'start_at',
+  end_at: 'end_at',
+  photos_album_id: 'photos_album_id',
+  created_at: 'created_at',
+  update_at: 'update_at'
+} as const
+
+export type EventsScalarFieldEnum = (typeof EventsScalarFieldEnum)[keyof typeof EventsScalarFieldEnum]
+
+
 export const Fortytwo_oauthScalarFieldEnum = {
   id: 'id',
   access_token: 'access_token',
@@ -95,6 +135,139 @@ export const MembershipsScalarFieldEnum = {
 } as const
 
 export type MembershipsScalarFieldEnum = (typeof MembershipsScalarFieldEnum)[keyof typeof MembershipsScalarFieldEnum]
+
+
+export const Organization_followersScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  organization_id: 'organization_id'
+} as const
+
+export type Organization_followersScalarFieldEnum = (typeof Organization_followersScalarFieldEnum)[keyof typeof Organization_followersScalarFieldEnum]
+
+
+export const Organization_membersScalarFieldEnum = {
+  id: 'id',
+  organization_id: 'organization_id',
+  user_id: 'user_id',
+  permission_id: 'permission_id',
+  registered_at: 'registered_at'
+} as const
+
+export type Organization_membersScalarFieldEnum = (typeof Organization_membersScalarFieldEnum)[keyof typeof Organization_membersScalarFieldEnum]
+
+
+export const Organization_permissionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  event_create: 'event_create',
+  event_update: 'event_update',
+  event_delete: 'event_delete',
+  service_create: 'service_create',
+  service_update: 'service_update',
+  service_delete: 'service_delete',
+  members_invite: 'members_invite',
+  members_manage: 'members_manage',
+  organization_update_info: 'organization_update_info',
+  organization_manage: 'organization_manage',
+  organization_manage_permission: 'organization_manage_permission',
+  created_at: 'created_at',
+  update_at: 'update_at'
+} as const
+
+export type Organization_permissionScalarFieldEnum = (typeof Organization_permissionScalarFieldEnum)[keyof typeof Organization_permissionScalarFieldEnum]
+
+
+export const OrganizationsScalarFieldEnum = {
+  id: 'id',
+  owner_id: 'owner_id',
+  name: 'name',
+  descriptiom: 'descriptiom',
+  logo: 'logo',
+  club: 'club',
+  organization_members_id: 'organization_members_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type OrganizationsScalarFieldEnum = (typeof OrganizationsScalarFieldEnum)[keyof typeof OrganizationsScalarFieldEnum]
+
+
+export const PhotosScalarFieldEnum = {
+  id: 'id',
+  path: 'path',
+  album_id: 'album_id',
+  updloaded_by_id: 'updloaded_by_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type PhotosScalarFieldEnum = (typeof PhotosScalarFieldEnum)[keyof typeof PhotosScalarFieldEnum]
+
+
+export const Photos_album_reportsScalarFieldEnum = {
+  id: 'id',
+  album_id: 'album_id',
+  user_id: 'user_id',
+  photo_id: 'photo_id',
+  reason: 'reason',
+  resolved: 'resolved',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Photos_album_reportsScalarFieldEnum = (typeof Photos_album_reportsScalarFieldEnum)[keyof typeof Photos_album_reportsScalarFieldEnum]
+
+
+export const Photos_albumScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  external_link: 'external_link',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Photos_albumScalarFieldEnum = (typeof Photos_albumScalarFieldEnum)[keyof typeof Photos_albumScalarFieldEnum]
+
+
+export const Service_catreogriesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  icon: 'icon',
+  background_image: 'background_image',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Service_catreogriesScalarFieldEnum = (typeof Service_catreogriesScalarFieldEnum)[keyof typeof Service_catreogriesScalarFieldEnum]
+
+
+export const ServicesScalarFieldEnum = {
+  id: 'id',
+  organization_id: 'organization_id',
+  category_id: 'category_id',
+  image: 'image',
+  title: 'title',
+  subtitle: 'subtitle',
+  edition: 'edition',
+  description: 'description',
+  address: 'address',
+  start_at: 'start_at',
+  end_at: 'end_at',
+  registration_required: 'registration_required',
+  registration_details: 'registration_details',
+  registration_link: 'registration_link',
+  registration_full: 'registration_full',
+  photo_album_id: 'photo_album_id',
+  source_link: 'source_link',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type ServicesScalarFieldEnum = (typeof ServicesScalarFieldEnum)[keyof typeof ServicesScalarFieldEnum]
 
 
 export const Two_factor_authScalarFieldEnum = {
@@ -205,12 +378,35 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const event_registrationsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  event_id: 'event_id'
+} as const
+
+export type event_registrationsOrderByRelevanceFieldEnum = (typeof event_registrationsOrderByRelevanceFieldEnum)[keyof typeof event_registrationsOrderByRelevanceFieldEnum]
+
+
 export const NullsOrder = {
   first: 'first',
   last: 'last'
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const eventsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  organization_id: 'organization_id',
+  image: 'image',
+  title: 'title',
+  subtitle: 'subtitle',
+  description: 'description',
+  location: 'location',
+  photos_album_id: 'photos_album_id'
+} as const
+
+export type eventsOrderByRelevanceFieldEnum = (typeof eventsOrderByRelevanceFieldEnum)[keyof typeof eventsOrderByRelevanceFieldEnum]
 
 
 export const fortytwo_oauthOrderByRelevanceFieldEnum = {
@@ -227,6 +423,106 @@ export const membershipsOrderByRelevanceFieldEnum = {
 } as const
 
 export type membershipsOrderByRelevanceFieldEnum = (typeof membershipsOrderByRelevanceFieldEnum)[keyof typeof membershipsOrderByRelevanceFieldEnum]
+
+
+export const organization_followersOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  organization_id: 'organization_id'
+} as const
+
+export type organization_followersOrderByRelevanceFieldEnum = (typeof organization_followersOrderByRelevanceFieldEnum)[keyof typeof organization_followersOrderByRelevanceFieldEnum]
+
+
+export const organization_membersOrderByRelevanceFieldEnum = {
+  id: 'id',
+  organization_id: 'organization_id',
+  user_id: 'user_id',
+  permission_id: 'permission_id'
+} as const
+
+export type organization_membersOrderByRelevanceFieldEnum = (typeof organization_membersOrderByRelevanceFieldEnum)[keyof typeof organization_membersOrderByRelevanceFieldEnum]
+
+
+export const organization_permissionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description'
+} as const
+
+export type organization_permissionOrderByRelevanceFieldEnum = (typeof organization_permissionOrderByRelevanceFieldEnum)[keyof typeof organization_permissionOrderByRelevanceFieldEnum]
+
+
+export const organizationsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  owner_id: 'owner_id',
+  name: 'name',
+  descriptiom: 'descriptiom',
+  logo: 'logo',
+  organization_members_id: 'organization_members_id'
+} as const
+
+export type organizationsOrderByRelevanceFieldEnum = (typeof organizationsOrderByRelevanceFieldEnum)[keyof typeof organizationsOrderByRelevanceFieldEnum]
+
+
+export const photosOrderByRelevanceFieldEnum = {
+  id: 'id',
+  path: 'path',
+  album_id: 'album_id',
+  updloaded_by_id: 'updloaded_by_id'
+} as const
+
+export type photosOrderByRelevanceFieldEnum = (typeof photosOrderByRelevanceFieldEnum)[keyof typeof photosOrderByRelevanceFieldEnum]
+
+
+export const photos_album_reportsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  album_id: 'album_id',
+  user_id: 'user_id',
+  photo_id: 'photo_id',
+  reason: 'reason'
+} as const
+
+export type photos_album_reportsOrderByRelevanceFieldEnum = (typeof photos_album_reportsOrderByRelevanceFieldEnum)[keyof typeof photos_album_reportsOrderByRelevanceFieldEnum]
+
+
+export const photos_albumOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  external_link: 'external_link'
+} as const
+
+export type photos_albumOrderByRelevanceFieldEnum = (typeof photos_albumOrderByRelevanceFieldEnum)[keyof typeof photos_albumOrderByRelevanceFieldEnum]
+
+
+export const service_catreogriesOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  icon: 'icon',
+  background_image: 'background_image'
+} as const
+
+export type service_catreogriesOrderByRelevanceFieldEnum = (typeof service_catreogriesOrderByRelevanceFieldEnum)[keyof typeof service_catreogriesOrderByRelevanceFieldEnum]
+
+
+export const servicesOrderByRelevanceFieldEnum = {
+  id: 'id',
+  organization_id: 'organization_id',
+  category_id: 'category_id',
+  image: 'image',
+  title: 'title',
+  subtitle: 'subtitle',
+  description: 'description',
+  address: 'address',
+  registration_details: 'registration_details',
+  registration_link: 'registration_link',
+  photo_album_id: 'photo_album_id',
+  source_link: 'source_link'
+} as const
+
+export type servicesOrderByRelevanceFieldEnum = (typeof servicesOrderByRelevanceFieldEnum)[keyof typeof servicesOrderByRelevanceFieldEnum]
 
 
 export const two_factor_authOrderByRelevanceFieldEnum = {
