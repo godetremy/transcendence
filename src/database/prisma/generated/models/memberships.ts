@@ -166,14 +166,14 @@ export type membershipsWhereInput = {
   id?: Prisma.StringFilter<"memberships"> | string
   start_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
   end_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
-  MemberUsers?: Prisma.UsersListRelationFilter
+  user?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
 }
 
 export type membershipsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
-  MemberUsers?: Prisma.usersOrderByRelationAggregateInput
+  user?: Prisma.usersOrderByWithRelationInput
   _relevance?: Prisma.membershipsOrderByRelevanceInput
 }
 
@@ -184,7 +184,7 @@ export type membershipsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.membershipsWhereInput | Prisma.membershipsWhereInput[]
   start_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
   end_at?: Prisma.DateTimeFilter<"memberships"> | Date | string
-  MemberUsers?: Prisma.UsersListRelationFilter
+  user?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
 }, "id">
 
 export type membershipsOrderByWithAggregationInput = {
@@ -209,28 +209,28 @@ export type membershipsCreateInput = {
   id?: string
   start_at?: Date | string
   end_at?: Date | string
-  MemberUsers?: Prisma.usersCreateNestedManyWithoutMembershipsInput
+  user?: Prisma.usersCreateNestedOneWithoutMembershipInput
 }
 
 export type membershipsUncheckedCreateInput = {
   id?: string
   start_at?: Date | string
   end_at?: Date | string
-  MemberUsers?: Prisma.usersUncheckedCreateNestedManyWithoutMembershipsInput
+  user?: Prisma.usersUncheckedCreateNestedOneWithoutMembershipInput
 }
 
 export type membershipsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  MemberUsers?: Prisma.usersUpdateManyWithoutMembershipsNestedInput
+  user?: Prisma.usersUpdateOneWithoutMembershipNestedInput
 }
 
 export type membershipsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  MemberUsers?: Prisma.usersUncheckedUpdateManyWithoutMembershipsNestedInput
+  user?: Prisma.usersUncheckedUpdateOneWithoutMembershipNestedInput
 }
 
 export type membershipsCreateManyInput = {
@@ -280,107 +280,69 @@ export type MembershipsNullableScalarRelationFilter = {
   isNot?: Prisma.membershipsWhereInput | null
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type membershipsCreateNestedOneWithoutMemberUsersInput = {
-  create?: Prisma.XOR<Prisma.membershipsCreateWithoutMemberUsersInput, Prisma.membershipsUncheckedCreateWithoutMemberUsersInput>
-  connectOrCreate?: Prisma.membershipsCreateOrConnectWithoutMemberUsersInput
+export type membershipsCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.membershipsCreateWithoutUserInput, Prisma.membershipsUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.membershipsCreateOrConnectWithoutUserInput
   connect?: Prisma.membershipsWhereUniqueInput
 }
 
-export type membershipsUpdateOneWithoutMemberUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.membershipsCreateWithoutMemberUsersInput, Prisma.membershipsUncheckedCreateWithoutMemberUsersInput>
-  connectOrCreate?: Prisma.membershipsCreateOrConnectWithoutMemberUsersInput
-  upsert?: Prisma.membershipsUpsertWithoutMemberUsersInput
+export type membershipsUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.membershipsCreateWithoutUserInput, Prisma.membershipsUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.membershipsCreateOrConnectWithoutUserInput
+  upsert?: Prisma.membershipsUpsertWithoutUserInput
   disconnect?: Prisma.membershipsWhereInput | boolean
   delete?: Prisma.membershipsWhereInput | boolean
   connect?: Prisma.membershipsWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.membershipsUpdateToOneWithWhereWithoutMemberUsersInput, Prisma.membershipsUpdateWithoutMemberUsersInput>, Prisma.membershipsUncheckedUpdateWithoutMemberUsersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.membershipsUpdateToOneWithWhereWithoutUserInput, Prisma.membershipsUpdateWithoutUserInput>, Prisma.membershipsUncheckedUpdateWithoutUserInput>
 }
 
-export type membershipsCreateWithoutMemberUsersInput = {
+export type membershipsCreateWithoutUserInput = {
   id?: string
   start_at?: Date | string
   end_at?: Date | string
 }
 
-export type membershipsUncheckedCreateWithoutMemberUsersInput = {
+export type membershipsUncheckedCreateWithoutUserInput = {
   id?: string
   start_at?: Date | string
   end_at?: Date | string
 }
 
-export type membershipsCreateOrConnectWithoutMemberUsersInput = {
+export type membershipsCreateOrConnectWithoutUserInput = {
   where: Prisma.membershipsWhereUniqueInput
-  create: Prisma.XOR<Prisma.membershipsCreateWithoutMemberUsersInput, Prisma.membershipsUncheckedCreateWithoutMemberUsersInput>
+  create: Prisma.XOR<Prisma.membershipsCreateWithoutUserInput, Prisma.membershipsUncheckedCreateWithoutUserInput>
 }
 
-export type membershipsUpsertWithoutMemberUsersInput = {
-  update: Prisma.XOR<Prisma.membershipsUpdateWithoutMemberUsersInput, Prisma.membershipsUncheckedUpdateWithoutMemberUsersInput>
-  create: Prisma.XOR<Prisma.membershipsCreateWithoutMemberUsersInput, Prisma.membershipsUncheckedCreateWithoutMemberUsersInput>
+export type membershipsUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.membershipsUpdateWithoutUserInput, Prisma.membershipsUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.membershipsCreateWithoutUserInput, Prisma.membershipsUncheckedCreateWithoutUserInput>
   where?: Prisma.membershipsWhereInput
 }
 
-export type membershipsUpdateToOneWithWhereWithoutMemberUsersInput = {
+export type membershipsUpdateToOneWithWhereWithoutUserInput = {
   where?: Prisma.membershipsWhereInput
-  data: Prisma.XOR<Prisma.membershipsUpdateWithoutMemberUsersInput, Prisma.membershipsUncheckedUpdateWithoutMemberUsersInput>
+  data: Prisma.XOR<Prisma.membershipsUpdateWithoutUserInput, Prisma.membershipsUncheckedUpdateWithoutUserInput>
 }
 
-export type membershipsUpdateWithoutMemberUsersInput = {
+export type membershipsUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type membershipsUncheckedUpdateWithoutMemberUsersInput = {
+export type membershipsUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type MembershipsCountOutputType
- */
-
-export type MembershipsCountOutputType = {
-  MemberUsers: number
-}
-
-export type MembershipsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  MemberUsers?: boolean | MembershipsCountOutputTypeCountMemberUsersArgs
-}
-
-/**
- * MembershipsCountOutputType without action
- */
-export type MembershipsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MembershipsCountOutputType
-   */
-  select?: Prisma.MembershipsCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * MembershipsCountOutputType without action
- */
-export type MembershipsCountOutputTypeCountMemberUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.usersWhereInput
-}
 
 
 export type membershipsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   start_at?: boolean
   end_at?: boolean
-  MemberUsers?: boolean | Prisma.memberships$MemberUsersArgs<ExtArgs>
-  _count?: boolean | Prisma.MembershipsCountOutputTypeDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.memberships$userArgs<ExtArgs>
 }, ExtArgs["result"]["memberships"]>
 
 export type membershipsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -403,8 +365,7 @@ export type membershipsSelectScalar = {
 
 export type membershipsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "start_at" | "end_at", ExtArgs["result"]["memberships"]>
 export type membershipsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  MemberUsers?: boolean | Prisma.memberships$MemberUsersArgs<ExtArgs>
-  _count?: boolean | Prisma.MembershipsCountOutputTypeDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.memberships$userArgs<ExtArgs>
 }
 export type membershipsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 export type membershipsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -412,7 +373,7 @@ export type membershipsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type $membershipsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "memberships"
   objects: {
-    MemberUsers: Prisma.$usersPayload<ExtArgs>[]
+    user: Prisma.$usersPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -812,7 +773,7 @@ readonly fields: membershipsFieldRefs;
  */
 export interface Prisma__membershipsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  MemberUsers<T extends Prisma.memberships$MemberUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.memberships$MemberUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user<T extends Prisma.memberships$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.memberships$userArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1238,9 +1199,9 @@ export type membershipsDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * memberships.MemberUsers
+ * memberships.user
  */
-export type memberships$MemberUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type memberships$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the users
    */
@@ -1254,11 +1215,6 @@ export type memberships$MemberUsersArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.usersInclude<ExtArgs> | null
   where?: Prisma.usersWhereInput
-  orderBy?: Prisma.usersOrderByWithRelationInput | Prisma.usersOrderByWithRelationInput[]
-  cursor?: Prisma.usersWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.UsersScalarFieldEnum | Prisma.UsersScalarFieldEnum[]
 }
 
 /**

@@ -1,85 +1,33 @@
-import { prisma } from '@/database/prisma/prisma';
-import { decrypt } from '@/lib/session';
-import { EditEventSchema } from '@/schema/EventForm';
+import { getEventById, UpdateEvent } from '@/database/Event';
+import { EditEventSchema } from '@/schema/EventSchema';
+import { CreateOrUpdateEventType } from '@/types/Event';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
-	try {
-		const cookie = req.cookies.get('session');
-		await decrypt(cookie?.value);
-
+	return errorHandler(async () => {
 		const { event_id } = await params;
-		const value = await prisma.event.findFirst({
-			include: {
-				registered: {},
-				image_album: {},
-			},
-			where: {
-				id: event_id,
-			},
-		});
 
-		return NextResponse.json(value);
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to get event.', {
-			status: 500,
-		});
-	}
+		const event = await getEventById(event_id, { registered: true, image_album: true });
+		if (event === null) throw ERRORS_DETAILS.event_does_not_exists();
+
+		return NextResponse.json(event);
+	});
 }
 
 export async function PATCH(
 	req: NextRequest,
 	{ params }: { params: Promise<{ event_id: string }> }
 ): Promise<NextResponse> {
-	try {
-		const cookie = req.cookies.get('session');
-		await decrypt(cookie?.value);
-
+	return errorHandler(async () => {
 		const { event_id } = await params;
-		const body = await req.json();
+		const body = await parseBody<CreateOrUpdateEventType>(req, EditEventSchema);
 
-		const fields = EditEventSchema.safeParse({
-			title: body.title,
-			description: body.description,
-			max_inscription: body.max_inscription,
-			start_at: body.start_at,
-			end_at: body.end_at,
-		});
-		if (!fields.success) {
-			console.error(fields.error.issues[0].message);
-			return new NextResponse(fields.error.issues[0].message, {
-				status: 401,
-			});
-		}
-		await prisma.event.update({
-			where: {
-				id: event_id,
-			},
-			data: {
-				title: fields.data.title,
-				description: fields.data.description,
-				max_inscription: fields.data.max_inscription,
-				...(fields.data.start_at && { start_at: fields.data.start_at }),
-				...(fields.data.end_at && { end_at: fields.data.end_at }),
-			},
-			include: {
-				author: {
-					include: {
-						memberships: true,
-					},
-				},
-				registered: true,
-			},
-		});
+		await UpdateEvent(body, event_id, {});
 		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to delete event.', {
-			status: 500,
-		});
-	}
+	});
 }

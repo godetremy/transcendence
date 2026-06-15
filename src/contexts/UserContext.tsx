@@ -1,5 +1,5 @@
 'use client';
-import { User } from '@/types/bde/User';
+import { User } from '@/types/User';
 import { createContext, ReactNode, useContext } from 'react';
 
 const UserContext = createContext<User | null>(null);

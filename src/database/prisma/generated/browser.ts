@@ -18,15 +18,30 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
+ * Model fortytwo_oauth
+ * 
+ */
+export type fortytwo_oauth = Prisma.fortytwo_oauthModel
+/**
  * Model memberships
  * 
  */
 export type memberships = Prisma.membershipsModel
 /**
- * Model oauth_fortytwo
+ * Model two_factor_auth
  * 
  */
-export type oauth_fortytwo = Prisma.oauth_fortytwoModel
+export type two_factor_auth = Prisma.two_factor_authModel
+/**
+ * Model users
+ * 
+ */
+export type users = Prisma.usersModel
+/**
+ * Model webauthn_credentials
+ * 
+ */
+export type webauthn_credentials = Prisma.webauthn_credentialsModel
 /**
  * Model registered_event
  * 
@@ -47,8 +62,3 @@ export type image_report = Prisma.image_reportModel
  * 
  */
 export type event = Prisma.eventModel
-/**
- * Model users
- * 
- */
-export type users = Prisma.usersModel

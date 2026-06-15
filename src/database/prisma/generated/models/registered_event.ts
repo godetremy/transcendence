@@ -267,6 +267,16 @@ export type registered_eventUncheckedUpdateManyInput = {
   registered_event_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+export type Registered_eventListRelationFilter = {
+  every?: Prisma.registered_eventWhereInput
+  some?: Prisma.registered_eventWhereInput
+  none?: Prisma.registered_eventWhereInput
+}
+
+export type registered_eventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type registered_eventOrderByRelevanceInput = {
   fields: Prisma.registered_eventOrderByRelevanceFieldEnum | Prisma.registered_eventOrderByRelevanceFieldEnum[]
   sort: Prisma.SortOrder
@@ -297,48 +307,6 @@ export type registered_eventMinOrderByAggregateInput = {
 export type Registered_eventNullableScalarRelationFilter = {
   is?: Prisma.registered_eventWhereInput | null
   isNot?: Prisma.registered_eventWhereInput | null
-}
-
-export type Registered_eventListRelationFilter = {
-  every?: Prisma.registered_eventWhereInput
-  some?: Prisma.registered_eventWhereInput
-  none?: Prisma.registered_eventWhereInput
-}
-
-export type registered_eventOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
-export type registered_eventCreateNestedOneWithoutEventInput = {
-  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
-  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
-  connect?: Prisma.registered_eventWhereUniqueInput
-}
-
-export type registered_eventUncheckedCreateNestedOneWithoutEventInput = {
-  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
-  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
-  connect?: Prisma.registered_eventWhereUniqueInput
-}
-
-export type registered_eventUpdateOneWithoutEventNestedInput = {
-  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
-  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
-  upsert?: Prisma.registered_eventUpsertWithoutEventInput
-  disconnect?: Prisma.registered_eventWhereInput | boolean
-  delete?: Prisma.registered_eventWhereInput | boolean
-  connect?: Prisma.registered_eventWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.registered_eventUpdateToOneWithWhereWithoutEventInput, Prisma.registered_eventUpdateWithoutEventInput>, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
-}
-
-export type registered_eventUncheckedUpdateOneWithoutEventNestedInput = {
-  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
-  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
-  upsert?: Prisma.registered_eventUpsertWithoutEventInput
-  disconnect?: Prisma.registered_eventWhereInput | boolean
-  delete?: Prisma.registered_eventWhereInput | boolean
-  connect?: Prisma.registered_eventWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.registered_eventUpdateToOneWithWhereWithoutEventInput, Prisma.registered_eventUpdateWithoutEventInput>, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
 }
 
 export type registered_eventCreateNestedManyWithoutUserInput = {
@@ -383,44 +351,36 @@ export type registered_eventUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.registered_eventScalarWhereInput | Prisma.registered_eventScalarWhereInput[]
 }
 
-export type registered_eventCreateWithoutEventInput = {
-  id?: string
-  created_at?: Date | string
-  user?: Prisma.usersCreateNestedOneWithoutRegistered_eventInput
+export type registered_eventCreateNestedOneWithoutEventInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
+  connect?: Prisma.registered_eventWhereUniqueInput
 }
 
-export type registered_eventUncheckedCreateWithoutEventInput = {
-  id?: string
-  user_id?: string | null
-  created_at?: Date | string
+export type registered_eventUncheckedCreateNestedOneWithoutEventInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
+  connect?: Prisma.registered_eventWhereUniqueInput
 }
 
-export type registered_eventCreateOrConnectWithoutEventInput = {
-  where: Prisma.registered_eventWhereUniqueInput
-  create: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
+export type registered_eventUpdateOneWithoutEventNestedInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
+  upsert?: Prisma.registered_eventUpsertWithoutEventInput
+  disconnect?: Prisma.registered_eventWhereInput | boolean
+  delete?: Prisma.registered_eventWhereInput | boolean
+  connect?: Prisma.registered_eventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.registered_eventUpdateToOneWithWhereWithoutEventInput, Prisma.registered_eventUpdateWithoutEventInput>, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
 }
 
-export type registered_eventUpsertWithoutEventInput = {
-  update: Prisma.XOR<Prisma.registered_eventUpdateWithoutEventInput, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
-  create: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
-  where?: Prisma.registered_eventWhereInput
-}
-
-export type registered_eventUpdateToOneWithWhereWithoutEventInput = {
-  where?: Prisma.registered_eventWhereInput
-  data: Prisma.XOR<Prisma.registered_eventUpdateWithoutEventInput, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
-}
-
-export type registered_eventUpdateWithoutEventInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.usersUpdateOneWithoutRegistered_eventNestedInput
-}
-
-export type registered_eventUncheckedUpdateWithoutEventInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type registered_eventUncheckedUpdateOneWithoutEventNestedInput = {
+  create?: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
+  connectOrCreate?: Prisma.registered_eventCreateOrConnectWithoutEventInput
+  upsert?: Prisma.registered_eventUpsertWithoutEventInput
+  disconnect?: Prisma.registered_eventWhereInput | boolean
+  delete?: Prisma.registered_eventWhereInput | boolean
+  connect?: Prisma.registered_eventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.registered_eventUpdateToOneWithWhereWithoutEventInput, Prisma.registered_eventUpdateWithoutEventInput>, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
 }
 
 export type registered_eventCreateWithoutUserInput = {
@@ -469,6 +429,46 @@ export type registered_eventScalarWhereInput = {
   user_id?: Prisma.StringNullableFilter<"registered_event"> | string | null
   created_at?: Prisma.DateTimeFilter<"registered_event"> | Date | string
   registered_event_id?: Prisma.StringNullableFilter<"registered_event"> | string | null
+}
+
+export type registered_eventCreateWithoutEventInput = {
+  id?: string
+  created_at?: Date | string
+  user?: Prisma.usersCreateNestedOneWithoutRegistered_eventInput
+}
+
+export type registered_eventUncheckedCreateWithoutEventInput = {
+  id?: string
+  user_id?: string | null
+  created_at?: Date | string
+}
+
+export type registered_eventCreateOrConnectWithoutEventInput = {
+  where: Prisma.registered_eventWhereUniqueInput
+  create: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
+}
+
+export type registered_eventUpsertWithoutEventInput = {
+  update: Prisma.XOR<Prisma.registered_eventUpdateWithoutEventInput, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
+  create: Prisma.XOR<Prisma.registered_eventCreateWithoutEventInput, Prisma.registered_eventUncheckedCreateWithoutEventInput>
+  where?: Prisma.registered_eventWhereInput
+}
+
+export type registered_eventUpdateToOneWithWhereWithoutEventInput = {
+  where?: Prisma.registered_eventWhereInput
+  data: Prisma.XOR<Prisma.registered_eventUpdateWithoutEventInput, Prisma.registered_eventUncheckedUpdateWithoutEventInput>
+}
+
+export type registered_eventUpdateWithoutEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.usersUpdateOneWithoutRegistered_eventNestedInput
+}
+
+export type registered_eventUncheckedUpdateWithoutEventInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type registered_eventCreateManyUserInput = {

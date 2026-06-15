@@ -1,5 +1,5 @@
 'use client';
-import { User } from '@/types/bde/User';
+import { User } from '@/types/User';
 import { useEffect, useState } from 'react';
 
 function Card({ user, onResult }: { user: User; onResult: (msg: string) => void }) {
@@ -8,19 +8,19 @@ function Card({ user, onResult }: { user: User; onResult: (msg: string) => void 
 			<h2>Name</h2>
 			<p>{user.full_name}</p>
 			<h2>Reason</h2>
-			<p>{user.reason}</p>
+			<p>{user.agent_reason}</p>
 			<h2>Mail</h2>
 			<p>{user.mail}</p>
 			<button
 				onClick={async () => {
-					await approvedAgent(user.id, true, onResult);
+					await approvedAgent(user.id, onResult);
 				}}
 			>
 				valider compte
 			</button>
 			<button
 				onClick={async () => {
-					await approvedAgent(user.id, false, onResult);
+					await approvedAgent(user.id, onResult);
 				}}
 			>
 				refuser compte
@@ -35,7 +35,7 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 
 	useEffect(() => {
 		const fetchusers = async () => {
-			const response = await fetch(`/app/api/auth/approval/list/?limit=10&page=0`, {
+			const response = await fetch(`/app/api/users/approval/pending/?limit=10&page=1`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 			});
 			if (response.ok) {
 				const value = await response.json();
-				setUsers(value);
+				setUsers(value.data);
 				return;
 			}
 			return;
@@ -61,10 +61,8 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 	);
 }
 
-async function approvedAgent(id: string, status: boolean, Onresult: (msg: string) => void) {
-	let statustostring = 'approve';
-	if (status == false) statustostring = 'reject';
-	const response = await fetch(`/app/api/auth/approval/${id}/${statustostring}/`, {
+async function approvedAgent(id: string, Onresult: (msg: string) => void) {
+	const response = await fetch(`/app/api/users/approval/${id}/pending/`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',

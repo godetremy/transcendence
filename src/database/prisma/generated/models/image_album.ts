@@ -293,6 +293,16 @@ export type image_albumUncheckedUpdateManyInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type Image_albumListRelationFilter = {
+  every?: Prisma.image_albumWhereInput
+  some?: Prisma.image_albumWhereInput
+  none?: Prisma.image_albumWhereInput
+}
+
+export type image_albumOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type image_albumOrderByRelevanceInput = {
   fields: Prisma.image_albumOrderByRelevanceFieldEnum | Prisma.image_albumOrderByRelevanceFieldEnum[]
   sort: Prisma.SortOrder
@@ -328,14 +338,46 @@ export type Image_albumNullableScalarRelationFilter = {
   isNot?: Prisma.image_albumWhereInput | null
 }
 
-export type Image_albumListRelationFilter = {
-  every?: Prisma.image_albumWhereInput
-  some?: Prisma.image_albumWhereInput
-  none?: Prisma.image_albumWhereInput
+export type image_albumCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
+  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
 }
 
-export type image_albumOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type image_albumUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
+  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+}
+
+export type image_albumUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput | Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
+  set?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  disconnect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  delete?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  update?: Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput | Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.image_albumUpdateManyWithWhereWithoutUserInput | Prisma.image_albumUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
+}
+
+export type image_albumUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput | Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
+  set?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  disconnect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  delete?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+  update?: Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput | Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.image_albumUpdateManyWithWhereWithoutUserInput | Prisma.image_albumUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
 }
 
 export type image_albumCreateNestedOneWithoutImage_reportInput = {
@@ -386,46 +428,57 @@ export type image_albumUncheckedUpdateOneWithoutEventNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.image_albumUpdateToOneWithWhereWithoutEventInput, Prisma.image_albumUpdateWithoutEventInput>, Prisma.image_albumUncheckedUpdateWithoutEventInput>
 }
 
-export type image_albumCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
-  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+export type image_albumCreateWithoutUserInput = {
+  id?: string
+  image_path: string
+  created_at?: Date | string
+  event?: Prisma.eventCreateNestedOneWithoutImage_albumInput
+  image_report?: Prisma.image_reportCreateNestedOneWithoutImage_albumInput
 }
 
-export type image_albumUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
-  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
+export type image_albumUncheckedCreateWithoutUserInput = {
+  id?: string
+  event_id?: string | null
+  image_path: string
+  created_at?: Date | string
+  image_report?: Prisma.image_reportUncheckedCreateNestedOneWithoutImage_albumInput
 }
 
-export type image_albumUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput | Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
-  set?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  disconnect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  delete?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  update?: Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput | Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.image_albumUpdateManyWithWhereWithoutUserInput | Prisma.image_albumUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
+export type image_albumCreateOrConnectWithoutUserInput = {
+  where: Prisma.image_albumWhereUniqueInput
+  create: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput>
 }
 
-export type image_albumUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput> | Prisma.image_albumCreateWithoutUserInput[] | Prisma.image_albumUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.image_albumCreateOrConnectWithoutUserInput | Prisma.image_albumCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput | Prisma.image_albumUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.image_albumCreateManyUserInputEnvelope
-  set?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  disconnect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  delete?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  connect?: Prisma.image_albumWhereUniqueInput | Prisma.image_albumWhereUniqueInput[]
-  update?: Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput | Prisma.image_albumUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.image_albumUpdateManyWithWhereWithoutUserInput | Prisma.image_albumUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
+export type image_albumCreateManyUserInputEnvelope = {
+  data: Prisma.image_albumCreateManyUserInput | Prisma.image_albumCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type image_albumUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.image_albumWhereUniqueInput
+  update: Prisma.XOR<Prisma.image_albumUpdateWithoutUserInput, Prisma.image_albumUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput>
+}
+
+export type image_albumUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.image_albumWhereUniqueInput
+  data: Prisma.XOR<Prisma.image_albumUpdateWithoutUserInput, Prisma.image_albumUncheckedUpdateWithoutUserInput>
+}
+
+export type image_albumUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.image_albumScalarWhereInput
+  data: Prisma.XOR<Prisma.image_albumUpdateManyMutationInput, Prisma.image_albumUncheckedUpdateManyWithoutUserInput>
+}
+
+export type image_albumScalarWhereInput = {
+  AND?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
+  OR?: Prisma.image_albumScalarWhereInput[]
+  NOT?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
+  id?: Prisma.StringFilter<"image_album"> | string
+  upload_user_id?: Prisma.StringNullableFilter<"image_album"> | string | null
+  event_id?: Prisma.StringNullableFilter<"image_album"> | string | null
+  image_path?: Prisma.StringFilter<"image_album"> | string
+  created_at?: Prisma.DateTimeFilter<"image_album"> | Date | string
 }
 
 export type image_albumCreateWithoutImage_reportInput = {
@@ -522,59 +575,6 @@ export type image_albumUncheckedUpdateWithoutEventInput = {
   image_path?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   image_report?: Prisma.image_reportUncheckedUpdateOneWithoutImage_albumNestedInput
-}
-
-export type image_albumCreateWithoutUserInput = {
-  id?: string
-  image_path: string
-  created_at?: Date | string
-  event?: Prisma.eventCreateNestedOneWithoutImage_albumInput
-  image_report?: Prisma.image_reportCreateNestedOneWithoutImage_albumInput
-}
-
-export type image_albumUncheckedCreateWithoutUserInput = {
-  id?: string
-  event_id?: string | null
-  image_path: string
-  created_at?: Date | string
-  image_report?: Prisma.image_reportUncheckedCreateNestedOneWithoutImage_albumInput
-}
-
-export type image_albumCreateOrConnectWithoutUserInput = {
-  where: Prisma.image_albumWhereUniqueInput
-  create: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput>
-}
-
-export type image_albumCreateManyUserInputEnvelope = {
-  data: Prisma.image_albumCreateManyUserInput | Prisma.image_albumCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type image_albumUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.image_albumWhereUniqueInput
-  update: Prisma.XOR<Prisma.image_albumUpdateWithoutUserInput, Prisma.image_albumUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.image_albumCreateWithoutUserInput, Prisma.image_albumUncheckedCreateWithoutUserInput>
-}
-
-export type image_albumUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.image_albumWhereUniqueInput
-  data: Prisma.XOR<Prisma.image_albumUpdateWithoutUserInput, Prisma.image_albumUncheckedUpdateWithoutUserInput>
-}
-
-export type image_albumUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.image_albumScalarWhereInput
-  data: Prisma.XOR<Prisma.image_albumUpdateManyMutationInput, Prisma.image_albumUncheckedUpdateManyWithoutUserInput>
-}
-
-export type image_albumScalarWhereInput = {
-  AND?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
-  OR?: Prisma.image_albumScalarWhereInput[]
-  NOT?: Prisma.image_albumScalarWhereInput | Prisma.image_albumScalarWhereInput[]
-  id?: Prisma.StringFilter<"image_album"> | string
-  upload_user_id?: Prisma.StringNullableFilter<"image_album"> | string | null
-  event_id?: Prisma.StringNullableFilter<"image_album"> | string | null
-  image_path?: Prisma.StringFilter<"image_album"> | string
-  created_at?: Prisma.DateTimeFilter<"image_album"> | Date | string
 }
 
 export type image_albumCreateManyUserInput = {

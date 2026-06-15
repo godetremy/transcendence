@@ -3,6 +3,7 @@ import styles from './component.module.scss';
 import Image from 'next/image';
 import { useUser } from '@/contexts/UserContext';
 import QRCode from 'react-qr-code';
+import { useEffect, useRef } from 'react';
 
 export interface MembershipCardProps {
 	requestClose: () => void;
@@ -10,6 +11,7 @@ export interface MembershipCardProps {
 
 export function MembershipCard(props: MembershipCardProps) {
 	const user = useUser();
+	const overlayRef = useRef<HTMLDivElement | null>(null);
 
 	const openOverlayStateAnimation: TargetAndTransition = { opacity: 1, pointerEvents: 'auto' };
 	const closeOverlayStateAnimation: TargetAndTransition = { opacity: 0, pointerEvents: 'none' };
@@ -29,8 +31,57 @@ export function MembershipCard(props: MembershipCardProps) {
 		opacity: 0,
 	};
 
+	useEffect(() => {
+		let startPosY = 0;
+		let lastPosY = 0;
+
+		const getTouchPos = (e: TouchEvent) => e.touches.item(0)?.clientY ?? 0;
+
+		const onTouchStart = (e: TouchEvent) => {
+			startPosY = getTouchPos(e);
+		};
+
+		const onTouchMove = (e: TouchEvent) => {
+			if (!overlayRef.current) return;
+
+			const pos = (startPosY - getTouchPos(e)) * -1;
+			if (pos < 0) {
+				overlayRef.current.style.transform = `scaleY(${1 - pos / 10000}) translateY(${-(pos / 14)}px)`;
+			} else {
+				overlayRef.current.style.transform = `translateY(${pos}px)`;
+			}
+			lastPosY = pos;
+		};
+
+		const onTouchEnd = () => {
+			if (!overlayRef.current) return;
+
+			if (lastPosY / window.innerHeight > 0.2) props.requestClose();
+			else {
+				overlayRef.current.style.transition = '.2s';
+				overlayRef.current.style.transform = '';
+				setTimeout(() => {
+					overlayRef.current!.style.transition = '';
+				}, 200);
+			}
+		};
+
+		document.body.style.overflow = 'hidden';
+		overlayRef.current?.addEventListener('touchstart', onTouchStart);
+		overlayRef.current?.addEventListener('touchmove', onTouchMove);
+		overlayRef.current?.addEventListener('touchend', onTouchEnd);
+
+		return () => {
+			document.body.style.overflow = '';
+			overlayRef.current?.removeEventListener('touchstart', onTouchStart);
+			overlayRef.current?.removeEventListener('touchmove', onTouchMove);
+			overlayRef.current?.removeEventListener('touchend', onTouchEnd);
+		};
+	}, []);
+
 	return (
 		<motion.div
+			ref={overlayRef}
 			key={'overlay'}
 			animate={openOverlayStateAnimation}
 			initial={closeOverlayStateAnimation}

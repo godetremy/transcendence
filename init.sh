@@ -35,6 +35,7 @@ npm i > /dev/null
 echo "[Prisma] delete migrate"
 rm -rf src/database/prisma/migrations/*
 echo "[Prisma] Reset data"
+rm -rf src/database/prisma/generated/*
 npx prisma migrate reset --force
 echo "[Prisma] Generate data"
 npx prisma generate

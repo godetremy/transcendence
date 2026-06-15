@@ -7,7 +7,7 @@ import { KeyRound, User2 } from 'lucide-react';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { Sublinks } from '@/components/login/Sublinks/Sublinks';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { SignupFormSchema } from '@/schema/SignupForm';
+import { SignupFormSchema } from '@/schema/SignupSchema';
 import { redirect } from 'next/navigation';
 import { LoginForm } from '@/components/login/LoginForm/LoginForm';
 
@@ -19,7 +19,7 @@ export default function Page() {
 
 	const signUp = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
-			email: form.get('email'),
+			mail: form.get('mail'),
 			password: form.get('password'),
 			passwordCheck: form.get('passwordCheck'),
 		});
@@ -34,7 +34,7 @@ export default function Page() {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				email: fields.data.email,
+				mail: fields.data.mail,
 				password: fields.data.password,
 				passwordCheck: fields.data.passwordCheck,
 			}),
@@ -59,8 +59,8 @@ export default function Page() {
 				inputs={
 					<>
 						<LoginTextInput
-							name={'email'}
-							type={'email'}
+							name={'mail'}
+							type={'mail'}
 							icon={<User2 />}
 							nameLabel={'Adresse e-mail'}
 							placeholder={'michel.doe@bde.42angouleme.fr'}

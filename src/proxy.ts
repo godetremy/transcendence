@@ -41,11 +41,15 @@ export default async function proxy(req: NextRequest) {
 		return NextResponse.next();
 	}
 
-	if (session === null) return NextResponse.redirect(new URL('/app/login', req.nextUrl));
+	if (session === null) {
+		if (req.nextUrl.pathname.startsWith('/app/api'))
+			return NextResponse.json({ success: false, message: 'Not logged in' }, { status: 401 });
+		return NextResponse.redirect(new URL('/app/login', req.nextUrl));
+	}
 
 	if (
-		session.is_agent == true &&
-		(session.is_agent_verified === null || session.is_agent_verified == false) &&
+		session.agent &&
+		(session.agent_verified === null || !session.agent_verified) &&
 		!req.nextUrl.pathname.startsWith('/app/agents/approval') &&
 		!req.nextUrl.pathname.startsWith('/app/api')
 	)

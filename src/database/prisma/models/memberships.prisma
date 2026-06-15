@@ -1,0 +1,8 @@
+model memberships {
+	id					String			@id					@default(uuid())
+
+	start_at			DateTime		@default(now())
+	end_at				DateTime		@default(now())
+
+	user				users?
+}
