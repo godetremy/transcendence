@@ -218,6 +218,7 @@ export type organizationsWhereInput = {
   organization_followers?: Prisma.Organization_followersListRelationFilter
   events?: Prisma.EventsListRelationFilter
   services?: Prisma.ServicesListRelationFilter
+  organization_permission?: Prisma.Organization_permissionListRelationFilter
 }
 
 export type organizationsOrderByWithRelationInput = {
@@ -234,6 +235,7 @@ export type organizationsOrderByWithRelationInput = {
   organization_followers?: Prisma.organization_followersOrderByRelationAggregateInput
   events?: Prisma.eventsOrderByRelationAggregateInput
   services?: Prisma.servicesOrderByRelationAggregateInput
+  organization_permission?: Prisma.organization_permissionOrderByRelationAggregateInput
   _relevance?: Prisma.organizationsOrderByRelevanceInput
 }
 
@@ -254,6 +256,7 @@ export type organizationsWhereUniqueInput = Prisma.AtLeast<{
   organization_followers?: Prisma.Organization_followersListRelationFilter
   events?: Prisma.EventsListRelationFilter
   services?: Prisma.ServicesListRelationFilter
+  organization_permission?: Prisma.Organization_permissionListRelationFilter
 }, "id">
 
 export type organizationsOrderByWithAggregationInput = {
@@ -300,6 +303,7 @@ export type organizationsCreateInput = {
   organization_followers?: Prisma.organization_followersCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsUncheckedCreateInput = {
@@ -316,6 +320,7 @@ export type organizationsUncheckedCreateInput = {
   organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsUncheckedCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesUncheckedCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsUpdateInput = {
@@ -332,6 +337,7 @@ export type organizationsUpdateInput = {
   organization_followers?: Prisma.organization_followersUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsUncheckedUpdateInput = {
@@ -348,6 +354,7 @@ export type organizationsUncheckedUpdateInput = {
   organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUncheckedUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUncheckedUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsCreateManyInput = {
@@ -475,6 +482,20 @@ export type organizationsUpdateOneRequiredWithoutOrganization_membersNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.organizationsUpdateToOneWithWhereWithoutOrganization_membersInput, Prisma.organizationsUpdateWithoutOrganization_membersInput>, Prisma.organizationsUncheckedUpdateWithoutOrganization_membersInput>
 }
 
+export type organizationsCreateNestedOneWithoutOrganization_permissionInput = {
+  create?: Prisma.XOR<Prisma.organizationsCreateWithoutOrganization_permissionInput, Prisma.organizationsUncheckedCreateWithoutOrganization_permissionInput>
+  connectOrCreate?: Prisma.organizationsCreateOrConnectWithoutOrganization_permissionInput
+  connect?: Prisma.organizationsWhereUniqueInput
+}
+
+export type organizationsUpdateOneRequiredWithoutOrganization_permissionNestedInput = {
+  create?: Prisma.XOR<Prisma.organizationsCreateWithoutOrganization_permissionInput, Prisma.organizationsUncheckedCreateWithoutOrganization_permissionInput>
+  connectOrCreate?: Prisma.organizationsCreateOrConnectWithoutOrganization_permissionInput
+  upsert?: Prisma.organizationsUpsertWithoutOrganization_permissionInput
+  connect?: Prisma.organizationsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.organizationsUpdateToOneWithWhereWithoutOrganization_permissionInput, Prisma.organizationsUpdateWithoutOrganization_permissionInput>, Prisma.organizationsUncheckedUpdateWithoutOrganization_permissionInput>
+}
+
 export type organizationsCreateNestedOneWithoutServicesInput = {
   create?: Prisma.XOR<Prisma.organizationsCreateWithoutServicesInput, Prisma.organizationsUncheckedCreateWithoutServicesInput>
   connectOrCreate?: Prisma.organizationsCreateOrConnectWithoutServicesInput
@@ -502,6 +523,7 @@ export type organizationsCreateWithoutEventsInput = {
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
   organization_followers?: Prisma.organization_followersCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsUncheckedCreateWithoutEventsInput = {
@@ -517,6 +539,7 @@ export type organizationsUncheckedCreateWithoutEventsInput = {
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
   organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesUncheckedCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsCreateOrConnectWithoutEventsInput = {
@@ -548,6 +571,7 @@ export type organizationsUpdateWithoutEventsInput = {
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
   organization_followers?: Prisma.organization_followersUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsUncheckedUpdateWithoutEventsInput = {
@@ -563,6 +587,7 @@ export type organizationsUncheckedUpdateWithoutEventsInput = {
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
   organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUncheckedUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsCreateWithoutOrganization_followersInput = {
@@ -578,6 +603,7 @@ export type organizationsCreateWithoutOrganization_followersInput = {
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsUncheckedCreateWithoutOrganization_followersInput = {
@@ -593,6 +619,7 @@ export type organizationsUncheckedCreateWithoutOrganization_followersInput = {
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsUncheckedCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesUncheckedCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsCreateOrConnectWithoutOrganization_followersInput = {
@@ -624,6 +651,7 @@ export type organizationsUpdateWithoutOrganization_followersInput = {
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsUncheckedUpdateWithoutOrganization_followersInput = {
@@ -639,6 +667,7 @@ export type organizationsUncheckedUpdateWithoutOrganization_followersInput = {
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUncheckedUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUncheckedUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsCreateWithoutOrganization_membersInput = {
@@ -654,6 +683,7 @@ export type organizationsCreateWithoutOrganization_membersInput = {
   organization_followers?: Prisma.organization_followersCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsUncheckedCreateWithoutOrganization_membersInput = {
@@ -669,6 +699,7 @@ export type organizationsUncheckedCreateWithoutOrganization_membersInput = {
   organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsUncheckedCreateNestedManyWithoutOrganizationInput
   services?: Prisma.servicesUncheckedCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsCreateOrConnectWithoutOrganization_membersInput = {
@@ -700,6 +731,7 @@ export type organizationsUpdateWithoutOrganization_membersInput = {
   organization_followers?: Prisma.organization_followersUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsUncheckedUpdateWithoutOrganization_membersInput = {
@@ -712,6 +744,87 @@ export type organizationsUncheckedUpdateWithoutOrganization_membersInput = {
   organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutOrganizationNestedInput
+  events?: Prisma.eventsUncheckedUpdateManyWithoutOrganizationNestedInput
+  services?: Prisma.servicesUncheckedUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type organizationsCreateWithoutOrganization_permissionInput = {
+  id?: string
+  owner_id: string
+  name: string
+  descriptiom?: string | null
+  logo?: string | null
+  club?: boolean
+  organization_members_id: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
+  organization_followers?: Prisma.organization_followersCreateNestedManyWithoutOrganizationInput
+  events?: Prisma.eventsCreateNestedManyWithoutOrganizationInput
+  services?: Prisma.servicesCreateNestedManyWithoutOrganizationInput
+}
+
+export type organizationsUncheckedCreateWithoutOrganization_permissionInput = {
+  id?: string
+  owner_id: string
+  name: string
+  descriptiom?: string | null
+  logo?: string | null
+  club?: boolean
+  organization_members_id: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
+  organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutOrganizationInput
+  events?: Prisma.eventsUncheckedCreateNestedManyWithoutOrganizationInput
+  services?: Prisma.servicesUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type organizationsCreateOrConnectWithoutOrganization_permissionInput = {
+  where: Prisma.organizationsWhereUniqueInput
+  create: Prisma.XOR<Prisma.organizationsCreateWithoutOrganization_permissionInput, Prisma.organizationsUncheckedCreateWithoutOrganization_permissionInput>
+}
+
+export type organizationsUpsertWithoutOrganization_permissionInput = {
+  update: Prisma.XOR<Prisma.organizationsUpdateWithoutOrganization_permissionInput, Prisma.organizationsUncheckedUpdateWithoutOrganization_permissionInput>
+  create: Prisma.XOR<Prisma.organizationsCreateWithoutOrganization_permissionInput, Prisma.organizationsUncheckedCreateWithoutOrganization_permissionInput>
+  where?: Prisma.organizationsWhereInput
+}
+
+export type organizationsUpdateToOneWithWhereWithoutOrganization_permissionInput = {
+  where?: Prisma.organizationsWhereInput
+  data: Prisma.XOR<Prisma.organizationsUpdateWithoutOrganization_permissionInput, Prisma.organizationsUncheckedUpdateWithoutOrganization_permissionInput>
+}
+
+export type organizationsUpdateWithoutOrganization_permissionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  club?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
+  organization_followers?: Prisma.organization_followersUpdateManyWithoutOrganizationNestedInput
+  events?: Prisma.eventsUpdateManyWithoutOrganizationNestedInput
+  services?: Prisma.servicesUpdateManyWithoutOrganizationNestedInput
+}
+
+export type organizationsUncheckedUpdateWithoutOrganization_permissionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  club?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
   organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUncheckedUpdateManyWithoutOrganizationNestedInput
   services?: Prisma.servicesUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -730,6 +843,7 @@ export type organizationsCreateWithoutServicesInput = {
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
   organization_followers?: Prisma.organization_followersCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsUncheckedCreateWithoutServicesInput = {
@@ -745,6 +859,7 @@ export type organizationsUncheckedCreateWithoutServicesInput = {
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
   organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutOrganizationInput
   events?: Prisma.eventsUncheckedCreateNestedManyWithoutOrganizationInput
+  organization_permission?: Prisma.organization_permissionUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type organizationsCreateOrConnectWithoutServicesInput = {
@@ -776,6 +891,7 @@ export type organizationsUpdateWithoutServicesInput = {
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
   organization_followers?: Prisma.organization_followersUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUpdateManyWithoutOrganizationNestedInput
 }
 
 export type organizationsUncheckedUpdateWithoutServicesInput = {
@@ -791,6 +907,7 @@ export type organizationsUncheckedUpdateWithoutServicesInput = {
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
   organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.eventsUncheckedUpdateManyWithoutOrganizationNestedInput
+  organization_permission?: Prisma.organization_permissionUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -803,6 +920,7 @@ export type OrganizationsCountOutputType = {
   organization_followers: number
   events: number
   services: number
+  organization_permission: number
 }
 
 export type OrganizationsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -810,6 +928,7 @@ export type OrganizationsCountOutputTypeSelect<ExtArgs extends runtime.Types.Ext
   organization_followers?: boolean | OrganizationsCountOutputTypeCountOrganization_followersArgs
   events?: boolean | OrganizationsCountOutputTypeCountEventsArgs
   services?: boolean | OrganizationsCountOutputTypeCountServicesArgs
+  organization_permission?: boolean | OrganizationsCountOutputTypeCountOrganization_permissionArgs
 }
 
 /**
@@ -850,6 +969,13 @@ export type OrganizationsCountOutputTypeCountServicesArgs<ExtArgs extends runtim
   where?: Prisma.servicesWhereInput
 }
 
+/**
+ * OrganizationsCountOutputType without action
+ */
+export type OrganizationsCountOutputTypeCountOrganization_permissionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.organization_permissionWhereInput
+}
+
 
 export type organizationsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -865,6 +991,7 @@ export type organizationsSelect<ExtArgs extends runtime.Types.Extensions.Interna
   organization_followers?: boolean | Prisma.organizations$organization_followersArgs<ExtArgs>
   events?: boolean | Prisma.organizations$eventsArgs<ExtArgs>
   services?: boolean | Prisma.organizations$servicesArgs<ExtArgs>
+  organization_permission?: boolean | Prisma.organizations$organization_permissionArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organizations"]>
 
@@ -910,6 +1037,7 @@ export type organizationsInclude<ExtArgs extends runtime.Types.Extensions.Intern
   organization_followers?: boolean | Prisma.organizations$organization_followersArgs<ExtArgs>
   events?: boolean | Prisma.organizations$eventsArgs<ExtArgs>
   services?: boolean | Prisma.organizations$servicesArgs<ExtArgs>
+  organization_permission?: boolean | Prisma.organizations$organization_permissionArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type organizationsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -922,6 +1050,7 @@ export type $organizationsPayload<ExtArgs extends runtime.Types.Extensions.Inter
     organization_followers: Prisma.$organization_followersPayload<ExtArgs>[]
     events: Prisma.$eventsPayload<ExtArgs>[]
     services: Prisma.$servicesPayload<ExtArgs>[]
+    organization_permission: Prisma.$organization_permissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1331,6 +1460,7 @@ export interface Prisma__organizationsClient<T, Null = never, ExtArgs extends ru
   organization_followers<T extends Prisma.organizations$organization_followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.organizations$organization_followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$organization_followersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.organizations$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.organizations$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$eventsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   services<T extends Prisma.organizations$servicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.organizations$servicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$servicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organization_permission<T extends Prisma.organizations$organization_permissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.organizations$organization_permissionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$organization_permissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1855,6 +1985,30 @@ export type organizations$servicesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.ServicesScalarFieldEnum | Prisma.ServicesScalarFieldEnum[]
+}
+
+/**
+ * organizations.organization_permission
+ */
+export type organizations$organization_permissionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the organization_permission
+   */
+  select?: Prisma.organization_permissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the organization_permission
+   */
+  omit?: Prisma.organization_permissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.organization_permissionInclude<ExtArgs> | null
+  where?: Prisma.organization_permissionWhereInput
+  orderBy?: Prisma.organization_permissionOrderByWithRelationInput | Prisma.organization_permissionOrderByWithRelationInput[]
+  cursor?: Prisma.organization_permissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Organization_permissionScalarFieldEnum | Prisma.Organization_permissionScalarFieldEnum[]
 }
 
 /**

@@ -66,11 +66,7 @@ export const ModelName = {
   services: 'services',
   two_factor_auth: 'two_factor_auth',
   users: 'users',
-  webauthn_credentials: 'webauthn_credentials',
-  registered_event: 'registered_event',
-  image_album: 'image_album',
-  image_report: 'image_report',
-  event: 'event'
+  webauthn_credentials: 'webauthn_credentials'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -151,6 +147,8 @@ export const Organization_membersScalarFieldEnum = {
   organization_id: 'organization_id',
   user_id: 'user_id',
   permission_id: 'permission_id',
+  approved: 'approved',
+  invited_at: 'invited_at',
   registered_at: 'registered_at'
 } as const
 
@@ -159,6 +157,7 @@ export type Organization_membersScalarFieldEnum = (typeof Organization_membersSc
 
 export const Organization_permissionScalarFieldEnum = {
   id: 'id',
+  organization_id: 'organization_id',
   name: 'name',
   description: 'description',
   event_create: 'event_create',
@@ -296,6 +295,7 @@ export const UsersScalarFieldEnum = {
   agent: 'agent',
   agent_verified: 'agent_verified',
   agent_reason: 'agent_reason',
+  admin: 'admin',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -314,52 +314,6 @@ export const Webauthn_credentialsScalarFieldEnum = {
 } as const
 
 export type Webauthn_credentialsScalarFieldEnum = (typeof Webauthn_credentialsScalarFieldEnum)[keyof typeof Webauthn_credentialsScalarFieldEnum]
-
-
-export const Registered_eventScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  created_at: 'created_at',
-  registered_event_id: 'registered_event_id'
-} as const
-
-export type Registered_eventScalarFieldEnum = (typeof Registered_eventScalarFieldEnum)[keyof typeof Registered_eventScalarFieldEnum]
-
-
-export const Image_albumScalarFieldEnum = {
-  id: 'id',
-  upload_user_id: 'upload_user_id',
-  event_id: 'event_id',
-  image_path: 'image_path',
-  created_at: 'created_at'
-} as const
-
-export type Image_albumScalarFieldEnum = (typeof Image_albumScalarFieldEnum)[keyof typeof Image_albumScalarFieldEnum]
-
-
-export const Image_reportScalarFieldEnum = {
-  id: 'id',
-  image_album_id: 'image_album_id',
-  signaling_id: 'signaling_id',
-  reason: 'reason',
-  created_at: 'created_at'
-} as const
-
-export type Image_reportScalarFieldEnum = (typeof Image_reportScalarFieldEnum)[keyof typeof Image_reportScalarFieldEnum]
-
-
-export const EventScalarFieldEnum = {
-  id: 'id',
-  author_id: 'author_id',
-  title: 'title',
-  description: 'description',
-  max_inscription: 'max_inscription',
-  start_at: 'start_at',
-  end_at: 'end_at',
-  created_at: 'created_at'
-} as const
-
-export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -446,6 +400,7 @@ export type organization_membersOrderByRelevanceFieldEnum = (typeof organization
 
 export const organization_permissionOrderByRelevanceFieldEnum = {
   id: 'id',
+  organization_id: 'organization_id',
   name: 'name',
   description: 'description'
 } as const
@@ -560,43 +515,4 @@ export const webauthn_credentialsOrderByRelevanceFieldEnum = {
 } as const
 
 export type webauthn_credentialsOrderByRelevanceFieldEnum = (typeof webauthn_credentialsOrderByRelevanceFieldEnum)[keyof typeof webauthn_credentialsOrderByRelevanceFieldEnum]
-
-
-export const registered_eventOrderByRelevanceFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  registered_event_id: 'registered_event_id'
-} as const
-
-export type registered_eventOrderByRelevanceFieldEnum = (typeof registered_eventOrderByRelevanceFieldEnum)[keyof typeof registered_eventOrderByRelevanceFieldEnum]
-
-
-export const image_albumOrderByRelevanceFieldEnum = {
-  id: 'id',
-  upload_user_id: 'upload_user_id',
-  event_id: 'event_id',
-  image_path: 'image_path'
-} as const
-
-export type image_albumOrderByRelevanceFieldEnum = (typeof image_albumOrderByRelevanceFieldEnum)[keyof typeof image_albumOrderByRelevanceFieldEnum]
-
-
-export const image_reportOrderByRelevanceFieldEnum = {
-  id: 'id',
-  image_album_id: 'image_album_id',
-  signaling_id: 'signaling_id',
-  reason: 'reason'
-} as const
-
-export type image_reportOrderByRelevanceFieldEnum = (typeof image_reportOrderByRelevanceFieldEnum)[keyof typeof image_reportOrderByRelevanceFieldEnum]
-
-
-export const eventOrderByRelevanceFieldEnum = {
-  id: 'id',
-  author_id: 'author_id',
-  title: 'title',
-  description: 'description'
-} as const
-
-export type eventOrderByRelevanceFieldEnum = (typeof eventOrderByRelevanceFieldEnum)[keyof typeof eventOrderByRelevanceFieldEnum]
 

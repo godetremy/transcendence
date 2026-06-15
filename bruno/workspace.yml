@@ -1,11 +1,11 @@
 opencollection: 1.0.0
 info:
-  name: "API - BDE 42 Angouleme"
-  type: workspace
+    name: 'API - BDE 42 Angouleme'
+    type: workspace
 
 collections:
-  - name: "API"
-    path: "collections/API"
+    - name: 'API'
+      path: 'collections/API'
 
 specs:
 

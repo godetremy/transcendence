@@ -1,9 +1,7 @@
 import { Prisma } from '@/database/prisma/generated/client';
 import { PublicEvent } from '@/types/Event';
 
-export function formatPublicEvent(
-	row: Prisma.eventGetPayload<{ include: { registered: false; author: true } }>
-): PublicEvent {
+export function formatPublicEvent(row: Prisma.eventsGetPayload<{ include: { author: true } }>): PublicEvent {
 	return {
 		id: row.id,
 		title: row.title,
@@ -18,6 +16,9 @@ export function formatPublicEvent(
 			full_name: row.author.full_name,
 			profile_picture: row.author.profile_picture,
 			agent: row.author.agent,
+			created_at: row.author.created_at,
+			updated_at: row.author.updated_at,
+			is_member: row.author.is_member,
 		},
 	};
 }

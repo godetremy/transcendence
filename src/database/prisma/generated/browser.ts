@@ -97,23 +97,3 @@ export type users = Prisma.usersModel
  * 
  */
 export type webauthn_credentials = Prisma.webauthn_credentialsModel
-/**
- * Model registered_event
- * 
- */
-export type registered_event = Prisma.registered_eventModel
-/**
- * Model image_album
- * 
- */
-export type image_album = Prisma.image_albumModel
-/**
- * Model image_report
- * 
- */
-export type image_report = Prisma.image_reportModel
-/**
- * Model event
- * 
- */
-export type event = Prisma.eventModel

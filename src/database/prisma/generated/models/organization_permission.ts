@@ -26,6 +26,7 @@ export type AggregateOrganization_permission = {
 
 export type Organization_permissionMinAggregateOutputType = {
   id: string | null
+  organization_id: string | null
   name: string | null
   description: string | null
   event_create: boolean | null
@@ -45,6 +46,7 @@ export type Organization_permissionMinAggregateOutputType = {
 
 export type Organization_permissionMaxAggregateOutputType = {
   id: string | null
+  organization_id: string | null
   name: string | null
   description: string | null
   event_create: boolean | null
@@ -64,6 +66,7 @@ export type Organization_permissionMaxAggregateOutputType = {
 
 export type Organization_permissionCountAggregateOutputType = {
   id: number
+  organization_id: number
   name: number
   description: number
   event_create: number
@@ -85,6 +88,7 @@ export type Organization_permissionCountAggregateOutputType = {
 
 export type Organization_permissionMinAggregateInputType = {
   id?: true
+  organization_id?: true
   name?: true
   description?: true
   event_create?: true
@@ -104,6 +108,7 @@ export type Organization_permissionMinAggregateInputType = {
 
 export type Organization_permissionMaxAggregateInputType = {
   id?: true
+  organization_id?: true
   name?: true
   description?: true
   event_create?: true
@@ -123,6 +128,7 @@ export type Organization_permissionMaxAggregateInputType = {
 
 export type Organization_permissionCountAggregateInputType = {
   id?: true
+  organization_id?: true
   name?: true
   description?: true
   event_create?: true
@@ -215,6 +221,7 @@ export type organization_permissionGroupByArgs<ExtArgs extends runtime.Types.Ext
 
 export type Organization_permissionGroupByOutputType = {
   id: string
+  organization_id: string
   name: string
   description: string | null
   event_create: boolean
@@ -255,6 +262,7 @@ export type organization_permissionWhereInput = {
   OR?: Prisma.organization_permissionWhereInput[]
   NOT?: Prisma.organization_permissionWhereInput | Prisma.organization_permissionWhereInput[]
   id?: Prisma.StringFilter<"organization_permission"> | string
+  organization_id?: Prisma.StringFilter<"organization_permission"> | string
   name?: Prisma.StringFilter<"organization_permission"> | string
   description?: Prisma.StringNullableFilter<"organization_permission"> | string | null
   event_create?: Prisma.BoolFilter<"organization_permission"> | boolean
@@ -271,10 +279,12 @@ export type organization_permissionWhereInput = {
   created_at?: Prisma.DateTimeFilter<"organization_permission"> | Date | string
   update_at?: Prisma.DateTimeFilter<"organization_permission"> | Date | string
   organization_members?: Prisma.Organization_membersListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
 }
 
 export type organization_permissionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  organization_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   event_create?: Prisma.SortOrder
@@ -291,6 +301,7 @@ export type organization_permissionOrderByWithRelationInput = {
   created_at?: Prisma.SortOrder
   update_at?: Prisma.SortOrder
   organization_members?: Prisma.organization_membersOrderByRelationAggregateInput
+  organization?: Prisma.organizationsOrderByWithRelationInput
   _relevance?: Prisma.organization_permissionOrderByRelevanceInput
 }
 
@@ -299,6 +310,7 @@ export type organization_permissionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.organization_permissionWhereInput | Prisma.organization_permissionWhereInput[]
   OR?: Prisma.organization_permissionWhereInput[]
   NOT?: Prisma.organization_permissionWhereInput | Prisma.organization_permissionWhereInput[]
+  organization_id?: Prisma.StringFilter<"organization_permission"> | string
   name?: Prisma.StringFilter<"organization_permission"> | string
   description?: Prisma.StringNullableFilter<"organization_permission"> | string | null
   event_create?: Prisma.BoolFilter<"organization_permission"> | boolean
@@ -315,10 +327,12 @@ export type organization_permissionWhereUniqueInput = Prisma.AtLeast<{
   created_at?: Prisma.DateTimeFilter<"organization_permission"> | Date | string
   update_at?: Prisma.DateTimeFilter<"organization_permission"> | Date | string
   organization_members?: Prisma.Organization_membersListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
 }, "id">
 
 export type organization_permissionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  organization_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   event_create?: Prisma.SortOrder
@@ -344,6 +358,7 @@ export type organization_permissionScalarWhereWithAggregatesInput = {
   OR?: Prisma.organization_permissionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.organization_permissionScalarWhereWithAggregatesInput | Prisma.organization_permissionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"organization_permission"> | string
+  organization_id?: Prisma.StringWithAggregatesFilter<"organization_permission"> | string
   name?: Prisma.StringWithAggregatesFilter<"organization_permission"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"organization_permission"> | string | null
   event_create?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
@@ -379,10 +394,12 @@ export type organization_permissionCreateInput = {
   created_at?: Date | string
   update_at?: Date | string
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganization_permissionInput
+  organization: Prisma.organizationsCreateNestedOneWithoutOrganization_permissionInput
 }
 
 export type organization_permissionUncheckedCreateInput = {
   id?: string
+  organization_id: string
   name: string
   description?: string | null
   event_create?: boolean
@@ -419,10 +436,12 @@ export type organization_permissionUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganization_permissionNestedInput
+  organization?: Prisma.organizationsUpdateOneRequiredWithoutOrganization_permissionNestedInput
 }
 
 export type organization_permissionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   event_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -443,6 +462,7 @@ export type organization_permissionUncheckedUpdateInput = {
 
 export type organization_permissionCreateManyInput = {
   id?: string
+  organization_id: string
   name: string
   description?: string | null
   event_create?: boolean
@@ -481,6 +501,7 @@ export type organization_permissionUpdateManyMutationInput = {
 
 export type organization_permissionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   event_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -511,6 +532,7 @@ export type organization_permissionOrderByRelevanceInput = {
 
 export type organization_permissionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  organization_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   event_create?: Prisma.SortOrder
@@ -530,6 +552,7 @@ export type organization_permissionCountOrderByAggregateInput = {
 
 export type organization_permissionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  organization_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   event_create?: Prisma.SortOrder
@@ -549,6 +572,7 @@ export type organization_permissionMaxOrderByAggregateInput = {
 
 export type organization_permissionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  organization_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   event_create?: Prisma.SortOrder
@@ -564,6 +588,16 @@ export type organization_permissionMinOrderByAggregateInput = {
   organization_manage_permission?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   update_at?: Prisma.SortOrder
+}
+
+export type Organization_permissionListRelationFilter = {
+  every?: Prisma.organization_permissionWhereInput
+  some?: Prisma.organization_permissionWhereInput
+  none?: Prisma.organization_permissionWhereInput
+}
+
+export type organization_permissionOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type organization_permissionCreateNestedOneWithoutOrganization_membersInput = {
@@ -584,6 +618,48 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type organization_permissionCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.organization_permissionCreateWithoutOrganizationInput, Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput> | Prisma.organization_permissionCreateWithoutOrganizationInput[] | Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput | Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.organization_permissionCreateManyOrganizationInputEnvelope
+  connect?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+}
+
+export type organization_permissionUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.organization_permissionCreateWithoutOrganizationInput, Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput> | Prisma.organization_permissionCreateWithoutOrganizationInput[] | Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput | Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.organization_permissionCreateManyOrganizationInputEnvelope
+  connect?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+}
+
+export type organization_permissionUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.organization_permissionCreateWithoutOrganizationInput, Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput> | Prisma.organization_permissionCreateWithoutOrganizationInput[] | Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput | Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.organization_permissionUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.organization_permissionUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.organization_permissionCreateManyOrganizationInputEnvelope
+  set?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  disconnect?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  delete?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  connect?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  update?: Prisma.organization_permissionUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.organization_permissionUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.organization_permissionUpdateManyWithWhereWithoutOrganizationInput | Prisma.organization_permissionUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.organization_permissionScalarWhereInput | Prisma.organization_permissionScalarWhereInput[]
+}
+
+export type organization_permissionUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.organization_permissionCreateWithoutOrganizationInput, Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput> | Prisma.organization_permissionCreateWithoutOrganizationInput[] | Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput | Prisma.organization_permissionCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.organization_permissionUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.organization_permissionUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.organization_permissionCreateManyOrganizationInputEnvelope
+  set?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  disconnect?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  delete?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  connect?: Prisma.organization_permissionWhereUniqueInput | Prisma.organization_permissionWhereUniqueInput[]
+  update?: Prisma.organization_permissionUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.organization_permissionUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.organization_permissionUpdateManyWithWhereWithoutOrganizationInput | Prisma.organization_permissionUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.organization_permissionScalarWhereInput | Prisma.organization_permissionScalarWhereInput[]
+}
+
 export type organization_permissionCreateWithoutOrganization_membersInput = {
   id?: string
   name: string
@@ -601,10 +677,12 @@ export type organization_permissionCreateWithoutOrganization_membersInput = {
   organization_manage_permission?: boolean
   created_at?: Date | string
   update_at?: Date | string
+  organization: Prisma.organizationsCreateNestedOneWithoutOrganization_permissionInput
 }
 
 export type organization_permissionUncheckedCreateWithoutOrganization_membersInput = {
   id?: string
+  organization_id: string
   name: string
   description?: string | null
   event_create?: boolean
@@ -655,9 +733,178 @@ export type organization_permissionUpdateWithoutOrganization_membersInput = {
   organization_manage_permission?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.organizationsUpdateOneRequiredWithoutOrganization_permissionNestedInput
 }
 
 export type organization_permissionUncheckedUpdateWithoutOrganization_membersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  event_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  event_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  event_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_manage_permission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type organization_permissionCreateWithoutOrganizationInput = {
+  id?: string
+  name: string
+  description?: string | null
+  event_create?: boolean
+  event_update?: boolean
+  event_delete?: boolean
+  service_create?: boolean
+  service_update?: boolean
+  service_delete?: boolean
+  members_invite?: boolean
+  members_manage?: boolean
+  organization_update_info?: boolean
+  organization_manage?: boolean
+  organization_manage_permission?: boolean
+  created_at?: Date | string
+  update_at?: Date | string
+  organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganization_permissionInput
+}
+
+export type organization_permissionUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  name: string
+  description?: string | null
+  event_create?: boolean
+  event_update?: boolean
+  event_delete?: boolean
+  service_create?: boolean
+  service_update?: boolean
+  service_delete?: boolean
+  members_invite?: boolean
+  members_manage?: boolean
+  organization_update_info?: boolean
+  organization_manage?: boolean
+  organization_manage_permission?: boolean
+  created_at?: Date | string
+  update_at?: Date | string
+  organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganization_permissionInput
+}
+
+export type organization_permissionCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.organization_permissionWhereUniqueInput
+  create: Prisma.XOR<Prisma.organization_permissionCreateWithoutOrganizationInput, Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput>
+}
+
+export type organization_permissionCreateManyOrganizationInputEnvelope = {
+  data: Prisma.organization_permissionCreateManyOrganizationInput | Prisma.organization_permissionCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
+}
+
+export type organization_permissionUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.organization_permissionWhereUniqueInput
+  update: Prisma.XOR<Prisma.organization_permissionUpdateWithoutOrganizationInput, Prisma.organization_permissionUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.organization_permissionCreateWithoutOrganizationInput, Prisma.organization_permissionUncheckedCreateWithoutOrganizationInput>
+}
+
+export type organization_permissionUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.organization_permissionWhereUniqueInput
+  data: Prisma.XOR<Prisma.organization_permissionUpdateWithoutOrganizationInput, Prisma.organization_permissionUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type organization_permissionUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.organization_permissionScalarWhereInput
+  data: Prisma.XOR<Prisma.organization_permissionUpdateManyMutationInput, Prisma.organization_permissionUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type organization_permissionScalarWhereInput = {
+  AND?: Prisma.organization_permissionScalarWhereInput | Prisma.organization_permissionScalarWhereInput[]
+  OR?: Prisma.organization_permissionScalarWhereInput[]
+  NOT?: Prisma.organization_permissionScalarWhereInput | Prisma.organization_permissionScalarWhereInput[]
+  id?: Prisma.StringFilter<"organization_permission"> | string
+  organization_id?: Prisma.StringFilter<"organization_permission"> | string
+  name?: Prisma.StringFilter<"organization_permission"> | string
+  description?: Prisma.StringNullableFilter<"organization_permission"> | string | null
+  event_create?: Prisma.BoolFilter<"organization_permission"> | boolean
+  event_update?: Prisma.BoolFilter<"organization_permission"> | boolean
+  event_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
+  service_create?: Prisma.BoolFilter<"organization_permission"> | boolean
+  service_update?: Prisma.BoolFilter<"organization_permission"> | boolean
+  service_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
+  members_invite?: Prisma.BoolFilter<"organization_permission"> | boolean
+  members_manage?: Prisma.BoolFilter<"organization_permission"> | boolean
+  organization_update_info?: Prisma.BoolFilter<"organization_permission"> | boolean
+  organization_manage?: Prisma.BoolFilter<"organization_permission"> | boolean
+  organization_manage_permission?: Prisma.BoolFilter<"organization_permission"> | boolean
+  created_at?: Prisma.DateTimeFilter<"organization_permission"> | Date | string
+  update_at?: Prisma.DateTimeFilter<"organization_permission"> | Date | string
+}
+
+export type organization_permissionCreateManyOrganizationInput = {
+  id?: string
+  name: string
+  description?: string | null
+  event_create?: boolean
+  event_update?: boolean
+  event_delete?: boolean
+  service_create?: boolean
+  service_update?: boolean
+  service_delete?: boolean
+  members_invite?: boolean
+  members_manage?: boolean
+  organization_update_info?: boolean
+  organization_manage?: boolean
+  organization_manage_permission?: boolean
+  created_at?: Date | string
+  update_at?: Date | string
+}
+
+export type organization_permissionUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  event_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  event_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  event_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_manage_permission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization_members?: Prisma.organization_membersUpdateManyWithoutOrganization_permissionNestedInput
+}
+
+export type organization_permissionUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  event_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  event_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  event_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  organization_manage_permission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganization_permissionNestedInput
+}
+
+export type organization_permissionUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -709,6 +956,7 @@ export type Organization_permissionCountOutputTypeCountOrganization_membersArgs<
 
 export type organization_permissionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  organization_id?: boolean
   name?: boolean
   description?: boolean
   event_create?: boolean
@@ -725,11 +973,13 @@ export type organization_permissionSelect<ExtArgs extends runtime.Types.Extensio
   created_at?: boolean
   update_at?: boolean
   organization_members?: boolean | Prisma.organization_permission$organization_membersArgs<ExtArgs>
+  organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.Organization_permissionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization_permission"]>
 
 export type organization_permissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  organization_id?: boolean
   name?: boolean
   description?: boolean
   event_create?: boolean
@@ -745,10 +995,12 @@ export type organization_permissionSelectCreateManyAndReturn<ExtArgs extends run
   organization_manage_permission?: boolean
   created_at?: boolean
   update_at?: boolean
+  organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization_permission"]>
 
 export type organization_permissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  organization_id?: boolean
   name?: boolean
   description?: boolean
   event_create?: boolean
@@ -764,10 +1016,12 @@ export type organization_permissionSelectUpdateManyAndReturn<ExtArgs extends run
   organization_manage_permission?: boolean
   created_at?: boolean
   update_at?: boolean
+  organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization_permission"]>
 
 export type organization_permissionSelectScalar = {
   id?: boolean
+  organization_id?: boolean
   name?: boolean
   description?: boolean
   event_create?: boolean
@@ -785,21 +1039,28 @@ export type organization_permissionSelectScalar = {
   update_at?: boolean
 }
 
-export type organization_permissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "event_create" | "event_update" | "event_delete" | "service_create" | "service_update" | "service_delete" | "members_invite" | "members_manage" | "organization_update_info" | "organization_manage" | "organization_manage_permission" | "created_at" | "update_at", ExtArgs["result"]["organization_permission"]>
+export type organization_permissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "name" | "description" | "event_create" | "event_update" | "event_delete" | "service_create" | "service_update" | "service_delete" | "members_invite" | "members_manage" | "organization_update_info" | "organization_manage" | "organization_manage_permission" | "created_at" | "update_at", ExtArgs["result"]["organization_permission"]>
 export type organization_permissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization_members?: boolean | Prisma.organization_permission$organization_membersArgs<ExtArgs>
+  organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.Organization_permissionCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type organization_permissionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type organization_permissionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type organization_permissionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
+}
+export type organization_permissionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
+}
 
 export type $organization_permissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "organization_permission"
   objects: {
     organization_members: Prisma.$organization_membersPayload<ExtArgs>[]
+    organization: Prisma.$organizationsPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    organization_id: string
     name: string
     description: string | null
     event_create: boolean
@@ -1210,6 +1471,7 @@ readonly fields: organization_permissionFieldRefs;
 export interface Prisma__organization_permissionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization_members<T extends Prisma.organization_permission$organization_membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.organization_permission$organization_membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$organization_membersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organization<T extends Prisma.organizationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.organizationsDefaultArgs<ExtArgs>>): Prisma.Prisma__organizationsClient<runtime.Types.Result.GetResult<Prisma.$organizationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1240,6 +1502,7 @@ export interface Prisma__organization_permissionClient<T, Null = never, ExtArgs 
  */
 export interface organization_permissionFieldRefs {
   readonly id: Prisma.FieldRef<"organization_permission", 'String'>
+  readonly organization_id: Prisma.FieldRef<"organization_permission", 'String'>
   readonly name: Prisma.FieldRef<"organization_permission", 'String'>
   readonly description: Prisma.FieldRef<"organization_permission", 'String'>
   readonly event_create: Prisma.FieldRef<"organization_permission", 'Boolean'>
@@ -1509,6 +1772,10 @@ export type organization_permissionCreateManyAndReturnArgs<ExtArgs extends runti
    */
   data: Prisma.organization_permissionCreateManyInput | Prisma.organization_permissionCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.organization_permissionIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1579,6 +1846,10 @@ export type organization_permissionUpdateManyAndReturnArgs<ExtArgs extends runti
    * Limit how many organization_permissions to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.organization_permissionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

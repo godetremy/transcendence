@@ -29,6 +29,8 @@ export type Organization_membersMinAggregateOutputType = {
   organization_id: string | null
   user_id: string | null
   permission_id: string | null
+  approved: boolean | null
+  invited_at: Date | null
   registered_at: Date | null
 }
 
@@ -37,6 +39,8 @@ export type Organization_membersMaxAggregateOutputType = {
   organization_id: string | null
   user_id: string | null
   permission_id: string | null
+  approved: boolean | null
+  invited_at: Date | null
   registered_at: Date | null
 }
 
@@ -45,6 +49,8 @@ export type Organization_membersCountAggregateOutputType = {
   organization_id: number
   user_id: number
   permission_id: number
+  approved: number
+  invited_at: number
   registered_at: number
   _all: number
 }
@@ -55,6 +61,8 @@ export type Organization_membersMinAggregateInputType = {
   organization_id?: true
   user_id?: true
   permission_id?: true
+  approved?: true
+  invited_at?: true
   registered_at?: true
 }
 
@@ -63,6 +71,8 @@ export type Organization_membersMaxAggregateInputType = {
   organization_id?: true
   user_id?: true
   permission_id?: true
+  approved?: true
+  invited_at?: true
   registered_at?: true
 }
 
@@ -71,6 +81,8 @@ export type Organization_membersCountAggregateInputType = {
   organization_id?: true
   user_id?: true
   permission_id?: true
+  approved?: true
+  invited_at?: true
   registered_at?: true
   _all?: true
 }
@@ -152,6 +164,8 @@ export type Organization_membersGroupByOutputType = {
   organization_id: string
   user_id: string
   permission_id: string
+  approved: boolean | null
+  invited_at: Date
   registered_at: Date
   _count: Organization_membersCountAggregateOutputType | null
   _min: Organization_membersMinAggregateOutputType | null
@@ -181,6 +195,8 @@ export type organization_membersWhereInput = {
   organization_id?: Prisma.StringFilter<"organization_members"> | string
   user_id?: Prisma.StringFilter<"organization_members"> | string
   permission_id?: Prisma.StringFilter<"organization_members"> | string
+  approved?: Prisma.BoolNullableFilter<"organization_members"> | boolean | null
+  invited_at?: Prisma.DateTimeFilter<"organization_members"> | Date | string
   registered_at?: Prisma.DateTimeFilter<"organization_members"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
   user?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
@@ -192,6 +208,8 @@ export type organization_membersOrderByWithRelationInput = {
   organization_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   permission_id?: Prisma.SortOrder
+  approved?: Prisma.SortOrderInput | Prisma.SortOrder
+  invited_at?: Prisma.SortOrder
   registered_at?: Prisma.SortOrder
   organization?: Prisma.organizationsOrderByWithRelationInput
   user?: Prisma.usersOrderByWithRelationInput
@@ -207,6 +225,8 @@ export type organization_membersWhereUniqueInput = Prisma.AtLeast<{
   organization_id?: Prisma.StringFilter<"organization_members"> | string
   user_id?: Prisma.StringFilter<"organization_members"> | string
   permission_id?: Prisma.StringFilter<"organization_members"> | string
+  approved?: Prisma.BoolNullableFilter<"organization_members"> | boolean | null
+  invited_at?: Prisma.DateTimeFilter<"organization_members"> | Date | string
   registered_at?: Prisma.DateTimeFilter<"organization_members"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
   user?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
@@ -218,6 +238,8 @@ export type organization_membersOrderByWithAggregationInput = {
   organization_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   permission_id?: Prisma.SortOrder
+  approved?: Prisma.SortOrderInput | Prisma.SortOrder
+  invited_at?: Prisma.SortOrder
   registered_at?: Prisma.SortOrder
   _count?: Prisma.organization_membersCountOrderByAggregateInput
   _max?: Prisma.organization_membersMaxOrderByAggregateInput
@@ -232,11 +254,15 @@ export type organization_membersScalarWhereWithAggregatesInput = {
   organization_id?: Prisma.StringWithAggregatesFilter<"organization_members"> | string
   user_id?: Prisma.StringWithAggregatesFilter<"organization_members"> | string
   permission_id?: Prisma.StringWithAggregatesFilter<"organization_members"> | string
+  approved?: Prisma.BoolNullableWithAggregatesFilter<"organization_members"> | boolean | null
+  invited_at?: Prisma.DateTimeWithAggregatesFilter<"organization_members"> | Date | string
   registered_at?: Prisma.DateTimeWithAggregatesFilter<"organization_members"> | Date | string
 }
 
 export type organization_membersCreateInput = {
   id?: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
   organization: Prisma.organizationsCreateNestedOneWithoutOrganization_membersInput
   user: Prisma.usersCreateNestedOneWithoutOrganization_membersInput
@@ -248,11 +274,15 @@ export type organization_membersUncheckedCreateInput = {
   organization_id: string
   user_id: string
   permission_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
 export type organization_membersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.organizationsUpdateOneRequiredWithoutOrganization_membersNestedInput
   user?: Prisma.usersUpdateOneRequiredWithoutOrganization_membersNestedInput
@@ -264,6 +294,8 @@ export type organization_membersUncheckedUpdateInput = {
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   permission_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -272,11 +304,15 @@ export type organization_membersCreateManyInput = {
   organization_id: string
   user_id: string
   permission_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
 export type organization_membersUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -285,6 +321,8 @@ export type organization_membersUncheckedUpdateManyInput = {
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   permission_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -299,6 +337,8 @@ export type organization_membersCountOrderByAggregateInput = {
   organization_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   permission_id?: Prisma.SortOrder
+  approved?: Prisma.SortOrder
+  invited_at?: Prisma.SortOrder
   registered_at?: Prisma.SortOrder
 }
 
@@ -307,6 +347,8 @@ export type organization_membersMaxOrderByAggregateInput = {
   organization_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   permission_id?: Prisma.SortOrder
+  approved?: Prisma.SortOrder
+  invited_at?: Prisma.SortOrder
   registered_at?: Prisma.SortOrder
 }
 
@@ -315,6 +357,8 @@ export type organization_membersMinOrderByAggregateInput = {
   organization_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   permission_id?: Prisma.SortOrder
+  approved?: Prisma.SortOrder
+  invited_at?: Prisma.SortOrder
   registered_at?: Prisma.SortOrder
 }
 
@@ -326,6 +370,10 @@ export type Organization_membersListRelationFilter = {
 
 export type organization_membersOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
 }
 
 export type organization_membersCreateNestedManyWithoutOrganization_permissionInput = {
@@ -456,6 +504,8 @@ export type organization_membersUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type organization_membersCreateWithoutOrganization_permissionInput = {
   id?: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
   organization: Prisma.organizationsCreateNestedOneWithoutOrganization_membersInput
   user: Prisma.usersCreateNestedOneWithoutOrganization_membersInput
@@ -465,6 +515,8 @@ export type organization_membersUncheckedCreateWithoutOrganization_permissionInp
   id?: string
   organization_id: string
   user_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
@@ -502,11 +554,15 @@ export type organization_membersScalarWhereInput = {
   organization_id?: Prisma.StringFilter<"organization_members"> | string
   user_id?: Prisma.StringFilter<"organization_members"> | string
   permission_id?: Prisma.StringFilter<"organization_members"> | string
+  approved?: Prisma.BoolNullableFilter<"organization_members"> | boolean | null
+  invited_at?: Prisma.DateTimeFilter<"organization_members"> | Date | string
   registered_at?: Prisma.DateTimeFilter<"organization_members"> | Date | string
 }
 
 export type organization_membersCreateWithoutOrganizationInput = {
   id?: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
   user: Prisma.usersCreateNestedOneWithoutOrganization_membersInput
   organization_permission: Prisma.organization_permissionCreateNestedOneWithoutOrganization_membersInput
@@ -516,6 +572,8 @@ export type organization_membersUncheckedCreateWithoutOrganizationInput = {
   id?: string
   user_id: string
   permission_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
@@ -547,6 +605,8 @@ export type organization_membersUpdateManyWithWhereWithoutOrganizationInput = {
 
 export type organization_membersCreateWithoutUserInput = {
   id?: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
   organization: Prisma.organizationsCreateNestedOneWithoutOrganization_membersInput
   organization_permission: Prisma.organization_permissionCreateNestedOneWithoutOrganization_membersInput
@@ -556,6 +616,8 @@ export type organization_membersUncheckedCreateWithoutUserInput = {
   id?: string
   organization_id: string
   permission_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
@@ -589,11 +651,15 @@ export type organization_membersCreateManyOrganization_permissionInput = {
   id?: string
   organization_id: string
   user_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
 export type organization_membersUpdateWithoutOrganization_permissionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.organizationsUpdateOneRequiredWithoutOrganization_membersNestedInput
   user?: Prisma.usersUpdateOneRequiredWithoutOrganization_membersNestedInput
@@ -603,6 +669,8 @@ export type organization_membersUncheckedUpdateWithoutOrganization_permissionInp
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -610,6 +678,8 @@ export type organization_membersUncheckedUpdateManyWithoutOrganization_permissio
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -617,11 +687,15 @@ export type organization_membersCreateManyOrganizationInput = {
   id?: string
   user_id: string
   permission_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
 export type organization_membersUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.usersUpdateOneRequiredWithoutOrganization_membersNestedInput
   organization_permission?: Prisma.organization_permissionUpdateOneRequiredWithoutOrganization_membersNestedInput
@@ -631,6 +705,8 @@ export type organization_membersUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   permission_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -638,6 +714,8 @@ export type organization_membersUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   permission_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -645,11 +723,15 @@ export type organization_membersCreateManyUserInput = {
   id?: string
   organization_id: string
   permission_id: string
+  approved?: boolean | null
+  invited_at?: Date | string
   registered_at?: Date | string
 }
 
 export type organization_membersUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.organizationsUpdateOneRequiredWithoutOrganization_membersNestedInput
   organization_permission?: Prisma.organization_permissionUpdateOneRequiredWithoutOrganization_membersNestedInput
@@ -659,6 +741,8 @@ export type organization_membersUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   permission_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -666,6 +750,8 @@ export type organization_membersUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   permission_id?: Prisma.StringFieldUpdateOperationsInput | string
+  approved?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  invited_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registered_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -676,6 +762,8 @@ export type organization_membersSelect<ExtArgs extends runtime.Types.Extensions.
   organization_id?: boolean
   user_id?: boolean
   permission_id?: boolean
+  approved?: boolean
+  invited_at?: boolean
   registered_at?: boolean
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
@@ -687,6 +775,8 @@ export type organization_membersSelectCreateManyAndReturn<ExtArgs extends runtim
   organization_id?: boolean
   user_id?: boolean
   permission_id?: boolean
+  approved?: boolean
+  invited_at?: boolean
   registered_at?: boolean
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
@@ -698,6 +788,8 @@ export type organization_membersSelectUpdateManyAndReturn<ExtArgs extends runtim
   organization_id?: boolean
   user_id?: boolean
   permission_id?: boolean
+  approved?: boolean
+  invited_at?: boolean
   registered_at?: boolean
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
@@ -709,10 +801,12 @@ export type organization_membersSelectScalar = {
   organization_id?: boolean
   user_id?: boolean
   permission_id?: boolean
+  approved?: boolean
+  invited_at?: boolean
   registered_at?: boolean
 }
 
-export type organization_membersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "user_id" | "permission_id" | "registered_at", ExtArgs["result"]["organization_members"]>
+export type organization_membersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "user_id" | "permission_id" | "approved" | "invited_at" | "registered_at", ExtArgs["result"]["organization_members"]>
 export type organization_membersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
@@ -741,6 +835,8 @@ export type $organization_membersPayload<ExtArgs extends runtime.Types.Extension
     organization_id: string
     user_id: string
     permission_id: string
+    approved: boolean | null
+    invited_at: Date
     registered_at: Date
   }, ExtArgs["result"]["organization_members"]>
   composites: {}
@@ -1172,6 +1268,8 @@ export interface organization_membersFieldRefs {
   readonly organization_id: Prisma.FieldRef<"organization_members", 'String'>
   readonly user_id: Prisma.FieldRef<"organization_members", 'String'>
   readonly permission_id: Prisma.FieldRef<"organization_members", 'String'>
+  readonly approved: Prisma.FieldRef<"organization_members", 'Boolean'>
+  readonly invited_at: Prisma.FieldRef<"organization_members", 'DateTime'>
   readonly registered_at: Prisma.FieldRef<"organization_members", 'DateTime'>
 }
     
