@@ -43,7 +43,6 @@ function CardList({ onResult }: { onResult: (msg: string) => void }) {
 			});
 			if (response.ok) {
 				const value = await response.json();
-				console.log(value);
 				setUsers(value.data);
 				return;
 			}

@@ -20,7 +20,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const password_ok = await bcrypt.compare(body.password, user.password);
 		if (!password_ok) throw ERRORS_DETAILS.invalid_mail_password();
 
-		console.log(user.two_factor_auth);
 		if (user.two_factor_auth) {
 			if (body.method) {
 				switch (body.method) {
