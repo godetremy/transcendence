@@ -46,10 +46,11 @@ export function POST(req: NextRequest, { params }: { params: Promise<{ id: strin
 			two_factor_auth: true,
 		});
 		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user.two_factor_auth_id) throw ERRORS_DETAILS.two_factor_auth_not_configured();
 
 		if (!(await checkTotp(user.two_factor_auth, body.code))) throw ERRORS_DETAILS.invalid_totp_code();
 
-		await toggleTotp(user_id.id, body.enable);
+		await toggleTotp(user.two_factor_auth_id, body.enable);
 
 		return NextResponse.json({
 			success: true,

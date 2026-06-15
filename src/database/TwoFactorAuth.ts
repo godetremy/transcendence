@@ -30,13 +30,11 @@ const saveTotpSecret = async (
 };
 
 const toggleTotp = async (
-	user_id: string,
+	two_factor_auth_id: string,
 	enabled: boolean
 ): Promise<Prisma.two_factor_authGetPayload<Prisma.two_factor_authDefaultArgs> | null> => {
-	const user = await createTwoFactorAuth(user_id);
-	if (!user.two_factor_auth_id) return null;
 	return prisma.two_factor_auth.update({
-		where: { id: user.two_factor_auth_id },
+		where: { id: two_factor_auth_id },
 		data: { totp_enabled: enabled },
 	});
 };
