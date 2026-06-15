@@ -19,6 +19,8 @@ model users {
     agent_verified				Boolean?
     agent_reason				String?
 
+	admin						Boolean			@default(false)
+
 	created_at					DateTime		@default(now())
 	updated_at					DateTime		@updatedAt
 

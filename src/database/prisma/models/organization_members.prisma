@@ -5,6 +5,9 @@ model organization_members {
 	user_id								String
 	permission_id						String
 
+	approved							Boolean?
+
+	invited_at							DateTime		@default(now())
 	registered_at						DateTime		@default(now())
 
 	organization						organizations					@relation(fields: [organization_id], references: [id])

@@ -16,4 +16,5 @@ model organizations {
 	organization_followers		organization_followers[]
 	events						events[]
 	services					services[]
+	organization_permission		organization_permission[]
 }

@@ -1,5 +1,6 @@
 model organization_permission {
 	id								String			@id			@default(uuid())
+	organization_id					String
 
 	name							String
 	description						String?
@@ -23,4 +24,6 @@ model organization_permission {
 	update_at						DateTime		@updatedAt
 
 	organization_members			organization_members[]
+	organization					organizations	@relation(fields: [organization_id], references: [id])
+
 }
