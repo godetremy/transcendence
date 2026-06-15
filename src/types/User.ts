@@ -9,7 +9,6 @@ export interface User {
 	profile_picture: string;
 	agent: boolean;
 	agent_reason: string | null;
-	memberships_id: string | null;
 	membership: Membership | null;
 }
 
@@ -20,4 +19,7 @@ export interface PublicUser {
 	full_name: string | null;
 	profile_picture: string | null;
 	agent: boolean;
+	created_at: Date;
+	updated_at: Date;
+	is_member: boolean;
 }

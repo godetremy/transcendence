@@ -5,6 +5,7 @@ import { isRedirectError } from 'next/dist/client/components/redirect-error';
 const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	internal_error: () => new ApiError(500, 'Internal server error'),
 	unsupported_content_type: () => new ApiError(400, 'Unsupported content type.'),
+	invalid_oauth_error: () => new ApiError(401, 'Invalid code'),
 	invalid_body: () => new ApiError(400, 'Invalid body.'),
 	missing_parameter: (parameter: string) => new ApiError(400, `Missing required parameter ${parameter}.`),
 	invalid_parameter: (parameter: string) => new ApiError(400, `Invalid parameter ${parameter}.`),
