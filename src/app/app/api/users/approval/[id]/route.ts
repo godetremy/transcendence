@@ -12,7 +12,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
 		const user = await getUserById(id, {});
 		if (user === null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!user.agent) throw ERRORS_DETAILS.account_unsupported_action();
+		if (!user.agent || user.agent_verified !== null) throw ERRORS_DETAILS.account_unsupported_action();
 
 		const updated_user = await updateUserApproval(id, body.approve);
 		return NextResponse.json({ success: true, approved: updated_user.agent_verified });
