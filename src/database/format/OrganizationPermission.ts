@@ -1,7 +1,9 @@
 import { OrganizationPermission } from '@/types/OrganizationPermission';
 import { Prisma } from '../prisma/generated/client';
 
-const formatOrganizationPermission = (row: Prisma.organization_permissionGetPayload<object>): OrganizationPermission => {
+const formatOrganizationPermission = (
+	row: Prisma.organization_permissionGetPayload<object>
+): OrganizationPermission => {
 	return {
 		id: row.id,
 		name: row.name,
