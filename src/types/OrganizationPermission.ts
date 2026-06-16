@@ -17,7 +17,7 @@ export interface PrivateOrganizationPermission {
 	update_at: Date;
 }
 
-export interface CreatePermission {
+export interface CreateOrganizationPermissionType {
 	name: string;
 	description: string | null;
 	event_create: boolean;

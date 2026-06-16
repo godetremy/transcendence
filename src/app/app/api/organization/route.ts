@@ -5,7 +5,7 @@ import { parseBody } from '@/utils/parsing';
 import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { decrypt } from '@/lib/session';
-import { createPermission } from '@/database/OrganizationPermission';
+import { CreateOrganizationPermission } from '@/database/OrganizationPermission';
 import {
 	countOrganizationByFilter,
 	createOrganization,
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
 
-		const permission = await createPermission({
+		const permission = await CreateOrganizationPermission({
 			name: body.name,
 			description: body.description,
 			event_create: true,
