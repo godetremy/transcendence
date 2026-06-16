@@ -54,11 +54,11 @@ const DeleteOrganizationPermission = async (
 	});
 };
 
-const getOrganizationPermissionByFilter = async  <T extends Prisma.organization_permissionInclude>(
+const getOrganizationPermissionByFilter = async <T extends Prisma.organization_permissionInclude>(
 	filter: Prisma.organization_permissionWhereInput,
 	include: T,
 	pagination?: PaginationParameters
-): Promise<Prisma.organization_permissionGetPayload<{ include: T}>[]> => {
+): Promise<Prisma.organization_permissionGetPayload<{ include: T }>[]> => {
 	return prisma.organization_permission.findMany({
 		where: filter,
 		include: include,
@@ -74,4 +74,11 @@ const countOrganizationPermissionByFilter = async (
 	});
 };
 
-export { CreateOrganizationPermission, CreateOrganizationPermissionWithOrganizationId, getOrganizationPermissionByFilter, countOrganizationPermissionByFilter, updateOrganizationPermission, DeleteOrganizationPermission };
+export {
+	CreateOrganizationPermission,
+	CreateOrganizationPermissionWithOrganizationId,
+	getOrganizationPermissionByFilter,
+	countOrganizationPermissionByFilter,
+	updateOrganizationPermission,
+	DeleteOrganizationPermission,
+};

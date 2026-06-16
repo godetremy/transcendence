@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
-import { deleteOrganization, getOrganizationById, organizationExistByName, updateOrganization } from '@/database/Organization';
+import {
+	deleteOrganization,
+	getOrganizationById,
+	organizationExistByName,
+	updateOrganization,
+} from '@/database/Organization';
 import { formatPublicOrganization } from '@/database/format/Organization';
 import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
@@ -25,7 +30,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 		if (org == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
-		if ((await organizationExistByName(body.name))) throw ERRORS_DETAILS.organization_already_exist();
+		if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});
