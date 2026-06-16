@@ -49,23 +49,19 @@ const createOrganization = async (
 	});
 };
 
-/*const updateOrganization = async (
-	data: CreateOrganization,
+const updateOrganization = async (
+	data: CreateOrganizationType,
+	organizations_id: string
 ): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
 	return prisma.organizations.update({
+		where: {
+			id: organizations_id,
+		},
 		data: {
 			...data,
-			organization_members: {
-				create: {
-					user_id: user_id,
-					approved: true,
-					registered_at: new Date(),
-					permission_id: permission_id,
-				},
-			},
 		},
 	});
-};*/
+};
 
 const getOrganizationByFilter = async <T extends Prisma.organizationsInclude>(
 	filter: Prisma.organizationsWhereInput,
@@ -92,4 +88,5 @@ export {
 	getOrganizationById,
 	getOrganizationByName,
 	organizationExistByName,
+	updateOrganization,
 };
