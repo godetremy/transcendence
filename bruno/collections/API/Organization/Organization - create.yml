@@ -1,0 +1,24 @@
+info:
+  name: Organization - create
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BaseURL}}/organization"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "bde",
+        "description": "bureau des eleves",
+        "logo": "",
+        "club": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

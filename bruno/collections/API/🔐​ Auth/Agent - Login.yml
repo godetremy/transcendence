@@ -1,26 +1,28 @@
 info:
-    name: Agent - Login
-    type: http
-    seq: 4
+  name: Agent - Login
+  type: http
+  seq: 4
 
 http:
-    method: POST
-    url: '{{BaseURL}}/auth/login'
-    body:
-        type: form-urlencoded
-        data:
-            - name: mail
-              value: test@free.fr
-            - name: password
-              value: test.123
-            - name: method
-              value: totp
-            - name: code
-              value: '123456'
-    auth: inherit
+  method: POST
+  url: "{{BaseURL}}/auth/login"
+  body:
+    type: form-urlencoded
+    data:
+      - name: mail
+        value: test@free.fr
+      - name: password
+        value: test.123
+      - name: method
+        value: totp
+        disabled: true
+      - name: code
+        value: "123456"
+        disabled: true
+  auth: inherit
 
 settings:
-    encodeUrl: true
-    timeout: 0
-    followRedirects: true
-    maxRedirects: 5
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
