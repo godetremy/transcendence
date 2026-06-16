@@ -27,4 +27,3 @@ extensions:
     presets:
       request:
         type: http
-        url: https://localhost/api/

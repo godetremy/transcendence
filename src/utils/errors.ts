@@ -28,6 +28,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	invalid_totp_code: () => new ApiError(401, 'The code you entered is invalid.'),
 	two_factor_auth_required: () => new ApiError(401, 'Two factor auth is required for this account.'),
 	two_factor_auth_not_implemented: () => new ApiError(501, 'This 2FA method is not implemented yet.'),
+	organization_already_exist: () => new ApiError(400, 'This organization already exists.'),
 };
 
 const formatError = (error: ApiError) => {

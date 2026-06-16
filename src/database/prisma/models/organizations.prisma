@@ -1,20 +1,18 @@
 model organizations {
-	id							String						@id					@default(uuid())
+    id String @id @default(uuid())
 
-	owner_id					String
-	name						String
-	descriptiom					String?
-	logo						String?
-	club						Boolean						@default(false)
+    owner_id    String
+    name        String  @unique
+    description String?
+    logo        String?
+    club        Boolean @default(false)
 
-	organization_members_id		String
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
 
-	created_at					DateTime					@default(now())
-	updated_at					DateTime					@updatedAt
-
-	organization_members		organization_members[]
-	organization_followers		organization_followers[]
-	events						events[]
-	services					services[]
-	organization_permission		organization_permission[]
+    organization_members    organization_members[]
+    organization_followers  organization_followers[]
+    events                  events[]
+    services                services[]
+    organization_permission organization_permission[]
 }

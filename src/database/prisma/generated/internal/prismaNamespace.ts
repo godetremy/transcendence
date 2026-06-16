@@ -1739,10 +1739,9 @@ export const OrganizationsScalarFieldEnum = {
   id: 'id',
   owner_id: 'owner_id',
   name: 'name',
-  descriptiom: 'descriptiom',
+  description: 'description',
   logo: 'logo',
   club: 'club',
-  organization_members_id: 'organization_members_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -1969,9 +1968,8 @@ export const organizationsOrderByRelevanceFieldEnum = {
   id: 'id',
   owner_id: 'owner_id',
   name: 'name',
-  descriptiom: 'descriptiom',
-  logo: 'logo',
-  organization_members_id: 'organization_members_id'
+  description: 'description',
+  logo: 'logo'
 } as const
 
 export type organizationsOrderByRelevanceFieldEnum = (typeof organizationsOrderByRelevanceFieldEnum)[keyof typeof organizationsOrderByRelevanceFieldEnum]

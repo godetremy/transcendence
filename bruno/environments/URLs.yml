@@ -1,4 +1,5 @@
 name: URLs
 variables:
-  - name: BaseURL
-    value: https://localhost/app/api
+    - name: BaseURL
+      value: https://nanci-windswept-lingeringly.ngrok-free.dev/app/api
+      disabled: true

@@ -28,10 +28,9 @@ export type OrganizationsMinAggregateOutputType = {
   id: string | null
   owner_id: string | null
   name: string | null
-  descriptiom: string | null
+  description: string | null
   logo: string | null
   club: boolean | null
-  organization_members_id: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -40,10 +39,9 @@ export type OrganizationsMaxAggregateOutputType = {
   id: string | null
   owner_id: string | null
   name: string | null
-  descriptiom: string | null
+  description: string | null
   logo: string | null
   club: boolean | null
-  organization_members_id: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -52,10 +50,9 @@ export type OrganizationsCountAggregateOutputType = {
   id: number
   owner_id: number
   name: number
-  descriptiom: number
+  description: number
   logo: number
   club: number
-  organization_members_id: number
   created_at: number
   updated_at: number
   _all: number
@@ -66,10 +63,9 @@ export type OrganizationsMinAggregateInputType = {
   id?: true
   owner_id?: true
   name?: true
-  descriptiom?: true
+  description?: true
   logo?: true
   club?: true
-  organization_members_id?: true
   created_at?: true
   updated_at?: true
 }
@@ -78,10 +74,9 @@ export type OrganizationsMaxAggregateInputType = {
   id?: true
   owner_id?: true
   name?: true
-  descriptiom?: true
+  description?: true
   logo?: true
   club?: true
-  organization_members_id?: true
   created_at?: true
   updated_at?: true
 }
@@ -90,10 +85,9 @@ export type OrganizationsCountAggregateInputType = {
   id?: true
   owner_id?: true
   name?: true
-  descriptiom?: true
+  description?: true
   logo?: true
   club?: true
-  organization_members_id?: true
   created_at?: true
   updated_at?: true
   _all?: true
@@ -175,10 +169,9 @@ export type OrganizationsGroupByOutputType = {
   id: string
   owner_id: string
   name: string
-  descriptiom: string | null
+  description: string | null
   logo: string | null
   club: boolean
-  organization_members_id: string
   created_at: Date
   updated_at: Date
   _count: OrganizationsCountAggregateOutputType | null
@@ -208,10 +201,9 @@ export type organizationsWhereInput = {
   id?: Prisma.StringFilter<"organizations"> | string
   owner_id?: Prisma.StringFilter<"organizations"> | string
   name?: Prisma.StringFilter<"organizations"> | string
-  descriptiom?: Prisma.StringNullableFilter<"organizations"> | string | null
+  description?: Prisma.StringNullableFilter<"organizations"> | string | null
   logo?: Prisma.StringNullableFilter<"organizations"> | string | null
   club?: Prisma.BoolFilter<"organizations"> | boolean
-  organization_members_id?: Prisma.StringFilter<"organizations"> | string
   created_at?: Prisma.DateTimeFilter<"organizations"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"organizations"> | Date | string
   organization_members?: Prisma.Organization_membersListRelationFilter
@@ -225,10 +217,9 @@ export type organizationsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   owner_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  descriptiom?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
   club?: Prisma.SortOrder
-  organization_members_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   organization_members?: Prisma.organization_membersOrderByRelationAggregateInput
@@ -241,15 +232,14 @@ export type organizationsOrderByWithRelationInput = {
 
 export type organizationsWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   AND?: Prisma.organizationsWhereInput | Prisma.organizationsWhereInput[]
   OR?: Prisma.organizationsWhereInput[]
   NOT?: Prisma.organizationsWhereInput | Prisma.organizationsWhereInput[]
   owner_id?: Prisma.StringFilter<"organizations"> | string
-  name?: Prisma.StringFilter<"organizations"> | string
-  descriptiom?: Prisma.StringNullableFilter<"organizations"> | string | null
+  description?: Prisma.StringNullableFilter<"organizations"> | string | null
   logo?: Prisma.StringNullableFilter<"organizations"> | string | null
   club?: Prisma.BoolFilter<"organizations"> | boolean
-  organization_members_id?: Prisma.StringFilter<"organizations"> | string
   created_at?: Prisma.DateTimeFilter<"organizations"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"organizations"> | Date | string
   organization_members?: Prisma.Organization_membersListRelationFilter
@@ -257,16 +247,15 @@ export type organizationsWhereUniqueInput = Prisma.AtLeast<{
   events?: Prisma.EventsListRelationFilter
   services?: Prisma.ServicesListRelationFilter
   organization_permission?: Prisma.Organization_permissionListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type organizationsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   owner_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  descriptiom?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
   club?: Prisma.SortOrder
-  organization_members_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.organizationsCountOrderByAggregateInput
@@ -281,10 +270,9 @@ export type organizationsScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"organizations"> | string
   owner_id?: Prisma.StringWithAggregatesFilter<"organizations"> | string
   name?: Prisma.StringWithAggregatesFilter<"organizations"> | string
-  descriptiom?: Prisma.StringNullableWithAggregatesFilter<"organizations"> | string | null
+  description?: Prisma.StringNullableWithAggregatesFilter<"organizations"> | string | null
   logo?: Prisma.StringNullableWithAggregatesFilter<"organizations"> | string | null
   club?: Prisma.BoolWithAggregatesFilter<"organizations"> | boolean
-  organization_members_id?: Prisma.StringWithAggregatesFilter<"organizations"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"organizations"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"organizations"> | Date | string
 }
@@ -293,10 +281,9 @@ export type organizationsCreateInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
@@ -310,10 +297,9 @@ export type organizationsUncheckedCreateInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
@@ -327,10 +313,9 @@ export type organizationsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
@@ -344,10 +329,9 @@ export type organizationsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -361,10 +345,9 @@ export type organizationsCreateManyInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -373,10 +356,9 @@ export type organizationsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -385,10 +367,9 @@ export type organizationsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -396,6 +377,11 @@ export type organizationsUncheckedUpdateManyInput = {
 export type OrganizationsScalarRelationFilter = {
   is?: Prisma.organizationsWhereInput
   isNot?: Prisma.organizationsWhereInput
+}
+
+export type OrganizationsNullableScalarRelationFilter = {
+  is?: Prisma.organizationsWhereInput | null
+  isNot?: Prisma.organizationsWhereInput | null
 }
 
 export type organizationsOrderByRelevanceInput = {
@@ -408,10 +394,9 @@ export type organizationsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   owner_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  descriptiom?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   club?: Prisma.SortOrder
-  organization_members_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -420,10 +405,9 @@ export type organizationsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   owner_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  descriptiom?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   club?: Prisma.SortOrder
-  organization_members_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -432,10 +416,9 @@ export type organizationsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   owner_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  descriptiom?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   club?: Prisma.SortOrder
-  organization_members_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -488,10 +471,12 @@ export type organizationsCreateNestedOneWithoutOrganization_permissionInput = {
   connect?: Prisma.organizationsWhereUniqueInput
 }
 
-export type organizationsUpdateOneRequiredWithoutOrganization_permissionNestedInput = {
+export type organizationsUpdateOneWithoutOrganization_permissionNestedInput = {
   create?: Prisma.XOR<Prisma.organizationsCreateWithoutOrganization_permissionInput, Prisma.organizationsUncheckedCreateWithoutOrganization_permissionInput>
   connectOrCreate?: Prisma.organizationsCreateOrConnectWithoutOrganization_permissionInput
   upsert?: Prisma.organizationsUpsertWithoutOrganization_permissionInput
+  disconnect?: Prisma.organizationsWhereInput | boolean
+  delete?: Prisma.organizationsWhereInput | boolean
   connect?: Prisma.organizationsWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.organizationsUpdateToOneWithWhereWithoutOrganization_permissionInput, Prisma.organizationsUpdateWithoutOrganization_permissionInput>, Prisma.organizationsUncheckedUpdateWithoutOrganization_permissionInput>
 }
@@ -514,10 +499,9 @@ export type organizationsCreateWithoutEventsInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
@@ -530,10 +514,9 @@ export type organizationsUncheckedCreateWithoutEventsInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
@@ -562,10 +545,9 @@ export type organizationsUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
@@ -578,10 +560,9 @@ export type organizationsUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -594,10 +575,9 @@ export type organizationsCreateWithoutOrganization_followersInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
@@ -610,10 +590,9 @@ export type organizationsUncheckedCreateWithoutOrganization_followersInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
@@ -642,10 +621,9 @@ export type organizationsUpdateWithoutOrganization_followersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
@@ -658,10 +636,9 @@ export type organizationsUncheckedUpdateWithoutOrganization_followersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -674,10 +651,9 @@ export type organizationsCreateWithoutOrganization_membersInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_followers?: Prisma.organization_followersCreateNestedManyWithoutOrganizationInput
@@ -690,10 +666,9 @@ export type organizationsUncheckedCreateWithoutOrganization_membersInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_followers?: Prisma.organization_followersUncheckedCreateNestedManyWithoutOrganizationInput
@@ -722,10 +697,9 @@ export type organizationsUpdateWithoutOrganization_membersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_followers?: Prisma.organization_followersUpdateManyWithoutOrganizationNestedInput
@@ -738,10 +712,9 @@ export type organizationsUncheckedUpdateWithoutOrganization_membersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_followers?: Prisma.organization_followersUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -754,10 +727,9 @@ export type organizationsCreateWithoutOrganization_permissionInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
@@ -770,10 +742,9 @@ export type organizationsUncheckedCreateWithoutOrganization_permissionInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
@@ -802,10 +773,9 @@ export type organizationsUpdateWithoutOrganization_permissionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
@@ -818,10 +788,9 @@ export type organizationsUncheckedUpdateWithoutOrganization_permissionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -834,10 +803,9 @@ export type organizationsCreateWithoutServicesInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersCreateNestedManyWithoutOrganizationInput
@@ -850,10 +818,9 @@ export type organizationsUncheckedCreateWithoutServicesInput = {
   id?: string
   owner_id: string
   name: string
-  descriptiom?: string | null
+  description?: string | null
   logo?: string | null
   club?: boolean
-  organization_members_id: string
   created_at?: Date | string
   updated_at?: Date | string
   organization_members?: Prisma.organization_membersUncheckedCreateNestedManyWithoutOrganizationInput
@@ -882,10 +849,9 @@ export type organizationsUpdateWithoutServicesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUpdateManyWithoutOrganizationNestedInput
@@ -898,10 +864,9 @@ export type organizationsUncheckedUpdateWithoutServicesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   owner_id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptiom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   club?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  organization_members_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization_members?: Prisma.organization_membersUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -981,10 +946,9 @@ export type organizationsSelect<ExtArgs extends runtime.Types.Extensions.Interna
   id?: boolean
   owner_id?: boolean
   name?: boolean
-  descriptiom?: boolean
+  description?: boolean
   logo?: boolean
   club?: boolean
-  organization_members_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   organization_members?: boolean | Prisma.organizations$organization_membersArgs<ExtArgs>
@@ -999,10 +963,9 @@ export type organizationsSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   owner_id?: boolean
   name?: boolean
-  descriptiom?: boolean
+  description?: boolean
   logo?: boolean
   club?: boolean
-  organization_members_id?: boolean
   created_at?: boolean
   updated_at?: boolean
 }, ExtArgs["result"]["organizations"]>
@@ -1011,10 +974,9 @@ export type organizationsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   owner_id?: boolean
   name?: boolean
-  descriptiom?: boolean
+  description?: boolean
   logo?: boolean
   club?: boolean
-  organization_members_id?: boolean
   created_at?: boolean
   updated_at?: boolean
 }, ExtArgs["result"]["organizations"]>
@@ -1023,15 +985,14 @@ export type organizationsSelectScalar = {
   id?: boolean
   owner_id?: boolean
   name?: boolean
-  descriptiom?: boolean
+  description?: boolean
   logo?: boolean
   club?: boolean
-  organization_members_id?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type organizationsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "owner_id" | "name" | "descriptiom" | "logo" | "club" | "organization_members_id" | "created_at" | "updated_at", ExtArgs["result"]["organizations"]>
+export type organizationsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "owner_id" | "name" | "description" | "logo" | "club" | "created_at" | "updated_at", ExtArgs["result"]["organizations"]>
 export type organizationsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization_members?: boolean | Prisma.organizations$organization_membersArgs<ExtArgs>
   organization_followers?: boolean | Prisma.organizations$organization_followersArgs<ExtArgs>
@@ -1056,10 +1017,9 @@ export type $organizationsPayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     owner_id: string
     name: string
-    descriptiom: string | null
+    description: string | null
     logo: string | null
     club: boolean
-    organization_members_id: string
     created_at: Date
     updated_at: Date
   }, ExtArgs["result"]["organizations"]>
@@ -1493,10 +1453,9 @@ export interface organizationsFieldRefs {
   readonly id: Prisma.FieldRef<"organizations", 'String'>
   readonly owner_id: Prisma.FieldRef<"organizations", 'String'>
   readonly name: Prisma.FieldRef<"organizations", 'String'>
-  readonly descriptiom: Prisma.FieldRef<"organizations", 'String'>
+  readonly description: Prisma.FieldRef<"organizations", 'String'>
   readonly logo: Prisma.FieldRef<"organizations", 'String'>
   readonly club: Prisma.FieldRef<"organizations", 'Boolean'>
-  readonly organization_members_id: Prisma.FieldRef<"organizations", 'String'>
   readonly created_at: Prisma.FieldRef<"organizations", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"organizations", 'DateTime'>
 }
