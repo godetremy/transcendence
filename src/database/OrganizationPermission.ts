@@ -26,6 +26,34 @@ const CreateOrganizationPermissionWithOrganizationId = async (
 	});
 };
 
+const updateOrganizationPermission = async (
+	data: CreateOrganizationPermissionType,
+	permission_id: string,
+	organizationId: string
+): Promise<Prisma.organization_permissionGetPayload<Prisma.organization_permissionDefaultArgs>> => {
+	return prisma.organization_permission.update({
+		where: {
+			id: permission_id,
+			organization_id: organizationId,
+		},
+		data: {
+			...data,
+		},
+	});
+};
+
+const DeleteOrganizationPermission = async (
+	permission_id: string,
+	organizationId: string
+): Promise<Prisma.organization_permissionGetPayload<Prisma.organization_permissionDefaultArgs>> => {
+	return prisma.organization_permission.delete({
+		where: {
+			id: permission_id,
+			organization_id: organizationId,
+		},
+	});
+};
+
 const getOrganizationPermissionByFilter = async  <T extends Prisma.organization_permissionInclude>(
 	filter: Prisma.organization_permissionWhereInput,
 	include: T,
@@ -38,4 +66,12 @@ const getOrganizationPermissionByFilter = async  <T extends Prisma.organization_
 	});
 };
 
-export { CreateOrganizationPermission, CreateOrganizationPermissionWithOrganizationId, getOrganizationPermissionByFilter,  };
+const countOrganizationPermissionByFilter = async (
+	filter: Prisma.organization_permissionWhereInput
+): Promise<number> => {
+	return prisma.organization_permission.count({
+		where: filter,
+	});
+};
+
+export { CreateOrganizationPermission, CreateOrganizationPermissionWithOrganizationId, getOrganizationPermissionByFilter, countOrganizationPermissionByFilter, updateOrganizationPermission, DeleteOrganizationPermission };
