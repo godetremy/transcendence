@@ -1,8 +1,8 @@
-import { z } from 'zod';
+import * as z from 'zod';
 
 export const CreateOrganizationSchema = z.object({
 	name: z.string(),
-	description: z.string().isNullable(),
-	logo: z.string().isNullable(),
-	club: z.boolean().isNullable(),
+	description: z.string().optional(),
+	logo: z.string().optional(),
+	club: z.boolean().optional(),
 });
