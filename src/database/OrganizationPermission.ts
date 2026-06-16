@@ -26,6 +26,22 @@ const CreateOrganizationPermissionWithOrganizationId = async (
 	});
 };
 
+const updateOrganizationPermissionInit = async (
+	data: CreateOrganizationPermissionType,
+	permission_id: string,
+	organizationId: string
+): Promise<Prisma.organization_permissionGetPayload<Prisma.organization_permissionDefaultArgs>> => {
+	return prisma.organization_permission.update({
+		where: {
+			id: permission_id,
+		},
+		data: {
+			...data,
+			organization_id: organizationId,
+		},
+	});
+};
+
 const updateOrganizationPermission = async (
 	data: CreateOrganizationPermissionType,
 	permission_id: string,
@@ -81,4 +97,5 @@ export {
 	countOrganizationPermissionByFilter,
 	updateOrganizationPermission,
 	DeleteOrganizationPermission,
+	updateOrganizationPermissionInit,
 };

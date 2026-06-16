@@ -1,0 +1,19 @@
+info:
+  name: Permission - Lists all permission
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{BaseURL}}/organization/:id/permission"
+  params:
+    - name: id
+      value: 2d485a43-3b6a-4f05-b0cb-3db66a219e02
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

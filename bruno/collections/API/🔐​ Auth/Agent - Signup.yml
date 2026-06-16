@@ -1,22 +1,22 @@
 info:
-    name: Agent - Signup
-    type: http
-    seq: 5
+  name: Agent - Signup
+  type: http
+  seq: 5
 
 http:
-    method: POST
-    url: '{{BaseURL}}/auth/signup'
-    body:
-        type: form-urlencoded
-        data:
-            - name: mail
-              value: test@free.fr
-            - name: password
-              value: test.123
-    auth: inherit
+  method: POST
+  url: "{{BaseURL}}/auth/signup"
+  body:
+    type: form-urlencoded
+    data:
+      - name: mail
+        value: test@test.fr
+      - name: password
+        value: test.123
+  auth: inherit
 
 settings:
-    encodeUrl: true
-    timeout: 0
-    followRedirects: true
-    maxRedirects: 5
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

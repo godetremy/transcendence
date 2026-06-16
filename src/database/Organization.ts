@@ -28,6 +28,10 @@ const organizationExistByName = async (name: string): Promise<boolean> => {
 	return (await getOrganizationByName(name, {})) !== null;
 };
 
+const organizationExistById = async (organization_id: string): Promise<boolean> => {
+	return (await getOrganizationById(organization_id, {})) !== null;
+};
+
 const createOrganization = async (
 	data: CreateOrganizationType,
 	user_id: string,
@@ -123,4 +127,5 @@ export {
 	organizationExistByName,
 	updateOrganization,
 	deleteOrganization,
+	organizationExistById,
 };

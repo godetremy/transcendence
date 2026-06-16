@@ -1,0 +1,19 @@
+info:
+  name: Permission - Create
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BaseURL}}/organization/:id/permission"
+  params:
+    - name: id
+      value: ""
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
