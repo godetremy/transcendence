@@ -1,0 +1,40 @@
+info:
+  name: Permission - Delete
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BaseURL}}/organization/:id/permission/:perm_id"
+  params:
+    - name: perm_id
+      value: 7b026627-34cb-4b4e-8dbd-fc109ca6816d
+      type: path
+    - name: id
+      value: fe9a1af0-9405-45d6-9a43-81dd411f7fb5
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "stagiaire",
+        "description": "cedric",
+        "event_create": false,
+        "event_update": false,
+        "event_delete": false,
+        "service_create": false,
+        "service_update": false,
+        "service_delete": true,
+        "members_invite": false,
+        "members_manage": false,
+        "organization_update_info": false,
+        "organization_manage": false,
+        "organization_manage_permission": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

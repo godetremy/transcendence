@@ -26,7 +26,7 @@ const CreateOrganizationPermissionWithOrganizationId = async (
 	});
 };
 
-const updateOrganizationPermissionInit = async (
+const updateOrganizationPermissionWithOrganizationId = async (
 	data: CreateOrganizationPermissionType,
 	permission_id: string,
 	organizationId: string
@@ -70,6 +70,20 @@ const DeleteOrganizationPermission = async (
 	});
 };
 
+const getOrganizationPermissionById = async <T extends Prisma.organization_permissionInclude>(
+	permission_id: string,
+	organizationId: string,
+	include: T
+): Promise<Prisma.organization_permissionGetPayload<{ include: T }> | null> => {
+	return prisma.organization_permission.findUnique({
+		where: {
+			id: permission_id,
+			organization_id: organizationId,
+		},
+		include: include,
+	});
+};
+
 const getOrganizationPermissionByFilter = async <T extends Prisma.organization_permissionInclude>(
 	filter: Prisma.organization_permissionWhereInput,
 	include: T,
@@ -97,5 +111,6 @@ export {
 	countOrganizationPermissionByFilter,
 	updateOrganizationPermission,
 	DeleteOrganizationPermission,
-	updateOrganizationPermissionInit,
+	updateOrganizationPermissionWithOrganizationId,
+	getOrganizationPermissionById,
 };

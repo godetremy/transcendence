@@ -5,7 +5,7 @@ import { parseBody } from '@/utils/parsing';
 import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { decrypt } from '@/lib/session';
-import { CreateOrganizationPermission, updateOrganizationPermissionInit } from '@/database/OrganizationPermission';
+import { CreateOrganizationPermission, updateOrganizationPermissionWithOrganizationId } from '@/database/OrganizationPermission';
 import {
 	countOrganizationByFilter,
 	createOrganization,
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		if (permission == null) throw ERRORS_DETAILS.organization_already_exist();
 
 		const organization = await createOrganization(body, user_id, permission.id);
-		await updateOrganizationPermissionInit( permission, permission.id, organization.id);
+		await updateOrganizationPermissionWithOrganizationId( permission, permission.id, organization.id);
 
 		return NextResponse.json(formatPublicOrganization(organization));
 	});
