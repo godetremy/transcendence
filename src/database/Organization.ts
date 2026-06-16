@@ -4,6 +4,16 @@ import { prisma } from '@/database/prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { CreateOrganizationType } from '@/types/Organization';
 
+const getOrganizationById = async <T extends Prisma.organizationsInclude>(
+	id: string,
+	include: T
+): Promise<Prisma.organizationsGetPayload<{ include: T }> | null> => {
+	return prisma.organizations.findUnique({
+		where: { id },
+		include: include,
+	});
+};
+
 const getOrganizationByName = async <T extends Prisma.organizationsInclude>(
 	name: string,
 	include: T
@@ -79,6 +89,7 @@ export {
 	getOrganizationByFilter,
 	countOrganizationByFilter,
 	createOrganization,
+	getOrganizationById,
 	getOrganizationByName,
 	organizationExistByName,
 };

@@ -7,7 +7,12 @@ import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { decrypt } from '@/lib/session';
 import { createPermission } from '@/database/OrganizationPermission';
-import { countOrganizationByFilter, createOrganization, getOrganizationByFilter } from '@/database/Organization';
+import {
+	countOrganizationByFilter,
+	createOrganization,
+	getOrganizationByFilter,
+	organizationExistByName,
+} from '@/database/Organization';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
@@ -26,7 +31,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
-		// if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
+		if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
 
 		const permission = await createPermission({
 			name: body.name,
