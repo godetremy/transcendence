@@ -10,7 +10,7 @@ http:
     type: form-urlencoded
     data:
       - name: mail
-        value: test@test.fr
+        value: test@free.fr
       - name: password
         value: test.123
   auth: inherit

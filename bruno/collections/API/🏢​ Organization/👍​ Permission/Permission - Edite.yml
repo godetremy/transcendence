@@ -24,12 +24,12 @@ http:
         "event_delete": false,
         "service_create": false,
         "service_update": false,
-        "service_delete": false,
+        "service_delete": true,
         "members_invite": false,
         "members_manage": false,
         "organization_update_info": false,
         "organization_manage": false,
-        "organization_manage_permission": true
+        "organization_manage_permission": false
       }
   auth: inherit
 

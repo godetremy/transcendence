@@ -3,7 +3,7 @@ model organization_members {
 
 	organization_id						String
 	user_id								String
-	permission_id						String
+	permission_id						String?
 
 	approved							Boolean?
 
@@ -12,5 +12,5 @@ model organization_members {
 
 	organization						organizations					@relation(fields: [organization_id], references: [id])
 	user								users							@relation(fields: [user_id], references: [id])
-	organization_permission				organization_permission			@relation(fields: [permission_id], references: [id])
+	organization_permission				organization_permission?		@relation(fields: [permission_id], references: [id])
 }

@@ -4,7 +4,7 @@ info:
   seq: 4
 
 http:
-  method: PATCH
+  method: DELETE
   url: "{{BaseURL}}/organization/:id/permission/:perm_id"
   params:
     - name: perm_id
@@ -13,24 +13,6 @@ http:
     - name: id
       value: fe9a1af0-9405-45d6-9a43-81dd411f7fb5
       type: path
-  body:
-    type: json
-    data: |-
-      {
-        "name": "stagiaire",
-        "description": "cedric",
-        "event_create": false,
-        "event_update": false,
-        "event_delete": false,
-        "service_create": false,
-        "service_update": false,
-        "service_delete": true,
-        "members_invite": false,
-        "members_manage": false,
-        "organization_update_info": false,
-        "organization_manage": false,
-        "organization_manage_permission": false
-      }
   auth: inherit
 
 settings:

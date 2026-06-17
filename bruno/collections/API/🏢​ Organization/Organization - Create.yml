@@ -10,8 +10,9 @@ http:
     type: json
     data: |-
       {
-        "name": "bde2",
+        "name": "bde",
         "description": "bureau des eleves",
+        "logo": "",
         "club": true
       }
   auth: inherit
