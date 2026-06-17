@@ -13,6 +13,12 @@ export const metadata: Metadata = {
 	description: 'BDE website',
 };
 
+export const viewport = {
+	width: 'device-width',
+	initialScale: 1,
+	viewportFit: 'cover',
+};
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -20,9 +26,6 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="fr" className={`${montserrat.className}`}>
-			<head>
-				<meta name="apple-mobile-web-app-title" content="Timothy gros con" />
-			</head>
 			<body>
 				<ModalProvider>{children}</ModalProvider>
 			</body>
