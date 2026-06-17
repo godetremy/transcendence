@@ -2,8 +2,16 @@ import { decrypt } from '@/lib/session';
 import { SessionPayload } from '@/types/session/SessionPayload';
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextRequest, NextResponse } from 'next/server';
+import { existsSync } from 'node:fs';
+import path from 'path';
 
 const ignorePath = ['/app/api/auth/'];
+
+function checkFirstInitialization(url: string) {
+	const uri = path.resolve(process.cwd(), '.init_done');
+	console.log(uri, existsSync(uri));
+	return !existsSync(uri) && !url.startsWith('/setup') && !url.startsWith('/app/api');
+}
 
 function isPathIgnored(path: string): boolean {
 	if (!path.startsWith('/app')) return true;
@@ -29,6 +37,8 @@ export default async function proxy(req: NextRequest) {
 	if (isPathIgnored(req.nextUrl.pathname)) {
 		return NextResponse.next();
 	}
+
+	if (checkFirstInitialization(req.nextUrl.pathname)) return NextResponse.redirect(new URL('/setup', req.nextUrl));
 
 	const session = await getSession(req.cookies.get('session'));
 
