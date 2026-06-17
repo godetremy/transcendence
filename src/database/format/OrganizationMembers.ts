@@ -1,9 +1,7 @@
 import { Prisma } from '../prisma/generated/client';
 import { PublicOrganizationMembers } from '@/types/OrganizationMembers';
 
-const formatOrganizationMembers = (
-	row: Prisma.organization_membersGetPayload<object>
-): PublicOrganizationMembers => {
+const formatOrganizationMembers = (row: Prisma.organization_membersGetPayload<object>): PublicOrganizationMembers => {
 	return {
 		id: row.id,
 		approved: row.approved,
@@ -13,6 +11,4 @@ const formatOrganizationMembers = (
 	};
 };
 
-export {
-	formatOrganizationMembers,
-}
+export { formatOrganizationMembers };

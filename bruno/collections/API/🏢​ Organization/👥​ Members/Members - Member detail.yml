@@ -1,10 +1,10 @@
 info:
-  name: Members - create invite members organization
+  name: Members - Member detail
   type: http
-  seq: 2
+  seq: 3
 
 http:
-  method: POST
+  method: GET
   url: "{{BaseURL}}/organization/:id/members?page=1&limit=10"
   params:
     - name: page
@@ -16,13 +16,6 @@ http:
     - name: id
       value: 70add5ff-6771-49f7-979e-c4de19dcf303
       type: path
-  body:
-    type: form-urlencoded
-    data:
-      - name: user_id
-        value: 49830d64-5ba0-4dbd-a543-a35091b16072
-      - name: permission_id
-        value: de5bf848-d146-447c-9e97-5d3f072457f
   auth: inherit
 
 settings:
