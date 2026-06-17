@@ -1,0 +1,25 @@
+info:
+  name: Members - lists members organization
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BaseURL}}/organization/:id/members?page=1&limit=10"
+  params:
+    - name: page
+      value: "1"
+      type: query
+    - name: limit
+      value: "10"
+      type: query
+    - name: id
+      value: 70add5ff-6771-49f7-979e-c4de19dcf303
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

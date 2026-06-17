@@ -519,9 +519,9 @@ export type organization_permissionUncheckedUpdateManyInput = {
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type Organization_permissionScalarRelationFilter = {
-  is?: Prisma.organization_permissionWhereInput
-  isNot?: Prisma.organization_permissionWhereInput
+export type Organization_permissionNullableScalarRelationFilter = {
+  is?: Prisma.organization_permissionWhereInput | null
+  isNot?: Prisma.organization_permissionWhereInput | null
 }
 
 export type organization_permissionOrderByRelevanceInput = {
@@ -606,10 +606,12 @@ export type organization_permissionCreateNestedOneWithoutOrganization_membersInp
   connect?: Prisma.organization_permissionWhereUniqueInput
 }
 
-export type organization_permissionUpdateOneRequiredWithoutOrganization_membersNestedInput = {
+export type organization_permissionUpdateOneWithoutOrganization_membersNestedInput = {
   create?: Prisma.XOR<Prisma.organization_permissionCreateWithoutOrganization_membersInput, Prisma.organization_permissionUncheckedCreateWithoutOrganization_membersInput>
   connectOrCreate?: Prisma.organization_permissionCreateOrConnectWithoutOrganization_membersInput
   upsert?: Prisma.organization_permissionUpsertWithoutOrganization_membersInput
+  disconnect?: Prisma.organization_permissionWhereInput | boolean
+  delete?: Prisma.organization_permissionWhereInput | boolean
   connect?: Prisma.organization_permissionWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.organization_permissionUpdateToOneWithWhereWithoutOrganization_membersInput, Prisma.organization_permissionUpdateWithoutOrganization_membersInput>, Prisma.organization_permissionUncheckedUpdateWithoutOrganization_membersInput>
 }

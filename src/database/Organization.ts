@@ -4,6 +4,16 @@ import { prisma } from '@/database/prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { CreateOrganizationType } from '@/types/Organization';
 
+const getOrganizationById = async <T extends Prisma.organizationsInclude>(
+	id: string,
+	include: T
+): Promise<Prisma.organizationsGetPayload<{ include: T }> | null> => {
+	return prisma.organizations.findUnique({
+		where: { id },
+		include: include,
+	});
+};
+
 const getOrganizationByName = async <T extends Prisma.organizationsInclude>(
 	name: string,
 	include: T
@@ -16,6 +26,10 @@ const getOrganizationByName = async <T extends Prisma.organizationsInclude>(
 
 const organizationExistByName = async (name: string): Promise<boolean> => {
 	return (await getOrganizationByName(name, {})) !== null;
+};
+
+const organizationExistById = async (organization_id: string): Promise<boolean> => {
+	return (await getOrganizationById(organization_id, {})) !== null;
 };
 
 const createOrganization = async (
@@ -39,23 +53,52 @@ const createOrganization = async (
 	});
 };
 
-/*const updateOrganization = async (
-	data: CreateOrganization,
+const updateOrganization = async (
+	data: CreateOrganizationType,
+	organizations_id: string
 ): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
 	return prisma.organizations.update({
+		where: {
+			id: organizations_id,
+		},
 		data: {
 			...data,
-			organization_members: {
-				create: {
-					user_id: user_id,
-					approved: true,
-					registered_at: new Date(),
-					permission_id: permission_id,
-				},
-			},
 		},
 	});
-};*/
+};
+
+const deleteOrganization = async (
+	organizations_id: string
+): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
+	await prisma.organization_members.deleteMany({
+		where: {
+			organization_id: organizations_id,
+		},
+	});
+
+	await prisma.organization_followers.deleteMany({
+		where: {
+			organization_id: organizations_id,
+		},
+	});
+
+	await prisma.organization_permission.deleteMany({
+		where: {
+			organization_id: organizations_id,
+		},
+	});
+
+	return prisma.organizations.delete({
+		where: {
+			id: organizations_id,
+		},
+		include: {
+			organization_permission: true,
+			organization_followers: true,
+			organization_members: true,
+		},
+	});
+};
 
 const getOrganizationByFilter = async <T extends Prisma.organizationsInclude>(
 	filter: Prisma.organizationsWhereInput,
@@ -79,6 +122,10 @@ export {
 	getOrganizationByFilter,
 	countOrganizationByFilter,
 	createOrganization,
+	getOrganizationById,
 	getOrganizationByName,
 	organizationExistByName,
+	updateOrganization,
+	deleteOrganization,
+	organizationExistById,
 };

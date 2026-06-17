@@ -5,11 +5,19 @@ export interface PrivateOrganizationMembers {
 	approved?: boolean;
 	invited_at: Date;
 	registered_at: Date;
-	user: User;
+	user_id: string;
 	permission_id: string;
 }
 
 export interface PublicOrganizationMembers {
-	approved?: boolean;
-	user: User;
+	id: string;
+	approved: boolean | null;
+	user_id: string;
+	invited_at: Date;
+	registered_at: Date;
+}
+
+export interface CreateInviteOrganizationMembersType {
+	user_id: string;
+	permission_id: string;
 }

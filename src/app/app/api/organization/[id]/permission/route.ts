@@ -1,0 +1,55 @@
+import { formatOrganizationPermission } from '@/database/format/OrganizationPermission';
+import { getOrganizationById } from '@/database/Organization';
+import {
+	countOrganizationPermissionByFilter,
+	CreateOrganizationPermissionWithOrganizationId,
+	getOrganizationPermissionByFilter,
+} from '@/database/OrganizationPermission';
+import { getUserById } from '@/database/User';
+import { decrypt } from '@/lib/session';
+import { OrganizationPermissionSchema } from '@/schema/OrganizationPermissionSchema';
+import { CreateOrganizationPermissionType } from '@/types/OrganizationPermission';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
+import { parseBody } from '@/utils/parsing';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { id } = await params;
+		const Pagination = getPaginationParams(req.nextUrl.searchParams);
+
+		const number = await countOrganizationPermissionByFilter({});
+		const list = await getOrganizationPermissionByFilter({ organization_id: id }, {}, Pagination);
+
+		return NextResponse.json(
+			generatePaginationResponse(list.map(formatOrganizationPermission), number, Pagination)
+		);
+	});
+}
+
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { id } = await params;
+
+		const body = await parseBody<CreateOrganizationPermissionType>(req, OrganizationPermissionSchema);
+
+		const cookie = req.cookies.get('session');
+		const user_id = (await decrypt(cookie?.value)).user_id;
+		const user = await getUserById(user_id, {});
+
+		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+
+		const organization = await getOrganizationById(id, {});
+		//const permission_user = await getOrganizationPermissionByFilter({organization_id: organization?.id, }, {});
+
+		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (user_id != organization.owner_id && user.admin == false) throw ERRORS_DETAILS.permission_denied();
+
+		const permission = await CreateOrganizationPermissionWithOrganizationId(body, organization.id);
+
+		if (permission == null) throw ERRORS_DETAILS.permission_denied();
+
+		return NextResponse.json(formatOrganizationPermission(permission));
+	});
+}

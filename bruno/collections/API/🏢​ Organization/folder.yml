@@ -1,7 +1,7 @@
 info:
-  name: 👤​ Users
+  name: 🏢​ Organization
   type: folder
-  seq: 2
+  seq: 4
 
 request:
   auth: inherit

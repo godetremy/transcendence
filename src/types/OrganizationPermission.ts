@@ -1,4 +1,4 @@
-export interface PrivateOrganizationPermission {
+export interface OrganizationPermission {
 	id: string;
 	name: string;
 	description: string | null;
@@ -13,11 +13,11 @@ export interface PrivateOrganizationPermission {
 	organization_update_info: boolean;
 	organization_manage: boolean;
 	organization_manage_permission: boolean;
-	create_at: Date;
-	update_at: Date;
+	created_at: Date;
+	updated_at: Date;
 }
 
-export interface CreatePermission {
+export interface CreateOrganizationPermissionType {
 	name: string;
 	description: string | null;
 	event_create: boolean;

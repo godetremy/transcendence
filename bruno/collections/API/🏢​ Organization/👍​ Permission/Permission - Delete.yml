@@ -1,0 +1,22 @@
+info:
+  name: Permission - Delete
+  type: http
+  seq: 4
+
+http:
+  method: DELETE
+  url: "{{BaseURL}}/organization/:id/permission/:perm_id"
+  params:
+    - name: perm_id
+      value: 7b026627-34cb-4b4e-8dbd-fc109ca6816d
+      type: path
+    - name: id
+      value: fe9a1af0-9405-45d6-9a43-81dd411f7fb5
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

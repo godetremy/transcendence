@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
-import { formatPrivateOrganization } from '@/database/format/Organization';
 import { parseBody } from '@/utils/parsing';
 import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { decrypt } from '@/lib/session';
-import { createPermission } from '@/database/OrganizationPermission';
-import { countOrganizationByFilter, createOrganization, getOrganizationByFilter } from '@/database/Organization';
+import {
+	CreateOrganizationPermission,
+	updateOrganizationPermissionWithOrganizationId,
+} from '@/database/OrganizationPermission';
+import {
+	countOrganizationByFilter,
+	createOrganization,
+	getOrganizationByFilter,
+	organizationExistByName,
+} from '@/database/Organization';
+import { formatPublicOrganization } from '@/database/format/Organization';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
@@ -16,7 +24,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const number = await countOrganizationByFilter({});
 		const list = await getOrganizationByFilter({}, {}, Pagination);
 
-		return NextResponse.json(generatePaginationResponse(list.map(formatPrivateOrganization), number, Pagination));
+		return NextResponse.json(generatePaginationResponse(list.map(formatPublicOrganization), number, Pagination));
 	});
 }
 
@@ -26,9 +34,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
-		// if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
+		if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
 
-		const permission = await createPermission({
+		const permission = await CreateOrganizationPermission({
 			name: body.name,
 			description: body.description,
 			event_create: true,
@@ -44,10 +52,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			organization_manage_permission: true,
 		});
 
-		if (permission == null) throw ERRORS_DETAILS.organization_already_exist(); // change le message
+		if (permission == null) throw ERRORS_DETAILS.organization_already_exist();
 
-		await createOrganization(body, user_id, permission.id);
+		const organization = await createOrganization(body, user_id, permission.id);
+		await updateOrganizationPermissionWithOrganizationId(permission, permission.id, organization.id);
 
-		return NextResponse.json({ success: true });
+		return NextResponse.json(formatPublicOrganization(organization));
 	});
 }

@@ -1,17 +1,17 @@
 info:
-  name: Agent - List pending approval
+  name: Organization - Lists Organizations
   type: http
-  seq: 4
+  seq: 2
 
 http:
   method: GET
-  url: "{{BaseURL}}/users/approval/pending?limit=10&page=1"
+  url: "{{BaseURL}}/organization?page=1&limit=10"
   params:
-    - name: limit
-      value: "10"
-      type: query
     - name: page
       value: "1"
+      type: query
+    - name: limit
+      value: "10"
       type: query
   auth: inherit
 
