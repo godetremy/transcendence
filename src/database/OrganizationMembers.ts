@@ -3,6 +3,7 @@ import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { CreateInviteOrganizationMembersType } from '@/types/OrganizationMembers';
+import { ERRORS_DETAILS } from '@/utils/errors';
 
 const getOrganizationMemberByFilter = async <T extends Prisma.organization_membersInclude>(
 	filter: Prisma.organization_membersWhereInput,
@@ -34,6 +35,29 @@ const countOrganizationMembersByFilter = async (filter: Prisma.organization_memb
 	});
 };
 
+const isUserInOrganization = async (organization_id: string, user_id: string): Promise<boolean> => {
+	return (await getOrganizationMemberByFilter({ organization_id, user_id }, {})) !== null;
+};
+
+const addMemberToOrganization = async (
+	organization_id: string,
+	user_id: string,
+	permission_id: string
+): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDeleteArgs>> => {
+	if (!(await isUserInOrganization(organization_id, user_id))) {
+		return prisma.organization_members.create({
+			data: {
+				organization_id,
+				user_id,
+				permission_id,
+				approved: true,
+				registered_at: new Date(),
+			},
+		});
+	}
+	throw ERRORS_DETAILS.organization_member_already_invited();
+};
+
 const CreateOrganizationMembersWithOrganizationId = async (
 	data: CreateInviteOrganizationMembersType,
 	organizationId: string
@@ -52,4 +76,6 @@ export {
 	countOrganizationMembersByFilter,
 	getOrganizationMembersByFilter,
 	CreateOrganizationMembersWithOrganizationId,
+	isUserInOrganization,
+	addMemberToOrganization,
 };

@@ -3,6 +3,7 @@ import { SignJWT, jwtVerify } from 'jose';
 import { SessionPayload, JWTSessionPayload } from '@/types/session/SessionPayload';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
+import { ERRORS_DETAILS } from '@/utils/errors';
 
 const encodedKey = new TextEncoder().encode(process.env.SESSION_SECRET);
 
@@ -84,6 +85,12 @@ const getSession = async (req: NextRequest): Promise<SessionPayload | null> => {
 	}
 };
 
+const getThrowableSession = async (req: NextRequest): Promise<SessionPayload> => {
+	const session = await getSession(req);
+	if (!session) throw ERRORS_DETAILS.session_expired();
+	return session;
+};
+
 const parseUserId = (id: string, session: JWTSessionPayload): { id: string; is_me: boolean } => {
 	if (id === 'me') {
 		return { id: session.user_id, is_me: true };
@@ -91,4 +98,14 @@ const parseUserId = (id: string, session: JWTSessionPayload): { id: string; is_m
 	return { id: id, is_me: session.user_id === id };
 };
 
-export { encrypt, decrypt, createSession, setSession, unsetSession, createAndSetSession, getSession, parseUserId };
+export {
+	encrypt,
+	decrypt,
+	createSession,
+	setSession,
+	unsetSession,
+	createAndSetSession,
+	getSession,
+	getThrowableSession,
+	parseUserId,
+};

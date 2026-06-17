@@ -33,23 +33,10 @@ const organizationExistById = async (organization_id: string): Promise<boolean> 
 };
 
 const createOrganization = async (
-	data: CreateOrganizationType,
-	user_id: string,
-	permission_id: string
+	data: Prisma.organizationsCreateInput
 ): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
 	return prisma.organizations.create({
-		data: {
-			owner_id: user_id,
-			...data,
-			organization_members: {
-				create: {
-					user_id: user_id,
-					approved: true,
-					registered_at: new Date(),
-					permission_id: permission_id,
-				},
-			},
-		},
+		data,
 	});
 };
 
