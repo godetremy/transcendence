@@ -1,4 +1,4 @@
-import { createAgentsUser, existUserByMail } from '@/database/User';
+import { countUsersByFilter, createAgentsUser, existUserByMail } from '@/database/User';
 import { createAndSetSession } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { parseBody } from '@/utils/parsing';
@@ -11,8 +11,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const body = await parseBody<AgentsSignUpParameters>(req, AgentsSignUpParametersSchema);
 
 		if (await existUserByMail(body.mail)) throw ERRORS_DETAILS.account_already_exists();
+		const total = await countUsersByFilter({});
 
-		const user = await createAgentsUser(body.mail, body.password);
+		const user = await createAgentsUser(body.mail, body.password, total === 0);
 
 		await createAndSetSession({
 			user_id: user.id,

@@ -33,7 +33,8 @@ const createStudentUser = async (
 
 const createAgentsUser = async (
 	mail: string,
-	password: string
+	password: string,
+	admin: boolean = false
 ): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.create({
 		data: {
@@ -45,6 +46,7 @@ const createAgentsUser = async (
 			fortytwo_oauth_id: null,
 			memberships_id: null,
 			agent: true,
+			admin,
 		},
 	});
 };
