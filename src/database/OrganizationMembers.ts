@@ -2,7 +2,6 @@ import { PaginationParameters } from '@/types/PaginationParameters';
 import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
-import { CreateInviteOrganizationMembersType } from '@/types/OrganizationMembers';
 import { ERRORS_DETAILS } from '@/utils/errors';
 
 const getOrganizationMemberByFilter = async <T extends Prisma.organization_membersInclude>(
@@ -13,7 +12,7 @@ const getOrganizationMemberByFilter = async <T extends Prisma.organization_membe
 	return prisma.organization_members.findFirst({
 		where: filter,
 		include: include,
-		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+		...(pagination ? { ...paginationToPrisma(pagination) } : {}),
 	});
 };
 
@@ -39,10 +38,18 @@ const isUserInOrganization = async (organization_id: string, user_id: string): P
 	return (await getOrganizationMemberByFilter({ organization_id, user_id }, {})) !== null;
 };
 
-const addMemberToOrganization = async (
+const isUserInvitedInOrganization = async (organization_id: string, user_id: string): Promise<boolean> => {
+	const user = await getOrganizationMemberByFilter({ organization_id, user_id }, {});
+	if (!user) throw ERRORS_DETAILS.member_not_in_organization();
+	if (user.approved) throw ERRORS_DETAILS.member_already_accepted();
+	return true;
+};
+
+const inviteMemberToOrganization = async (
 	organization_id: string,
 	user_id: string,
-	permission_id: string
+	permission_id: string,
+	force_approve?: boolean
 ): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDeleteArgs>> => {
 	if (!(await isUserInOrganization(organization_id, user_id))) {
 		return prisma.organization_members.create({
@@ -50,24 +57,30 @@ const addMemberToOrganization = async (
 				organization_id,
 				user_id,
 				permission_id,
-				approved: true,
 				registered_at: new Date(),
+				approved: force_approve ?? false,
 			},
 		});
 	}
 	throw ERRORS_DETAILS.organization_member_already_invited();
 };
 
-const CreateOrganizationMembersWithOrganizationId = async (
-	data: CreateInviteOrganizationMembersType,
-	organizationId: string
-): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>> => {
-	return prisma.organization_members.create({
-		data: {
-			user: { connect: { id: data.user_id } },
-			organization: { connect: { id: organizationId } },
-			organization_permission: { connect: { id: data.permission_id } },
-		},
+const acceptInvitationToOrganization = async (
+	organization_id: string,
+	user_id: string
+): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDeleteArgs>[]> => {
+	return prisma.organization_members.updateManyAndReturn({
+		where: { organization_id, user_id },
+		data: { approved: true },
+	});
+};
+
+const declineInvitationToOrganization = async (
+	organization_id: string,
+	user_id: string
+): Promise<Prisma.BatchPayload> => {
+	return prisma.organization_members.deleteMany({
+		where: { organization_id, user_id },
 	});
 };
 
@@ -75,7 +88,9 @@ export {
 	getOrganizationMemberByFilter,
 	countOrganizationMembersByFilter,
 	getOrganizationMembersByFilter,
-	CreateOrganizationMembersWithOrganizationId,
 	isUserInOrganization,
-	addMemberToOrganization,
+	inviteMemberToOrganization,
+	isUserInvitedInOrganization,
+	acceptInvitationToOrganization,
+	declineInvitationToOrganization,
 };

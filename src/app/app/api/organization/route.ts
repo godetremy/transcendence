@@ -6,25 +6,20 @@ import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { getThrowableSession } from '@/lib/session';
 import { initializeOrganizationPermission } from '@/database/OrganizationPermission';
-import {
-	countOrganizationByFilter,
-	createOrganization,
-	getOrganizationByFilter,
-	organizationExistByName,
-} from '@/database/Organization';
+import { countOrganizationByFilter, createOrganization, getOrganizationByFilter } from '@/database/Organization';
 import { formatPrivateOrganization, formatPublicOrganization } from '@/database/format/Organization';
 import { checkIsUserGlobalAdmin } from '@/utils/permission';
 import { getUserFromSession } from '@/database/User';
-import { addMemberToOrganization } from '@/database/OrganizationMembers';
+import { inviteMemberToOrganization } from '@/database/OrganizationMembers';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const Pagination = getPaginationParams(req.nextUrl.searchParams);
+		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
 		const number = await countOrganizationByFilter({});
-		const list = await getOrganizationByFilter({}, {}, Pagination);
+		const list = await getOrganizationByFilter({}, {}, pagination);
 
-		return NextResponse.json(generatePaginationResponse(list.map(formatPublicOrganization), number, Pagination));
+		return NextResponse.json(generatePaginationResponse(list.map(formatPublicOrganization), number, pagination));
 	});
 }
 
@@ -37,14 +32,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 
-		if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
 		const organization = await createOrganization({
 			...body,
 			owner_id: session.user_id,
 		});
 
 		const permission = await initializeOrganizationPermission(organization.id);
-		await addMemberToOrganization(organization.id, session.user_id, permission[0].id);
+		await inviteMemberToOrganization(organization.id, session.user_id, permission[0].id, true);
 
 		return NextResponse.json(formatPrivateOrganization(organization));
 	});

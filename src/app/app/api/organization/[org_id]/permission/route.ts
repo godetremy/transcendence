@@ -14,16 +14,19 @@ import { generatePaginationResponse, getPaginationParams } from '@/utils/paginat
 import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: Promise<{ org_id: string }> }
+): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { id } = await params;
-		const Pagination = getPaginationParams(req.nextUrl.searchParams);
+		const { org_id } = await params;
+		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
 		const number = await countOrganizationPermissionByFilter({});
-		const list = await getOrganizationPermissionByFilter({ organization_id: id }, {}, Pagination);
+		const list = await getOrganizationPermissionByFilter({ organization_id: org_id }, {}, pagination);
 
 		return NextResponse.json(
-			generatePaginationResponse(list.map(formatOrganizationPermission), number, Pagination)
+			generatePaginationResponse(list.map(formatOrganizationPermission), number, pagination)
 		);
 	});
 }
@@ -44,7 +47,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 		//const permission_user = await getOrganizationPermissionByFilter({organization_id: organization?.id, }, {});
 
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (user_id != organization.owner_id && user.admin == false) throw ERRORS_DETAILS.permission_denied();
+		if (user_id != organization.owner_id && !user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const permission = await CreateOrganizationPermissionWithOrganizationId(body, organization.id);
 

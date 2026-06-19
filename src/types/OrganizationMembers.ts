@@ -1,20 +1,17 @@
-import { User } from '@/types/User';
+import { PublicOrganization } from '@/types/Organization';
 
-export interface PrivateOrganizationMembers {
-	id: string;
-	approved?: boolean;
-	invited_at: Date;
-	registered_at: Date;
-	user_id: string;
-	permission_id: string;
-}
-
-export interface PublicOrganizationMembers {
+export interface OrganizationMembers {
 	id: string;
 	approved: boolean | null;
 	user_id: string;
-	invited_at: Date;
-	registered_at: Date;
+	invited_at: string;
+	registered_at: string;
+}
+
+export interface OrganizationInvitation {
+	id: string;
+	invited_at: string;
+	organization: PublicOrganization;
 }
 
 export interface CreateInviteOrganizationMembersType {

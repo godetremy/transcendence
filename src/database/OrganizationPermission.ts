@@ -149,6 +149,10 @@ const countOrganizationPermissionByFilter = async (
 	});
 };
 
+const existPermissionInOrganization = async (id: string, organization_id: string) => {
+	return (await prisma.organization_permission.findUnique({ where: { id, organization_id } })) !== null;
+};
+
 export {
 	initializeOrganizationPermission,
 	CreateOrganizationPermission,
@@ -159,4 +163,5 @@ export {
 	DeleteOrganizationPermission,
 	updateOrganizationPermissionWithOrganizationId,
 	getOrganizationPermissionById,
+	existPermissionInOrganization,
 };

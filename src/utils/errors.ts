@@ -31,6 +31,9 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	organization_already_exist: () => new ApiError(400, 'This organization already exists.'),
 	organization_does_not_exist: () => new ApiError(404, 'This organization does not exists.'),
 	organization_member_already_invited: () => new ApiError(403, 'This member has already been invited.'),
+	member_not_in_organization: () => new ApiError(403, 'This member is not in the organization.'),
+	member_already_accepted: () => new ApiError(403, 'This member has already been accepted.'),
+	permission_does_not_exists: () => new ApiError(403, "This permission doesn't exists."),
 };
 
 const formatError = (error: ApiError) => {

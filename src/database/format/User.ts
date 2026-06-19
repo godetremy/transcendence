@@ -5,10 +5,11 @@ import formatMembership from '@/database/format/Membership';
 const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPayload<{ include: T }>): User => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { fortytwo_oauth_id, fortytwo_user_id, password, two_factor_auth_id, memberships_id, ...user } = row;
+	const { fortytwo_oauth_id, fortytwo_user_id, password, two_factor_auth_id, memberships_id, admin, ...user } = row;
 
 	return {
 		...user,
+		admin: admin ? true : undefined,
 		membership:
 			'membership' in row
 				? row.membership

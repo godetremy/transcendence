@@ -7,7 +7,6 @@ const ignorePath = ['/app/api/auth/'];
 
 function checkFirstInitialization(url: string) {
 	const uri = path.resolve(process.cwd(), '.init_done');
-	console.log(uri, existsSync(uri));
 	return !existsSync(uri) && !url.startsWith('/setup') && !url.startsWith('/app/api');
 }
 
