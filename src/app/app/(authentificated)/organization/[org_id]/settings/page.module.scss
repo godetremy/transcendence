@@ -1,0 +1,22 @@
+@use '../../../../../supports';
+
+.section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	padding: 20px;
+}
+
+.card_button {
+	max-width: 600px;
+}
+
+.list {
+	padding: 0;
+	width: 100%;
+	max-width: 600px;
+	border-radius: 15px;
+	overflow: hidden;
+	border: 1px solid var(--color-border-dark);
+}

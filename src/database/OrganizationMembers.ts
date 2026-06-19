@@ -11,7 +11,6 @@ const getOrganizationMemberByFilter = async <T extends Prisma.organization_membe
 	return prisma.organization_members.findFirst({
 		where: filter,
 		include: include,
-		...(pagination ? { ...paginationToPrisma(pagination) } : {}),
 	});
 };
 
@@ -24,6 +23,16 @@ const getOrganizationMembersByFilter = async <T extends Prisma.organization_memb
 		where: filter,
 		include: include,
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+	});
+};
+
+const getOrganizationWhereMemberBelongs = async <T extends Prisma.organization_membersInclude>(
+	user_id: string,
+	include: T
+): Promise<Prisma.organization_membersGetPayload<{ include: T }>[]> => {
+	return prisma.organization_members.findMany({
+		where: { user_id, approved: true },
+		include: include,
 	});
 };
 
@@ -87,6 +96,7 @@ export {
 	getOrganizationMemberByFilter,
 	countOrganizationMembersByFilter,
 	getOrganizationMembersByFilter,
+	getOrganizationWhereMemberBelongs,
 	isUserInOrganization,
 	inviteMemberToOrganization,
 	isUserInvitedInOrganization,

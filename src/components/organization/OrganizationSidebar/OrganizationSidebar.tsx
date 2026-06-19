@@ -1,37 +1,57 @@
+'use client';
 import styles from './components.module.scss';
-import { LucideProps, PanelLeft } from 'lucide-react';
+import { CalendarFold, Coins, LayoutDashboard, PanelLeft, Wrench } from 'lucide-react';
 import { OrganizationPicker } from '@/components/organization/OrganizationSelector/OrganizationSelector';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { useParams, usePathname } from 'next/navigation';
+import { ReactNode, useState } from 'react';
 
 export interface OrganizationSidebarProps {
-	visibleSidebar: boolean;
-	setVisibleSidebar: (val: boolean) => void;
-	pages: {
-		icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
-		name: string;
-		href: string;
-	}[];
+	children: ReactNode;
 }
 
 export function OrganizationSidebar(props: OrganizationSidebarProps) {
+	const { org_id } = useParams();
 	const pathname = usePathname();
+	const [visibleSidebar, setVisibleSidebar] = useState(false);
+
+	const pages = [
+		{
+			icon: LayoutDashboard,
+			name: 'Dashboard',
+			href: `/app/organization/${org_id}/dashboard`,
+		},
+		{
+			icon: CalendarFold,
+			name: `Événement`,
+			href: `/app/organization/${org_id}/events`,
+		},
+		{
+			icon: Coins,
+			name: 'Services',
+			href: `/app/organization/${org_id}/services`,
+		},
+		{
+			icon: Wrench,
+			name: 'Paramètre',
+			href: `/app/organization/${org_id}/settings`,
+		},
+	];
 
 	return (
 		<>
-			<div className={`${styles.backdrop} ${!props.visibleSidebar ? styles.hidden : ''}`} />
-			<aside className={`${styles.sidebar} ${!props.visibleSidebar ? styles.hidden : undefined}`}>
+			<div className={`${styles.backdrop} ${!visibleSidebar ? styles.hidden : ''}`} />
+			<aside className={`${styles.sidebar} ${!visibleSidebar ? styles.hidden : undefined}`}>
 				<header>
 					<OrganizationPicker />
 				</header>
-				{props.pages.map((page, i) => (
+				{pages.map((page, i) => (
 					<Link
 						href={page.href}
 						key={i}
 						className={pathname === page.href ? styles.active : undefined}
 						prefetch={true}
-						onNavigate={() => props.setVisibleSidebar(false)}
+						onNavigate={() => setVisibleSidebar(false)}
 					>
 						<page.icon size={20} />
 						{page.name}
@@ -39,11 +59,12 @@ export function OrganizationSidebar(props: OrganizationSidebarProps) {
 				))}
 			</aside>
 			<button
-				onClick={() => props.setVisibleSidebar(!props.visibleSidebar)}
-				className={`${styles.sidebar_button} ${!props.visibleSidebar ? styles.hidden : ''}`}
+				onClick={() => setVisibleSidebar(!visibleSidebar)}
+				className={`${styles.sidebar_button} ${!visibleSidebar ? styles.hidden : ''}`}
 			>
 				<PanelLeft color={'currentColor'} />
 			</button>
+			<article className={!visibleSidebar ? styles.hidden : undefined}>{props.children}</article>
 		</>
 	);
 }

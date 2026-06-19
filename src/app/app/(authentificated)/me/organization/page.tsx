@@ -62,11 +62,8 @@ export default function Page() {
 	const [invitations, setInvitations] = useState<OrganizationInvitation[] | undefined>(undefined);
 
 	const fetchOrganisation = async (page: number) => {
-		const res = await get<PaginationResponse<PublicOrganization>>(`/organization/mine?page=${page}`);
-		setOrganizations((prev) => {
-			if (prev === undefined) return res.data;
-			return [...prev, ...res.data];
-		});
+		const res = await get<PublicOrganization[]>(`/organization/mine?page=${page}`);
+		setOrganizations(res);
 	};
 
 	const fetchInvitation = async (page: number) => {

@@ -1,41 +1,28 @@
-'use client';
 import styles from './layout.module.scss';
-import { ReactNode, useState } from 'react';
-import { CalendarFold, Coins, LayoutDashboard, Wrench } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { ReactNode } from 'react';
 import { OrganizationSidebar } from '@/components/organization/OrganizationSidebar/OrganizationSidebar';
+import { OrganizationsProvider } from '@/contexts/OrganizationsContext';
+import { getOrganizationWhereMemberBelongs } from '@/database/OrganizationMembers';
+import { formatPrivateOrganization } from '@/database/format/Organization';
+import { decrypt } from '@/lib/session';
+import { cookies } from 'next/headers';
 
-export default function Layout({ children }: { children: ReactNode }) {
-	const { org_id } = useParams();
-	const [visibleSidebar, setVisibleSidebar] = useState(false);
+export default async function Layout({ children }: { children: ReactNode }) {
+	const Cookies = await cookies();
+	const sessionCookie = Cookies.get('session');
+	const session = await decrypt(sessionCookie?.value ?? '');
 
-	const pages = [
-		{
-			icon: LayoutDashboard,
-			name: 'Dashboard',
-			href: `/app/organization/${org_id}/dashboard`,
-		},
-		{
-			icon: CalendarFold,
-			name: `Événement`,
-			href: `/app/organization/${org_id}/events`,
-		},
-		{
-			icon: Coins,
-			name: 'Services',
-			href: `/app/organization/${org_id}/services`,
-		},
-		{
-			icon: Wrench,
-			name: 'Paramètre',
-			href: `/app/organization/${org_id}/settings`,
-		},
-	];
+	const organizations = (await getOrganizationWhereMemberBelongs(session.user_id, { organization: true })).map(
+		(member) => {
+			return formatPrivateOrganization(member.organization);
+		}
+	);
 
 	return (
-		<div className={styles.main_container}>
-			<OrganizationSidebar pages={pages} setVisibleSidebar={setVisibleSidebar} visibleSidebar={visibleSidebar} />
-			<article className={!visibleSidebar ? styles.hidden : undefined}>{children}</article>
-		</div>
+		<OrganizationsProvider organizations={organizations}>
+			<div className={styles.main_container}>
+				<OrganizationSidebar>{children}</OrganizationSidebar>
+			</div>
+		</OrganizationsProvider>
 	);
 }
