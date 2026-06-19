@@ -1,0 +1,30 @@
+info:
+  name: Category - Update category
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BaseURL}}/categories/:category_id"
+  params:
+    - name: category_id
+      value: e3cb1b89-2577-43c5-9e65-67bdac088815
+      type: path
+  body:
+    type: form-urlencoded
+    data:
+      - name: name
+        value: Divertissement
+      - name: description
+        value: Il est temps de se divertir
+      - name: icon
+        value: /images/demo_profile.jpg
+      - name: background_image
+        value: /images/demo_profile.jpg
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

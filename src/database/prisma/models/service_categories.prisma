@@ -1,4 +1,4 @@
-model service_catreogries {
+model service_categories {
 	id						String			@id		@default(uuid())
 
 	name					String

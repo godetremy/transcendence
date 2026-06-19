@@ -34,6 +34,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	member_not_in_organization: () => new ApiError(403, 'This member is not in the organization.'),
 	member_already_accepted: () => new ApiError(403, 'This member has already been accepted.'),
 	permission_does_not_exists: () => new ApiError(403, "This permission doesn't exists."),
+	category_does_not_exists: () => new ApiError(403, "This category doesn't exists."),
 };
 
 const formatError = (error: ApiError) => {

@@ -28,6 +28,6 @@ model services {
 	updated_at				DateTime				@updatedAt
 
 	organization			organizations			@relation(fields: [organization_id], references: [id])
-	category				service_catreogries		@relation(fields: [category_id], references: [id])
+	category				service_categories		@relation(fields: [category_id], references: [id])
 	photo_album				photos_album?			@relation(fields: [photo_album_id], references: [id])
 }
