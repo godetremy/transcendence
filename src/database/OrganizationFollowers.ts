@@ -24,20 +24,20 @@ const getOrganizationFollowersByFilter = async <T extends Prisma.organization_fo
 };
 
 const manageFollow = async (
-	user: users,
+	user: string,
 	follow: boolean,
-	id: string,
-): Promise <void> => {
+	id: string
+): Promise<Prisma.organization_followersGetPayload<Prisma.organization_followersDefaultArgs>> => {
 	if (follow) {
-		prisma.organization_followers.create({
+		return prisma.organization_followers.create({
 			data: {
-				user_id: user.id,
+				user_id: user,
 				organization_id: id,
 			},
 		});
 	}
-	prisma.organization_followers.delete({
-		where: { id: user.id },
+	return prisma.organization_followers.delete({
+		where: { id: user },
 	});
 };
 
