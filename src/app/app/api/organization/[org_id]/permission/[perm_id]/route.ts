@@ -26,10 +26,7 @@ export async function DELETE(
 		//const permission = await getOrganizationPermissionById(perm_id, id, {});
 
 		if (organization == null /*|| permission == null*/) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (
-			user_id != organization.owner_id &&
-			user.admin == false /*&& permission.organization_manage_permission == false*/
-		)
+		if (user_id != organization.owner_id && !user.admin /*&& permission.organization_manage_permission == false*/)
 			throw ERRORS_DETAILS.permission_denied();
 
 		const permission_result = await DeleteOrganizationPermission(perm_id, id);
@@ -57,10 +54,7 @@ export async function PATCH(
 		//const permission = await getOrganizationPermissionById(perm_id, id, {});
 
 		if (organization == null /*|| permission == null*/) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (
-			user_id != organization.owner_id &&
-			user.admin == false /*&& permission.organization_manage_permission == false*/
-		)
+		if (user_id != organization.owner_id && !user.admin /*&& permission.organization_manage_permission == false*/)
 			throw ERRORS_DETAILS.permission_denied();
 
 		const permission_result = await updateOrganizationPermission(body, perm_id, organization.id);

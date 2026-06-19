@@ -4,14 +4,59 @@ import { CreateOrganizationPermissionType } from '@/types/OrganizationPermission
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 
-const CreateOrganizationPermission = async (
-	data: CreateOrganizationPermissionType
-): Promise<Prisma.organization_permissionGetPayload<Prisma.organization_permissionDefaultArgs>> => {
-	return prisma.organization_permission.create({
-		data: {
-			...data,
-		},
+const initializeOrganizationPermission = async (
+	organization_id: string
+): Promise<Prisma.organization_permissionGetPayload<Prisma.organization_permissionDefaultArgs>[]> => {
+	return prisma.organization_permission.createManyAndReturn({
+		data: [
+			{
+				name: 'Administrateur',
+				description: 'Accès complet à l’organisation.',
+				organization_id,
+				event_create: true,
+				event_update: true,
+				event_delete: true,
+				service_create: true,
+				service_update: true,
+				service_delete: true,
+				members_manage: true,
+				organization_update_info: true,
+				organization_manage: true,
+				organization_manage_permission: true,
+			},
+			{
+				name: 'Manager',
+				description: 'Gère les membres de l’équipe.',
+				organization_id,
+				event_create: true,
+				event_update: true,
+				event_delete: true,
+				service_create: true,
+				service_update: true,
+				service_delete: true,
+				members_manage: true,
+				organization_update_info: true,
+				organization_manage_permission: true,
+			},
+			{
+				name: 'Éditeur',
+				description: 'Gère événements et services.',
+				organization_id,
+				event_create: true,
+				event_update: true,
+				event_delete: true,
+				service_create: true,
+				service_update: true,
+				service_delete: true,
+			},
+		],
 	});
+};
+
+const CreateOrganizationPermission = async (
+	data: Prisma.organization_permissionCreateManyInput
+): Promise<Prisma.organization_permissionGetPayload<Prisma.organization_permissionDefaultArgs>> => {
+	return prisma.organization_permission.create({ data });
 };
 
 const CreateOrganizationPermissionWithOrganizationId = async (
@@ -104,7 +149,12 @@ const countOrganizationPermissionByFilter = async (
 	});
 };
 
+const existPermissionInOrganization = async (id: string, organization_id: string) => {
+	return (await prisma.organization_permission.findUnique({ where: { id, organization_id } })) !== null;
+};
+
 export {
+	initializeOrganizationPermission,
 	CreateOrganizationPermission,
 	CreateOrganizationPermissionWithOrganizationId,
 	getOrganizationPermissionByFilter,
@@ -113,4 +163,5 @@ export {
 	DeleteOrganizationPermission,
 	updateOrganizationPermissionWithOrganizationId,
 	getOrganizationPermissionById,
+	existPermissionInOrganization,
 };

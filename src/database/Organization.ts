@@ -14,42 +14,15 @@ const getOrganizationById = async <T extends Prisma.organizationsInclude>(
 	});
 };
 
-const getOrganizationByName = async <T extends Prisma.organizationsInclude>(
-	name: string,
-	include: T
-): Promise<Prisma.organizationsGetPayload<{ include: T }> | null> => {
-	return prisma.organizations.findUnique({
-		where: { name },
-		include: include,
-	});
-};
-
-const organizationExistByName = async (name: string): Promise<boolean> => {
-	return (await getOrganizationByName(name, {})) !== null;
-};
-
 const organizationExistById = async (organization_id: string): Promise<boolean> => {
 	return (await getOrganizationById(organization_id, {})) !== null;
 };
 
 const createOrganization = async (
-	data: CreateOrganizationType,
-	user_id: string,
-	permission_id: string
+	data: Prisma.organizationsCreateInput
 ): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
 	return prisma.organizations.create({
-		data: {
-			owner_id: user_id,
-			...data,
-			organization_members: {
-				create: {
-					user_id: user_id,
-					approved: true,
-					registered_at: new Date(),
-					permission_id: permission_id,
-				},
-			},
-		},
+		data,
 	});
 };
 
@@ -118,14 +91,17 @@ const countOrganizationByFilter = async (filter: Prisma.organizationsWhereInput)
 	});
 };
 
+const existOrganization = async (organization_id: string): Promise<boolean> => {
+	return (await getOrganizationById(organization_id, {})) !== null;
+};
+
 export {
 	getOrganizationByFilter,
 	countOrganizationByFilter,
 	createOrganization,
 	getOrganizationById,
-	getOrganizationByName,
-	organizationExistByName,
 	updateOrganization,
 	deleteOrganization,
 	organizationExistById,
+	existOrganization,
 };

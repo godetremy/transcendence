@@ -18,8 +18,11 @@
 	}
 
 	> .left {
-		width: 24px;
 		height: 24px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 10px;
 	}
 	> .right {
 		height: 24px;
@@ -45,21 +48,23 @@
 	}
 }
 
+.listItem.hoverable {
+	&:active {
+		background-color: rgba(var(--color-rgb-primary-white), 0.1);
+
+		&.negative {
+			background-color: rgba(254, 132, 132, 0.1);
+		}
+	}
+}
+
 @include supports.hover(supports.$breakpoints-tablets) {
-	.listItem {
+	.listItem.hoverable {
 		&:hover {
 			background-color: rgba(var(--color-rgb-primary-white), 0.07);
 
 			&.negative {
 				background-color: rgba(254, 132, 132, 0.07);
-			}
-		}
-
-		&:active {
-			background-color: rgba(var(--color-rgb-primary-white), 0.1);
-
-			&.negative {
-				background-color: rgba(254, 132, 132, 0.1);
 			}
 		}
 	}

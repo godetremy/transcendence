@@ -1,0 +1,16 @@
+.empty_state_container {
+	padding: 40px 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	h3 {
+		font: 600 24px var(--font-paragraph);
+	}
+
+	p {
+		font: 400 14px var(--font-paragraph);
+		opacity: .7;
+	}
+}

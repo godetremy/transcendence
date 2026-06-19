@@ -21,7 +21,7 @@ export interface PublicOrganization {
 
 export interface CreateOrganizationType {
 	name: string;
-	description: string | null;
-	logo: string | null;
-	club: boolean;
+	description?: string;
+	logo?: string;
+	club?: boolean;
 }

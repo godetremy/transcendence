@@ -1,0 +1,19 @@
+@use "../../../supports";
+
+.main_container {
+	display: flex;
+
+	& > article {
+		flex: 1;
+		margin-left: 300px;
+		transition: .3s cubic-bezier(.5,0,0,1);
+	}
+}
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.main_container {
+		& > article {
+			margin-left: 0;
+		}
+	}
+}

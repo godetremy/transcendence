@@ -4,59 +4,42 @@ import { generatePaginationResponse, getPaginationParams } from '@/utils/paginat
 import { parseBody } from '@/utils/parsing';
 import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
-import { decrypt } from '@/lib/session';
-import {
-	CreateOrganizationPermission,
-	updateOrganizationPermissionWithOrganizationId,
-} from '@/database/OrganizationPermission';
-import {
-	countOrganizationByFilter,
-	createOrganization,
-	getOrganizationByFilter,
-	organizationExistByName,
-} from '@/database/Organization';
-import { formatPublicOrganization } from '@/database/format/Organization';
+import { getThrowableSession } from '@/lib/session';
+import { initializeOrganizationPermission } from '@/database/OrganizationPermission';
+import { countOrganizationByFilter, createOrganization, getOrganizationByFilter } from '@/database/Organization';
+import { formatPrivateOrganization, formatPublicOrganization } from '@/database/format/Organization';
+import { checkIsUserGlobalAdmin } from '@/utils/permission';
+import { getUserFromSession } from '@/database/User';
+import { inviteMemberToOrganization } from '@/database/OrganizationMembers';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const Pagination = getPaginationParams(req.nextUrl.searchParams);
+		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
 		const number = await countOrganizationByFilter({});
-		const list = await getOrganizationByFilter({}, {}, Pagination);
+		const list = await getOrganizationByFilter({}, {}, pagination);
 
-		return NextResponse.json(generatePaginationResponse(list.map(formatPublicOrganization), number, Pagination));
+		return NextResponse.json(generatePaginationResponse(list.map(formatPublicOrganization), number, pagination));
 	});
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
+		if (!user) throw ERRORS_DETAILS.account_not_found();
+		checkIsUserGlobalAdmin(user);
+
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
-
-		const permission = await CreateOrganizationPermission({
-			name: body.name,
-			description: body.description,
-			event_create: true,
-			event_update: true,
-			event_delete: true,
-			service_create: true,
-			service_update: true,
-			service_delete: true,
-			members_invite: true,
-			members_manage: true,
-			organization_update_info: true,
-			organization_manage: true,
-			organization_manage_permission: true,
+		const organization = await createOrganization({
+			...body,
+			owner_id: session.user_id,
 		});
 
-		if (permission == null) throw ERRORS_DETAILS.organization_already_exist();
+		const permission = await initializeOrganizationPermission(organization.id);
+		await inviteMemberToOrganization(organization.id, session.user_id, permission[0].id, true);
 
-		const organization = await createOrganization(body, user_id, permission.id);
-		await updateOrganizationPermissionWithOrganizationId(permission, permission.id, organization.id);
-
-		return NextResponse.json(formatPublicOrganization(organization));
+		return NextResponse.json(formatPrivateOrganization(organization));
 	});
 }

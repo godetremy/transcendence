@@ -10,6 +10,7 @@ export interface User {
 	agent: boolean;
 	agent_reason: string | null;
 	membership: Membership | null;
+	admin?: boolean;
 }
 
 export interface PublicUser {

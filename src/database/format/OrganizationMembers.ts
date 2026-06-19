@@ -1,9 +1,8 @@
 import { Prisma } from '../prisma/generated/client';
-import { PublicOrganizationMembers } from '@/types/OrganizationMembers';
+import { OrganizationInvitation, OrganizationMembers } from '@/types/OrganizationMembers';
+import { formatPublicOrganization } from '@/database/format/Organization';
 
-const formatOrganizationMembers = (
-	row: Prisma.organization_membersGetPayload<object>
-): PublicOrganizationMembers => {
+const formatOrganizationMembers = (row: Prisma.organization_membersGetPayload<object>): OrganizationMembers => {
 	return {
 		id: row.id,
 		approved: row.approved,
@@ -13,6 +12,10 @@ const formatOrganizationMembers = (
 	};
 };
 
-export {
-	formatOrganizationMembers,
-}
+const formatOrganizationInvitation = (
+	row: Prisma.organization_membersGetPayload<{ include: { organization: true } }>
+): OrganizationInvitation => {
+	return { id: row.id, invited_at: row.invited_at, organization: formatPublicOrganization(row.organization) };
+};
+
+export { formatOrganizationMembers, formatOrganizationInvitation };

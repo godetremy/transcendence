@@ -1,9 +1,14 @@
-import { decrypt } from '@/lib/session';
-import { SessionPayload } from '@/types/session/SessionPayload';
-import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
+import { getSession } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
+import { existsSync } from 'node:fs';
+import path from 'path';
 
 const ignorePath = ['/app/api/auth/'];
+
+function checkFirstInitialization(url: string) {
+	const uri = path.resolve(process.cwd(), '.init_done');
+	return !existsSync(uri) && !url.startsWith('/setup') && !url.startsWith('/app/api');
+}
 
 function isPathIgnored(path: string): boolean {
 	if (!path.startsWith('/app')) return true;
@@ -13,24 +18,14 @@ function isPathIgnored(path: string): boolean {
 	return false;
 }
 
-async function getSession(cookie: RequestCookie | undefined): Promise<SessionPayload | null> {
-	try {
-		if (cookie === undefined) return null;
-		const session = await decrypt(cookie.value);
-		if (Date.now() / 1000 >= session.exp) return null;
-		return session;
-	} catch (err: unknown) {
-		console.error(err);
-		return null;
-	}
-}
-
 export default async function proxy(req: NextRequest) {
 	if (isPathIgnored(req.nextUrl.pathname)) {
 		return NextResponse.next();
 	}
 
-	const session = await getSession(req.cookies.get('session'));
+	if (checkFirstInitialization(req.nextUrl.pathname)) return NextResponse.redirect(new URL('/setup', req.nextUrl));
+
+	const session = await getSession(req);
 
 	if (req.nextUrl.pathname === '/app') {
 		if (session !== null) return NextResponse.redirect(new URL('/app/home', req.nextUrl));

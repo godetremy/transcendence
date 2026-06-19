@@ -3,7 +3,16 @@ import styles from './page.module.scss';
 import { useUser } from '@/contexts/UserContext';
 import { ProfileBanner } from '@/components/profile/ProfileBanner/ProfileBanner';
 import ListItem from '@/components/globals/ListItem/ListItem';
-import { BadgeDollarSign, BookOpenText, FileLock, GitCommitVerticalIcon, Lock, LogOut, User2 } from 'lucide-react';
+import {
+	BadgeDollarSign,
+	BookOpenText,
+	Building2,
+	FileLock,
+	GitCommitVerticalIcon,
+	Lock,
+	LogOut,
+	User2,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
@@ -42,6 +51,12 @@ export default function Page() {
 						title={'Ton adhesion'}
 						description={'Gère ton adhesion au BDE'}
 						onPress={() => router.push('/app/me/membership')}
+					/>
+					<ListItem
+						icon={Building2}
+						title={'Organisation'}
+						description={'Gère tes organisations'}
+						onPress={() => router.push('/app/me/organization')}
 						last
 					/>
 				</div>

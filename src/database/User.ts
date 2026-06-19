@@ -3,7 +3,7 @@ import { prisma } from '@/database/prisma/prisma';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 import * as bcrypt from 'bcrypt';
-import { JWTSessionPayload } from '@/types/session/SessionPayload';
+import { SessionPayload } from '@/types/session/SessionPayload';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 
@@ -127,7 +127,7 @@ const getUserById = async <T extends Prisma.usersInclude>(
 };
 
 const getUserFromSession = async <T extends Prisma.usersInclude>(
-	session: JWTSessionPayload,
+	session: SessionPayload,
 	include: T
 ): Promise<Prisma.usersGetPayload<{ include: T }> | null> => {
 	return getUserById(session.user_id, include);

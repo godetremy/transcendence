@@ -22,7 +22,7 @@ http:
       - name: user_id
         value: 49830d64-5ba0-4dbd-a543-a35091b16072
       - name: permission_id
-        value: de5bf848-d146-447c-9e97-5d3f072457fd
+        value: de5bf848-d146-447c-9e97-5d3f072457f
   auth: inherit
 
 settings:

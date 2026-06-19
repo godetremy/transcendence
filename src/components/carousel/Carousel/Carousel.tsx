@@ -173,7 +173,7 @@ export function Carousel(props: CarouselProps) {
 
 		const slideWidth = container.children[0].getBoundingClientRect().width;
 
-		const progression = ((event.x - dragBaseXPosition.current) / slideWidth) * 2;
+		const progression = (event.x - dragBaseXPosition.current) / slideWidth;
 		let translateX = dragBaseTranslateX.current + progression * slideWidth;
 
 		if (translateX > 0) {
@@ -199,7 +199,7 @@ export function Carousel(props: CarouselProps) {
 		const slideWidth = container.children[0].getBoundingClientRect().width;
 		const translateX = parseTranslateX(container);
 
-		const targetSlide = Math.round(-(translateX / slideWidth)) % container.children.length;
+		const targetSlide = Math.round(-(translateX / slideWidth)) * 1.2 % container.children.length;
 		goToSlide(targetSlide);
 	}
 
