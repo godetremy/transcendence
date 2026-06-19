@@ -6,8 +6,7 @@ import { ERRORS_DETAILS } from '@/utils/errors';
 
 const getOrganizationMemberByFilter = async <T extends Prisma.organization_membersInclude>(
 	filter: Prisma.organization_membersWhereInput,
-	include: T,
-	pagination?: PaginationParameters
+	include: T
 ): Promise<Prisma.organization_membersGetPayload<{ include: T }> | null> => {
 	return prisma.organization_members.findFirst({
 		where: filter,

@@ -8,7 +8,7 @@ http:
   url: "{{BaseURL}}/organization/:id/permission"
   params:
     - name: id
-      value: fe9a1af0-9405-45d6-9a43-81dd411f7fb5
+      value: 70add5ff-6771-49f7-979e-c4de19dcf303
       type: path
   body:
     type: json
