@@ -1,0 +1,36 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { errorHandler } from '@/utils/errors';
+import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
+import {
+	countOrganizationFollowersByFilter,
+	getOrganizationFollowersByFilter,
+	manageFollow,
+} from '@/database/OrganizationFollowers';
+import { formatOrganizationFollowers } from '@/database/format/OrganizationFollowers';
+import { parseBody } from '@/utils/parsing';
+import { OrganizationFollowersSchema } from '@/schema/OrganizationFollowersSchema';
+import { getThrowableSession } from '@/lib/session';
+import { OrganizationFollowers } from '@/types/OrganizationFollowers';
+
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { id } = await params;
+		const pagination = getPaginationParams(req.nextUrl.searchParams);
+
+		const count = await countOrganizationFollowersByFilter({});
+		const List = await getOrganizationFollowersByFilter({ organization_id: id }, {}, pagination);
+
+		return NextResponse.json(generatePaginationResponse(List.map(formatOrganizationFollowers), count, pagination));
+	});
+}
+
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { id } = await params;
+		const session = await getThrowableSession(req);
+		const body = await parseBody<OrganizationFollowers>(req, OrganizationFollowersSchema);
+
+		await manageFollow(session.user_id, body.follow, id);
+		return NextResponse.json({ success: true });
+	});
+}

@@ -3,7 +3,7 @@ import { OrganizationPermission } from '@/types/OrganizationPermission';
 const comparePermissionLow = (
 	user_permision: OrganizationPermission,
 	req_permission: OrganizationPermission
-): Boolean => {
+): boolean => {
 	if (user_permision.event_create == false && req_permission.event_create == true) return false;
 	if (user_permision.event_delete == false && req_permission.event_delete == true) return false;
 	if (user_permision.event_update == false && req_permission.event_update == true) return false;
