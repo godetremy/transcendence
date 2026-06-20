@@ -1,0 +1,13 @@
+services:
+    nginx:
+        build: ./services/nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - host-network
+        volumes:
+            - ./certificates:/etc/nginx/certificates
+
+networks:
+    host-network:
