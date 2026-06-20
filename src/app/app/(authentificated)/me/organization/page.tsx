@@ -12,6 +12,8 @@ import { PaginationResponse } from '@/types/PaginationResponse';
 import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 import { PublicOrganization } from '@/types/Organization';
 import { useRouter } from 'next/navigation';
+import { Card } from '@/components/globals/Card/Card';
+import { OrganizationCreateDialog } from '@/components/organization/OrganizationCreateDialog/OrganizationCreateDialog';
 
 function InviteActions({
 	org_id,
@@ -60,6 +62,7 @@ export default function Page() {
 	const [organizations, setOrganizations] = useState<PublicOrganization[] | undefined>(undefined);
 
 	const [invitations, setInvitations] = useState<OrganizationInvitation[] | undefined>(undefined);
+	const [showCreateDialog, setShowCreateDialog] = useState<boolean>(false);
 
 	const fetchOrganisation = async (page: number) => {
 		const res = await get<PublicOrganization[]>(`/organization/mine?page=${page}`);
@@ -98,7 +101,11 @@ export default function Page() {
 					<>
 						<span className={styles.listSectionTitle}>Administrateur</span>
 						<section className={styles.list}>
-							<ListItem title={'Créer une nouvelle organisation'} last />
+							<ListItem
+								title={'Créer une nouvelle organisation'}
+								onPress={() => setShowCreateDialog(true)}
+								last
+							/>
 						</section>
 					</>
 				)}
@@ -162,6 +169,9 @@ export default function Page() {
 				)}
 				{loading && <Loader />}
 			</article>
+			<Card visible={showCreateDialog} requestClose={() => setShowCreateDialog(false)}>
+				<OrganizationCreateDialog close={() => setShowCreateDialog(false)} />
+			</Card>
 		</NavigationBarHeader>
 	);
 }
