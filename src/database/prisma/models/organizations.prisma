@@ -2,7 +2,7 @@ model organizations {
     id String @id @default(uuid())
 
     owner_id    String
-    name        String
+    name        String  @unique
     description String?
     logo        String?
     club        Boolean @default(false)

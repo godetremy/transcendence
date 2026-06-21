@@ -12,25 +12,25 @@ import { OrganizationFollowersSchema } from '@/schema/OrganizationFollowersSchem
 import { getThrowableSession } from '@/lib/session';
 import { OrganizationFollowers } from '@/types/OrganizationFollowers';
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ org_id: string }> }): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { id } = await params;
+		const { org_id } = await params;
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
 		const count = await countOrganizationFollowersByFilter({});
-		const List = await getOrganizationFollowersByFilter({ organization_id: id }, {}, pagination);
+		const List = await getOrganizationFollowersByFilter({ organization_id: org_id }, {}, pagination);
 
 		return NextResponse.json(generatePaginationResponse(List.map(formatOrganizationFollowers), count, pagination));
 	});
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ org_id: string }> }): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { id } = await params;
+		const { org_id } = await params;
 		const session = await getThrowableSession(req);
 		const body = await parseBody<OrganizationFollowers>(req, OrganizationFollowersSchema);
 
-		await manageFollow(session.user_id, body.follow, id);
+		await manageFollow(session.user_id, body.follow, org_id);
 		return NextResponse.json({ success: true });
 	});
 }
