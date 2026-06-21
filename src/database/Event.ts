@@ -45,8 +45,8 @@ const UpdateEvent = async <T extends Prisma.eventsInclude>(
 	data: CreateOrUpdateEventType,
 	event_id: string,
 	include: T
-): Promise<void> => {
-	await prisma.events.update({
+): Promise<Prisma.eventsGetPayload<{ include: T }> | null> => {
+	return await prisma.events.update({
 		where: {
 			id: event_id,
 		},
@@ -68,11 +68,13 @@ const deleteEventById = async <T extends Prisma.eventsInclude>(event_id: string,
 
 const getEventById = async <T extends Prisma.eventsInclude>(
 	event_id: string,
+	organization_id: string,
 	include: T
 ): Promise<Prisma.eventsGetPayload<{ include: T }> | null> => {
 	return await prisma.events.findUnique({
 		where: {
 			id: event_id,
+			organization_id: organization_id,
 		},
 		include: include,
 	});

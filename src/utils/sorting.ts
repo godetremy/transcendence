@@ -5,7 +5,7 @@ const DEFAULT_SORTINGOPTIONS: SortingOption[] = [];
 const DEFAULT_SORTINGOPTION: SortingOption = { id: '', sort: 'desc' };
 
 const getSortingParams = (params: URLSearchParams): SortingOption[] => {
-	const sorting: SortingOption[] = []; 
+	const sorting: SortingOption[] = [];
 
 	if (params.has('sort')) {
 		const sort = params.get('sort')!;

@@ -1,5 +1,5 @@
 info:
-  name: Events - List event (admin)
+  name: Events - Lists events (admin)
   type: http
   seq: 2
 

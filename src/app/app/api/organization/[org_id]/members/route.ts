@@ -4,7 +4,10 @@ import { errorHandler } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ org_id: string }> }): Promise<NextResponse> {
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: Promise<{ org_id: string }> }
+): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { org_id } = await params;
 		const pagination = getPaginationParams(req.nextUrl.searchParams);

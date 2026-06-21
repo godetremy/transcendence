@@ -12,7 +12,10 @@ import { OrganizationFollowersSchema } from '@/schema/OrganizationFollowersSchem
 import { getThrowableSession } from '@/lib/session';
 import { OrganizationFollowers } from '@/types/OrganizationFollowers';
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ org_id: string }> }): Promise<NextResponse> {
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: Promise<{ org_id: string }> }
+): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { org_id } = await params;
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
@@ -24,7 +27,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ org_
 	});
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ org_id: string }> }): Promise<NextResponse> {
+export async function PUT(
+	req: NextRequest,
+	{ params }: { params: Promise<{ org_id: string }> }
+): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { org_id } = await params;
 		const session = await getThrowableSession(req);
