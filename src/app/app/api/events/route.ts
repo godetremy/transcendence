@@ -1,56 +1,23 @@
-import { countEventsByFilter, createEvent, deleteEventById, getEventsByFilter } from '@/database/Event';
-import { decrypt } from '@/lib/session';
-import { ClubAndSubscribeEventParamSchema, CreateEventSchema, IdEventParamSchema } from '@/schema/EventSchema';
-import { getDateParams } from '@/utils/date';
-import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
-import { getSortingParams } from '@/utils/sorting';
-import { NextRequest, NextResponse } from 'next/server';
-import { parseBody, parseParams } from '@/utils/parsing';
-import { ClubAndSubscribeEvent, CreateOrUpdateEventType, IdEvent } from '@/types/Event';
-import { formatPublicEvent } from '@/database/format/Event';
-import { errorHandler } from '@/utils/errors';
+import { countEventsByFilter, getEventsByFilter } from "@/database/Event";
+import { formatPublicEvent } from "@/database/format/Event";
+import { getOrganizationById } from "@/database/Organization";
+import { getDateParams } from "@/utils/date";
+import { errorHandler, ERRORS_DETAILS } from "@/utils/errors";
+import { generatePaginationResponse, getPaginationParams } from "@/utils/pagination";
+import { getSortingParams } from "@/utils/sorting";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
+export async function GET( req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const params = req.nextUrl.searchParams;
+		const searchParams = req.nextUrl.searchParams;
 
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-
-		const data = parseParams<ClubAndSubscribeEvent>(params, ClubAndSubscribeEventParamSchema);
-		const date = getDateParams(params);
-		const sorting = getSortingParams(params);
-		const pagination = getPaginationParams(params);
+		const date = getDateParams(searchParams);
+		const sorting = getSortingParams(searchParams);
+		const pagination = getPaginationParams(searchParams);
 
 		const count = await countEventsByFilter();
-		const value = await getEventsByFilter({ author: true }, { ...data, user_id }, date, sorting, pagination);
+		const value = await getEventsByFilter({ organization: true }, date, sorting, pagination);
 
 		return NextResponse.json(generatePaginationResponse(value.map(formatPublicEvent), count, pagination));
-	});
-}
-
-export async function DELETE(req: NextRequest): Promise<NextResponse> {
-	return errorHandler(async () => {
-		const cookie = req.cookies.get('session');
-		await decrypt(cookie?.value);
-
-		const data = await parseBody<IdEvent>(req, IdEventParamSchema);
-
-		await deleteEventById(data.event_id, { registered: true, image_album: true });
-
-		return NextResponse.json({ success: true });
-	});
-}
-
-export async function POST(req: NextRequest): Promise<NextResponse> {
-	return errorHandler(async () => {
-		const cookie = req.cookies.get('session');
-		const session = await decrypt(cookie?.value);
-
-		const data = await parseBody<CreateOrUpdateEventType>(req, CreateEventSchema);
-
-		await createEvent(data, session.user_id, { author: true });
-
-		return NextResponse.json({ success: true });
 	});
 }
