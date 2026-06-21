@@ -5,25 +5,20 @@ import { DEFAULT_SORTINGOPTIONS, sortingToPrisma } from '@/utils/sorting';
 import { SortingOption } from '@/types/SortingParameters';
 import { DateOption } from '@/types/DateParameters';
 import { DEFAULT_DATEOPTION, dateToPrisma } from '@/utils/date';
-import { AuthorEvent, CreateOrUpdateEventType } from '@/types/Event';
+import { CreateOrUpdateEventType } from '@/types/Event';
 import { Prisma } from './prisma/generated/client';
 
-const getEventsByFilter = async <T extends Prisma.eventInclude>(
+const getEventsByFilter = async <T extends Prisma.eventsInclude>(
 	include: T,
-	data: AuthorEvent,
+	organization_id: string,
 	time?: DateOption,
 	sorting?: SortingOption[],
 	pagination?: PaginationParameters
-): Promise<Prisma.eventGetPayload<{ include: T }>[]> => {
-	const value = await prisma.event.findMany({
+): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
+	const value = await prisma.events.findMany({
 		include: include,
 		where: {
-			registered: {
-				...(data.subscribe ? { user_id: data.user_id } : {}),
-			},
-			author: {
-				...(data.club ? { full_name: data.club } : {}),
-			},
+			organization_id: organization_id,
 			...dateToPrisma(time ?? DEFAULT_DATEOPTION),
 		},
 		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
@@ -32,26 +27,26 @@ const getEventsByFilter = async <T extends Prisma.eventInclude>(
 	return value;
 };
 
-const createEvent = async <T extends Prisma.eventInclude>(
+const createEvent = async <T extends Prisma.eventsInclude>(
 	data: CreateOrUpdateEventType,
-	author_id: string,
+	organization_id: string,
 	include: T
 ): Promise<void> => {
-	await prisma.event.create({
+	await prisma.events.create({
 		data: {
-			author_id: author_id,
+			organization_id: organization_id,
 			...data,
 		},
 		include: include,
 	});
 };
 
-const UpdateEvent = async <T extends Prisma.eventInclude>(
+const UpdateEvent = async <T extends Prisma.eventsInclude>(
 	data: CreateOrUpdateEventType,
 	event_id: string,
 	include: T
 ): Promise<void> => {
-	await prisma.event.update({
+	await prisma.events.update({
 		where: {
 			id: event_id,
 		},
@@ -62,8 +57,8 @@ const UpdateEvent = async <T extends Prisma.eventInclude>(
 	});
 };
 
-const deleteEventById = async <T extends Prisma.eventInclude>(event_id: string, include: T): Promise<void> => {
-	await prisma.event.delete({
+const deleteEventById = async <T extends Prisma.eventsInclude>(event_id: string, include: T): Promise<void> => {
+	await prisma.events.delete({
 		where: {
 			id: event_id,
 		},
@@ -71,11 +66,11 @@ const deleteEventById = async <T extends Prisma.eventInclude>(event_id: string, 
 	});
 };
 
-const getEventById = async <T extends Prisma.eventInclude>(
+const getEventById = async <T extends Prisma.eventsInclude>(
 	event_id: string,
 	include: T
-): Promise<Prisma.eventGetPayload<{ include: T }> | null> => {
-	return await prisma.event.findUnique({
+): Promise<Prisma.eventsGetPayload<{ include: T }> | null> => {
+	return await prisma.events.findUnique({
 		where: {
 			id: event_id,
 		},
@@ -83,8 +78,8 @@ const getEventById = async <T extends Prisma.eventInclude>(
 	});
 };
 
-const countEventsByFilter = async (filter?: Prisma.eventWhereInput): Promise<number> => {
-	return prisma.event.count({
+const countEventsByFilter = async (filter?: Prisma.eventsWhereInput): Promise<number> => {
+	return prisma.events.count({
 		where: filter,
 	});
 };

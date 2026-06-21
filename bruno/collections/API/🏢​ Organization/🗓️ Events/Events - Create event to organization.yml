@@ -1,0 +1,32 @@
+info:
+  name: Events - Create event to organization
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BaseURL}}/organization/:org_id/events"
+  params:
+    - name: org_id
+      value: cc734165-fe1a-439f-8c99-a85cecd19a01
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "title": "test",
+        "subtitle": "test1",
+        "description": "test2",
+        "max_registration": 50,
+        "location": "chez cedric",
+        "image": "/path/to/image",
+        "start_at": "2020-10-01",
+        "end_at": "2020-10-02"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

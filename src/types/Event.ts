@@ -1,43 +1,41 @@
-import { RegisteredEventPrivate } from './RegisteredEvent';
-import { PublicUser } from './User';
-
 export interface PrivateEvent {
 	id: string;
-	title: string | null;
+	title: string;
+	subtitle: string| null;
 	description: string | null;
-	max_inscription: number;
+	max_registration: number | null;
+	localtion: string | null;
+	image: string;
 	start_at: Date;
 	end_at: Date;
-	create_at?: Date;
-	author_id: string;
-	registered: RegisteredEventPrivate | null;
+	create_at: Date;
+	update_at: Date;
+	event_registration: string;
 }
 
 export interface PublicEvent {
 	id: string;
-	title: string | null;
+	title: string;
+	subtitle: string| null;
 	description: string | null;
-	max_inscription: number;
+	max_registration: number | null;
+	localtion: string | null;
+	image: string
 	start_at: Date;
 	end_at: Date;
-	author: PublicUser;
+	create_at: Date;
+	update_at: Date;
 }
 
 export interface CreateOrUpdateEventType {
 	title: string;
-	description: string;
-	max_inscription: number;
+	subtitle: string| null;
+	description: string | null;
+	max_registration: number | null;
+	localtion: string | null;
+	image: string;
 	start_at: Date;
 	end_at: Date;
-}
-
-export interface ClubAndSubscribeEvent {
-	subscribe: boolean | null;
-	club: string | null;
-}
-
-export interface AuthorEvent extends ClubAndSubscribeEvent {
-	user_id: string;
 }
 
 export interface IdEvent {

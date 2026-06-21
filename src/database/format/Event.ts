@@ -1,24 +1,35 @@
 import { Prisma } from '@/database/prisma/generated/client';
-import { PublicEvent } from '@/types/Event';
+import { PrivateEvent, PublicEvent } from '@/types/Event';
 
-export function formatPublicEvent(row: Prisma.eventsGetPayload<{ include: { author: true } }>): PublicEvent {
+export function formatPublicEvent(row: Prisma.eventsGetPayload<{ include: { organization: true } }>): PublicEvent {
 	return {
 		id: row.id,
 		title: row.title,
+		subtitle: row.subtitle,
 		description: row.description,
-		max_inscription: row.max_inscription,
+		max_registration: row.max_registration,
+		image: row.image,
+		localtion: row.location,
 		start_at: row.start_at,
 		end_at: row.end_at,
-		author: {
-			id: row.author.id,
-			first_name: row.author.first_name,
-			last_name: row.author.last_name,
-			full_name: row.author.full_name,
-			profile_picture: row.author.profile_picture,
-			agent: row.author.agent,
-			created_at: row.author.created_at,
-			updated_at: row.author.updated_at,
-			is_member: row.author.is_member,
-		},
+		create_at: row.created_at,
+		update_at: row.update_at,
+	};
+}
+
+export function formatPrivateEvent(row: Prisma.eventsGetPayload<{ include: { organization: true } }>): PrivateEvent {
+	return {
+		id: row.id,
+		title: row.title,
+		subtitle: row.subtitle,
+		description: row.description,
+		max_registration: row.max_registration,
+		image: row.image,
+		localtion: row.location,
+		start_at: row.start_at,
+		end_at: row.end_at,
+		create_at: row.created_at,
+		update_at: row.update_at,
+		event_registration: '',
 	};
 }
