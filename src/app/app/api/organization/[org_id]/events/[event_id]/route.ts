@@ -1,4 +1,4 @@
-import { deleteEventById, getEventById, UpdateEvent } from '@/database/Event';
+import { deleteEventById, getEventById, getEventByIdToOrganization, UpdateEvent } from '@/database/Event';
 import { formatPrivateEvent } from '@/database/format/Event';
 import { getOrganizationById } from '@/database/Organization';
 import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
@@ -22,7 +22,7 @@ export async function GET(
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});
 		const organization = await getOrganizationById(org_id, {});
-		const event = await getEventById(event_id, org_id, {});
+		const event = await getEventByIdToOrganization(event_id, org_id, {});
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
@@ -35,7 +35,7 @@ export async function GET(
 				throw ERRORS_DETAILS.member_not_in_organization();
 		}
 
-		const event_value = await getEventById(event_id, org_id, { organization: true });
+		const event_value = await getEventByIdToOrganization(event_id, org_id, { organization: true });
 		if (event_value === null) throw ERRORS_DETAILS.event_does_not_exists();
 
 		return NextResponse.json(formatPrivateEvent(event_value));
@@ -88,7 +88,7 @@ export async function DELETE(
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});
 		const organization = await getOrganizationById(org_id, {});
-		const event = await getEventById(event_id, org_id, {});
+		const event = await getEventByIdToOrganization(event_id, org_id, {});
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
@@ -104,7 +104,7 @@ export async function DELETE(
 			if (permission?.event_delete == null) throw ERRORS_DETAILS.permission_denied();
 		}
 
-		await deleteEventById(event_id, org_id, { });
+		await deleteEventById(event_id, org_id, {});
 
 		return NextResponse.json({ success: true });
 	});
