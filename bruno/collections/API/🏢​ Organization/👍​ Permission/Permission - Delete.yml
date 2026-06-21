@@ -5,13 +5,13 @@ info:
 
 http:
   method: DELETE
-  url: "{{BaseURL}}/organization/:id/permission/:perm_id"
+  url: "{{BaseURL}}/organization/:org_id/permission/:perm_id"
   params:
-    - name: perm_id
-      value: 7b026627-34cb-4b4e-8dbd-fc109ca6816d
+    - name: org_id
+      value: cc734165-fe1a-439f-8c99-a85cecd19a01
       type: path
-    - name: id
-      value: fe9a1af0-9405-45d6-9a43-81dd411f7fb5
+    - name: perm_id
+      value: 06591410-cec8-45ac-a2f3-96f5af3b0ab3
       type: path
   auth: inherit
 

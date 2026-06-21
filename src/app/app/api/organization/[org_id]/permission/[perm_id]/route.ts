@@ -16,10 +16,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function DELETE(
 	req: NextRequest,
-	{ params }: { params: Promise<{ id: string; perm_id: string }> }
+	{ params }: { params: Promise<{ org_id: string; perm_id: string }> }
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { id, perm_id } = await params;
+		const { org_id, perm_id } = await params;
 
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
@@ -27,7 +27,7 @@ export async function DELETE(
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 
-		const organization = await getOrganizationById(id, {});
+		const organization = await getOrganizationById(org_id, {});
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		if (user.admin == false && user_id != organization.owner_id) {
@@ -47,7 +47,7 @@ export async function DELETE(
 				throw ERRORS_DETAILS.permission_denied();
 		}
 
-		const permission_result = await DeleteOrganizationPermission(perm_id, id);
+		const permission_result = await DeleteOrganizationPermission(perm_id, org_id);
 
 		return NextResponse.json(formatOrganizationPermission(permission_result));
 	});
@@ -55,10 +55,10 @@ export async function DELETE(
 
 export async function PATCH(
 	req: NextRequest,
-	{ params }: { params: Promise<{ id: string; perm_id: string }> }
+	{ params }: { params: Promise<{ org_id: string; perm_id: string }> }
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { id, perm_id } = await params;
+		const { org_id, perm_id } = await params;
 
 		const body = await parseBody<CreateOrganizationPermissionType>(req, OrganizationPermissionSchema);
 
@@ -68,7 +68,7 @@ export async function PATCH(
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 
-		const organization = await getOrganizationById(id, {});
+		const organization = await getOrganizationById(org_id, {});
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		if (user.admin == false && user_id != organization.owner_id) {

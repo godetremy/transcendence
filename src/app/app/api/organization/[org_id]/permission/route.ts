@@ -33,9 +33,12 @@ export async function GET(
 	});
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function POST(
+	req: NextRequest,
+	{ params }: { params: Promise<{ org_id: string }> }
+): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { id } = await params;
+		const { org_id } = await params;
 
 		const body = await parseBody<CreateOrganizationPermissionType>(req, OrganizationPermissionSchema);
 
@@ -45,7 +48,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 
-		const organization = await getOrganizationById(id, {});
+		const organization = await getOrganizationById(org_id, {});
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		if (user.admin == false && user_id != organization.owner_id) {

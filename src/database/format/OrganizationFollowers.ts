@@ -10,6 +10,4 @@ const formatOrganizationFollowers = (
 	};
 };
 
-export {
-	formatOrganizationFollowers,
-}
+export { formatOrganizationFollowers };
