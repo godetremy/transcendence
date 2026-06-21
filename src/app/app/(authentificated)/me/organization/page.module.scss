@@ -39,7 +39,7 @@
 		align-items: center;
 		color: var(--color-primary-white);
 		border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
-		transition: .2s;
+		transition: 0.2s;
 
 		&:active {
 			scale: 0.95;
@@ -61,7 +61,7 @@
 		padding-right: 3px;
 	}
 
-	& > div[aria-label="animation"] {
+	& > div[aria-label='animation'] {
 		opacity: 0.5;
 	}
 }

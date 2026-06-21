@@ -1,6 +1,11 @@
 import { formatOrganizationPermission } from '@/database/format/OrganizationPermission';
 import { getOrganizationById } from '@/database/Organization';
-import { DeleteOrganizationPermission, updateOrganizationPermission } from '@/database/OrganizationPermission';
+import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
+import {
+	DeleteOrganizationPermission,
+	getOrganizationPermissionById,
+	updateOrganizationPermission,
+} from '@/database/OrganizationPermission';
 import { getUserById } from '@/database/User';
 import { decrypt } from '@/lib/session';
 import { OrganizationPermissionSchema } from '@/schema/OrganizationPermissionSchema';
@@ -23,11 +28,24 @@ export async function DELETE(
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 
 		const organization = await getOrganizationById(id, {});
-		//const permission = await getOrganizationPermissionById(perm_id, id, {});
+		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		if (organization == null /*|| permission == null*/) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (user_id != organization.owner_id && !user.admin /*&& permission.organization_manage_permission == false*/)
-			throw ERRORS_DETAILS.permission_denied();
+		if (user.admin == false && user_id != organization.owner_id) {
+			const member_user = await getOrganizationMemberByFilter(
+				{ user_id: user.id, organization_id: organization.id },
+				{}
+			);
+			if (member_user == null || member_user.approved == false || member_user.permission_id == null)
+				throw ERRORS_DETAILS.permission_denied();
+
+			const permission = await getOrganizationPermissionById(
+				member_user.permission_id,
+				member_user.organization_id,
+				{}
+			);
+			if (permission == null || permission.organization_manage_permission == false)
+				throw ERRORS_DETAILS.permission_denied();
+		}
 
 		const permission_result = await DeleteOrganizationPermission(perm_id, id);
 
@@ -51,15 +69,26 @@ export async function PATCH(
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 
 		const organization = await getOrganizationById(id, {});
-		//const permission = await getOrganizationPermissionById(perm_id, id, {});
+		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		if (organization == null /*|| permission == null*/) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (user_id != organization.owner_id && !user.admin /*&& permission.organization_manage_permission == false*/)
-			throw ERRORS_DETAILS.permission_denied();
+		if (user.admin == false && user_id != organization.owner_id) {
+			const member_user = await getOrganizationMemberByFilter(
+				{ user_id: user.id, organization_id: organization.id },
+				{}
+			);
+			if (member_user == null || member_user.approved == false || member_user.permission_id == null)
+				throw ERRORS_DETAILS.permission_denied();
+
+			const permission = await getOrganizationPermissionById(
+				member_user.permission_id,
+				member_user.organization_id,
+				{}
+			);
+			if (permission == null || permission.organization_manage_permission == false)
+				throw ERRORS_DETAILS.permission_denied();
+		}
 
 		const permission_result = await updateOrganizationPermission(body, perm_id, organization.id);
-
-		if (permission_result == null) throw ERRORS_DETAILS.permission_denied();
 
 		return NextResponse.json(formatOrganizationPermission(permission_result));
 	});

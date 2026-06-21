@@ -1,9 +1,11 @@
 import { formatOrganizationPermission } from '@/database/format/OrganizationPermission';
 import { getOrganizationById } from '@/database/Organization';
+import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
 import {
 	countOrganizationPermissionByFilter,
 	CreateOrganizationPermissionWithOrganizationId,
 	getOrganizationPermissionByFilter,
+	getOrganizationPermissionById,
 } from '@/database/OrganizationPermission';
 import { getUserById } from '@/database/User';
 import { decrypt } from '@/lib/session';
@@ -44,14 +46,26 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 
 		const organization = await getOrganizationById(id, {});
-		//const permission_user = await getOrganizationPermissionByFilter({organization_id: organization?.id, }, {});
-
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (user_id != organization.owner_id && !user.admin) throw ERRORS_DETAILS.permission_denied();
+
+		if (user.admin == false && user_id != organization.owner_id) {
+			const member_user = await getOrganizationMemberByFilter(
+				{ user_id: user.id, organization_id: organization.id },
+				{}
+			);
+			if (member_user == null || member_user.approved == false || member_user.permission_id == null)
+				throw ERRORS_DETAILS.permission_denied();
+
+			const permission = await getOrganizationPermissionById(
+				member_user.permission_id,
+				member_user.organization_id,
+				{}
+			);
+			if (permission == null || permission.organization_manage_permission == false)
+				throw ERRORS_DETAILS.permission_denied();
+		}
 
 		const permission = await CreateOrganizationPermissionWithOrganizationId(body, organization.id);
-
-		if (permission == null) throw ERRORS_DETAILS.permission_denied();
 
 		return NextResponse.json(formatOrganizationPermission(permission));
 	});

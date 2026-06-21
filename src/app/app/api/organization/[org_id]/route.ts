@@ -34,8 +34,6 @@ export async function PATCH(
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 
-		//if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();
-
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});

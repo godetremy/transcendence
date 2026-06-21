@@ -12,13 +12,13 @@
 	color: var(--color-primary-white);
 	position: relative;
 	overflow: hidden;
-	transition: .2s;
+	transition: 0.2s;
 
 	& > div {
 		position: absolute;
 		background-color: #000;
 		border-radius: 4px;
-		opacity: .6;
+		opacity: 0.6;
 	}
 
 	& > img {
@@ -30,8 +30,8 @@
 		text-align: left;
 		font: 500 15px var(--font-paragraph);
 		white-space: nowrap;
-		opacity: .6;
-		transition: .2s;
+		opacity: 0.6;
+		transition: 0.2s;
 	}
 
 	& > svg {
@@ -40,18 +40,18 @@
 		padding: 7px 7px 7px 14px;
 		height: 100%;
 		width: 37px;
-		background: linear-gradient(90deg, #0000, #000C, #000);
+		background: linear-gradient(90deg, #0000, #000c, #000);
 		translate: 3px 0;
-		transition: .2s;
+		transition: 0.2s;
 
 		& > * {
 			opacity: 0;
-			transition: .2s;
+			transition: 0.2s;
 		}
-
 	}
 
-	&:hover, &.opened {
+	&:hover,
+	&.opened {
 		background-color: #111;
 		padding: 7px;
 		border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
@@ -61,7 +61,7 @@
 		}
 
 		& > svg {
-			background: linear-gradient(90deg, #1110, #111C, #111);
+			background: linear-gradient(90deg, #1110, #111c, #111);
 			translate: 0;
 			& > * {
 				opacity: 1;
@@ -91,7 +91,7 @@
 
 	& > a {
 		appearance: none;
-		background-color: #FFF0;
+		background-color: #fff0;
 		border: 1px solid rgba(var(--color-rgb-primary-white), 0);
 		padding: 4px;
 		border-radius: 4px;
@@ -103,7 +103,7 @@
 		position: relative;
 		width: 100%;
 		overflow: hidden;
-		transition: .2s;
+		transition: 0.2s;
 
 		& > img {
 			border-radius: 2px;
@@ -115,11 +115,11 @@
 			font: 500 15px var(--font-paragraph);
 			white-space: nowrap;
 			text-overflow: ellipsis;
-			opacity: .6;
+			opacity: 0.6;
 		}
 
 		&:hover {
-			background-color: #FFF1;
+			background-color: #fff1;
 		}
 
 		&:active {

@@ -199,7 +199,7 @@ export function Carousel(props: CarouselProps) {
 		const slideWidth = container.children[0].getBoundingClientRect().width;
 		const translateX = parseTranslateX(container);
 
-		const targetSlide = Math.round(-(translateX / slideWidth)) * 1.2 % container.children.length;
+		const targetSlide = (Math.round(-(translateX / slideWidth)) * 1.2) % container.children.length;
 		goToSlide(targetSlide);
 	}
 

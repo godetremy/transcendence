@@ -1,35 +1,35 @@
 services:
     seaweed-master:
         image: chrislusf/seaweedfs
-        command: "master -ip=seaweed-master -port=9333"
+        command: 'master -ip=seaweed-master -port=9333'
         ports:
-            - "9333:9333"
+            - '9333:9333'
         networks:
             - app
     seaweed-volume:
         image: chrislusf/seaweedfs
-        command: "volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080"
+        command: 'volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080'
         depends_on:
             - seaweed-master
 
         ports:
-            - "8080:8080"
+            - '8080:8080'
         networks:
             - app
     seaweed-filer:
         image: chrislusf/seaweedfs
-        command: "filer -master=seaweed-master:9333"
+        command: 'filer -master=seaweed-master:9333'
         depends_on:
             - seaweed-master
         ports:
-            - "8888:8888"
+            - '8888:8888'
         networks:
             - app
     nginx:
         build: ./services/nginx
         ports:
-            - "80:80"
-            - "443:443"
+            - '80:80'
+            - '443:443'
         networks:
             - app
             - host-network
