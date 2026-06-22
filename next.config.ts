@@ -5,7 +5,7 @@ const withMDX = createMDX({});
 
 const nextConfig: NextConfig = {
 	images: {
-		remotePatterns: [new URL('https://cdn.intra.42.fr/**')],
+		unoptimized: true,
 	},
 };
 
