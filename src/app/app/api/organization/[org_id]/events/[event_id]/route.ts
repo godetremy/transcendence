@@ -42,7 +42,9 @@ export async function GET(
 
 		const subscribe_list = await getRegistrationsToEventById({}, event_id);
 
-		return NextResponse.json(formatPrivateEventWithRegistrations(event_value, subscribe_list.map(formatPrivateRegisteredEvent)));
+		return NextResponse.json(
+			formatPrivateEventWithRegistrations(event_value, subscribe_list.map(formatPrivateRegisteredEvent))
+		);
 	});
 }
 

@@ -37,7 +37,10 @@ export function formatPrivateEvent(row: Prisma.eventsGetPayload<{ include: { org
 	};
 }
 
-export function formatPrivateEventWithRegistrations(row: Prisma.eventsGetPayload<{ include: { organization: true } }>, register: RegisteredEventPrivate[]): PrivateEventWithRegistration {
+export function formatPrivateEventWithRegistrations(
+	row: Prisma.eventsGetPayload<{ include: { organization: true } }>,
+	register: RegisteredEventPrivate[]
+): PrivateEventWithRegistration {
 	return {
 		id: row.id,
 		title: row.title,

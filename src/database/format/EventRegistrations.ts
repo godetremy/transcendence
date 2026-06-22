@@ -1,7 +1,9 @@
 import { Prisma } from '@/database/prisma/generated/client';
 import { RegisteredEventPrivate } from '@/types/RegisteredEvent';
 
-export function formatPrivateRegisteredEvent(row: Prisma.event_registrationsGetPayload<object>): RegisteredEventPrivate {
+export function formatPrivateRegisteredEvent(
+	row: Prisma.event_registrationsGetPayload<object>
+): RegisteredEventPrivate {
 	return {
 		id: row.id,
 		user_id: row.user_id,

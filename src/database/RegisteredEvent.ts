@@ -14,11 +14,13 @@ const getEventRegistrationsById = async <T extends Prisma.event_registrationsInc
 	user_id: string,
 	include: T
 ): Promise<Prisma.event_registrationsGetPayload<{ include: T }> | null> => {
-	return prisma.event_registrations.findFirst({
+	return prisma.event_registrations.findUnique({
 		include: include,
 		where: {
-			event_id: event_id,
-			user_id: user_id,
+			user_id_event_id: {
+				event_id: event_id,
+				user_id: user_id,
+			},
 		},
 	});
 };
@@ -48,14 +50,14 @@ const deleteEventRegistrationsById = async <T extends Prisma.event_registrations
 			user_id_event_id: {
 				event_id: event_id,
 				user_id: user_id,
-			}
-		}
+			},
+		},
 	});
 };
 
 const getRegistrationsToEventById = async <T extends Prisma.event_registrationsInclude>(
 	include: T,
-	event_id: string,
+	event_id: string
 ): Promise<Prisma.event_registrationsGetPayload<{ include: T }>[]> => {
 	return prisma.event_registrations.findMany({
 		include: include,
