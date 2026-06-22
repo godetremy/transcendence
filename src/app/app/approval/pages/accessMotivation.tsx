@@ -1,8 +1,10 @@
 import styles from './accessMotivation.module.scss';
 import { ApprovalButton, ApprovalPage } from '@/app/app/approval/page';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
+import { UserUpdateParametersSchema } from '@/schema/UserUpdateParametersSchema';
+import { patch } from '@/lib/fetcher';
 
 export function AccessMotivation(
 	logout: () => void,
@@ -10,11 +12,30 @@ export function AccessMotivation(
 	loading: boolean,
 	setLoading: (v: boolean) => void
 ): ApprovalPage {
+	const [error, setError] = useState<string | undefined>(undefined);
+	const [reason, setReason] = useState('');
+
 	const saveValue = () => {
 		setLoading(true);
-		setTimeout(() => {
+		const fields = UserUpdateParametersSchema.safeParse({ agent_reason: reason });
+
+		if (!fields.success) {
+			setError(fields.error.issues[0].message);
 			setLoading(false);
-			nextPage();
+			return;
+		}
+
+		setTimeout(() => {
+			patch<{ success: boolean }>('/users/me', {
+				agent_reason: reason,
+			})
+				.then(() => {
+					nextPage();
+				})
+				.catch((err: Error) => {
+					setError(err.message);
+				})
+				.finally(() => setLoading(false));
 		}, 1000);
 	};
 
@@ -37,7 +58,10 @@ export function AccessMotivation(
 				required
 				disabled={loading}
 				useTextArea={true}
+				value={reason}
+				onChange={(e) => setReason(e.currentTarget.value)}
 			/>
+			{error && <p className={styles.error}>{error}</p>}
 		</div>
 	);
 
