@@ -20,6 +20,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	event_does_not_register: () => new ApiError(400, 'This event does not register user.'),
 	event_has_register: () => new ApiError(400, 'This event has registered user.'),
 	service_does_not_exists: () => new ApiError(404, 'This service does not exists.'),
+	album_does_not_exists: () => new ApiError(404, 'This album does not exists.'),
 	permission_denied: () => new ApiError(403, 'You do not have permission to perform this action.'),
 	file_not_found: () => new ApiError(404, 'This file does not exist.'),
 	session_expired: () => new ApiError(401, 'This session expired.'),

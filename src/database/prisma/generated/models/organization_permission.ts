@@ -35,6 +35,9 @@ export type Organization_permissionMinAggregateOutputType = {
   service_create: boolean | null
   service_update: boolean | null
   service_delete: boolean | null
+  Album_create: boolean | null
+  Album_update: boolean | null
+  Album_delete: boolean | null
   members_invite: boolean | null
   members_manage: boolean | null
   organization_update_info: boolean | null
@@ -55,6 +58,9 @@ export type Organization_permissionMaxAggregateOutputType = {
   service_create: boolean | null
   service_update: boolean | null
   service_delete: boolean | null
+  Album_create: boolean | null
+  Album_update: boolean | null
+  Album_delete: boolean | null
   members_invite: boolean | null
   members_manage: boolean | null
   organization_update_info: boolean | null
@@ -75,6 +81,9 @@ export type Organization_permissionCountAggregateOutputType = {
   service_create: number
   service_update: number
   service_delete: number
+  Album_create: number
+  Album_update: number
+  Album_delete: number
   members_invite: number
   members_manage: number
   organization_update_info: number
@@ -97,6 +106,9 @@ export type Organization_permissionMinAggregateInputType = {
   service_create?: true
   service_update?: true
   service_delete?: true
+  Album_create?: true
+  Album_update?: true
+  Album_delete?: true
   members_invite?: true
   members_manage?: true
   organization_update_info?: true
@@ -117,6 +129,9 @@ export type Organization_permissionMaxAggregateInputType = {
   service_create?: true
   service_update?: true
   service_delete?: true
+  Album_create?: true
+  Album_update?: true
+  Album_delete?: true
   members_invite?: true
   members_manage?: true
   organization_update_info?: true
@@ -137,6 +152,9 @@ export type Organization_permissionCountAggregateInputType = {
   service_create?: true
   service_update?: true
   service_delete?: true
+  Album_create?: true
+  Album_update?: true
+  Album_delete?: true
   members_invite?: true
   members_manage?: true
   organization_update_info?: true
@@ -230,6 +248,9 @@ export type Organization_permissionGroupByOutputType = {
   service_create: boolean
   service_update: boolean
   service_delete: boolean
+  Album_create: boolean
+  Album_update: boolean
+  Album_delete: boolean
   members_invite: boolean
   members_manage: boolean
   organization_update_info: boolean
@@ -271,6 +292,9 @@ export type organization_permissionWhereInput = {
   service_create?: Prisma.BoolFilter<"organization_permission"> | boolean
   service_update?: Prisma.BoolFilter<"organization_permission"> | boolean
   service_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_create?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_update?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
   members_invite?: Prisma.BoolFilter<"organization_permission"> | boolean
   members_manage?: Prisma.BoolFilter<"organization_permission"> | boolean
   organization_update_info?: Prisma.BoolFilter<"organization_permission"> | boolean
@@ -293,6 +317,9 @@ export type organization_permissionOrderByWithRelationInput = {
   service_create?: Prisma.SortOrder
   service_update?: Prisma.SortOrder
   service_delete?: Prisma.SortOrder
+  Album_create?: Prisma.SortOrder
+  Album_update?: Prisma.SortOrder
+  Album_delete?: Prisma.SortOrder
   members_invite?: Prisma.SortOrder
   members_manage?: Prisma.SortOrder
   organization_update_info?: Prisma.SortOrder
@@ -319,6 +346,9 @@ export type organization_permissionWhereUniqueInput = Prisma.AtLeast<{
   service_create?: Prisma.BoolFilter<"organization_permission"> | boolean
   service_update?: Prisma.BoolFilter<"organization_permission"> | boolean
   service_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_create?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_update?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
   members_invite?: Prisma.BoolFilter<"organization_permission"> | boolean
   members_manage?: Prisma.BoolFilter<"organization_permission"> | boolean
   organization_update_info?: Prisma.BoolFilter<"organization_permission"> | boolean
@@ -341,6 +371,9 @@ export type organization_permissionOrderByWithAggregationInput = {
   service_create?: Prisma.SortOrder
   service_update?: Prisma.SortOrder
   service_delete?: Prisma.SortOrder
+  Album_create?: Prisma.SortOrder
+  Album_update?: Prisma.SortOrder
+  Album_delete?: Prisma.SortOrder
   members_invite?: Prisma.SortOrder
   members_manage?: Prisma.SortOrder
   organization_update_info?: Prisma.SortOrder
@@ -367,6 +400,9 @@ export type organization_permissionScalarWhereWithAggregatesInput = {
   service_create?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
   service_update?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
   service_delete?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
+  Album_create?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
+  Album_update?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
+  Album_delete?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
   members_invite?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
   members_manage?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
   organization_update_info?: Prisma.BoolWithAggregatesFilter<"organization_permission"> | boolean
@@ -386,6 +422,9 @@ export type organization_permissionCreateInput = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -408,6 +447,9 @@ export type organization_permissionUncheckedCreateInput = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -428,6 +470,9 @@ export type organization_permissionUpdateInput = {
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -450,6 +495,9 @@ export type organization_permissionUncheckedUpdateInput = {
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -471,6 +519,9 @@ export type organization_permissionCreateManyInput = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -490,6 +541,9 @@ export type organization_permissionUpdateManyMutationInput = {
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -510,6 +564,9 @@ export type organization_permissionUncheckedUpdateManyInput = {
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -541,6 +598,9 @@ export type organization_permissionCountOrderByAggregateInput = {
   service_create?: Prisma.SortOrder
   service_update?: Prisma.SortOrder
   service_delete?: Prisma.SortOrder
+  Album_create?: Prisma.SortOrder
+  Album_update?: Prisma.SortOrder
+  Album_delete?: Prisma.SortOrder
   members_invite?: Prisma.SortOrder
   members_manage?: Prisma.SortOrder
   organization_update_info?: Prisma.SortOrder
@@ -561,6 +621,9 @@ export type organization_permissionMaxOrderByAggregateInput = {
   service_create?: Prisma.SortOrder
   service_update?: Prisma.SortOrder
   service_delete?: Prisma.SortOrder
+  Album_create?: Prisma.SortOrder
+  Album_update?: Prisma.SortOrder
+  Album_delete?: Prisma.SortOrder
   members_invite?: Prisma.SortOrder
   members_manage?: Prisma.SortOrder
   organization_update_info?: Prisma.SortOrder
@@ -581,6 +644,9 @@ export type organization_permissionMinOrderByAggregateInput = {
   service_create?: Prisma.SortOrder
   service_update?: Prisma.SortOrder
   service_delete?: Prisma.SortOrder
+  Album_create?: Prisma.SortOrder
+  Album_update?: Prisma.SortOrder
+  Album_delete?: Prisma.SortOrder
   members_invite?: Prisma.SortOrder
   members_manage?: Prisma.SortOrder
   organization_update_info?: Prisma.SortOrder
@@ -672,6 +738,9 @@ export type organization_permissionCreateWithoutOrganization_membersInput = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -693,6 +762,9 @@ export type organization_permissionUncheckedCreateWithoutOrganization_membersInp
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -728,6 +800,9 @@ export type organization_permissionUpdateWithoutOrganization_membersInput = {
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -749,6 +824,9 @@ export type organization_permissionUncheckedUpdateWithoutOrganization_membersInp
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -768,6 +846,9 @@ export type organization_permissionCreateWithoutOrganizationInput = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -788,6 +869,9 @@ export type organization_permissionUncheckedCreateWithoutOrganizationInput = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -838,6 +922,9 @@ export type organization_permissionScalarWhereInput = {
   service_create?: Prisma.BoolFilter<"organization_permission"> | boolean
   service_update?: Prisma.BoolFilter<"organization_permission"> | boolean
   service_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_create?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_update?: Prisma.BoolFilter<"organization_permission"> | boolean
+  Album_delete?: Prisma.BoolFilter<"organization_permission"> | boolean
   members_invite?: Prisma.BoolFilter<"organization_permission"> | boolean
   members_manage?: Prisma.BoolFilter<"organization_permission"> | boolean
   organization_update_info?: Prisma.BoolFilter<"organization_permission"> | boolean
@@ -857,6 +944,9 @@ export type organization_permissionCreateManyOrganizationInput = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -876,6 +966,9 @@ export type organization_permissionUpdateWithoutOrganizationInput = {
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -896,6 +989,9 @@ export type organization_permissionUncheckedUpdateWithoutOrganizationInput = {
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -916,6 +1012,9 @@ export type organization_permissionUncheckedUpdateManyWithoutOrganizationInput =
   service_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
   service_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_create?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_update?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  Album_delete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_invite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   members_manage?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization_update_info?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -967,6 +1066,9 @@ export type organization_permissionSelect<ExtArgs extends runtime.Types.Extensio
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -990,6 +1092,9 @@ export type organization_permissionSelectCreateManyAndReturn<ExtArgs extends run
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -1011,6 +1116,9 @@ export type organization_permissionSelectUpdateManyAndReturn<ExtArgs extends run
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -1032,6 +1140,9 @@ export type organization_permissionSelectScalar = {
   service_create?: boolean
   service_update?: boolean
   service_delete?: boolean
+  Album_create?: boolean
+  Album_update?: boolean
+  Album_delete?: boolean
   members_invite?: boolean
   members_manage?: boolean
   organization_update_info?: boolean
@@ -1041,7 +1152,7 @@ export type organization_permissionSelectScalar = {
   update_at?: boolean
 }
 
-export type organization_permissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "name" | "description" | "event_create" | "event_update" | "event_delete" | "service_create" | "service_update" | "service_delete" | "members_invite" | "members_manage" | "organization_update_info" | "organization_manage" | "organization_manage_permission" | "created_at" | "update_at", ExtArgs["result"]["organization_permission"]>
+export type organization_permissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "name" | "description" | "event_create" | "event_update" | "event_delete" | "service_create" | "service_update" | "service_delete" | "Album_create" | "Album_update" | "Album_delete" | "members_invite" | "members_manage" | "organization_update_info" | "organization_manage" | "organization_manage_permission" | "created_at" | "update_at", ExtArgs["result"]["organization_permission"]>
 export type organization_permissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization_members?: boolean | Prisma.organization_permission$organization_membersArgs<ExtArgs>
   organization?: boolean | Prisma.organization_permission$organizationArgs<ExtArgs>
@@ -1071,6 +1182,9 @@ export type $organization_permissionPayload<ExtArgs extends runtime.Types.Extens
     service_create: boolean
     service_update: boolean
     service_delete: boolean
+    Album_create: boolean
+    Album_update: boolean
+    Album_delete: boolean
     members_invite: boolean
     members_manage: boolean
     organization_update_info: boolean
@@ -1513,6 +1627,9 @@ export interface organization_permissionFieldRefs {
   readonly service_create: Prisma.FieldRef<"organization_permission", 'Boolean'>
   readonly service_update: Prisma.FieldRef<"organization_permission", 'Boolean'>
   readonly service_delete: Prisma.FieldRef<"organization_permission", 'Boolean'>
+  readonly Album_create: Prisma.FieldRef<"organization_permission", 'Boolean'>
+  readonly Album_update: Prisma.FieldRef<"organization_permission", 'Boolean'>
+  readonly Album_delete: Prisma.FieldRef<"organization_permission", 'Boolean'>
   readonly members_invite: Prisma.FieldRef<"organization_permission", 'Boolean'>
   readonly members_manage: Prisma.FieldRef<"organization_permission", 'Boolean'>
   readonly organization_update_info: Prisma.FieldRef<"organization_permission", 'Boolean'>

@@ -23,7 +23,7 @@ http:
       value: "1"
       type: query
     - name: org_id
-      value: 77425446-6e11-471d-8d78-c852965b312f
+      value: ed3b7ec9-2aaa-4a4f-984d-3d0baf0bf7ee
       type: path
   auth: inherit
 
