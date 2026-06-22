@@ -57,4 +57,3 @@ export interface CreateOrUpdateEventType {
 	start_at: Date;
 	end_at: Date;
 }
-

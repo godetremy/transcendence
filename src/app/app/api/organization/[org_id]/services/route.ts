@@ -42,7 +42,13 @@ export async function GET(
 		const pagination = getPaginationParams(searchParams);
 
 		const count = await countServicesByFilter();
-		const value = await getServicesByFilterToOrganization({ organization: true, category: true }, org_id, date, sorting, pagination);
+		const value = await getServicesByFilterToOrganization(
+			{ organization: true, category: true },
+			org_id,
+			date,
+			sorting,
+			pagination
+		);
 
 		return NextResponse.json(generatePaginationResponse(value.map(formatPrivateService), count, pagination));
 	});

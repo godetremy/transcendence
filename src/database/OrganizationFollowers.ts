@@ -1,7 +1,7 @@
 import { prisma } from '@/database/prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { PaginationParameters } from '@/types/PaginationParameters';
-import { Prisma, users } from '@/database/prisma/generated/client';
+import { Prisma } from '@/database/prisma/generated/client';
 
 const countOrganizationFollowersByFilter = async (filter: Prisma.organization_followersWhereInput): Promise<number> => {
 	return prisma.organization_followers.count({

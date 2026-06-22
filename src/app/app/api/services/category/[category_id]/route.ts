@@ -21,4 +21,4 @@ export async function GET(
 
 		return NextResponse.json(generatePaginationResponse(lists.map(formatPublicService), count, pagination));
 	});
-}	
+}

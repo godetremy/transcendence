@@ -147,7 +147,7 @@ export default function Page() {
 																...(prev ?? []),
 															]);
 													}
-													setInvitations((prev) => prev.filter((v) => v.id !== id));
+													setInvitations((prev) => prev!.filter((v) => v.id !== id));
 												}}
 											/>
 										}

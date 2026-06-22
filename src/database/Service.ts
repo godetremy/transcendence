@@ -5,7 +5,6 @@ import { DEFAULT_SORTINGOPTIONS, sortingToPrisma } from '@/utils/sorting';
 import { SortingOption } from '@/types/SortingParameters';
 import { DateOption } from '@/types/DateParameters';
 import { DEFAULT_DATEOPTION, dateToPrisma } from '@/utils/date';
-import { CreateOrUpdateEventType } from '@/types/Event';
 import { Prisma } from './prisma/generated/client';
 import { CreateOrUpdateServiceType } from '@/types/Service';
 

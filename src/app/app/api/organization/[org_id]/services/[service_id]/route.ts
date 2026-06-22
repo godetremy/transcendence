@@ -35,12 +35,13 @@ export async function GET(
 				throw ERRORS_DETAILS.member_not_in_organization();
 		}
 
-		const service_value = await getServicesByIdToOrganization(service_id, org_id, { organization: true, category: true });
+		const service_value = await getServicesByIdToOrganization(service_id, org_id, {
+			organization: true,
+			category: true,
+		});
 		if (service_value === null) throw ERRORS_DETAILS.service_does_not_exists();
 
-		return NextResponse.json(
-			formatPrivateService(service_value)
-		);
+		return NextResponse.json(formatPrivateService(service_value));
 	});
 }
 
