@@ -1,7 +1,5 @@
-import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
-import { PaginationParameters } from '@/types/PaginationParameters';
 
 const countEventRegistrationsByFilter = async (filter?: Prisma.event_registrationsWhereInput): Promise<number> => {
 	return prisma.event_registrations.count({

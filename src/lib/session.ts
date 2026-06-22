@@ -91,7 +91,7 @@ const getThrowableSession = async (req: NextRequest): Promise<SessionPayload> =>
 	return session;
 };
 
-const parseUserId = (id: string, session: JWTSessionPayload): { id: string; is_me: boolean } => {
+const parseUserId = (id: string, session: SessionPayload): { id: string; is_me: boolean } => {
 	if (id === 'me') {
 		return { id: session.user_id, is_me: true };
 	}

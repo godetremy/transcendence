@@ -45,10 +45,10 @@ export default async function proxy(req: NextRequest) {
 	if (
 		session.agent &&
 		(session.agent_verified === null || !session.agent_verified) &&
-		!req.nextUrl.pathname.startsWith('/app/agents/approval') &&
+		!req.nextUrl.pathname.startsWith('/app/approval') &&
 		!req.nextUrl.pathname.startsWith('/app/api')
 	)
-		return NextResponse.redirect(new URL('/app/agents/approval', req.nextUrl));
+		return NextResponse.redirect(new URL('/app/approval', req.nextUrl));
 
 	return NextResponse.next();
 }

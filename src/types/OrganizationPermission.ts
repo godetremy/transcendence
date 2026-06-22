@@ -8,6 +8,9 @@ export interface OrganizationPermission {
 	service_create: boolean;
 	service_update: boolean;
 	service_delete: boolean;
+	album_create: boolean;
+	album_update: boolean;
+	album_delete: boolean;
 	members_invite: boolean;
 	members_manage: boolean;
 	organization_update_info: boolean;
@@ -28,6 +31,9 @@ export interface CreateOrganizationPermissionType {
 	service_delete: boolean;
 	members_invite: boolean;
 	members_manage: boolean;
+	album_create: boolean;
+	album_update: boolean;
+	album_delete: boolean;
 	organization_update_info: boolean;
 	organization_manage: boolean;
 	organization_manage_permission: boolean;

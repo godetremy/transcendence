@@ -2,14 +2,36 @@ import styles from './approbationResult.module.scss';
 import { ApprovalButton, ApprovalPage } from '@/app/app/approval/page';
 import { ReactNode } from 'react';
 import { LoginText } from '@/components/login/LoginText/LoginText';
-import { EmojiSunglasses } from '@/components/stickers/EmojiSunglasses/EmojiSunglasses';
 import { EmojiRaisedEyebrow } from '@/components/stickers/EmojiRaisedEyebrow/EmojiRaisedEyebrow';
+import EmojiSunglasses from '@/components/stickers/EmojiSunglasses/EmojiSunglasses';
+import { useRouter } from 'next/navigation';
+import { post } from '@/lib/fetcher';
 
-export function ApprobationResult(approved: boolean, logout: () => void, nextPage: () => void): ApprovalPage {
+export function ApprobationResult(
+	approved: boolean,
+	logout: () => void,
+	setLoading: (v: boolean) => void
+): ApprovalPage {
+	const router = useRouter();
+
+	const refreshToken = () => {
+		setLoading(true);
+		setTimeout(() => {
+			post<{ success: boolean }>('/auth/refresh', {})
+				.then(() => router.replace('/app'))
+				.catch((err) => console.error(err))
+				.finally(() => setLoading(false));
+		}, 800);
+	};
+
+	const openSupport = () => {
+		router.push(`mailto:${process.env.NEXT_PUBLIC_SUPPORT_MAIL}`);
+	};
+
 	const buttons: ApprovalButton[] = approved
-		? [{ title: "C'est parti !", onPress: () => {}, primary: true }]
+		? [{ title: "C'est parti !", onPress: refreshToken, primary: true, canLoad: true }]
 		: [
-				{ title: 'Un problème ?', onPress: () => {} },
+				{ title: 'Un problème ?', onPress: openSupport },
 				{ title: 'Se déconnecter', onPress: logout, primary: true },
 			];
 

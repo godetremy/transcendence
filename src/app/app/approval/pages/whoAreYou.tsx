@@ -3,6 +3,8 @@ import { ApprovalButton, ApprovalPage } from '@/app/app/approval/page';
 import { ReactNode, useState } from 'react';
 import { LoginText } from '@/components/login/LoginText/LoginText';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
+import { patch } from '@/lib/fetcher';
+import { UserUpdateParametersSchema } from '@/schema/UserUpdateParametersSchema';
 
 export function WhoAreYou(
 	logout: () => void,
@@ -10,11 +12,30 @@ export function WhoAreYou(
 	loading: boolean,
 	setLoading: (v: boolean) => void
 ): ApprovalPage {
+	const [error, setError] = useState<string | undefined>(undefined);
+	const [fullName, setFullName] = useState('');
+
 	const saveValue = () => {
 		setLoading(true);
-		setTimeout(() => {
+		const fields = UserUpdateParametersSchema.safeParse({ full_name: fullName });
+
+		if (!fields.success) {
+			setError(fields.error.issues[0].message);
 			setLoading(false);
-			nextPage();
+			return;
+		}
+
+		setTimeout(() => {
+			patch<{ success: boolean }>('/users/me', {
+				full_name: fullName,
+			})
+				.then(() => {
+					nextPage();
+				})
+				.catch((err: Error) => {
+					setError(err.message);
+				})
+				.finally(() => setLoading(false));
 		}, 1000);
 	};
 
@@ -36,7 +57,10 @@ export function WhoAreYou(
 				placeholder={'BDE 42 Angoulême'}
 				required
 				disabled={loading}
+				value={fullName}
+				onChange={(e) => setFullName(e.currentTarget.value)}
 			/>
+			{error && <p className={styles.error}>{error}</p>}
 		</div>
 	);
 

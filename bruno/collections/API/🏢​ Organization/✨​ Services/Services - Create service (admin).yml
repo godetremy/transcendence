@@ -1,0 +1,38 @@
+info:
+  name: Services - Create service (admin)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{BaseURL}}/organization/:org_id/services"
+  params:
+    - name: org_id
+      value: 2d973706-a901-4909-a09e-368ef3145de8
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "category_id": "7f341ca7-2031-4285-97c9-b9ae2248377d",
+        "title": "soirée",
+        "subtitle": "Cedric",
+        "description": "Test cedric",
+        "image": "path/to/image",
+        "edition": 10,
+        "registration_required": true,
+        "registration_details": "test",
+        "registration_link": "https:/test.com",
+        "source_link": "https:/cedric.scam.fr",
+        "location": "chez cedric",
+        "start_at": "2010-10-10",
+        "end_at": "2010-10-10",
+        "registration_full": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

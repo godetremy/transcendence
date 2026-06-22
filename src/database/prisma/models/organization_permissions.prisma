@@ -13,6 +13,10 @@ model organization_permission {
 	service_update					Boolean			@default(false)
 	service_delete					Boolean			@default(false)
 
+	album_create					Boolean			@default(false)
+	album_update					Boolean			@default(false)
+	album_delete					Boolean			@default(false)
+
 	members_invite					Boolean			@default(false)
 	members_manage					Boolean			@default(false)
 

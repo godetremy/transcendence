@@ -1,8 +1,7 @@
 import { countEventsByFilter, getEventsByFilter } from '@/database/Event';
 import { formatPublicEvent } from '@/database/format/Event';
-import { getOrganizationById } from '@/database/Organization';
 import { getDateParams } from '@/utils/date';
-import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+import { errorHandler } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';

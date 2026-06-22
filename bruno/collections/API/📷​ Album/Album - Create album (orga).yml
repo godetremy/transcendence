@@ -1,0 +1,25 @@
+info:
+  name: Album - Create album (orga)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{BaseURL}}/albums"
+  body:
+    type: json
+    data: |-
+      {
+        "event_id": "fafd3e5f-e5c2-4ba4-b2ec-a64b35e09e44",
+        "service_id": null,
+        "name": "cedric",
+        "description": "test cedric",
+        "external_link": "external"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
