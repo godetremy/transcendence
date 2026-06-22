@@ -20,7 +20,3 @@ export const DateEventParamSchema = z.object({
 	from: z.coerce.date(),
 	to: z.coerce.date(),
 });
-
-export const IdEventParamSchema = z.object({
-	event_id: z.coerce.string(),
-});

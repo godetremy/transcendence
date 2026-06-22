@@ -10,7 +10,7 @@ model services {
 	edition					Int
 
 	description				String?
-	address					String?
+	location				String?
 
 	start_at				DateTime?
 	end_at					DateTime?
