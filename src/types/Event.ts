@@ -1,4 +1,5 @@
 import { PrivateOrganization } from './Organization';
+import { RegisteredEventPrivate } from './RegisteredEvent';
 
 export interface PrivateEvent {
 	id: string;
@@ -12,7 +13,22 @@ export interface PrivateEvent {
 	end_at: Date;
 	create_at: Date;
 	update_at: Date;
-	event_registration: string;
+	organization: PrivateOrganization;
+}
+
+export interface PrivateEventWithRegistration {
+	id: string;
+	title: string;
+	subtitle: string | null;
+	description: string | null;
+	max_registration: number | null;
+	localtion: string | null;
+	image: string;
+	start_at: Date;
+	end_at: Date;
+	create_at: Date;
+	update_at: Date;
+	event_registration: RegisteredEventPrivate[];
 	organization: PrivateOrganization;
 }
 

@@ -8,4 +8,6 @@ model event_registrations {
 
 	user					users					@relation(fields: [user_id], references: [id])
 	event					events					@relation(fields: [event_id], references: [id])
+
+	@@unique([user_id, event_id])
 }

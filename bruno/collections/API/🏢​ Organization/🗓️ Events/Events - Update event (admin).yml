@@ -1,7 +1,7 @@
 info:
-  name: Events - Update event to organization
+  name: Events - Update event (admin)
   type: http
-  seq: 4
+  seq: 5
 
 http:
   method: PATCH
