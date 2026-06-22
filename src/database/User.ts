@@ -108,6 +108,16 @@ const updateUserPassword = async (
 	});
 };
 
+const updateUserAdminStatus = async (
+	id: string,
+	admin: boolean
+): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
+	return prisma.users.update({
+		where: { id },
+		data: { admin },
+	});
+};
+
 const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.delete({
 		where: { id: id },
@@ -177,6 +187,7 @@ export {
 	createOrUpdateStudentUser,
 	updateUserApproval,
 	updateUserPassword,
+	updateUserAdminStatus,
 	deleteUser,
 	getUserById,
 	getUserFromSession,

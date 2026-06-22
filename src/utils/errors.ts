@@ -41,6 +41,8 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	too_many_upload: () => new ApiError(429, 'You requested too many upload. Please wait some hour and try again.'),
 	refused_delete_member: () => new ApiError(403, "You can't delete this member."),
 	refused_define_permissions: () => new ApiError(403, "You can't define permissions."),
+	cant_remove_last_admin: () => new ApiError(401, "You cant leave your admin role because you're the last admin."),
+	already_admin: () => new ApiError(401, 'This user is already admin.'),
 };
 
 const formatError = (error: ApiError) => {

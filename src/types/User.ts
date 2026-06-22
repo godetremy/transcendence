@@ -20,7 +20,11 @@ export interface PublicUser {
 	full_name: string | null;
 	profile_picture: string | null;
 	agent: boolean;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 	is_member: boolean;
+}
+
+export interface AgentRequest extends PublicUser {
+	reason: string | null;
 }

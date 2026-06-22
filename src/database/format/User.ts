@@ -1,5 +1,5 @@
 import { Prisma } from '../prisma/generated/client';
-import { User, PublicUser } from '@/types/User';
+import { User, PublicUser, AgentRequest } from '@/types/User';
 import formatMembership from '@/database/format/Membership';
 import { createHash } from 'node:crypto';
 
@@ -29,10 +29,17 @@ const formatPublicUser = (row: Prisma.usersGetPayload<object>): PublicUser => {
 		full_name: row.full_name,
 		profile_picture: row.full_name,
 		agent: row.agent,
-		created_at: row.created_at,
-		updated_at: row.updated_at,
+		created_at: row.created_at.toISOString(),
+		updated_at: row.updated_at.toISOString(),
 		is_member: row.memberships_id !== null,
 	};
 };
 
-export { formatPrivateUser, formatPublicUser };
+const formatAgentRequest = (row: Prisma.usersGetPayload<object>): AgentRequest => {
+	return {
+		...formatPublicUser(row),
+		reason: row.agent_reason,
+	};
+};
+
+export { formatPrivateUser, formatPublicUser, formatAgentRequest };
