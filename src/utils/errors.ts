@@ -35,6 +35,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	member_already_accepted: () => new ApiError(403, 'This member has already been accepted.'),
 	permission_does_not_exists: () => new ApiError(403, "This permission doesn't exists."),
 	category_does_not_exists: () => new ApiError(403, "This category doesn't exists."),
+	too_many_upload: () => new ApiError(429, 'You requested too many upload. Please wait some hour and try again.'),
 };
 
 const formatError = (error: ApiError) => {

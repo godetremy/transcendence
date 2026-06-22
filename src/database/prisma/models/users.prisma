@@ -33,4 +33,5 @@ model users {
 	event_registrations			event_registrations[]
 	photos						photos[]
 	photos_album_reports		photos_album_reports[]
+	upload_requests				upload_request[]
 }

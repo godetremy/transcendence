@@ -1,0 +1,12 @@
+model upload_request {
+    id              	String   			@id @default(uuid())
+
+    uploaded_by_id  	String
+    file_id         	String?  			@unique
+
+    uploaded_by     	users    			@relation(fields: [uploaded_by_id], references: [id])
+    file            	files?   			@relation(fields: [file_id], references: [id])
+
+    created_at      	DateTime 			@default(now())
+    updated_at      	DateTime 			@updatedAt
+}
