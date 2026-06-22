@@ -92,6 +92,29 @@ const declineInvitationToOrganization = async (
 	});
 };
 
+const deleteMember = async (user_id: string): Promise<void> => {
+	prisma.organization_members.delete({
+		where: { id: user_id },
+	});
+};
+
+const definePermissionsMember = async (user_id: string, permission_id: string): Promise<void> => {
+	prisma.organization_members.update({
+		where: { user_id: user_id },
+		data: { permission_id: permission_id },
+	});
+};
+
+const getMemberById = async <T extends Prisma.membersInclude>(
+	id: string,
+	include: T
+): Promise<Prisma.membersGetPayload<{ include: T }> | null> => {
+	return prisma.organization_members.findUnique({
+		where: { id },
+		include: include,
+	});
+};
+
 export {
 	getOrganizationMemberByFilter,
 	countOrganizationMembersByFilter,
@@ -102,4 +125,7 @@ export {
 	isUserInvitedInOrganization,
 	acceptInvitationToOrganization,
 	declineInvitationToOrganization,
+	deleteMember,
+	definePermissionsMember,
+	getMemberById,
 };

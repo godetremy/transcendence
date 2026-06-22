@@ -37,6 +37,8 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	permission_does_not_exists: () => new ApiError(403, "This permission doesn't exists."),
 	category_does_not_exists: () => new ApiError(403, "This category doesn't exists."),
 	too_many_upload: () => new ApiError(429, 'You requested too many upload. Please wait some hour and try again.'),
+	refused_delete_member: () => new ApiError(403, "You can't delete this member."),
+	refused_define_permissions: () => new ApiError(403, "You can't define permissions."),
 };
 
 const formatError = (error: ApiError) => {
