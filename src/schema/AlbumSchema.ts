@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import { z } from 'zod';
 
 export const CreateAlbumSchema = z.object({
 	event_id: z.string().min(0).max(40).trim().nullable(),

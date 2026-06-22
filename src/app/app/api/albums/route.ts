@@ -1,4 +1,4 @@
-import { countAlbumByFilter, createAlbum, getAlbumsByFilter, UpdateAlbum } from '@/database/Album';
+import { countAlbumByFilter, createAlbum, getAlbumsByFilter } from '@/database/Album';
 import { getEventById } from '@/database/Event';
 import { formatPrivateAlbum } from '@/database/format/Album';
 import { getOrganizationById } from '@/database/Organization';
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const user = await getUserById(session.user_id, {});
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (user.admin == false) throw ERRORS_DETAILS.permission_denied();
-		
+
 		const count = await countAlbumByFilter({});
 		const value = await getAlbumsByFilter({}, {}, pagination);
 
@@ -51,18 +51,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			organization = await getOrganizationById(service.organization_id, {});
 		}
 		if (body.event_id == null && body.service_id == null) throw ERRORS_DETAILS.missing_parameter();
-		
+
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		const member = await getOrganizationMemberByFilter({organization_id: organization.id, user_id: user.id}, {});
-		if (member == null || member.approved == false || member.permission_id == null) throw ERRORS_DETAILS.member_not_in_organization();
+		const member = await getOrganizationMemberByFilter({ organization_id: organization.id, user_id: user.id }, {});
+		if (member == null || member.approved == false || member.permission_id == null)
+			throw ERRORS_DETAILS.member_not_in_organization();
 		const permission = await getOrganizationPermissionById(member.permission_id, organization.id, {});
 		if (permission == null) throw ERRORS_DETAILS.permission_does_not_exists();
 
-		if (permission.Album_create == false) throw ERRORS_DETAILS.permission_denied();
-		const album = await createAlbum(body, { events: true, services: true});
+		if (permission.album_create == false) throw ERRORS_DETAILS.permission_denied();
+		const album = await createAlbum(body, { events: true, services: true });
 		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
 
 		return NextResponse.json(formatPrivateAlbum(album));
 	});
 }
-

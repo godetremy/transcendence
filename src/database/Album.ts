@@ -26,11 +26,11 @@ const createAlbum = async <T extends Prisma.photos_albumInclude>(
 			description: data.description,
 			external_link: data.external_link,
 			services: {
-				...( data.service_id ? {connect: { id: data.service_id, }}: {})
+				...(data.service_id ? { connect: { id: data.service_id } } : {}),
 			},
 			events: {
-				...( data.event_id ? {connect: { id: data.event_id, }}: {})
-			}
+				...(data.event_id ? { connect: { id: data.event_id } } : {}),
+			},
 		},
 		include: include,
 	});
@@ -82,11 +82,4 @@ const countAlbumByFilter = async (filter: Prisma.photos_albumWhereInput): Promis
 	});
 };
 
-export {
-	getAlbumsByFilter,
-	createAlbum,
-	countAlbumByFilter,
-	getAlbumById,
-	deleteAlbumById,
-	UpdateAlbum,
-};
+export { getAlbumsByFilter, createAlbum, countAlbumByFilter, getAlbumById, deleteAlbumById, UpdateAlbum };
