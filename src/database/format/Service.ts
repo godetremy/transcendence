@@ -1,12 +1,12 @@
 import { PrivateService, PublicService } from "@/types/Service";
 import { Prisma } from "../prisma/generated/client";
-import { formatPrivateOrganization } from "./Organization";
+import { formatPrivateOrganization, formatPublicOrganization } from "./Organization";
 import { formatServiceCategory } from "./ServiceCategories";
 
 export function formatPublicService(row: Prisma.servicesGetPayload<{ include: { organization: true, category: true } }>): PublicService {
 	return {
 		...row,
-		organization_name: row.organization.name,
+		organization: formatPublicOrganization(row.organization),
 		category: formatServiceCategory(row.category),
 	};
 }

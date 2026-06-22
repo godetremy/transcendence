@@ -1,4 +1,4 @@
-import { PrivateOrganization } from './Organization';
+import { PrivateOrganization, PublicOrganization } from './Organization';
 import { ServiceCategory } from './ServiceCategory';
 
 export interface PrivateService {
@@ -41,7 +41,7 @@ export interface PublicService {
 	source_link: string | null;
 	created_at: Date;
 	updated_at: Date;
-	organization_name: string;
+	organization: PublicOrganization;
 	category: ServiceCategory;
 }
 
