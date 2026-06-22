@@ -1,0 +1,31 @@
+info:
+  name: Services - Lists services
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: "{{BaseURL}}/services?from=2000-10-01&to=2100-10-01&sort=title asc&limit=20&page=1"
+  params:
+    - name: from
+      value: 2000-10-01
+      type: query
+    - name: to
+      value: 2100-10-01
+      type: query
+    - name: sort
+      value: title asc
+      type: query
+    - name: limit
+      value: "20"
+      type: query
+    - name: page
+      value: "1"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

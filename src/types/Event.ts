@@ -7,7 +7,7 @@ export interface PrivateEvent {
 	subtitle: string | null;
 	description: string | null;
 	max_registration: number | null;
-	localtion: string | null;
+	location: string | null;
 	image: string;
 	start_at: Date;
 	end_at: Date;
@@ -22,7 +22,7 @@ export interface PrivateEventWithRegistration {
 	subtitle: string | null;
 	description: string | null;
 	max_registration: number | null;
-	localtion: string | null;
+	location: string | null;
 	image: string;
 	start_at: Date;
 	end_at: Date;
@@ -38,7 +38,7 @@ export interface PublicEvent {
 	subtitle: string | null;
 	description: string | null;
 	max_registration: number | null;
-	localtion: string | null;
+	location: string | null;
 	image: string;
 	start_at: Date;
 	end_at: Date;
@@ -52,12 +52,9 @@ export interface CreateOrUpdateEventType {
 	subtitle: string | null;
 	description: string | null;
 	max_registration: number | null;
-	localtion: string | null;
+	location: string | null;
 	image: string;
 	start_at: Date;
 	end_at: Date;
 }
 
-export interface IdEvent {
-	event_id: string;
-}
