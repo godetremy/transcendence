@@ -1,6 +1,7 @@
 import { Prisma } from '../prisma/generated/client';
 import { User, PublicUser } from '@/types/User';
 import formatMembership from '@/database/format/Membership';
+import { createHash } from 'node:crypto';
 
 const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPayload<{ include: T }>): User => {
 	// This filter private database data.
@@ -10,6 +11,7 @@ const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPa
 	return {
 		...user,
 		admin: admin ? true : undefined,
+		profile_picture: user.profile_picture ?? `/images/avatar/${createHash('sha256').update(user.id).digest('hex')}`,
 		membership:
 			'membership' in row
 				? row.membership

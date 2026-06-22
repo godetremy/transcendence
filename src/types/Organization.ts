@@ -3,7 +3,7 @@ export interface PrivateOrganization {
 	owner: string;
 	name: string;
 	description: string | null;
-	logo: string | null;
+	logo: string;
 	club: boolean;
 	created_at: Date;
 	updated_at: Date;

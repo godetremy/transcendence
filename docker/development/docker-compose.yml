@@ -25,6 +25,16 @@ services:
             - '8888:8888'
         networks:
             - app
+    dicebear:
+        image: dicebear/api:4
+        restart: always
+        networks:
+            - app
+        tmpfs:
+            - '/run'
+            - '/tmp'
+        environment:
+            WEBP_SIZE_MAX: 512
     nginx:
         build: ./services/nginx
         ports:
