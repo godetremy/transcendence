@@ -1,8 +1,10 @@
-import { deleteEventById, getEventById, getEventByIdToOrganization, UpdateEvent } from '@/database/Event';
-import { formatPrivateEvent } from '@/database/format/Event';
+import { deleteEventById, getEventByIdToOrganization, UpdateEvent } from '@/database/Event';
+import { formatPrivateEvent, formatPrivateEventWithRegistrations } from '@/database/format/Event';
+import { formatPrivateRegisteredEvent } from '@/database/format/EventRegistrations';
 import { getOrganizationById } from '@/database/Organization';
 import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
 import { getOrganizationPermissionById } from '@/database/OrganizationPermission';
+import { getRegistrationsToEventById } from '@/database/RegisteredEvent';
 import { getUserById } from '@/database/User';
 import { decrypt } from '@/lib/session';
 import { CreateEventSchema } from '@/schema/EventSchema';
@@ -38,7 +40,9 @@ export async function GET(
 		const event_value = await getEventByIdToOrganization(event_id, org_id, { organization: true });
 		if (event_value === null) throw ERRORS_DETAILS.event_does_not_exists();
 
-		return NextResponse.json(formatPrivateEvent(event_value));
+		const subscribe_list = await getRegistrationsToEventById({}, event_id);
+
+		return NextResponse.json(formatPrivateEventWithRegistrations(event_value, subscribe_list.map(formatPrivateRegisteredEvent)));
 	});
 }
 
@@ -53,6 +57,7 @@ export async function PATCH(
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});
 		const organization = await getOrganizationById(org_id, {});
+		const event = await getEventByIdToOrganization(event_id, org_id, {});
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();

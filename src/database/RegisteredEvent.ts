@@ -3,68 +3,72 @@ import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
 import { PaginationParameters } from '@/types/PaginationParameters';
 
-const countRegisteredEventsByFilter = async (filter?: Prisma.registered_eventWhereInput): Promise<number> => {
-	return prisma.registered_event.count({
+const countEventRegistrationsByFilter = async (filter?: Prisma.event_registrationsWhereInput): Promise<number> => {
+	return prisma.event_registrations.count({
 		where: filter,
 	});
 };
 
-const getRegisteredEventById = async <T extends Prisma.registered_eventInclude>(
+const getEventRegistrationsById = async <T extends Prisma.event_registrationsInclude>(
 	event_id: string,
 	user_id: string,
 	include: T
-): Promise<Prisma.registered_eventGetPayload<{ include: T }> | null> => {
-	return prisma.registered_event.findUnique({
+): Promise<Prisma.event_registrationsGetPayload<{ include: T }> | null> => {
+	return prisma.event_registrations.findFirst({
 		include: include,
 		where: {
-			registered_event_id: event_id,
+			event_id: event_id,
 			user_id: user_id,
 		},
 	});
 };
 
-const createRegisteredEventById = async <T extends Prisma.registered_eventInclude>(
+const createEventRegistrationsById = async <T extends Prisma.event_registrationsInclude>(
 	event_id: string,
 	user_id: string,
 	include: T
-): Promise<Prisma.registered_eventGetPayload<{ include: T }> | null> => {
-	return prisma.registered_event.create({
+): Promise<Prisma.event_registrationsGetPayload<{ include: T }> | null> => {
+	return prisma.event_registrations.create({
 		include: include,
 		data: {
-			registered_event_id: event_id,
+			event_id: event_id,
 			user_id: user_id,
 		},
 	});
 };
 
-const deleteRegisteredEventById = async <T extends Prisma.registered_eventInclude>(
-	filter: Prisma.registered_eventWhereUniqueInput,
+const deleteEventRegistrationsById = async <T extends Prisma.event_registrationsInclude>(
+	event_id: string,
+	user_id: string,
 	include: T
-): Promise<Prisma.registered_eventGetPayload<{ include: T }> | null> => {
-	return prisma.registered_event.delete({
+): Promise<Prisma.event_registrationsGetPayload<{ include: T }> | null> => {
+	return prisma.event_registrations.delete({
 		include: include,
-		where: filter,
+		where: {
+			user_id_event_id: {
+				event_id: event_id,
+				user_id: user_id,
+			}
+		}
 	});
 };
 
-const getRegistersToEventById = async <T extends Prisma.registered_eventInclude>(
+const getRegistrationsToEventById = async <T extends Prisma.event_registrationsInclude>(
 	include: T,
 	event_id: string,
-	pagination?: PaginationParameters
-): Promise<Prisma.registered_eventGetPayload<{ include: T }>[]> => {
-	return prisma.registered_event.findMany({
+): Promise<Prisma.event_registrationsGetPayload<{ include: T }>[]> => {
+	return prisma.event_registrations.findMany({
 		include: include,
 		where: {
-			registered_event_id: event_id,
+			event_id: event_id,
 		},
-		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 };
 
 export {
-	countRegisteredEventsByFilter,
-	getRegisteredEventById,
-	createRegisteredEventById,
-	deleteRegisteredEventById,
-	getRegistersToEventById,
+	countEventRegistrationsByFilter,
+	getEventRegistrationsById,
+	createEventRegistrationsById,
+	deleteEventRegistrationsById,
+	getRegistrationsToEventById,
 };

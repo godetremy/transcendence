@@ -1,18 +1,21 @@
 info:
-  name: Events - Detail event (admin)
+  name: Events - Subscribe to event
   type: http
-  seq: 3
+  seq: 8
 
 http:
-  method: GET
-  url: "{{BaseURL}}/organization/:org_id/events/:event_id"
+  method: PUT
+  url: "{{BaseURL}}/events/:event_id"
   params:
     - name: event_id
       value: 40f756b4-5d60-48f8-98e4-3726d93d311c
       type: path
-    - name: org_id
-      value: 41263fd5-f568-485d-8a03-3dfd0c65d461
-      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "register": true
+      }
   auth: inherit
 
 settings:
