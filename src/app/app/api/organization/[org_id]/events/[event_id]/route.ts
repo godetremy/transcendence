@@ -24,11 +24,9 @@ export async function GET(
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});
 		const organization = await getOrganizationById(org_id, {});
-		const event = await getEventByIdToOrganization(event_id, org_id, {});
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
 
 		if (user.admin == false && organization.owner_id != user_id) {
 			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
@@ -59,11 +57,9 @@ export async function PATCH(
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});
 		const organization = await getOrganizationById(org_id, {});
-		const event = await getEventByIdToOrganization(event_id, org_id, {});
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
 
 		if (user.admin == false && organization.owner_id != user_id) {
 			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
@@ -95,11 +91,9 @@ export async function DELETE(
 		const user_id = (await decrypt(cookie?.value)).user_id;
 		const user = await getUserById(user_id, {});
 		const organization = await getOrganizationById(org_id, {});
-		const event = await getEventByIdToOrganization(event_id, org_id, {});
 
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
 
 		if (user.admin == false && organization.owner_id != user_id) {
 			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
