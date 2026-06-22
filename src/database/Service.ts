@@ -58,7 +58,7 @@ const createServices = async <T extends Prisma.servicesInclude>(
 };
 
 const UpdateServices = async <T extends Prisma.servicesInclude>(
-	data: CreateOrUpdateEventType,
+	data: CreateOrUpdateServiceType,
 	event_id: string,
 	include: T
 ): Promise<Prisma.servicesGetPayload<{ include: T }> | null> => {
