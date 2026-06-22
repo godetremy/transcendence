@@ -27,6 +27,20 @@ const getServicesByFilterToOrganization = async <T extends Prisma.servicesInclud
 	});
 };
 
+const getServicesByCategory = async <T extends Prisma.servicesInclude>(
+	include: T,
+	category_id: string,
+	pagination?: PaginationParameters
+): Promise<Prisma.servicesGetPayload<{ include: T }>[]> => {
+	return await prisma.services.findMany({
+		include: include,
+		where: {
+			category_id: category_id,
+		},
+		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+	});
+};
+
 const getServicesByFilter = async <T extends Prisma.servicesInclude>(
 	include: T,
 	time?: DateOption,
@@ -128,4 +142,5 @@ export {
 	countServicesByFilter,
 	getServicesByFilterToOrganization,
 	getServicesByIdToOrganization,
+	getServicesByCategory,
 };

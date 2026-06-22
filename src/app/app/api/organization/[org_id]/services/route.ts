@@ -3,6 +3,7 @@ import { getOrganizationById } from '@/database/Organization';
 import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
 import { getOrganizationPermissionById } from '@/database/OrganizationPermission';
 import { countServicesByFilter, createServices, getServicesByFilterToOrganization } from '@/database/Service';
+import { getServiceCategoryById } from '@/database/ServiceCategories';
 import { getUserById } from '@/database/User';
 import { decrypt } from '@/lib/session';
 import { CreateServiceSchema } from '@/schema/ServiceShema';
@@ -72,6 +73,8 @@ export async function POST(
 		}
 
 		const data = await parseBody<CreateOrUpdateServiceType>(req, CreateServiceSchema);
+		const category = await getServiceCategoryById(data.category_id, {});
+		if (category == null) throw ERRORS_DETAILS.category_does_not_exists();
 		await createServices(data, org_id, {});
 
 		return NextResponse.json({ success: true });

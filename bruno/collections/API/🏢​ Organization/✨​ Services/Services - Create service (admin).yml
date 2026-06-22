@@ -8,13 +8,13 @@ http:
   url: "{{BaseURL}}/organization/:org_id/services"
   params:
     - name: org_id
-      value: ed3b7ec9-2aaa-4a4f-984d-3d0baf0bf7ee
+      value: 2d973706-a901-4909-a09e-368ef3145de8
       type: path
   body:
     type: json
     data: |-
       {
-        "category_id": "cadc57db-04e2-4a49-9e78-c8834d25e708",
+        "category_id": "7f341ca7-2031-4285-97c9-b9ae2248377d",
         "title": "soirée",
         "subtitle": "Cedric",
         "description": "Test cedric",

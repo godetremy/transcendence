@@ -20,10 +20,6 @@ export async function GET(
 	return errorHandler(async () => {
 		const { event_id } = await params;
 
-		const event = await getEventById(event_id, {});
-
-		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
-
 		const event_value = await getEventById(event_id, { organization: true });
 		if (event_value === null) throw ERRORS_DETAILS.event_does_not_exists();
 
