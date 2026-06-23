@@ -7,7 +7,6 @@ import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { parseParams } from '@/utils/parsing';
 import { getUserOrganizationPermission } from '@/utils/permission';
-import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(

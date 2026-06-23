@@ -1,11 +1,11 @@
 info:
-  name: Members - lists members organization
+  name: Users - Lists users
   type: http
   seq: 1
 
 http:
   method: GET
-  url: "{{BaseURL}}/organization/:org_id/members?page=1&limit=10"
+  url: "{{BaseURL}}/organization/:org_id/users?page=1&limit=10"
   params:
     - name: page
       value: "1"
@@ -14,7 +14,7 @@ http:
       value: "10"
       type: query
     - name: org_id
-      value: d3d3d8a6-3b13-47e4-b173-6a9b0ce9acfc
+      value: 0500218b-b1c6-460d-826d-22f09ad4aefd
       type: path
   auth: inherit
 
