@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { getThrowableSession } from '@/lib/session';
-import { getUserFromSession } from '@/database/User';
+import { getUserById, getUserFromSession } from '@/database/User';
 import { getUserOrganizationPermission } from '@/utils/permission';
 import {
 	acceptInvitationToOrganization,
@@ -27,6 +27,8 @@ export function POST(req: NextRequest, { params }: { params: Promise<{ org_id: s
 
 		const body = await parseBody<MemberInviteRequestBody>(req, MemberInviteRequestBodySchema);
 
+		const user_invited = await getUserById(body.user_id, {});
+		if (!user_invited) throw ERRORS_DETAILS.account_not_found();
 		const permission = await getUserOrganizationPermission(user, org_id);
 		if (!permission.members_manage) ERRORS_DETAILS.permission_denied();
 
