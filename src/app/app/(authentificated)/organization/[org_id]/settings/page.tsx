@@ -8,6 +8,7 @@ import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { deletef } from '@/lib/fetcher';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/contexts/UserContext';
+import ListContainer from '@/components/globals/ListContainer/ListContainer';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -52,7 +53,7 @@ export default function Page() {
 				description={organization.description ?? 'Aucune description'}
 			/>
 			<section className={styles.section}>
-				<div className={styles.list}>
+				<ListContainer>
 					<ListItem
 						icon={Paintbrush}
 						title={"A propos de l'organisation"}
@@ -72,8 +73,8 @@ export default function Page() {
 						onPress={() => router.push('settings/followers')}
 						last
 					/>
-				</div>
-				<div className={styles.list}>
+				</ListContainer>
+				<ListContainer>
 					{organization.owner === (user?.id ?? '') && (
 						<ListItem
 							icon={Handshake}
@@ -92,7 +93,7 @@ export default function Page() {
 						onPress={leaveOrganisation}
 						disabled={organization.owner === (user?.id ?? '')}
 					/>
-				</div>
+				</ListContainer>
 				{organization.owner === (user?.id ?? '') && (
 					<span className={styles.listSectionDetails}>
 						Tu ne peux pas quitter cette organisation car tu en es le propriétaire. Avant de quitter,

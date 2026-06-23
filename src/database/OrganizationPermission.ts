@@ -1,6 +1,6 @@
 import { Prisma } from '@/database/prisma/generated/client';
 import { prisma } from '@/database/prisma/prisma';
-import { CreateOrganizationPermissionType } from '@/types/OrganizationPermission';
+import { CreateOrganizationPermissionType } from '@/types/OrganizationPermissionDetails';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 

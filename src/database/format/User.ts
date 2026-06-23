@@ -27,7 +27,7 @@ const formatPublicUser = (row: Prisma.usersGetPayload<object>): PublicUser => {
 		first_name: row.first_name,
 		last_name: row.last_name,
 		full_name: row.full_name,
-		profile_picture: row.full_name,
+		profile_picture: row.profile_picture ?? `/images/avatar/${createHash('sha256').update(row.id).digest('hex')}`,
 		agent: row.agent,
 		created_at: row.created_at.toISOString(),
 		updated_at: row.updated_at.toISOString(),

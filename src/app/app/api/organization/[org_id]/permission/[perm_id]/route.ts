@@ -1,4 +1,4 @@
-import { formatOrganizationPermission } from '@/database/format/OrganizationPermission';
+import { formatOrganizationPermissionDetails } from '@/database/format/OrganizationPermission';
 import { getOrganizationById } from '@/database/Organization';
 import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
 import {
@@ -9,7 +9,7 @@ import {
 import { getUserById } from '@/database/User';
 import { decrypt } from '@/lib/session';
 import { OrganizationPermissionSchema } from '@/schema/OrganizationPermissionSchema';
-import { CreateOrganizationPermissionType } from '@/types/OrganizationPermission';
+import { CreateOrganizationPermissionType } from '@/types/OrganizationPermissionDetails';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
@@ -30,7 +30,7 @@ export async function DELETE(
 		const organization = await getOrganizationById(org_id, {});
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		if (user.admin == false && user_id != organization.owner_id) {
+		if (!user.admin && user_id != organization.owner_id) {
 			const member_user = await getOrganizationMemberByFilter(
 				{ user_id: user.id, organization_id: organization.id },
 				{}
@@ -43,13 +43,13 @@ export async function DELETE(
 				member_user.organization_id,
 				{}
 			);
-			if (permission == null || permission.organization_manage_permission == false)
+			if (permission == null || !permission.organization_manage_permission)
 				throw ERRORS_DETAILS.permission_denied();
 		}
 
 		const permission_result = await DeleteOrganizationPermission(perm_id, org_id);
 
-		return NextResponse.json(formatOrganizationPermission(permission_result));
+		return NextResponse.json(formatOrganizationPermissionDetails(permission_result));
 	});
 }
 
@@ -71,7 +71,7 @@ export async function PATCH(
 		const organization = await getOrganizationById(org_id, {});
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		if (user.admin == false && user_id != organization.owner_id) {
+		if (!user.admin && user_id != organization.owner_id) {
 			const member_user = await getOrganizationMemberByFilter(
 				{ user_id: user.id, organization_id: organization.id },
 				{}
@@ -84,12 +84,12 @@ export async function PATCH(
 				member_user.organization_id,
 				{}
 			);
-			if (permission == null || permission.organization_manage_permission == false)
+			if (permission == null || !permission.organization_manage_permission)
 				throw ERRORS_DETAILS.permission_denied();
 		}
 
 		const permission_result = await updateOrganizationPermission(body, perm_id, organization.id);
 
-		return NextResponse.json(formatOrganizationPermission(permission_result));
+		return NextResponse.json(formatOrganizationPermissionDetails(permission_result));
 	});
 }

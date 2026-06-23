@@ -2,6 +2,14 @@ export interface OrganizationPermission {
 	id: string;
 	name: string;
 	description: string | null;
+	created_at: Date;
+	updated_at: Date;
+}
+
+export interface OrganizationPermissionDetails {
+	id: string;
+	name: string;
+	description: string | null;
 	event_create: boolean;
 	event_update: boolean;
 	event_delete: boolean;

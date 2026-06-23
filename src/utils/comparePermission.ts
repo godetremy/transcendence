@@ -1,6 +1,6 @@
-import { OrganizationPermission } from '@/types/OrganizationPermission';
+import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 
-const PERMISSION_KEYS: (keyof OrganizationPermission)[] = [
+const PERMISSION_KEYS: (keyof OrganizationPermissionDetails)[] = [
 	'event_create',
 	'event_delete',
 	'event_update',
@@ -15,8 +15,8 @@ const PERMISSION_KEYS: (keyof OrganizationPermission)[] = [
 ];
 
 const comparePermissionLow = (
-	user_permission: OrganizationPermission,
-	req_permission: OrganizationPermission
+	user_permission: OrganizationPermissionDetails,
+	req_permission: OrganizationPermissionDetails
 ): boolean => {
 	return PERMISSION_KEYS.every((key) => user_permission[key] === true || req_permission[key] !== true);
 };

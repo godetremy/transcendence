@@ -1,9 +1,21 @@
-import { OrganizationPermission } from '@/types/OrganizationPermission';
+import { OrganizationPermission, OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 import { Prisma } from '../prisma/generated/client';
 
 const formatOrganizationPermission = (
 	row: Prisma.organization_permissionGetPayload<object>
 ): OrganizationPermission => {
+	return {
+		id: row.id,
+		name: row.name,
+		description: row.description,
+		created_at: row.created_at,
+		updated_at: row.update_at,
+	};
+};
+
+const formatOrganizationPermissionDetails = (
+	row: Prisma.organization_permissionGetPayload<object>
+): OrganizationPermissionDetails => {
 	return {
 		id: row.id,
 		name: row.name,
@@ -27,4 +39,4 @@ const formatOrganizationPermission = (
 	};
 };
 
-export { formatOrganizationPermission };
+export { formatOrganizationPermission, formatOrganizationPermissionDetails };

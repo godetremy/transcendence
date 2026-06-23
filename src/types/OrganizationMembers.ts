@@ -1,11 +1,12 @@
 import { PublicOrganization } from '@/types/Organization';
+import { PublicUser } from '@/types/User';
+import { OrganizationPermission } from '@/types/OrganizationPermissionDetails';
 
-export interface OrganizationMembers {
-	id: string;
+export interface OrganizationMembers extends PublicUser {
 	approved: boolean | null;
-	user_id: string;
 	invited_at: string;
 	registered_at: string;
+	permission: OrganizationPermission | null;
 }
 
 export interface OrganizationInvitation {

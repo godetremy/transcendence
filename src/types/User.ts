@@ -18,7 +18,7 @@ export interface PublicUser {
 	first_name: string | null;
 	last_name: string | null;
 	full_name: string | null;
-	profile_picture: string | null;
+	profile_picture: string;
 	agent: boolean;
 	created_at: string;
 	updated_at: string;
