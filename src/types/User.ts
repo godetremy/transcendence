@@ -25,6 +25,10 @@ export interface PublicUser {
 	is_member: boolean;
 }
 
+export interface FindUser {
+	q: string | null;
+}
+
 export interface AgentRequest extends PublicUser {
 	reason: string | null;
 }
