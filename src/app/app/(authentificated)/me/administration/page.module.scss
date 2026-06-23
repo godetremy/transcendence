@@ -14,7 +14,7 @@
 		display: flex;
 		gap: 3px;
 
-		& > input[type="email"] {
+		& > input[type='email'] {
 			appearance: none;
 			flex: 1;
 			background-color: rgba(var(--color-rgb-primary-white), 0.07);
@@ -26,7 +26,7 @@
 			font: 550 14px var(--font-paragraph);
 		}
 
-		& > input[type="submit"] {
+		& > input[type='submit'] {
 			appearance: none;
 			height: 42px;
 			padding: 0 20px;
@@ -35,7 +35,7 @@
 			color: var(--color-primary-white);
 			border-radius: 0 10px 10px 0;
 			font: 550 14px var(--font-paragraph);
-			transition: .2s;
+			transition: 0.2s;
 
 			&:disabled {
 				opacity: 0.6;
@@ -99,7 +99,7 @@
 	gap: 5px;
 	font: 550 13px var(--font-paragraph);
 	background-color: rgba(var(--color-rgb-primary-white), 0.1);
-	transition: .2s;
+	transition: 0.2s;
 
 	&:active {
 		scale: 0.95;
