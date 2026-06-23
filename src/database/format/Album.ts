@@ -7,7 +7,6 @@ export function formatPrivateAlbum(row: Prisma.photos_albumGetPayload<object>): 
 	};
 }
 
-
 export function formatPublicAlbum(row: Prisma.photos_albumGetPayload<object>): PublicAlbum {
 	return {
 		...row,

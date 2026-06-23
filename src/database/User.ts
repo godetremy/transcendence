@@ -6,6 +6,8 @@ import * as bcrypt from 'bcrypt';
 import { SessionPayload } from '@/types/session/SessionPayload';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
+import { DEFAULT_SORTINGOPTIONS, sortingToPrisma } from '@/utils/sorting';
+import { SortingOption } from '@/types/SortingParameters';
 
 const createStudentUser = async (
 	me: FortyTwoCursusUserDetails,
@@ -167,6 +169,18 @@ const getUsersByFilter = async <T extends Prisma.usersInclude>(
 	});
 };
 
+const getUsersByFilterAndSearch = async <T extends Prisma.usersInclude>(
+	filter: Prisma.usersWhereInput,
+	include: T,
+	pagination?: PaginationParameters
+): Promise<Prisma.usersGetPayload<{ include: T }>[]> => {
+	return prisma.users.findMany({
+		where: filter,
+		include: include,
+		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+	});
+};
+
 const countUsersByFilter = async (filter: Prisma.usersWhereInput): Promise<number> => {
 	return prisma.users.count({
 		where: filter,
@@ -196,4 +210,5 @@ export {
 	countUsersByFilter,
 	existUserById,
 	existUserByMail,
+	getUsersByFilterAndSearch,
 };
