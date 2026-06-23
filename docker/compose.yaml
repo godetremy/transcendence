@@ -1,0 +1,70 @@
+name: LGBTQIA+
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ${DB_NAME_POSTGRES}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRES}
+      POSTGRES_DB: ${DB_NAME_POSTGRES}
+    networks:
+      - main
+    restart: on-failure
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${USER_POSTGRES} -d $${DB_NAME_POSTGRES}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dicebear:
+    image: dicebear/api:4
+    environment:
+      WEBP_SIZE_MAX: 512
+    networks:
+      - app
+    restart: always
+    tmpfs:
+      - /run
+      - /tmp
+
+  nginx:
+    image: nginx:stable-alpine
+    depends_on:
+      - seaweed-filer
+    networks:
+      - app
+      - host-network
+
+  seaweed-master:
+    image: chrislusf/seaweedfs:3.96
+    networks:
+      - app
+    command: 'master -ip=seaweed-master -port=9333'
+
+  seaweed-filer:
+    image: chrislusf/seaweedfs:3.96
+    depends_on:
+      - seaweed-master
+    networks:
+      - app
+    command: 'filer -master=seaweed-master:9333'
+
+  seaweed-volume:
+    image: chrislusf/seaweedfs:3.96
+    depends_on:
+      - seaweed-master
+    networks:
+      - app
+    command: 'volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080'
+
+networks:
+  main:
+    driver: bridge
+  app:
+  host-network:
+
+volumes:
+  postgres_data:
