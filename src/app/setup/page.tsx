@@ -17,7 +17,7 @@ import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 export default function Setup() {
 	const { openModal, closeModal } = useModal();
 
-	const [page, setPage] = useState(5);
+	const [page, setPage] = useState(1);
 	const [acceptedCGU, setAcceptedCGU] = useState(false);
 
 	const [creatingAccount, setCreatingAccount] = useState(false);
