@@ -1,7 +1,7 @@
 info:
   name: Album - Create album (orga)
   type: http
-  seq: 2
+  seq: 3
 
 http:
   method: POST
@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "event_id": "fafd3e5f-e5c2-4ba4-b2ec-a64b35e09e44",
+        "event_id": "99c652f7-4b0a-4fc0-9434-bc7bbd6e3fd9",
         "service_id": null,
         "name": "cedric",
         "description": "test cedric",

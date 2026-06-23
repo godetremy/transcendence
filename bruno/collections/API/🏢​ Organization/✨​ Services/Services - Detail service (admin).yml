@@ -8,10 +8,10 @@ http:
   url: "{{BaseURL}}/organization/:org_id/services/:service_id"
   params:
     - name: service_id
-      value: 4f7b6bd5-f0e4-4a27-baa5-85ef7b7ea186
+      value: c3b8d177-505d-4d3c-8cf5-5ab05bf0172f
       type: path
     - name: org_id
-      value: ed3b7ec9-2aaa-4a4f-984d-3d0baf0bf7ee
+      value: cf8d7a3f-d0a2-457c-996b-f282d350d092
       type: path
   auth: inherit
 
