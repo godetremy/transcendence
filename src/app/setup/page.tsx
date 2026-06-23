@@ -17,7 +17,7 @@ import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 export default function Setup() {
 	const { openModal, closeModal } = useModal();
 
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState(4);
 	const [acceptedCGU, setAcceptedCGU] = useState(false);
 
 	const [creatingAccount, setCreatingAccount] = useState(false);
@@ -74,15 +74,12 @@ export default function Setup() {
 		}
 
 		setTimeout(() => {
-			post<{ success: boolean; message?: string }>('/organization', fields.data).then((res) => {
-				if (res.success) {
+			post<{ success: boolean; message?: string }>('/organization', fields.data)
+				.then(() => {
 					setPage(page + 1);
-					setCreatingOrganisation(false);
-					return;
-				}
-				setCreatingOrganisation(false);
-				setCreatingOrganisationError(res.message);
-			});
+				})
+				.catch((err) => setCreatingOrganisationError(err.message))
+				.finally(() => setCreatingOrganisation(false));
 		}, 1500);
 	};
 
