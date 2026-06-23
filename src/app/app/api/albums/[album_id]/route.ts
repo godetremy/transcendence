@@ -1,13 +1,12 @@
 import { getAlbumById, UpdateAlbum } from '@/database/Album';
 import { formatPublicAlbum } from '@/database/format/Album';
-import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
-import { getOrganizationPermissionById } from '@/database/OrganizationPermission';
 import { getUserById } from '@/database/User';
 import { getThrowableSession } from '@/lib/session';
 import { UpdateAlbumSchema } from '@/schema/AlbumSchema';
 import { UpdateAlbumType } from '@/types/album';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
+import { getUserOrganizationPermission } from '@/utils/permission';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -45,36 +44,18 @@ export async function PATCH(
 		});
 		if (checkAlbum == null) throw ERRORS_DETAILS.album_does_not_exists();
 
-		if (
-			user.admin == false &&
-			checkAlbum.events?.organization.owner_id != user.id &&
-			checkAlbum.services?.organization.owner_id != user.id
-		) {
+		if (user.admin == false) {
 			if (checkAlbum.events?.organization_id != null) {
-				const member = await getOrganizationMemberByFilter(
-					{ organization_id: checkAlbum.events?.organization_id, user_id: user.id },
-					{}
-				);
-				if (member == null || member.permission_id == null) throw ERRORS_DETAILS.member_not_in_organization();
-				const permissison = await getOrganizationPermissionById(
-					member.permission_id,
-					checkAlbum.events?.organization_id,
-					{}
-				);
-				if (permissison == null || permissison.album_update == false) throw ERRORS_DETAILS.permission_denied();
+				if (checkAlbum.events.organization.owner_id != user.id) {
+					const permissison = await getUserOrganizationPermission(user, checkAlbum.events.organization_id);
+					if (permissison == null || permissison.album_update == false) throw ERRORS_DETAILS.permission_denied();
+				}
 			} else if (checkAlbum.services?.organization_id != null) {
-				const member = await getOrganizationMemberByFilter(
-					{ organization_id: checkAlbum.services?.organization_id, user_id: user.id },
-					{}
-				);
-				if (member == null || member.permission_id == null) throw ERRORS_DETAILS.member_not_in_organization();
-				const permissison = await getOrganizationPermissionById(
-					member.permission_id,
-					checkAlbum.services?.organization_id,
-					{}
-				);
-				if (permissison == null || permissison.album_update == false) throw ERRORS_DETAILS.permission_denied();
-			} else throw ERRORS_DETAILS.organization_does_not_exist();
+				if (checkAlbum.services.organization.owner_id != user.id) {
+					const permissison = await getUserOrganizationPermission(user, checkAlbum.services.organization_id);
+					if (permissison == null || permissison.album_update == false) throw ERRORS_DETAILS.permission_denied();
+				}
+			}
 		}
 
 		const body = await parseBody<UpdateAlbumType>(req, UpdateAlbumSchema);
