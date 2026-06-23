@@ -92,26 +92,27 @@ const declineInvitationToOrganization = async (
 	});
 };
 
-const deleteMember = async (user_id: string): Promise<void> => {
-	prisma.organization_members.delete({
-		where: { id: user_id },
-	});
-};
-
 const definePermissionsMember = async (user_id: string, permission_id: string): Promise<void> => {
-	prisma.organization_members.update({
-		where: { user_id: user_id },
+	prisma.organization_members.updateMany({
+		where: { user_id },
 		data: { permission_id: permission_id },
 	});
 };
 
-const getMemberById = async <T extends Prisma.membersInclude>(
-	id: string,
+const getOrganizationMemberById = async <T extends Prisma.organization_membersInclude>(
+	user_id: string,
+	organization_id: string,
 	include: T
-): Promise<Prisma.membersGetPayload<{ include: T }> | null> => {
-	return prisma.organization_members.findUnique({
-		where: { id },
+): Promise<Prisma.organization_membersGetPayload<{ include: T }> | null> => {
+	return prisma.organization_members.findFirst({
+		where: { user_id, organization_id },
 		include: include,
+	});
+};
+
+const deleteMemberFromOrganization = async (user_id: string, organization_id: string): Promise<void> => {
+	prisma.organization_members.deleteMany({
+		where: { user_id, organization_id },
 	});
 };
 
@@ -125,7 +126,7 @@ export {
 	isUserInvitedInOrganization,
 	acceptInvitationToOrganization,
 	declineInvitationToOrganization,
-	deleteMember,
 	definePermissionsMember,
-	getMemberById,
+	getOrganizationMemberById,
+	deleteMemberFromOrganization,
 };

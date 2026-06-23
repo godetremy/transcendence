@@ -49,7 +49,7 @@ export function OrganizationSidebar(props: OrganizationSidebarProps) {
 					<Link
 						href={page.href}
 						key={i}
-						className={pathname === page.href ? styles.active : undefined}
+						className={pathname.startsWith(page.href) ? styles.active : undefined}
 						prefetch={true}
 						onNavigate={() => setVisibleSidebar(false)}
 					>
