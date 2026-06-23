@@ -49,6 +49,7 @@ const createAgentsUser = async (
 			memberships_id: null,
 			agent: true,
 			admin,
+			agent_verified: admin,
 		},
 	});
 };
