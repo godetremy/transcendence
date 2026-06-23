@@ -7,3 +7,9 @@ export const CreateAlbumSchema = z.object({
 	description: z.string().min(0).max(200).trim().nullable(),
 	external_link: z.string().min(0).max(20).trim().nullable(),
 });
+
+export const UpdateAlbumSchema = z.object({
+	name: z.string().min(0).max(20),
+	description: z.string().min(0).max(200).trim().nullable(),
+	external_link: z.string().min(0).max(20).trim().nullable(),
+});

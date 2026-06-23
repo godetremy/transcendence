@@ -2,7 +2,7 @@ import { PaginationParameters } from '@/types/PaginationParameters';
 import { prisma } from './prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { Prisma } from './prisma/generated/client';
-import { CreateAlbumType } from '@/types/album';
+import { CreateAlbumType, UpdateAlbumType } from '@/types/album';
 
 const getAlbumsByFilter = async <T extends Prisma.photos_albumInclude>(
 	filter: Prisma.photos_albumWhereInput,
@@ -37,7 +37,7 @@ const createAlbum = async <T extends Prisma.photos_albumInclude>(
 };
 
 const UpdateAlbum = async <T extends Prisma.photos_albumInclude>(
-	data: CreateAlbumType,
+	data: UpdateAlbumType,
 	album_id: string,
 	include: T
 ): Promise<Prisma.photos_albumGetPayload<{ include: T }> | null> => {

@@ -23,3 +23,9 @@ export interface CreateAlbumType {
 	description: string | null;
 	external_link: string | null;
 }
+
+export interface UpdateAlbumType {
+	name: string;
+	description: string | null;
+	external_link: string | null;
+}
