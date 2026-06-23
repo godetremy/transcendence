@@ -10,7 +10,7 @@ model organization_members {
 	invited_at							DateTime		@default(now())
 	registered_at						DateTime		@default(now())
 
-	organization						organizations					@relation(fields: [organization_id], references: [id])
+	organization						organizations					@relation(fields: [organization_id], references: [id], onDelete: Cascade)
 	user								users							@relation(fields: [user_id], references: [id])
 	organization_permission				organization_permission?		@relation(fields: [permission_id], references: [id])
 }

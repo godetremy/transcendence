@@ -19,7 +19,7 @@ model events {
 	created_at						DateTime					@default(now())
 	update_at						DateTime					@updatedAt
 
-	organization					organizations				@relation(fields: [organization_id], references: [id])
-	photos_album					photos_album?				@relation(fields: [photos_album_id], references: [id])
+	organization					organizations				@relation(fields: [organization_id], references: [id], onDelete: Cascade)
+	photos_album					photos_album?				@relation(fields: [photos_album_id], references: [id], onDelete: Cascade)
 	event_registration				event_registrations[]
 }

@@ -12,7 +12,7 @@ model photos_album_reports {
 	created_at				DateTime				@default(now())
 	updated_at				DateTime				@updatedAt
 
-	album					photos_album			@relation(fields: [album_id], references: [id])
+	album					photos_album			@relation(fields: [album_id], references: [id], onDelete: Cascade)
 	user					users					@relation(fields: [user_id], references: [id])
 	photo					photos?					@relation(fields: [photo_id], references: [id])
 }
