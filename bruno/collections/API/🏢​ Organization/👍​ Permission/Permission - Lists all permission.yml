@@ -1,7 +1,7 @@
 info:
   name: Permission - Lists all permission
   type: http
-  seq: 2
+  seq: 1
 
 http:
   method: GET

@@ -1,7 +1,7 @@
 info:
   name: Agent - Signup
   type: http
-  seq: 5
+  seq: 4
 
 http:
   method: POST
@@ -10,7 +10,7 @@ http:
     type: form-urlencoded
     data:
       - name: mail
-        value: test@free.fr
+        value: test@test.fr
       - name: password
         value: test.123
   auth: inherit
