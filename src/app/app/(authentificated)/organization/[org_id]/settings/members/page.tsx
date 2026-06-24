@@ -11,6 +11,7 @@ import OrganizationAddMemberDialog from '@/components/organization/OrganizationA
 import { OrganizationPermissionList } from '@/components/organization/OrganizationPermissionList/OrganizationPermissionList';
 import { OrganizationMembersList } from '@/components/organization/OrganizationMembersList/OrganizationMembersList';
 import { OrganizationMemberCard } from '@/components/organization/OrganizationMemberCard/OrganizationMemberCard';
+import { OrganizationPermissionCreateCard } from '@/components/organization/OrganizationPermissionCreateCard/OrganizationPermissionCreateCard';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -22,6 +23,8 @@ export default function Page() {
 	const [memberCardUser, setMemberCardUser] = useState<OrganizationMembers | undefined>(undefined);
 
 	const [showAddMemberCard, setShowAddMemberCard] = useState(false);
+
+	const [showCreatePermissionCard, setShowCreatePermissionCard] = useState(false);
 
 	const animation_picker_initial = (inverted: boolean): TargetAndTransition => ({
 		translateX: 20 * (inverted ? -1 : 1),
@@ -82,7 +85,14 @@ export default function Page() {
 				<OrganizationAddMemberDialog close={() => setShowAddMemberCard(false)} />
 			</Card>
 
-			<button className={styles.fab} onClick={() => (selectedTab === 0 ? setShowAddMemberCard(true) : undefined)}>
+			<Card visible={showCreatePermissionCard} requestClose={() => setShowCreatePermissionCard(false)}>
+				<OrganizationPermissionCreateCard close={() => setShowCreatePermissionCard(false)} />
+			</Card>
+
+			<button
+				className={styles.fab}
+				onClick={() => (selectedTab === 0 ? setShowAddMemberCard(true) : setShowCreatePermissionCard(true))}
+			>
 				<AnimatePresence mode={'wait'}>
 					{selectedTab === 0 ? (
 						<motion.div

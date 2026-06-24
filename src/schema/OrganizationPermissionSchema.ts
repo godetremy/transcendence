@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 export const OrganizationPermissionSchema = z.object({
-	name: z.string().trim(),
+	name: z.string().trim().min(3),
 	description: z.string().trim().nullable(),
 	event_create: z.boolean(),
 	event_update: z.boolean(),

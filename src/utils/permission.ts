@@ -2,52 +2,7 @@ import { Prisma } from '@/database/prisma/generated/client';
 import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
 import { ERRORS_DETAILS } from '@/utils/errors';
 import { getOrganizationById } from '@/database/Organization';
-
-const NULL_PERMISSIONS = (org_id: string): Prisma.organization_permissionGetPayload<object> => ({
-	id: 'null',
-	name: 'NOT SET',
-	organization_id: org_id,
-	description: null,
-	event_create: false,
-	event_update: false,
-	event_delete: false,
-	service_create: false,
-	service_update: false,
-	service_delete: false,
-	album_create: false,
-	album_update: false,
-	album_delete: false,
-	members_invite: false,
-	members_manage: false,
-	organization_update_info: false,
-	organization_manage: false,
-	organization_manage_permission: false,
-	created_at: new Date(),
-	update_at: new Date(),
-});
-
-const FULL_PERMISSIONS = (org_id: string): Prisma.organization_permissionGetPayload<object> => ({
-	id: 'owner',
-	name: 'Owner',
-	organization_id: org_id,
-	description: 'Full access to all organization details.',
-	event_create: true,
-	event_update: true,
-	event_delete: true,
-	service_create: true,
-	service_update: true,
-	service_delete: true,
-	album_create: true,
-	album_update: true,
-	album_delete: true,
-	members_invite: true,
-	members_manage: true,
-	organization_update_info: true,
-	organization_manage: true,
-	organization_manage_permission: true,
-	created_at: new Date(),
-	update_at: new Date(),
-});
+import { FULL_PERMISSIONS, NULL_PERMISSIONS } from '@/const/permission';
 
 const getUserOrganizationPermission = async (
 	user: Prisma.usersGetPayload<Prisma.usersDefaultArgs>,
