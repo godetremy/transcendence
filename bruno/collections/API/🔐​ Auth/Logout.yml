@@ -6,8 +6,6 @@ info:
 http:
   method: GET
   url: "{{BaseURL}}/auth/logout"
-  body:
-    type: form-urlencoded
   auth: inherit
 
 settings:

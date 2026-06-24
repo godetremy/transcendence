@@ -10,6 +10,14 @@ http:
     - name: album_id
       value: e7750f55-706c-4ba6-a4c9-cb5deccc574b
       type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "nouveau cedric",
+        "description": "ahahahha",
+        "external_link": "non"
+      }
   auth: inherit
 
 settings:

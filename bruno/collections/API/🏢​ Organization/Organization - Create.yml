@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "name": "bde",
+        "name": "bde2",
         "description": "bureau des eleves",
         "logo": "",
         "club": true
