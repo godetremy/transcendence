@@ -198,7 +198,6 @@ export function Carousel(props: CarouselProps) {
 		const translateX = parseTranslateX(container);
 
 		const targetSlide = Math.round(-(translateX / slideWidth)) % container.children.length;
-		console.log({ targetSlide });
 		goToSlide(targetSlide);
 	}
 
@@ -257,7 +256,7 @@ export function Carousel(props: CarouselProps) {
 		}, 100);
 		createEventHandler();
 		return removeEventHandler;
-	});
+	}, []);
 
 	return (
 		<div role={'group'} aria-roledescription={'carousel'} className={styles.carousel} ref={carouselRef}>
