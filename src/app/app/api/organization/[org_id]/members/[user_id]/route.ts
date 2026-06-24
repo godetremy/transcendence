@@ -15,6 +15,22 @@ import { DefineMemberPermissions } from '@/types/OrganizationMembers';
 import { getUserOrganizationPermission } from '@/utils/permission';
 import { comparePermissionLow } from '@/utils/comparePermission';
 import { formatOrganizationPermissionDetails } from '@/database/format/OrganizationPermission';
+import { formatOrganizationMembers } from '@/database/format/OrganizationMembers';
+
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: Promise<{ org_id: string; user_id: string }> }
+): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { org_id, user_id } = await params;
+
+		const member = await getOrganizationMemberById(user_id, org_id, { user: true, organization_permission: true });
+		if (member == null) throw ERRORS_DETAILS.member_not_in_organization();
+
+		return NextResponse.json(formatOrganizationMembers<{ user: true; organization_permission: true }>(member));
+	});
+}
+
 
 export async function POST(
 	req: NextRequest,
