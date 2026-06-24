@@ -6,10 +6,11 @@ import { OrganizationPermissionSelector } from '@/components/organization/Organi
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import ListItem from '@/components/globals/ListItem/ListItem';
-import { useQuery } from '@tanstack/react-query';
-import { getOrganizationMemberById } from '@/lib/fetcher/organization';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { deleteOrganizationMember, getOrganizationMemberById } from '@/lib/fetcher/organization';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 
 export function OrganizationMemberCard({
 	member,
@@ -21,7 +22,9 @@ export function OrganizationMemberCard({
 	const organizationCtx = useOrganizations();
 	const organization = organizationCtx.getCurrentOrganization()!;
 
+	const { openModal, closeModal } = useModal();
 	const { data, isLoading, isError, error } = useQuery(getOrganizationMemberById(organization.id, member.user.id));
+	const leave = useMutation(deleteOrganizationMember(organization.id, member.user!.id));
 
 	const formatJoinSubtitle = (member: OrganizationMembers) => {
 		const invited_at = new Date(member.invited_at);
@@ -57,7 +60,20 @@ export function OrganizationMemberCard({
 							userId={member.user!.id}
 						/>
 						<ListContainer>
-							<ListItem title={"Retirer de l'organisation"} negative last />
+							<ListItem title={"Retirer de l'organisation"} negative last onPress={() => {
+								openModal({
+									title: 'Tu veux vraiment le retirer ?',
+									message: 'Cette personne pourra toujours être réinvité',
+									buttons: [
+										{ text: 'Non', onClick: closeModal },
+										{ text: 'Supprimer', negative: true, onClick: () => {
+											leave.mutate({ user_id: data.user.id});
+											closeModal();
+											close();
+										}}
+									]
+								})
+							}} />
 						</ListContainer>
 					</>
 				)}

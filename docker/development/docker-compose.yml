@@ -47,6 +47,8 @@ services:
             - ./certificates:/etc/nginx/certificates
         depends_on:
             - seaweed-filer
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
 
 networks:
     app:
