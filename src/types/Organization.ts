@@ -11,8 +11,8 @@ export interface PrivateOrganization {
 	description: string | null;
 	logo: string;
 	club: boolean;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 	organization_members?: OrganizationMembers[];
 	organization_followers?: PublicOrganizationFollowers[];
 	events?: PrivateEvent[];
@@ -26,8 +26,8 @@ export interface PublicOrganization {
 	description: string | null;
 	logo: string | null;
 	club: boolean;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface CreateOrganizationType {

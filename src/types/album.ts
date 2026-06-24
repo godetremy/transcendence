@@ -3,8 +3,8 @@ export interface PrivateAlbum {
 	name: string;
 	description: string | null;
 	external_link: string | null;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface PublicAlbum {
@@ -12,8 +12,8 @@ export interface PublicAlbum {
 	name: string;
 	description: string | null;
 	external_link: string | null;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface CreateAlbumType {

@@ -9,16 +9,16 @@ export interface PrivateService {
 	description: string | null;
 	location: string | null;
 	image: string;
-	start_at: Date | null;
-	end_at: Date | null;
+	start_at: string | null;
+	end_at: string | null;
 	registration_required: boolean;
 	registration_details: string;
 	registration_link: string;
 	registration_full: boolean;
 	photo_album_id: string | null;
 	source_link: string | null;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 	organization?: PrivateOrganization;
 	category?: ServiceCategory;
 }
@@ -31,16 +31,16 @@ export interface PublicService {
 	description: string | null;
 	location: string | null;
 	image: string;
-	start_at: Date | null;
-	end_at: Date | null;
+	start_at: string | null;
+	end_at: string | null;
 	registration_required: boolean;
 	registration_details: string;
 	registration_link: string;
 	registration_full: boolean;
 	photo_album_id: string | null;
 	source_link: string | null;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 	organization?: PublicOrganization;
 	category?: ServiceCategory;
 }

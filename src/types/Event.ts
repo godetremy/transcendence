@@ -10,10 +10,10 @@ export interface PrivateEvent {
 	max_registration: number | null;
 	location: string | null;
 	image: string;
-	start_at: Date;
-	end_at: Date;
-	created_at: Date;
-	update_at: Date;
+	start_at: string;
+	end_at: string;
+	created_at: string;
+	update_at: string;
 	organization?: PrivateOrganization;
 	photos_album?: PublicAlbum;
 	event_registration?: RegisteredEventPrivate[];
@@ -27,10 +27,10 @@ export interface PublicEvent {
 	max_registration: number | null;
 	location: string | null;
 	image: string;
-	start_at: Date;
-	end_at: Date;
-	created_at: Date;
-	update_at: Date;
+	start_at: string;
+	end_at: string;
+	created_at: string;
+	update_at: string;
 	organization?: PublicOrganization;
 }
 

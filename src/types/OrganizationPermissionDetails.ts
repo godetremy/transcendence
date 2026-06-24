@@ -2,8 +2,8 @@ export interface OrganizationPermission {
 	id: string;
 	name: string;
 	description: string | null;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface OrganizationPermissionDetails {
@@ -24,8 +24,8 @@ export interface OrganizationPermissionDetails {
 	organization_update_info: boolean;
 	organization_manage: boolean;
 	organization_manage_permission: boolean;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface CreateOrganizationPermissionType {

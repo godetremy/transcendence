@@ -8,6 +8,6 @@ export function formatPrivateRegisteredEvent(
 		id: row.id,
 		user_id: row.user_id,
 		event_id: row.event_id,
-		registered_at: row.registered_at,
+		registered_at: row.registered_at.toISOString(),
 	};
 }
