@@ -1,5 +1,4 @@
 import styles from './components.module.scss';
-import { Check, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { get } from '@/lib/fetcher';
 import { Loader } from '@/components/globals/Loader/Loader';
@@ -10,6 +9,7 @@ import ListItem from '@/components/globals/ListItem/ListItem';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import Image from 'next/image';
+import { CardHeader } from '@/components/globals/CardHeader/CardHeader';
 
 function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 	const organizationCtx = useOrganizations();
@@ -65,15 +65,7 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 
 	return (
 		<section className={styles.container}>
-			<header>
-				<button onClick={close} disabled={addingMembers}>
-					<X />
-				</button>
-				<h1>Ajouter des membres</h1>
-				<button className={styles.primary} onClick={addMembers} disabled={addingMembers}>
-					{addingMembers ? <Loader size={24} /> : <Check />}
-				</button>
-			</header>
+			<CardHeader title={'Ajouter des membres'} onClose={close} loading={addingMembers} onAccept={addMembers} />
 			<section className={styles.searchbar}>
 				<input
 					type={'text'}
