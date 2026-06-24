@@ -36,6 +36,7 @@ export async function DELETE(
 		if (!deleter.approved) throw ERRORS_DETAILS.permission_denied();
 
 		const permissions = await getOrganizationPermissionById(deleter.permission_id, org_id, {});
+		if (!permissions) throw ERRORS_DETAILS.permission_does_not_exists();
 		if (!user.admin && org.owner_id !== user.id && !permissions.members_manage)
 			throw ERRORS_DETAILS.permission_denied();
 
@@ -67,6 +68,7 @@ export async function POST(
 		if (!definer.approved) throw ERRORS_DETAILS.permission_denied();
 
 		const permissions = await getOrganizationPermissionById(definer.permission, org_id, {});
+		if (!permissions) throw ERRORS_DETAILS.permission_does_not_exists();
 		if (!user.admin && org.owner_id !== session.user_id && permissions.members_manage)
 			throw ERRORS_DETAILS.permission_denied();
 

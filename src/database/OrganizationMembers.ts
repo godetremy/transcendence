@@ -3,6 +3,7 @@ import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { ERRORS_DETAILS } from '@/utils/errors';
+import { BatchPayload } from '@/database/prisma/generated/internal/prismaNamespace';
 
 const getOrganizationMemberByFilter = async <T extends Prisma.organization_membersInclude>(
 	filter: Prisma.organization_membersWhereInput,
@@ -73,6 +74,25 @@ const inviteMemberToOrganization = async (
 	throw ERRORS_DETAILS.organization_member_already_invited();
 };
 
+const inviteMembersToOrganization = async (
+	organization_id: string,
+	users_id: string[],
+	permission_id: string,
+	force_approve?: boolean
+): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>[]> => {
+	for (const id of users_id)
+		if (await isUserInOrganization(organization_id, id)) throw ERRORS_DETAILS.organization_member_already_invited();
+	return prisma.organization_members.createManyAndReturn({
+		data: users_id.map((user_id) => ({
+			organization_id: organization_id,
+			user_id: user_id,
+			permission_id: permission_id,
+			approved: force_approve ?? false,
+			registered_at: new Date(),
+		})),
+	});
+};
+
 const acceptInvitationToOrganization = async (
 	organization_id: string,
 	user_id: string
@@ -122,6 +142,7 @@ export {
 	getOrganizationWhereMemberBelongs,
 	isUserInOrganization,
 	inviteMemberToOrganization,
+	inviteMembersToOrganization,
 	isUserInvitedInOrganization,
 	acceptInvitationToOrganization,
 	declineInvitationToOrganization,
