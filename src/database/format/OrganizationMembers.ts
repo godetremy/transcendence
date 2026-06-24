@@ -30,18 +30,6 @@ const formatOrganizationMembers = <T extends Prisma.organizationsInclude>(
 	} as unknown as OrganizationMembers<T>;
 };
 
-const formatOrganizationManyMembers = (
-	rows: Prisma.organization_membersGetPayload<object>[]
-): OrganizationMembers[] => {
-	return rows.map((row) => ({
-		id: row.id,
-		approved: row.approved,
-		user_id: row.user_id,
-		invited_at: row.invited_at.toDateString(),
-		registered_at: row.registered_at.toDateString(),
-	}));
-};
-
 const formatOrganizationInvitation = (
 	row: Prisma.organization_membersGetPayload<{ include: { organization: true } }>
 ): OrganizationInvitation => {
@@ -52,4 +40,4 @@ const formatOrganizationInvitation = (
 	};
 };
 
-export { formatOrganizationMembers, formatOrganizationInvitation, formatOrganizationManyMembers };
+export { formatOrganizationMembers, formatOrganizationInvitation };

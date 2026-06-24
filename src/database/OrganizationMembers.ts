@@ -83,7 +83,7 @@ const inviteMembersToOrganization = async (
 	users_id: string[],
 	permission_id: string,
 	force_approve?: boolean
-): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>[]> => {
+): Promise<Prisma.organization_membersGetPayload<{ include: { user: true; organization_permission: true } }>[]> => {
 	for (const id of users_id)
 		if (await isUserInOrganization(organization_id, id)) throw ERRORS_DETAILS.organization_member_already_invited();
 	return prisma.organization_members.createManyAndReturn({
@@ -94,6 +94,10 @@ const inviteMembersToOrganization = async (
 			approved: force_approve ?? false,
 			registered_at: new Date(),
 		})),
+		include: {
+			organization_permission: true,
+			user: true,
+		},
 	});
 };
 
