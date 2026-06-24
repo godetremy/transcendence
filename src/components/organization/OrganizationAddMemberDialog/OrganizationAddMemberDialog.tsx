@@ -10,6 +10,8 @@ import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import Image from 'next/image';
 import { CardHeader } from '@/components/globals/CardHeader/CardHeader';
+import { inviteOrganizationMembers } from '@/lib/fetcher/organization';
+import { useMutation } from '@tanstack/react-query';
 
 function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 	const organizationCtx = useOrganizations();
@@ -24,6 +26,7 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 	const [members, setMembers] = useState<PublicUser[]>([]);
 
 	const [hasSearch, setHasSearch] = useState(false);
+	const invites = useMutation(inviteOrganizationMembers(organization.id));
 
 	const fetchMembers = (query: string) => {
 		setLoadingMember(true);
@@ -52,6 +55,7 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 
 	const addMembers = () => {
 		setAddingMembers(true);
+		//invites.mutate({ permission_id:  });
 	};
 
 	const includeId = (id: string) => {

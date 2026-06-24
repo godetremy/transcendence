@@ -141,15 +141,17 @@ const getOrganizationMemberById = async <T extends Prisma.organization_membersIn
 	});
 };
 
-const deleteMemberFromOrganization = async (user_id: string, organization_id: string): 
-Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>> => {
+const deleteMemberFromOrganization = async (
+	user_id: string,
+	organization_id: string
+): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>> => {
 	return prisma.organization_members.delete({
-		where: { 
+		where: {
 			organization_id_user_id: {
 				user_id: user_id,
 				organization_id: organization_id,
-			}
-		 },
+			},
+		},
 	});
 };
 
