@@ -1,6 +1,6 @@
 import { deletef, get, post } from '@/lib/fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
-import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
+import { CreateOrganizationPermissionType, OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
 import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
@@ -71,6 +71,16 @@ const inviteOrganizationMembers = (
 	},
 });
 
+const CreateOrganizationPermission = (
+	org_id: string
+): UseMutationOptions<OrganizationPermissionDetails, Error, { permission: CreateOrganizationPermissionType }> => ({
+	mutationFn: ({ permission }: { permission: CreateOrganizationPermissionType }) =>
+		post<OrganizationPermissionDetails>(`/organization/${org_id}/permission`, permission),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'permissions'] });
+	},
+});
+
 export {
 	getOrganizationMembers,
 	getOrganizationPermission,
@@ -78,4 +88,5 @@ export {
 	updateOrganizationUserPermission,
 	deleteOrganizationMember,
 	inviteOrganizationMembers,
+	CreateOrganizationPermission,
 };
