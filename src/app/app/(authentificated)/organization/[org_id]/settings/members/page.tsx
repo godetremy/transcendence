@@ -22,7 +22,7 @@ export default function Page() {
 	const [selectedTab, setSelectedTab] = useState(0);
 
 	const [membersLoading, setMembersLoading] = useState(true);
-	const [members, setMembers] = useState<OrganizationMembers[]>([]);
+	const [members, setMembers] = useState<OrganizationMembers<{ user: true; permission: true }>[]>([]);
 	const [membersPage, setMembersPage] = useState(1);
 	const [membersHasMore, setMembersHasMore] = useState(true);
 	const [showMemberCard, setShowMemberCard] = useState(false);
@@ -38,7 +38,9 @@ export default function Page() {
 	const animation_picker_animate: TargetAndTransition = { translateX: 0, opacity: 1, transition: { duration: 0.2 } };
 
 	const fetchMembers = () => {
-		get<PaginationResponse<OrganizationMembers>>(`/organization/${organization.id}/members?page=${membersPage}`)
+		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
+			`/organization/${organization.id}/members?page=${membersPage}`
+		)
 			.then((res) => {
 				setMembers((prev) => [...prev, ...res.data]);
 				setMembersHasMore(res.total_pages > membersPage + 1);
@@ -48,7 +50,7 @@ export default function Page() {
 			.finally(() => setMembersLoading(false));
 	};
 
-	const formatMembersDescription = (member: OrganizationMembers) => {
+	const formatMembersDescription = (member: OrganizationMembers<{ permission: true }>) => {
 		const invited_at = new Date(member.invited_at);
 		const registred_at = new Date(member.registered_at);
 
@@ -86,11 +88,11 @@ export default function Page() {
 								{members.map((member, i) => (
 									<ListItem
 										key={i}
-										title={member.user!.full_name ?? member.id}
+										title={member.user.full_name ?? member.id}
 										description={formatMembersDescription(member)}
 										leftElement={
 											<Image
-												src={member.user!.profile_picture}
+												src={member.user.profile_picture}
 												width={40}
 												height={40}
 												alt={`Photo de ${member.user!.full_name ?? member.id}`}

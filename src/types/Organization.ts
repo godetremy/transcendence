@@ -4,7 +4,7 @@ import { OrganizationMembers } from './OrganizationMembers';
 import { OrganizationPermission } from './OrganizationPermissionDetails';
 import { PrivateService } from './Service';
 
-export interface PrivateOrganization {
+export interface PrivateOrganization<T = object> {
 	id: string;
 	owner_id: string;
 	name: string;
@@ -13,11 +13,11 @@ export interface PrivateOrganization {
 	club: boolean;
 	created_at: string;
 	updated_at: string;
-	organization_members?: OrganizationMembers[];
-	organization_followers?: PublicOrganizationFollowers[];
-	events?: PrivateEvent[];
-	services?: PrivateService[];
-	organization_permission?: OrganizationPermission[];
+	organization_members: T extends { membership: unknown } ? OrganizationMembers[] : never;
+	organization_followers: T extends { membership: unknown } ? PublicOrganizationFollowers[] : never;
+	events: T extends { membership: unknown } ? PrivateEvent[] : never;
+	services: T extends { membership: unknown } ? PrivateService[] : never;
+	organization_permission: T extends { membership: unknown } ? OrganizationPermission[] : never;
 }
 
 export interface PublicOrganization {

@@ -6,7 +6,7 @@ import { formatPrivateRegisteredEvent } from './EventRegistrations';
 
 const formatPublicEvent = <T extends Prisma.eventsInclude>(
 	row: Prisma.eventsGetPayload<{ include: T }>
-): PublicEvent => {
+): PublicEvent<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, ...event } = row;
@@ -20,12 +20,12 @@ const formatPublicEvent = <T extends Prisma.eventsInclude>(
 			'organization' in row && row.organization
 				? formatPublicOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
 				: undefined,
-	};
+	} as unknown as PublicEvent<T>;
 };
 
 const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 	row: Prisma.eventsGetPayload<{ include: T }>
-): PrivateEvent => {
+): PrivateEvent<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, ...event } = row;
@@ -49,7 +49,7 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 						formatPrivateRegisteredEvent
 					)
 				: undefined,
-	};
+	} as unknown as PrivateEvent<T>;
 };
 
 export { formatPrivateEvent, formatPublicEvent };

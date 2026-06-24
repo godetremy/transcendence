@@ -2,7 +2,7 @@ import { PublicAlbum } from './album';
 import { PrivateOrganization, PublicOrganization } from './Organization';
 import { RegisteredEventPrivate } from './RegisteredEvent';
 
-export interface PrivateEvent {
+export interface PrivateEvent<T = object> {
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -14,12 +14,12 @@ export interface PrivateEvent {
 	end_at: string;
 	created_at: string;
 	update_at: string;
-	organization?: PrivateOrganization;
-	photos_album?: PublicAlbum;
-	event_registration?: RegisteredEventPrivate[];
+	organization: T extends { organization: unknown } ? PrivateOrganization : never;
+	photos_album: T extends { photos_album: unknown } ? PublicAlbum : never;
+	event_registration: T extends { event_registration: unknown } ? RegisteredEventPrivate[] : never;
 }
 
-export interface PublicEvent {
+export interface PublicEvent<T = object> {
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -31,7 +31,7 @@ export interface PublicEvent {
 	end_at: string;
 	created_at: string;
 	update_at: string;
-	organization?: PublicOrganization;
+	organization: T extends { organization: unknown } ? PublicOrganization : never;
 }
 
 export interface CreateOrUpdateEventType {

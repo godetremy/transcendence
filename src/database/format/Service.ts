@@ -5,7 +5,7 @@ import { formatServiceCategory } from './ServiceCategories';
 
 const formatPublicService = <T extends Prisma.servicesInclude>(
 	row: Prisma.servicesGetPayload<{ include: T }>
-): PublicService => {
+): PublicService<T> => {
 	const { created_at, updated_at, start_at, end_at, ...service } = row;
 	return {
 		...service,
@@ -21,12 +21,12 @@ const formatPublicService = <T extends Prisma.servicesInclude>(
 			'organization' in row && row.organization
 				? formatPublicOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
 				: undefined,
-	};
+	} as unknown as PublicService<T>;
 };
 
 const formatPrivateService = <T extends Prisma.servicesInclude>(
 	row: Prisma.servicesGetPayload<{ include: T }>
-): PrivateService => {
+): PrivateService<T> => {
 	const { created_at, updated_at, start_at, end_at, ...service } = row;
 	return {
 		...service,
@@ -42,7 +42,7 @@ const formatPrivateService = <T extends Prisma.servicesInclude>(
 			'organization' in row && row.organization
 				? formatPrivateOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
 				: undefined,
-	};
+	} as unknown as PrivateService<T>;
 };
 
 export { formatPublicService, formatPrivateService };

@@ -9,7 +9,7 @@ import { formatOrganizationPermission } from './OrganizationPermission';
 
 const formatPrivateOrganization = <T extends Prisma.organizationsInclude>(
 	row: Prisma.organizationsGetPayload<{ include: T }>
-): PrivateOrganization => {
+): PrivateOrganization<T> => {
 	const { logo, created_at, updated_at, ...orga } = row;
 	return {
 		...orga,
@@ -42,7 +42,7 @@ const formatPrivateOrganization = <T extends Prisma.organizationsInclude>(
 						formatOrganizationPermission
 					)
 				: undefined,
-	};
+	} as unknown as PrivateOrganization<T>;
 };
 
 const formatPublicOrganization = <T extends Prisma.organizationsInclude>(

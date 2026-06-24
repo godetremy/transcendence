@@ -1,7 +1,7 @@
 import { PrivateOrganization, PublicOrganization } from './Organization';
 import { ServiceCategory } from './ServiceCategory';
 
-export interface PrivateService {
+export interface PrivateService<T = object> {
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -19,11 +19,11 @@ export interface PrivateService {
 	source_link: string | null;
 	created_at: string;
 	updated_at: string;
-	organization?: PrivateOrganization;
-	category?: ServiceCategory;
+	organization: T extends { membership: unknown } ? PrivateOrganization : never;
+	category: T extends { membership: unknown } ? ServiceCategory : never;
 }
 
-export interface PublicService {
+export interface PublicService<T = object> {
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -41,8 +41,8 @@ export interface PublicService {
 	source_link: string | null;
 	created_at: string;
 	updated_at: string;
-	organization?: PublicOrganization;
-	category?: ServiceCategory;
+	organization: T extends { membership: unknown } ? PublicOrganization : never;
+	category: T extends { membership: unknown } ? ServiceCategory : never;
 }
 
 export interface CreateOrUpdateServiceType {

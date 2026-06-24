@@ -1,6 +1,6 @@
 import { Membership } from './Membership';
 
-export interface User {
+export interface User<T = object> {
 	id: string;
 	mail: string;
 	first_name: string | null;
@@ -9,7 +9,7 @@ export interface User {
 	profile_picture: string;
 	agent: boolean;
 	agent_reason: string | null;
-	membership?: Membership;
+	membership: T extends { membership: unknown } ? Membership : never;
 	admin?: boolean;
 }
 
