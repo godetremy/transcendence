@@ -58,7 +58,7 @@ const inviteMemberToOrganization = async (
 	user_id: string,
 	permission_id: string,
 	force_approve?: boolean
-): Promise<Prisma.organization_membersGetPayload<{include: { user: true; organization_permission: true }}>> => {
+): Promise<Prisma.organization_membersGetPayload<{ include: { user: true; organization_permission: true } }>> => {
 	if (!(await isUserInOrganization(organization_id, user_id))) {
 		return prisma.organization_members.create({
 			data: {
@@ -71,7 +71,7 @@ const inviteMemberToOrganization = async (
 			include: {
 				organization_permission: true,
 				user: true,
-			}
+			},
 		});
 	}
 	throw ERRORS_DETAILS.organization_member_already_invited();

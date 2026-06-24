@@ -13,7 +13,7 @@
 		color: rgba(var(--color-rgb-primary-white), 0.6);
 		border: none;
 		font: 500 14px var(--font-paragraph);
-		transition: .3s;
+		transition: 0.3s;
 
 		&:hover {
 			background-color: rgba(var(--color-rgb-primary-white), 0.07);
@@ -32,7 +32,7 @@
 		height: 1px;
 		width: 50%;
 		background-color: var(--color-primary-white);
-		transition: .3s;
+		transition: 0.3s;
 	}
 
 	&.active {

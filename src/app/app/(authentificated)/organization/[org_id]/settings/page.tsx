@@ -75,7 +75,7 @@ export default function Page() {
 					/>
 				</ListContainer>
 				<ListContainer>
-					{organization.owner === (user?.id ?? '') && (
+					{organization.owner_id === (user?.id ?? '') && (
 						<ListItem
 							icon={Handshake}
 							title={'Transférer la propriété'}
@@ -91,10 +91,10 @@ export default function Page() {
 						negative={true}
 						showChevron={false}
 						onPress={leaveOrganisation}
-						disabled={organization.owner === (user?.id ?? '')}
+						disabled={organization.owner_id === (user?.id ?? '')}
 					/>
 				</ListContainer>
-				{organization.owner === (user?.id ?? '') && (
+				{organization.owner_id === (user?.id ?? '') && (
 					<span className={styles.listSectionDetails}>
 						Tu ne peux pas quitter cette organisation car tu en es le propriétaire. Avant de quitter,
 						transfère ton rôle à un autre membre.

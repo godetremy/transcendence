@@ -19,8 +19,8 @@ export interface PrivateService {
 	source_link: string | null;
 	created_at: Date;
 	updated_at: Date;
-	organization: PrivateOrganization;
-	category: ServiceCategory;
+	organization?: PrivateOrganization;
+	category?: ServiceCategory;
 }
 
 export interface PublicService {
@@ -41,8 +41,8 @@ export interface PublicService {
 	source_link: string | null;
 	created_at: Date;
 	updated_at: Date;
-	organization: PublicOrganization;
-	category: ServiceCategory;
+	organization?: PublicOrganization;
+	category?: ServiceCategory;
 }
 
 export interface CreateOrUpdateServiceType {

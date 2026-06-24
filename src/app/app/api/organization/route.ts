@@ -24,7 +24,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const number = await countOrganizationByFilter({});
 		const list = await getOrganizationByFilter({}, {}, pagination);
 
-		return NextResponse.json(generatePaginationResponse(list.map(formatPublicOrganization), number, pagination));
+		return NextResponse.json(
+			generatePaginationResponse(list.map(formatPublicOrganization<object>), number, pagination)
+		);
 	});
 }
 
@@ -46,6 +48,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const permission = await initializeOrganizationPermission(organization.id);
 		await inviteMemberToOrganization(organization.id, session.user_id, permission[0].id, true);
 
-		return NextResponse.json(formatPrivateOrganization(organization));
+		return NextResponse.json(formatPrivateOrganization<object>(organization));
 	});
 }

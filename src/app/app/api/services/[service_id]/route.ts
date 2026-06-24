@@ -13,6 +13,6 @@ export async function GET(
 		const event_value = await getServicesById(service_id, { organization: true, category: true });
 		if (event_value === null) throw ERRORS_DETAILS.service_does_not_exists();
 
-		return NextResponse.json(formatPublicService(event_value));
+		return NextResponse.json(formatPublicService<{ organization: true; category: true }>(event_value));
 	});
 }

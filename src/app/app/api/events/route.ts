@@ -17,6 +17,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const count = await countEventsByFilter();
 		const value = await getEventsByFilter({ organization: true }, date, sorting, pagination);
 
-		return NextResponse.json(generatePaginationResponse(value.map(formatPublicEvent), count, pagination));
+		return NextResponse.json(generatePaginationResponse(value.map(formatPublicEvent<object>), count, pagination));
 	});
 }

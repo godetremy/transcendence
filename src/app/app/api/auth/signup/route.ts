@@ -14,10 +14,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const total = await countUsersByFilter({});
 
 		let user;
-		if (total === 0)
-			user = await createAgentsUser(body.mail, body.password, total === 0, true);
-		else 
-			user = await createAgentsUser(body.mail, body.password, total === 0);
+		if (total === 0) user = await createAgentsUser(body.mail, body.password, total === 0, true);
+		else user = await createAgentsUser(body.mail, body.password, total === 0);
 
 		await createAndSetSession({
 			user_id: user.id,

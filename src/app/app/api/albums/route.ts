@@ -2,8 +2,6 @@ import { countAlbumByFilter, createAlbum, getAlbumsByFilter } from '@/database/A
 import { getEventById } from '@/database/Event';
 import { formatPrivateAlbum } from '@/database/format/Album';
 import { getOrganizationById } from '@/database/Organization';
-import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
-import { getOrganizationPermissionById } from '@/database/OrganizationPermission';
 import { getServicesById } from '@/database/Service';
 import { getUserById } from '@/database/User';
 import { getThrowableSession } from '@/lib/session';
@@ -12,6 +10,7 @@ import { CreateAlbumType } from '@/types/album';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { parseBody } from '@/utils/parsing';
+import { getUserOrganizationPermission } from '@/utils/permission';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -53,13 +52,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		if (body.event_id == null && body.service_id == null) throw ERRORS_DETAILS.missing_parameter();
 
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		const member = await getOrganizationMemberByFilter({ organization_id: organization.id, user_id: user.id }, {});
-		if (member == null || member.approved == false || member.permission_id == null)
-			throw ERRORS_DETAILS.member_not_in_organization();
-		const permission = await getOrganizationPermissionById(member.permission_id, organization.id, {});
-		if (permission == null) throw ERRORS_DETAILS.permission_does_not_exists();
 
-		if (permission.album_create == false) throw ERRORS_DETAILS.permission_denied();
+		const user_permission = await getUserOrganizationPermission(user, organization.id);
+		if (!user_permission.album_create) throw ERRORS_DETAILS.permission_denied();
+
 		const album = await createAlbum(body, { events: true, services: true });
 		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
 

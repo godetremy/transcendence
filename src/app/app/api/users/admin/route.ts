@@ -3,7 +3,7 @@ import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { getThrowableSession } from '@/lib/session';
 import { getUserById, getUserByMail, getUsersByFilter, updateUserAdminStatus } from '@/database/User';
 import { checkIsUserGlobalAdmin } from '@/utils/permission';
-import { formatPrivateUser, formatPublicUser } from '@/database/format/User';
+import { formatPrivateUser } from '@/database/format/User';
 import { parseBody } from '@/utils/parsing';
 import { AdminAppendBodySchema } from '@/schema/AdminAppendBodySchema';
 import { AdminAppendBody } from '@/types/AdminAppendBody';

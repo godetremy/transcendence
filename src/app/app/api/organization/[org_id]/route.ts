@@ -5,8 +5,9 @@ import { formatPublicOrganization } from '@/database/format/Organization';
 import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { parseBody } from '@/utils/parsing';
-import { decrypt } from '@/lib/session';
-import { getUserById } from '@/database/User';
+import { getThrowableSession } from '@/lib/session';
+import { getUserFromSession } from '@/database/User';
+import { getUserOrganizationPermission } from '@/utils/permission';
 
 export async function GET(
 	req: NextRequest,
@@ -16,9 +17,9 @@ export async function GET(
 		const { org_id } = await params;
 		const org = await getOrganizationById(org_id, {});
 
-		if (org == null) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!org) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		return NextResponse.json(formatPublicOrganization(org));
+		return NextResponse.json(formatPublicOrganization<object>(org));
 	});
 }
 
@@ -28,22 +29,22 @@ export async function PATCH(
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { org_id } = await params;
-		const org = await getOrganizationById(org_id, {});
 
-		if (org == null) throw ERRORS_DETAILS.organization_does_not_exist();
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
+		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+
+		const org = await getOrganizationById(org_id, {});
+		if (!org) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		const user = await getUserById(user_id, {});
-
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (org.owner_id != user_id && !user.admin) throw ERRORS_DETAILS.permission_denied();
+		const user_permission = await getUserOrganizationPermission(user, org_id);
+		if (!user_permission.organization_update_info) throw ERRORS_DETAILS.permission_denied();
 
 		const value = await updateOrganization(body, org_id);
 
-		return NextResponse.json(formatPublicOrganization(value));
+		return NextResponse.json(formatPublicOrganization<object>(value));
 	});
 }
 
@@ -55,16 +56,15 @@ export async function DELETE(
 		const { org_id } = await params;
 		const org = await getOrganizationById(org_id, {});
 
-		if (org == null) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!org) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		const user = await getUserById(user_id, {});
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
 
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (org.owner_id != user_id && !user.admin) throw ERRORS_DETAILS.permission_denied();
+		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (org.owner_id != user.id && !user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const value = await deleteOrganization(org_id);
-		return NextResponse.json(formatPublicOrganization(value));
+		return NextResponse.json(formatPublicOrganization<object>(value));
 	});
 }

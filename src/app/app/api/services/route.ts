@@ -17,6 +17,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const count = await countServicesByFilter();
 		const value = await getServicesByFilter({ organization: true, category: true }, date, sorting, pagination);
 
-		return NextResponse.json(generatePaginationResponse(value.map(formatPublicService), count, pagination));
+		return NextResponse.json(generatePaginationResponse(value.map(formatPublicService<object>), count, pagination));
 	});
 }

@@ -19,6 +19,12 @@ export async function GET(
 			pagination
 		);
 
-		return NextResponse.json(generatePaginationResponse(list.map(formatOrganizationMembers), number, pagination));
+		return NextResponse.json(
+			generatePaginationResponse(
+				list.map(formatOrganizationMembers<{ user: true; organization_permission: true }>),
+				number,
+				pagination
+			)
+		);
 	});
 }

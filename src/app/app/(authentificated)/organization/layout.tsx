@@ -14,7 +14,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
 
 	const organizations = (await getOrganizationWhereMemberBelongs(session.user_id, { organization: true })).map(
 		(member) => {
-			return formatPrivateOrganization(member.organization);
+			return formatPrivateOrganization<object>(member.organization);
 		}
 	);
 

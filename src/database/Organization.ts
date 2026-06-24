@@ -57,32 +57,9 @@ const updateOrganization = async (
 const deleteOrganization = async (
 	organizations_id: string
 ): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
-	await prisma.organization_members.deleteMany({
-		where: {
-			organization_id: organizations_id,
-		},
-	});
-
-	await prisma.organization_followers.deleteMany({
-		where: {
-			organization_id: organizations_id,
-		},
-	});
-
-	await prisma.organization_permission.deleteMany({
-		where: {
-			organization_id: organizations_id,
-		},
-	});
-
 	return prisma.organizations.delete({
 		where: {
 			id: organizations_id,
-		},
-		include: {
-			organization_permission: true,
-			organization_followers: true,
-			organization_members: true,
 		},
 	});
 };

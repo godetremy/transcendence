@@ -13,11 +13,9 @@ const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPa
 		admin: admin ? true : undefined,
 		profile_picture: user.profile_picture ?? `/images/avatar/${createHash('sha256').update(user.id).digest('hex')}`,
 		membership:
-			'membership' in row
-				? row.membership
-					? formatMembership(row.membership as Prisma.membershipsGetPayload<object>)
-					: null
-				: null,
+			'membership' in row && row.membership
+				? formatMembership(row.membership as Prisma.membershipsGetPayload<object>)
+				: undefined,
 	};
 };
 

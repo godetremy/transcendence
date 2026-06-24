@@ -6,8 +6,6 @@ import * as bcrypt from 'bcrypt';
 import { SessionPayload } from '@/types/session/SessionPayload';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
-import { DEFAULT_SORTINGOPTIONS, sortingToPrisma } from '@/utils/sorting';
-import { SortingOption } from '@/types/SortingParameters';
 
 const createStudentUser = async (
 	me: FortyTwoCursusUserDetails,

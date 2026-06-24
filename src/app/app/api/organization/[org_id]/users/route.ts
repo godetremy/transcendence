@@ -19,26 +19,29 @@ export async function GET(
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+
 		const permission = await getUserOrganizationPermission(user, org_id);
-		if (permission == null) throw ERRORS_DETAILS.account_does_not_exists();
 		if (permission.members_invite == false && user.admin == false) throw ERRORS_DETAILS.permission_denied();
-		
+
 		const parameter = parseParams<FindUser>(req.nextUrl.searchParams, UserFindSchema);
-		console.error(parameter);
+
 		const number = await countUsersByFilter({});
+
 		const list = await getUsersByFilterAndSearch(
-			(parameter.q == null ? {} : {
-				OR: [
-					{
-						full_name: {
-							contains: parameter.q,
-						},
+			parameter.q == null
+				? {}
+				: {
+						OR: [
+							{
+								full_name: {
+									contains: parameter.q,
+								},
+							},
+							{
+								mail: parameter.q,
+							},
+						],
 					},
-					{
-						mail: parameter.q,
-					}
-				],
-			}),
 			{ organization_members: true },
 			pagination
 		);

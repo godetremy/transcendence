@@ -11,7 +11,7 @@ export function GET(req: NextRequest) {
 
 		return NextResponse.json(
 			list.map((member) => {
-				return formatPrivateOrganization(member.organization);
+				return formatPrivateOrganization<object>(member.organization);
 			})
 		);
 	});

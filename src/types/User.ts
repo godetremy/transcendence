@@ -9,7 +9,7 @@ export interface User {
 	profile_picture: string;
 	agent: boolean;
 	agent_reason: string | null;
-	membership: Membership | null;
+	membership?: Membership;
 	admin?: boolean;
 }
 

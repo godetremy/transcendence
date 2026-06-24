@@ -23,7 +23,7 @@ export async function GET(
 		const event_value = await getEventById(event_id, { organization: true });
 		if (event_value === null) throw ERRORS_DETAILS.event_does_not_exists();
 
-		return NextResponse.json(formatPublicEvent(event_value));
+		return NextResponse.json(formatPublicEvent<object>(event_value));
 	});
 }
 

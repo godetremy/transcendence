@@ -1,4 +1,5 @@
-import { PrivateOrganization } from './Organization';
+import { PublicAlbum } from './album';
+import { PrivateOrganization, PublicOrganization } from './Organization';
 import { RegisteredEventPrivate } from './RegisteredEvent';
 
 export interface PrivateEvent {
@@ -11,25 +12,11 @@ export interface PrivateEvent {
 	image: string;
 	start_at: Date;
 	end_at: Date;
-	create_at: Date;
+	created_at: Date;
 	update_at: Date;
-	organization: PrivateOrganization;
-}
-
-export interface PrivateEventWithRegistration {
-	id: string;
-	title: string;
-	subtitle: string | null;
-	description: string | null;
-	max_registration: number | null;
-	location: string | null;
-	image: string;
-	start_at: Date;
-	end_at: Date;
-	create_at: Date;
-	update_at: Date;
-	event_registration: RegisteredEventPrivate[];
-	organization: PrivateOrganization;
+	organization?: PrivateOrganization;
+	photos_album?: PublicAlbum;
+	event_registration?: RegisteredEventPrivate[];
 }
 
 export interface PublicEvent {
@@ -42,9 +29,9 @@ export interface PublicEvent {
 	image: string;
 	start_at: Date;
 	end_at: Date;
-	create_at: Date;
+	created_at: Date;
 	update_at: Date;
-	organization_name: string;
+	organization?: PublicOrganization;
 }
 
 export interface CreateOrUpdateEventType {

@@ -79,14 +79,14 @@ export default function Page() {
 								{members.map((member, i) => (
 									<ListItem
 										key={i}
-										title={member.full_name ?? member.id}
+										title={member.user!.full_name ?? member.id}
 										description={formatMembersDescription(member)}
 										leftElement={
 											<Image
-												src={member.profile_picture}
+												src={member.user!.profile_picture}
 												width={40}
 												height={40}
-												alt={`Photo de ${member.full_name ?? member.id}`}
+												alt={`Photo de ${member.user!.full_name ?? member.id}`}
 												className={styles.profilePicture}
 											/>
 										}

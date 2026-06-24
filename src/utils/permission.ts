@@ -64,6 +64,7 @@ const getUserOrganizationPermission = async (
 	);
 
 	if (!organization_member) throw ERRORS_DETAILS.member_not_in_organization();
+	if (organization_member.approved == false) throw ERRORS_DETAILS.member_not_in_organization();
 
 	return organization_member.organization_permission ?? NULL_PERMISSIONS(organization_member.organization_id);
 };
