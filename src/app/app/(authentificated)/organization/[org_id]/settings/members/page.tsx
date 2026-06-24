@@ -1,19 +1,16 @@
 'use client';
 import styles from './page.module.scss';
 import { NavigationBarHeader } from '@/components/globals/NavigationBarHeader/NavigationBarHeader';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion, TargetAndTransition } from 'motion/react';
-import ListItem from '@/components/globals/ListItem/ListItem';
-import ListContainer from '@/components/globals/ListContainer/ListContainer';
-import { Loader } from '@/components/globals/Loader/Loader';
-import { get } from '@/lib/fetcher';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { PaginationResponse } from '@/types/PaginationResponse';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
-import Image from 'next/image';
 import { Plus, UserRoundPlus } from 'lucide-react';
 import { Card } from '@/components/globals/Card/Card';
 import OrganizationAddMemberDialog from '@/components/organization/OrganizationAddMemberDialog/OrganizationAddMemberDialog';
+import { OrganizationPermissionList } from '@/components/organization/OrganizationPermissionList/OrganizationPermissionList';
+import { OrganizationMembersList } from '@/components/organization/OrganizationMembersList/OrganizationMembersList';
+import { OrganizationMemberCard } from '@/components/organization/OrganizationMemberCard/OrganizationMemberCard';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -21,12 +18,8 @@ export default function Page() {
 
 	const [selectedTab, setSelectedTab] = useState(0);
 
-	const [membersLoading, setMembersLoading] = useState(true);
-	const [members, setMembers] = useState<OrganizationMembers<{ user: true; permission: true }>[]>([]);
-	const [membersPage, setMembersPage] = useState(1);
-	const [membersHasMore, setMembersHasMore] = useState(true);
 	const [showMemberCard, setShowMemberCard] = useState(false);
-	const [memberCardUserId, setMemberCardUserId] = useState<string | undefined>(undefined);
+	const [memberCardUser, setMemberCardUser] = useState<OrganizationMembers | undefined>(undefined);
 
 	const [showAddMemberCard, setShowAddMemberCard] = useState(false);
 
@@ -36,32 +29,6 @@ export default function Page() {
 		transition: { duration: 0.2 },
 	});
 	const animation_picker_animate: TargetAndTransition = { translateX: 0, opacity: 1, transition: { duration: 0.2 } };
-
-	const fetchMembers = () => {
-		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
-			`/organization/${organization.id}/members?page=${membersPage}`
-		)
-			.then((res) => {
-				setMembers((prev) => [...prev, ...res.data]);
-				setMembersHasMore(res.total_pages > membersPage + 1);
-				setMembersPage((prev) => prev + 1);
-			})
-			.catch((err) => console.log(err))
-			.finally(() => setMembersLoading(false));
-	};
-
-	const formatMembersDescription = (member: OrganizationMembers<{ permission: true }>) => {
-		const invited_at = new Date(member.invited_at);
-		const registred_at = new Date(member.registered_at);
-
-		const permission = member.permission?.name ?? 'Aucune permission';
-
-		return `${permission} • ${member.approved ? `A rejoins le ${registred_at.toLocaleDateString()}` : `Invité le ${invited_at.toLocaleDateString()}`}`;
-	};
-
-	useEffect(() => {
-		fetchMembers();
-	}, []);
 
 	return (
 		<NavigationBarHeader title={'Membres et permissions'}>
@@ -84,31 +51,13 @@ export default function Page() {
 							animate={animation_picker_animate}
 							key={'members_page'}
 						>
-							<ListContainer>
-								{members.map((member, i) => (
-									<ListItem
-										key={i}
-										title={member.user.full_name ?? member.id}
-										description={formatMembersDescription(member)}
-										leftElement={
-											<Image
-												src={member.user.profile_picture}
-												width={40}
-												height={40}
-												alt={`Photo de ${member.user!.full_name ?? member.id}`}
-												className={styles.profilePicture}
-											/>
-										}
-										last={i == members.length - 1}
-										onPress={() => {
-											setMemberCardUserId(member.id);
-											setShowMemberCard(true);
-										}}
-									/>
-								))}
-							</ListContainer>
-
-							{membersLoading ? <Loader /> : membersHasMore && <button>Charger plus</button>}
+							<OrganizationMembersList
+								org_id={organization.id}
+								onPressItem={(member) => {
+									setMemberCardUser(member);
+									setShowMemberCard(true);
+								}}
+							/>
 						</motion.section>
 					) : (
 						<motion.section
@@ -118,15 +67,16 @@ export default function Page() {
 							animate={animation_picker_animate}
 							key={'permission_page'}
 						>
-							<p>Permission</p>
-							<ListItem title={'Demo'} />
+							<OrganizationPermissionList org_id={organization.id} />
 						</motion.section>
 					)}
 				</AnimatePresence>
 			</div>
 
 			<Card visible={showMemberCard} requestClose={() => setShowMemberCard(false)}>
-				{memberCardUserId && <p>{memberCardUserId}</p>}
+				{memberCardUser && (
+					<OrganizationMemberCard member={memberCardUser} close={() => setShowMemberCard(false)} />
+				)}
 			</Card>
 			<Card visible={showAddMemberCard} requestClose={() => setShowAddMemberCard(false)}>
 				<OrganizationAddMemberDialog close={() => setShowAddMemberCard(false)} />

@@ -25,7 +25,7 @@ export async function POST(
 		const session = await getThrowableSession(req);
 		const me = await getUserFromSession(session, {});
 		const other = await getUserById(user_id, {});
-		if (!me || !other) throw ERRORS_DETAILS.account_not_found();
+		if (!me || !other) throw ERRORS_DETAILS.account_does_not_exists();
 
 		await getUserOrganizationPermission(other, org_id);
 
