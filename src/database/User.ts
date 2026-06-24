@@ -177,7 +177,7 @@ const getUsersByFilterAndSearch = async <T extends Prisma.usersInclude>(
 	return prisma.users.findMany({
 		where: filter,
 		include: include,
-		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+		...(pagination ? { ...paginationToPrisma(pagination) } : {}),
 	});
 };
 

@@ -11,6 +11,9 @@ import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
 import Image from 'next/image';
+import { Plus, UserRoundPlus } from 'lucide-react';
+import { Card } from '@/components/globals/Card/Card';
+import OrganizationAddMemberDialog from '@/components/organization/OrganizationAddMemberDialog/OrganizationAddMemberDialog';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -22,6 +25,10 @@ export default function Page() {
 	const [members, setMembers] = useState<OrganizationMembers[]>([]);
 	const [membersPage, setMembersPage] = useState(1);
 	const [membersHasMore, setMembersHasMore] = useState(true);
+	const [showMemberCard, setShowMemberCard] = useState(false);
+	const [memberCardUserId, setMemberCardUserId] = useState<string | undefined>(undefined);
+
+	const [showAddMemberCard, setShowAddMemberCard] = useState(false);
 
 	const animation_picker_initial = (inverted: boolean): TargetAndTransition => ({
 		translateX: 20 * (inverted ? -1 : 1),
@@ -52,7 +59,7 @@ export default function Page() {
 
 	useEffect(() => {
 		fetchMembers();
-	}, [fetchMembers]);
+	}, []);
 
 	return (
 		<NavigationBarHeader title={'Membres et permissions'}>
@@ -90,8 +97,11 @@ export default function Page() {
 												className={styles.profilePicture}
 											/>
 										}
-										showChevron={false}
 										last={i == members.length - 1}
+										onPress={() => {
+											setMemberCardUserId(member.id);
+											setShowMemberCard(true);
+										}}
 									/>
 								))}
 							</ListContainer>
@@ -112,6 +122,37 @@ export default function Page() {
 					)}
 				</AnimatePresence>
 			</div>
+
+			<Card visible={showMemberCard} requestClose={() => setShowMemberCard(false)}>
+				{memberCardUserId && <p>{memberCardUserId}</p>}
+			</Card>
+			<Card visible={showAddMemberCard} requestClose={() => setShowAddMemberCard(false)}>
+				<OrganizationAddMemberDialog close={() => setShowAddMemberCard(false)} />
+			</Card>
+
+			<button className={styles.fab} onClick={() => (selectedTab === 0 ? setShowAddMemberCard(true) : undefined)}>
+				<AnimatePresence mode={'wait'}>
+					{selectedTab === 0 ? (
+						<motion.div
+							key={'members_page'}
+							initial={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+							exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+							animate={{ scale: 1, opacity: 1, transition: { duration: 0.2 } }}
+						>
+							<UserRoundPlus />
+						</motion.div>
+					) : (
+						<motion.div
+							key={'permission_page'}
+							initial={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+							exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+							animate={{ scale: 1, opacity: 1, transition: { duration: 0.2 } }}
+						>
+							<Plus />
+						</motion.div>
+					)}
+				</AnimatePresence>
+			</button>
 		</NavigationBarHeader>
 	);
 }

@@ -21,7 +21,7 @@ export async function GET(
 		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
 
 		const permission = await getUserOrganizationPermission(user, org_id);
-		if (permission.members_invite == false && user.admin == false) throw ERRORS_DETAILS.permission_denied();
+		if (!permission.members_invite && !user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const parameter = parseParams<FindUser>(req.nextUrl.searchParams, UserFindSchema);
 
