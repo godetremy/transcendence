@@ -3,6 +3,7 @@ import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { ERRORS_DETAILS } from '@/utils/errors';
+import { BatchPayload } from '@/database/prisma/generated/internal/prismaNamespace';
 
 const getOrganizationMemberByFilter = async <T extends Prisma.organization_membersInclude>(
 	filter: Prisma.organization_membersWhereInput,
@@ -77,6 +78,29 @@ const inviteMemberToOrganization = async (
 	throw ERRORS_DETAILS.organization_member_already_invited();
 };
 
+const inviteMembersToOrganization = async (
+	organization_id: string,
+	users_id: string[],
+	permission_id: string,
+	force_approve?: boolean
+): Promise<Prisma.organization_membersGetPayload<{ include: { user: true; organization_permission: true } }>[]> => {
+	for (const id of users_id)
+		if (await isUserInOrganization(organization_id, id)) throw ERRORS_DETAILS.organization_member_already_invited();
+	return prisma.organization_members.createManyAndReturn({
+		data: users_id.map((user_id) => ({
+			organization_id: organization_id,
+			user_id: user_id,
+			permission_id: permission_id,
+			approved: force_approve ?? false,
+			registered_at: new Date(),
+		})),
+		include: {
+			organization_permission: true,
+			user: true,
+		},
+	});
+};
+
 const acceptInvitationToOrganization = async (
 	organization_id: string,
 	user_id: string
@@ -117,9 +141,15 @@ const getOrganizationMemberById = async <T extends Prisma.organization_membersIn
 	});
 };
 
-const deleteMemberFromOrganization = async (user_id: string, organization_id: string): Promise<void> => {
-	prisma.organization_members.deleteMany({
-		where: { user_id, organization_id },
+const deleteMemberFromOrganization = async (user_id: string, organization_id: string): 
+Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>> => {
+	return prisma.organization_members.delete({
+		where: { 
+			organization_id_user_id: {
+				user_id: user_id,
+				organization_id: organization_id,
+			}
+		 },
 	});
 };
 
@@ -130,6 +160,7 @@ export {
 	getOrganizationWhereMemberBelongs,
 	isUserInOrganization,
 	inviteMemberToOrganization,
+	inviteMembersToOrganization,
 	isUserInvitedInOrganization,
 	acceptInvitationToOrganization,
 	declineInvitationToOrganization,

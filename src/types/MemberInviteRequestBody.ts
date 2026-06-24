@@ -1,4 +1,4 @@
 export interface MemberInviteRequestBody {
-	user_id: string;
+	users_id: string;
 	permission_id: string;
 }
