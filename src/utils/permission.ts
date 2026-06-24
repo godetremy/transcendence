@@ -56,7 +56,9 @@ const getUserOrganizationPermission = async (
 	const organization = await getOrganizationById(organization_id, {});
 	if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
-	if (user.admin || organization.owner_id === user.id) return FULL_PERMISSIONS(organization.id);
+	if (user.admin) return FULL_PERMISSIONS(organization.id);
+	if (organization.verified == null || !organization.verified) throw ERRORS_DETAILS.organization_does_not_verified();
+	if (organization.owner_id === user.id) return FULL_PERMISSIONS(organization.id);
 
 	const organization_member = await getOrganizationMemberByFilter(
 		{ user_id: user.id, organization_id: organization_id },

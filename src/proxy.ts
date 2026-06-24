@@ -5,7 +5,7 @@ import path from 'path';
 
 const ignorePath = ['/app/api/auth/'];
 const ignorePathApprove = [
-	'app/api/users/approval',
+	'/app/api/users/approval',
 	'/app/approval',
 	'/app/api/users/me',
 	'/app/api/auth/refresh',
@@ -27,10 +27,7 @@ function isPathIgnored(path: string): boolean {
 
 function isPathIgnoredApprove(path: string): boolean {
 	for (const ignored of ignorePathApprove) {
-		if (path.startsWith(ignored)) {
-			console.error('ignored', ignored);
-			return true;
-		}
+		if (path.startsWith(ignored)) return true;
 	}
 	return false;
 }

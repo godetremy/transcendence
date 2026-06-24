@@ -13,7 +13,6 @@ import {
 	organizationExistByName,
 } from '@/database/Organization';
 import { formatPrivateOrganization, formatPublicOrganization } from '@/database/format/Organization';
-import { checkIsUserGlobalAdmin } from '@/utils/permission';
 import { getUserFromSession } from '@/database/User';
 import { inviteMemberToOrganization } from '@/database/OrganizationMembers';
 
@@ -21,8 +20,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
-		const number = await countOrganizationByFilter({});
-		const list = await getOrganizationByFilter({}, {}, pagination);
+		const number = await countOrganizationByFilter({ verified: true });
+		const list = await getOrganizationByFilter({ verified: true }, {}, pagination);
 
 		return NextResponse.json(
 			generatePaginationResponse(list.map(formatPublicOrganization<object>), number, pagination)
@@ -35,7 +34,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
 		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		checkIsUserGlobalAdmin(user);
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 		if (await organizationExistByName(body.name)) throw ERRORS_DETAILS.organization_already_exist();

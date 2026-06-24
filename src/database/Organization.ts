@@ -54,6 +54,20 @@ const updateOrganization = async (
 	});
 };
 
+const updateVerificationOrganization = async (
+	approve: boolean,
+	organizations_id: string
+): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
+	return prisma.organizations.update({
+		where: {
+			id: organizations_id,
+		},
+		data: {
+			verified: approve,
+		},
+	});
+};
+
 const deleteOrganization = async (
 	organizations_id: string
 ): Promise<Prisma.organizationsGetPayload<Prisma.organizationsDefaultArgs>> => {
@@ -97,4 +111,5 @@ export {
 	existOrganization,
 	organizationExistByName,
 	getOrganizationByName,
+	updateVerificationOrganization,
 };
