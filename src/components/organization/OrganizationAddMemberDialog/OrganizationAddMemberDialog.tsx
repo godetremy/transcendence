@@ -9,9 +9,9 @@ import ListItem from '@/components/globals/ListItem/ListItem';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import Image from 'next/image';
-import { CardHeader } from '@/components/globals/CardHeader/CardHeader';
 import { inviteOrganizationMembers } from '@/lib/fetcher/organization';
 import { useMutation } from '@tanstack/react-query';
+import { CardHeaderPermissionPicker } from '@/components/globals/CardHeaderPermissionPicker/CardHeaderPermissionPicker';
 
 function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 	const organizationCtx = useOrganizations();
@@ -53,9 +53,10 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 		}, 800);
 	};
 
-	const addMembers = () => {
+	const addMembers = (perm_id: string) => {
 		setAddingMembers(true);
-		//invites.mutate({ permission_id:  });
+		invites.mutate({ permission_id: perm_id, members: membersSelection });
+		close();
 	};
 
 	const includeId = (id: string) => {
@@ -69,7 +70,13 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 
 	return (
 		<section className={styles.container}>
-			<CardHeader title={'Ajouter des membres'} onClose={close} loading={addingMembers} onAccept={addMembers} />
+			<CardHeaderPermissionPicker
+				orgId={organization.id}
+				title={'Ajouter des membres'}
+				loading={addingMembers}
+				onAccept={addMembers}
+				disabledAccept={membersSelection.length === 0}
+			/>
 			<section className={styles.searchbar}>
 				<input
 					type={'text'}

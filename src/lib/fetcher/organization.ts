@@ -50,7 +50,7 @@ const deleteOrganizationMember = (
 	mutationFn: ({ user_id }: { user_id: string }) =>
 		deletef<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`, Object),
 	onSuccess: () => {
-		GlobalQueryClient.invalidateQueries({ queryKey: ['member', user_id] });
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'members'] });
 	},
 });
 
@@ -66,8 +66,8 @@ const inviteOrganizationMembers = (
 			permission_id: permission_id,
 			users_id: members.join(','),
 		}),
-	onSuccess: (data) => {
-		GlobalQueryClient.setQueryData(['organization', org_id], data);
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'members'] });
 	},
 });
 
