@@ -1,4 +1,4 @@
-import { deleteUser } from '@/database/User';
+import { deleteUser, getUserById } from '@/database/User';
 import { decrypt, parseUserId } from '@/lib/session';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
@@ -13,6 +13,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 		const user_id = parseUserId(id, session);
 
 		if (!user_id.is_me) throw ERRORS_DETAILS.permission_denied();
+
+		const user_account = await getUserById(user_id.id, {});
+		if (!user_account) throw ERRORS_DETAILS.account_does_not_exists();
 
 		const user = await deleteUser(user_id.id);
 		if (user.fortytwo_oauth_id) await deleteOauthFortyTwo(user.fortytwo_oauth_id);
