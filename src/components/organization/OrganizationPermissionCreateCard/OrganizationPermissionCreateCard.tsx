@@ -6,6 +6,8 @@ import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDet
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { NULL_PERMISSIONS } from '@/const/permission';
 import { OrganizationPermissionSchema } from '@/schema/OrganizationPermissionSchema';
+import { useMutation } from '@tanstack/react-query';
+import { CreateOrganizationPermission } from '@/lib/fetcher/organization';
 
 export function OrganizationPermissionCreateCard({ close }: { close: () => void }) {
 	const organizationCtx = useOrganizations();
@@ -20,7 +22,9 @@ export function OrganizationPermissionCreateCard({ close }: { close: () => void 
 		updated_at: '',
 	});
 
+	const createPermission = useMutation(CreateOrganizationPermission(organization.id));
 	const onValidate = () => {
+		createPermission.mutate({ permission: permission });
 		setCreatingRole(true);
 		setTimeout(close, 2000);
 	};
