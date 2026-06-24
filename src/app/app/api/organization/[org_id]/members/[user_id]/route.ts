@@ -87,9 +87,10 @@ export async function DELETE(
 
 		const user = await getOrganizationMemberById(id.id, org_id, {});
 		if (user === null) throw ERRORS_DETAILS.member_not_in_organization();
-		if (user.id === organization.owner_id) throw ERRORS_DETAILS.cant_leave_as_owner();
-		await deleteMemberFromOrganization(id.id, org_id);
+		if (session.user_id === organization.owner_id) throw ERRORS_DETAILS.cant_leave_as_owner();
+		const member = await deleteMemberFromOrganization(id.id, org_id);
+		if (!member) throw ERRORS_DETAILS.member_not_in_organization();
 
-		return NextResponse.json({ success: true });
+		return NextResponse.json(formatOrganizationMembers<object>(member));
 	});
 }

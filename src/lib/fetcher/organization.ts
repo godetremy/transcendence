@@ -1,4 +1,4 @@
-import { get, post } from '@/lib/fetcher';
+import { deletef, get, post } from '@/lib/fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
@@ -43,9 +43,21 @@ const updateOrganizationUserPermission = (
 	},
 });
 
+const deleteOrganizationMember = (
+	org_id: string,
+	user_id: string
+): UseMutationOptions<OrganizationMembers<{ user: true; permission: true }>, Error, { user_id: string }> => ({
+	mutationFn: ({ user_id }: { user_id: string }) => 
+		deletef<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`, Object),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({queryKey: ['member', user_id]});
+	},
+});
+
 export {
 	getOrganizationMembers,
 	getOrganizationPermission,
 	getOrganizationMemberById,
 	updateOrganizationUserPermission,
+	deleteOrganizationMember,
 };

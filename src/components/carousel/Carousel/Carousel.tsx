@@ -165,7 +165,6 @@ export function Carousel(props: CarouselProps) {
 
 	function dragEventHandler(event: MouseEvent) {
 		if (event.buttons !== 1) return;
-
 		slideTimeoutPaused.current = true;
 
 		const container = slidesContainerRef.current;
@@ -192,7 +191,6 @@ export function Carousel(props: CarouselProps) {
 	function endDragEventHandler() {
 		const container = slidesContainerRef.current;
 		if (!container) return;
-
 		slideTimeoutPaused.current = false;
 		updateSlideTimeout();
 
@@ -230,7 +228,7 @@ export function Carousel(props: CarouselProps) {
 			window.addEventListener('resize', resizeEventHandler);
 			container?.addEventListener('mousedown', beginDragEventHandler);
 			container?.addEventListener('mousemove', dragEventHandler);
-			container?.addEventListener('mouseup', endDragEventHandler);
+			window.addEventListener('mouseup', endDragEventHandler);
 			container?.addEventListener('touchstart', beginDragTouchEventHandler);
 			container?.addEventListener('touchmove', dragTouchEventHandler);
 			container?.addEventListener('touchend', endDragTouchEventHandler);
@@ -239,7 +237,7 @@ export function Carousel(props: CarouselProps) {
 			window.removeEventListener('resize', resizeEventHandler);
 			container?.removeEventListener('mousedown', beginDragEventHandler);
 			container?.removeEventListener('mousemove', dragEventHandler);
-			container?.removeEventListener('mouseup', endDragEventHandler);
+			window.removeEventListener('mouseup', endDragEventHandler);
 			container?.removeEventListener('touchstart', beginDragTouchEventHandler);
 			container?.removeEventListener('touchmove', dragTouchEventHandler);
 			container?.removeEventListener('touchend', endDragTouchEventHandler);
