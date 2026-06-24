@@ -3,7 +3,7 @@ import { User, PublicUser, AgentRequest } from '@/types/User';
 import formatMembership from '@/database/format/Membership';
 import { createHash } from 'node:crypto';
 
-const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPayload<{ include: T }>): User => {
+const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPayload<{ include: T }>): User<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { fortytwo_oauth_id, fortytwo_user_id, password, two_factor_auth_id, memberships_id, admin, ...user } = row;
@@ -16,7 +16,7 @@ const formatPrivateUser = <T extends Prisma.usersInclude>(row: Prisma.usersGetPa
 			'membership' in row && row.membership
 				? formatMembership(row.membership as Prisma.membershipsGetPayload<object>)
 				: undefined,
-	};
+	} as unknown as User<T>;
 };
 
 const formatPublicUser = (row: Prisma.usersGetPayload<object>): PublicUser => {

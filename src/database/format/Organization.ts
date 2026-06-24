@@ -9,10 +9,12 @@ import { formatOrganizationPermission } from './OrganizationPermission';
 
 const formatPrivateOrganization = <T extends Prisma.organizationsInclude>(
 	row: Prisma.organizationsGetPayload<{ include: T }>
-): PrivateOrganization => {
-	const { logo, ...orga } = row;
+): PrivateOrganization<T> => {
+	const { logo, created_at, updated_at, ...orga } = row;
 	return {
 		...orga,
+		created_at: created_at.toISOString(),
+		updated_at: updated_at.toISOString(),
 		logo: logo ?? `/images/organization/avatar/${createHash('sha256').update(row.id).digest('hex')}`,
 		organization_members:
 			'organization_members' in row && row.organization_members
@@ -40,7 +42,7 @@ const formatPrivateOrganization = <T extends Prisma.organizationsInclude>(
 						formatOrganizationPermission
 					)
 				: undefined,
-	};
+	} as unknown as PrivateOrganization<T>;
 };
 
 const formatPublicOrganization = <T extends Prisma.organizationsInclude>(
@@ -48,9 +50,11 @@ const formatPublicOrganization = <T extends Prisma.organizationsInclude>(
 ): PublicOrganization => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { logo, owner_id, ...orga } = row;
+	const { logo, owner_id, created_at, updated_at, ...orga } = row;
 	return {
 		...orga,
+		created_at: created_at.toISOString(),
+		updated_at: updated_at.toISOString(),
 		logo: logo ?? `/images/organization/avatar/${createHash('sha256').update(row.id).digest('hex')}`,
 	};
 };

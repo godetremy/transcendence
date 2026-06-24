@@ -6,27 +6,35 @@ import { formatPrivateRegisteredEvent } from './EventRegistrations';
 
 const formatPublicEvent = <T extends Prisma.eventsInclude>(
 	row: Prisma.eventsGetPayload<{ include: T }>
-): PublicEvent => {
+): PublicEvent<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { organization_id, photos_album_id, ...event } = row;
+	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, ...event } = row;
 	return {
 		...event,
+		start_at: start_at.toISOString(),
+		end_at: end_at.toISOString(),
+		created_at: created_at.toISOString(),
+		update_at: update_at.toISOString(),
 		organization:
 			'organization' in row && row.organization
 				? formatPublicOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
 				: undefined,
-	};
+	} as unknown as PublicEvent<T>;
 };
 
 const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 	row: Prisma.eventsGetPayload<{ include: T }>
-): PrivateEvent => {
+): PrivateEvent<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { organization_id, photos_album_id, ...event } = row;
+	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, ...event } = row;
 	return {
 		...event,
+		start_at: start_at.toISOString(),
+		end_at: end_at.toISOString(),
+		created_at: created_at.toISOString(),
+		update_at: update_at.toISOString(),
 		organization:
 			'organization' in row && row.organization
 				? formatPrivateOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
@@ -41,7 +49,7 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 						formatPrivateRegisteredEvent
 					)
 				: undefined,
-	};
+	} as unknown as PrivateEvent<T>;
 };
 
 export { formatPrivateEvent, formatPublicEvent };

@@ -5,9 +5,14 @@ import { formatServiceCategory } from './ServiceCategories';
 
 const formatPublicService = <T extends Prisma.servicesInclude>(
 	row: Prisma.servicesGetPayload<{ include: T }>
-): PublicService => {
+): PublicService<T> => {
+	const { created_at, updated_at, start_at, end_at, ...service } = row;
 	return {
-		...row,
+		...service,
+		created_at: created_at.toISOString(),
+		updated_at: updated_at.toISOString(),
+		start_at: !start_at ? null : start_at.toISOString(),
+		end_at: !end_at ? null : end_at.toISOString(),
 		category:
 			'category' in row && row.category
 				? formatServiceCategory(row.category as Prisma.service_categoriesGetPayload<object>)
@@ -16,14 +21,19 @@ const formatPublicService = <T extends Prisma.servicesInclude>(
 			'organization' in row && row.organization
 				? formatPublicOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
 				: undefined,
-	};
+	} as unknown as PublicService<T>;
 };
 
 const formatPrivateService = <T extends Prisma.servicesInclude>(
 	row: Prisma.servicesGetPayload<{ include: T }>
-): PrivateService => {
+): PrivateService<T> => {
+	const { created_at, updated_at, start_at, end_at, ...service } = row;
 	return {
-		...row,
+		...service,
+		created_at: created_at.toISOString(),
+		updated_at: updated_at.toISOString(),
+		start_at: !start_at ? null : start_at.toISOString(),
+		end_at: !end_at ? null : end_at.toISOString(),
 		category:
 			'category' in row && row.category
 				? formatServiceCategory(row.category as Prisma.service_categoriesGetPayload<object>)
@@ -32,7 +42,7 @@ const formatPrivateService = <T extends Prisma.servicesInclude>(
 			'organization' in row && row.organization
 				? formatPrivateOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
 				: undefined,
-	};
+	} as unknown as PrivateService<T>;
 };
 
 export { formatPublicService, formatPrivateService };

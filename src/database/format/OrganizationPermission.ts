@@ -8,8 +8,8 @@ const formatOrganizationPermission = (
 		id: row.id,
 		name: row.name,
 		description: row.description,
-		created_at: row.created_at,
-		updated_at: row.update_at,
+		created_at: row.created_at.toISOString(),
+		updated_at: row.update_at.toISOString(),
 	};
 };
 
@@ -34,8 +34,8 @@ const formatOrganizationPermissionDetails = (
 		organization_update_info: row.organization_update_info,
 		organization_manage: row.organization_manage,
 		organization_manage_permission: row.organization_manage_permission,
-		created_at: row.created_at,
-		updated_at: row.update_at,
+		created_at: row.created_at.toISOString(),
+		updated_at: row.update_at.toISOString(),
 	};
 };
 

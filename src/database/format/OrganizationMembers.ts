@@ -6,7 +6,7 @@ import { formatOrganizationPermission } from '@/database/format/OrganizationPerm
 
 const formatOrganizationMembers = <T extends Prisma.organizationsInclude>(
 	row: Prisma.organization_membersGetPayload<{ include: T }>
-): OrganizationMembers => {
+): OrganizationMembers<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { organization_id, user_id, permission_id, ...members } = row;
@@ -24,7 +24,7 @@ const formatOrganizationMembers = <T extends Prisma.organizationsInclude>(
 				? formatPublicOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)
 				: undefined,
 		user: 'user' in row && row.user ? formatPublicUser(row.user as Prisma.usersGetPayload<object>) : undefined,
-	};
+	} as unknown as OrganizationMembers<T>;
 };
 
 const formatOrganizationInvitation = (
