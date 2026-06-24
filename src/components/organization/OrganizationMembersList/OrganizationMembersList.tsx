@@ -20,11 +20,11 @@ export function OrganizationMembersList({
 	if (isLoading) return <Loader />;
 	if (isError || data === undefined) return <ErrorState error={error} />;
 
-	const formatMembersDescription = (member: OrganizationMembers) => {
+	const formatMembersDescription = (member: OrganizationMembers<{ permission: true }>) => {
 		const invited_at = new Date(member.invited_at);
 		const registred_at = new Date(member.registered_at);
 
-		const permission = member.permission?.name ?? 'Aucune permission';
+		const permission = member.permission.name ?? 'Aucune permission';
 
 		return `${permission} • ${member.approved ? `A rejoins le ${registred_at.toLocaleDateString()}` : `Invité le ${invited_at.toLocaleDateString()}`}`;
 	};

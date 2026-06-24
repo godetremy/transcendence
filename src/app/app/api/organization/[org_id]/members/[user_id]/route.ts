@@ -31,7 +31,6 @@ export async function GET(
 	});
 }
 
-
 export async function POST(
 	req: NextRequest,
 	{ params }: { params: Promise<{ org_id: string; user_id: string }> }
@@ -61,8 +60,11 @@ export async function POST(
 		)
 			throw ERRORS_DETAILS.permission_denied();
 
-		await definePermissionsMember(user_id, body.permissions);
-		return NextResponse.json({ success: true });
+		const data = await definePermissionsMember(user_id, body.permissions);
+		const member = await getOrganizationMemberById(user_id, org_id, { user: true, organization_permission: true });
+		if (data.length <= 0 || member === null) throw ERRORS_DETAILS.account_does_not_exists();
+
+		return NextResponse.json(formatOrganizationMembers<{ user: true; organization_permission: true }>(member));
 	});
 }
 

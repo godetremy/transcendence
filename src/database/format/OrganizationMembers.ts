@@ -10,14 +10,17 @@ const formatOrganizationMembers = <T extends Prisma.organizationsInclude>(
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { organization_id, user_id, permission_id, ...members } = row;
+
 	return {
 		id: members.id,
 		approved: members.approved,
 		invited_at: members.invited_at.toDateString(),
 		registered_at: members.registered_at.toDateString(),
 		permission:
-			'permission' in row && row.permission
-				? formatOrganizationPermission(row.permission as Prisma.organization_permissionGetPayload<object>)
+			'organization_permission' in row && row.organization_permission
+				? formatOrganizationPermission(
+						row.organization_permission as Prisma.organization_permissionGetPayload<object>
+					)
 				: undefined,
 		organization:
 			'organization' in row && row.organization

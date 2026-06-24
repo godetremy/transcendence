@@ -11,11 +11,17 @@ import { getOrganizationMemberById } from '@/lib/fetcher/organization';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 
-export function OrganizationMemberCard({ member, close }: { member: OrganizationMembers; close: () => void }) {
+export function OrganizationMemberCard({
+	member,
+	close,
+}: {
+	member: OrganizationMembers<{ user: true; permission: true }>;
+	close: () => void;
+}) {
 	const organizationCtx = useOrganizations();
 	const organization = organizationCtx.getCurrentOrganization()!;
 
-	const { data, isLoading, isError, error } = useQuery(getOrganizationMemberById(organization.id, member.id));
+	const { data, isLoading, isError, error } = useQuery(getOrganizationMemberById(organization.id, member.user.id));
 
 	const formatJoinSubtitle = (member: OrganizationMembers) => {
 		const invited_at = new Date(member.invited_at);

@@ -96,8 +96,11 @@ const declineInvitationToOrganization = async (
 	});
 };
 
-const definePermissionsMember = async (user_id: string, permission_id: string): Promise<void> => {
-	prisma.organization_members.updateMany({
+const definePermissionsMember = async (
+	user_id: string,
+	permission_id: string
+): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>[]> => {
+	return prisma.organization_members.updateManyAndReturn({
 		where: { user_id },
 		data: { permission_id: permission_id },
 	});

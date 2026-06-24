@@ -5,8 +5,13 @@ import { OrganizationMembers } from '@/types/OrganizationMembers';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
 import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
-const getOrganizationMembers = (org_id: string): UseQueryOptions<PaginationResponse<OrganizationMembers>, Error> => ({
-	queryFn: () => get<PaginationResponse<OrganizationMembers>>(`/organization/${org_id}/members`),
+const getOrganizationMembers = (
+	org_id: string
+): UseQueryOptions<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>, Error> => ({
+	queryFn: () =>
+		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
+			`/organization/${org_id}/members`
+		),
 	queryKey: ['organization', org_id, 'members'],
 });
 
@@ -17,7 +22,10 @@ const getOrganizationPermission = (
 	queryKey: ['organization', org_id, 'permissions'],
 });
 
-const getOrganizationMemberById = (org_id: string, user_id: string): UseQueryOptions<OrganizationMembers, Error> => ({
+const getOrganizationMemberById = (
+	org_id: string,
+	user_id: string
+): UseQueryOptions<OrganizationMembers<{ user: true; permission: true }>, Error> => ({
 	queryFn: () => get<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`),
 	queryKey: ['organization', org_id, 'member', user_id],
 });
