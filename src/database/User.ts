@@ -34,7 +34,8 @@ const createStudentUser = async (
 const createAgentsUser = async (
 	mail: string,
 	password: string,
-	admin: boolean = false
+	admin: boolean = false,
+	agent_verified: boolean | null = null
 ): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.create({
 		data: {
@@ -47,6 +48,7 @@ const createAgentsUser = async (
 			memberships_id: null,
 			agent: true,
 			admin,
+			agent_verified: agent_verified,
 		},
 	});
 };
@@ -108,6 +110,16 @@ const updateUserPassword = async (
 	});
 };
 
+const updateUserAdminStatus = async (
+	id: string,
+	admin: boolean
+): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
+	return prisma.users.update({
+		where: { id },
+		data: { admin },
+	});
+};
+
 const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.delete({
 		where: { id: id },
@@ -157,6 +169,18 @@ const getUsersByFilter = async <T extends Prisma.usersInclude>(
 	});
 };
 
+const getUsersByFilterAndSearch = async <T extends Prisma.usersInclude>(
+	filter: Prisma.usersWhereInput,
+	include: T,
+	pagination?: PaginationParameters
+): Promise<Prisma.usersGetPayload<{ include: T }>[]> => {
+	return prisma.users.findMany({
+		where: filter,
+		include: include,
+		...(pagination ? { ...paginationToPrisma(pagination) } : {}),
+	});
+};
+
 const countUsersByFilter = async (filter: Prisma.usersWhereInput): Promise<number> => {
 	return prisma.users.count({
 		where: filter,
@@ -177,6 +201,7 @@ export {
 	createOrUpdateStudentUser,
 	updateUserApproval,
 	updateUserPassword,
+	updateUserAdminStatus,
 	deleteUser,
 	getUserById,
 	getUserFromSession,
@@ -185,4 +210,5 @@ export {
 	countUsersByFilter,
 	existUserById,
 	existUserByMail,
+	getUsersByFilterAndSearch,
 };

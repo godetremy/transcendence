@@ -1,0 +1,62 @@
+import { getAlbumById, UpdateAlbum } from '@/database/Album';
+import { formatPublicAlbum } from '@/database/format/Album';
+import { getUserById } from '@/database/User';
+import { getThrowableSession } from '@/lib/session';
+import { UpdateAlbumSchema } from '@/schema/AlbumSchema';
+import { UpdateAlbumType } from '@/types/album';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+import { parseBody } from '@/utils/parsing';
+import { getUserOrganizationPermission } from '@/utils/permission';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: Promise<{ album_id: string }> }
+): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { album_id } = await params;
+		const session = await getThrowableSession(req);
+
+		const user = await getUserById(session.user_id, {});
+		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+
+		const album = await getAlbumById(album_id, {});
+		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
+
+		return NextResponse.json(formatPublicAlbum(album));
+	});
+}
+
+export async function PATCH(
+	req: NextRequest,
+	{ params }: { params: Promise<{ album_id: string }> }
+): Promise<NextResponse> {
+	return errorHandler(async () => {
+		const { album_id } = await params;
+
+		const session = await getThrowableSession(req);
+		const user = await getUserById(session.user_id, {});
+		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+
+		const checkAlbum = await getAlbumById(album_id, {
+			events: { include: { organization: true } },
+			services: { include: { organization: true } },
+		});
+		if (checkAlbum == null) throw ERRORS_DETAILS.album_does_not_exists();
+
+		if (checkAlbum.events?.organization_id != null) {
+			const user_permission = await getUserOrganizationPermission(user, checkAlbum.events.organization_id);
+			if (user_permission.album_update == false) throw ERRORS_DETAILS.permission_denied();
+		} else if (checkAlbum.services?.organization_id != null) {
+			const user_permission = await getUserOrganizationPermission(user, checkAlbum.services.organization_id);
+			if (user_permission.album_update == false) throw ERRORS_DETAILS.permission_denied();
+		} else throw ERRORS_DETAILS.organization_does_not_exist();
+
+		const body = await parseBody<UpdateAlbumType>(req, UpdateAlbumSchema);
+
+		const album = await UpdateAlbum(body, album_id, {});
+		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
+
+		return NextResponse.json(formatPublicAlbum(album));
+	});
+}

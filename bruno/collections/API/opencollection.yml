@@ -17,7 +17,7 @@ config:
 request:
   variables:
     - name: BaseURL
-      value: https://localhost/app/api
+      value: https://nanci-windswept-lingeringly.ngrok-free.dev/app/api
 bundled: false
 extensions:
   bruno:

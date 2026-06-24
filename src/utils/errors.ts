@@ -32,6 +32,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	two_factor_auth_required: () => new ApiError(401, 'Two factor auth is required for this account.'),
 	two_factor_auth_not_implemented: () => new ApiError(501, 'This 2FA method is not implemented yet.'),
 	organization_already_exist: () => new ApiError(400, 'This organization already exists.'),
+	organization_does_not_verified: () => new ApiError(400, 'This organization is not verified.'),
 	organization_does_not_exist: () => new ApiError(404, 'This organization does not exists.'),
 	organization_member_already_invited: () => new ApiError(403, 'This member has already been invited.'),
 	member_not_in_organization: () => new ApiError(403, 'This member is not in the organization.'),
@@ -41,6 +42,9 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	too_many_upload: () => new ApiError(429, 'You requested too many upload. Please wait some hour and try again.'),
 	refused_delete_member: () => new ApiError(403, "You can't delete this member."),
 	refused_define_permissions: () => new ApiError(403, "You can't define permissions."),
+	cant_remove_last_admin: () => new ApiError(401, "You cant leave your admin role because you're the last admin."),
+	cant_leave_as_owner: () => new ApiError(403, "You can't leave this organization because you're the owner."),
+	already_admin: () => new ApiError(401, 'This user is already admin.'),
 };
 
 const formatError = (error: ApiError) => {

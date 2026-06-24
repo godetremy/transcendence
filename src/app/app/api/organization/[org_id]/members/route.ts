@@ -13,8 +13,18 @@ export async function GET(
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
 		const number = await countOrganizationMembersByFilter({});
-		const list = await getOrganizationMembersByFilter({ organization_id: org_id }, {}, pagination);
+		const list = await getOrganizationMembersByFilter(
+			{ organization_id: org_id },
+			{ user: true, organization_permission: true },
+			pagination
+		);
 
-		return NextResponse.json(generatePaginationResponse(list.map(formatOrganizationMembers), number, pagination));
+		return NextResponse.json(
+			generatePaginationResponse(
+				list.map(formatOrganizationMembers<{ user: true; organization_permission: true }>),
+				number,
+				pagination
+			)
+		);
 	});
 }

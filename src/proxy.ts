@@ -4,6 +4,13 @@ import { existsSync } from 'node:fs';
 import path from 'path';
 
 const ignorePath = ['/app/api/auth/'];
+const ignorePathApprove = [
+	'/app/api/users/approval',
+	'/app/approval',
+	'/app/api/users/me',
+	'/app/api/auth/refresh',
+	'/app/api/auth/logout',
+];
 
 function checkFirstInitialization(url: string) {
 	const uri = path.resolve(process.cwd(), '.init_done');
@@ -13,6 +20,13 @@ function checkFirstInitialization(url: string) {
 function isPathIgnored(path: string): boolean {
 	if (!path.startsWith('/app')) return true;
 	for (const ignored of ignorePath) {
+		if (path.startsWith(ignored)) return true;
+	}
+	return false;
+}
+
+function isPathIgnoredApprove(path: string): boolean {
+	for (const ignored of ignorePathApprove) {
 		if (path.startsWith(ignored)) return true;
 	}
 	return false;
@@ -42,13 +56,10 @@ export default async function proxy(req: NextRequest) {
 		return NextResponse.redirect(new URL('/app/login', req.nextUrl));
 	}
 
-	if (
-		session.agent &&
-		(session.agent_verified === null || !session.agent_verified) &&
-		!req.nextUrl.pathname.startsWith('/app/approval') &&
-		!req.nextUrl.pathname.startsWith('/app/api')
-	)
+	if (session.agent && (session.agent_verified === null || !session.agent_verified)) {
+		if (isPathIgnoredApprove(req.nextUrl.pathname)) return NextResponse.next();
 		return NextResponse.redirect(new URL('/app/approval', req.nextUrl));
+	}
 
 	return NextResponse.next();
 }

@@ -12,7 +12,6 @@ import {
 import { parseBody } from '@/utils/parsing';
 import { MemberInviteRequestBodySchema } from '@/schema/MemberInviteRequestBodySchema';
 import { MemberInviteRequestBody } from '@/types/MemberInviteRequestBody';
-import { existPermissionInOrganization } from '@/database/OrganizationPermission';
 import { organizationExistById } from '@/database/Organization';
 import { formatOrganizationMembers } from '@/database/format/OrganizationMembers';
 import { MemberInviteResponseRequestBody } from '@/types/MemberInviteResponseRequestBody';
@@ -27,16 +26,12 @@ export function POST(req: NextRequest, { params }: { params: Promise<{ org_id: s
 
 		const body = await parseBody<MemberInviteRequestBody>(req, MemberInviteRequestBodySchema);
 
-		const permission = await getUserOrganizationPermission(user, org_id);
-		if (!permission.members_manage) ERRORS_DETAILS.permission_denied();
-
-		if (!(await organizationExistById(org_id))) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (!(await existPermissionInOrganization(body.permission_id, org_id)))
-			throw ERRORS_DETAILS.permission_does_not_exists();
+		const user_permission = await getUserOrganizationPermission(user, org_id);
+		if (!user_permission.members_manage) ERRORS_DETAILS.permission_denied();
 
 		const member = await inviteMemberToOrganization(org_id, body.user_id, body.permission_id);
 
-		return NextResponse.json(formatOrganizationMembers(member));
+		return NextResponse.json(formatOrganizationMembers<object>(member));
 	});
 }
 

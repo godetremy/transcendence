@@ -9,9 +9,11 @@ import {
 	Building2,
 	FileLock,
 	GitCommitVerticalIcon,
+	KeyRound,
 	Lock,
 	LogOut,
 	User2,
+	Vote,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
@@ -57,8 +59,25 @@ export default function Page() {
 						title={'Organisation'}
 						description={'Gère tes organisations'}
 						onPress={() => router.push('/app/me/organization')}
-						last
+						last={!user?.admin}
 					/>
+					{user?.admin && (
+						<>
+							<ListItem
+								icon={Vote}
+								title={'Demandes d’accès agents'}
+								description={'Gère les demandes de création des comptes agents'}
+								onPress={() => router.push('/app/me/agents')}
+							/>
+							<ListItem
+								icon={KeyRound}
+								title={'Administrateurs'}
+								description={'Gère les membres administrateurs'}
+								onPress={() => router.push('/app/me/administration')}
+								last
+							/>
+						</>
+					)}
 				</div>
 				<div className={styles.list}>
 					<ListItem

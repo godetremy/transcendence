@@ -156,9 +156,9 @@ export function Carousel(props: CarouselProps) {
 	}
 
 	function beginDragEventHandler(event: MouseEvent) {
+		if (event.buttons !== 1) return;
 		const container = slidesContainerRef.current;
 		if (!container) return;
-
 		dragBaseXPosition.current = event.x;
 		dragBaseTranslateX.current = parseTranslateX(container);
 	}
@@ -199,7 +199,7 @@ export function Carousel(props: CarouselProps) {
 		const slideWidth = container.children[0].getBoundingClientRect().width;
 		const translateX = parseTranslateX(container);
 
-		const targetSlide = (Math.round(-(translateX / slideWidth)) * 1.2) % container.children.length;
+		const targetSlide = Math.round(-(translateX / slideWidth)) % container.children.length;
 		goToSlide(targetSlide);
 	}
 

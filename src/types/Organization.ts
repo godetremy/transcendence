@@ -1,12 +1,23 @@
-export interface PrivateOrganization {
+import { PrivateEvent } from './Event';
+import { PublicOrganizationFollowers } from './OrganizationFollowers';
+import { OrganizationMembers } from './OrganizationMembers';
+import { OrganizationPermission } from './OrganizationPermissionDetails';
+import { PrivateService } from './Service';
+
+export interface PrivateOrganization<T = object> {
 	id: string;
-	owner: string;
+	owner_id: string;
 	name: string;
 	description: string | null;
 	logo: string;
 	club: boolean;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
+	organization_members: T extends { membership: unknown } ? OrganizationMembers[] : never;
+	organization_followers: T extends { membership: unknown } ? PublicOrganizationFollowers[] : never;
+	events: T extends { membership: unknown } ? PrivateEvent[] : never;
+	services: T extends { membership: unknown } ? PrivateService[] : never;
+	organization_permission: T extends { membership: unknown } ? OrganizationPermission[] : never;
 }
 
 export interface PublicOrganization {
@@ -15,8 +26,8 @@ export interface PublicOrganization {
 	description: string | null;
 	logo: string | null;
 	club: boolean;
-	created_at: Date;
-	updated_at: Date;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface CreateOrganizationType {

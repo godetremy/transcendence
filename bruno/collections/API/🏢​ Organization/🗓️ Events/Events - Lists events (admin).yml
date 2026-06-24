@@ -1,7 +1,7 @@
 info:
   name: Events - Lists events (admin)
   type: http
-  seq: 2
+  seq: 1
 
 http:
   method: GET
@@ -23,7 +23,7 @@ http:
       value: "1"
       type: query
     - name: org_id
-      value: 41263fd5-f568-485d-8a03-3dfd0c65d461
+      value: e59fa0a3-be72-49fe-94b7-8fba9a5496e5
       type: path
   auth: inherit
 

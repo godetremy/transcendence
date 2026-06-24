@@ -8,7 +8,7 @@ import QRCode from 'react-qr-code';
 import { get, post } from '@/lib/fetcher';
 
 export default function Page() {
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<User<{ membership: true }> | null>(null);
 
 	const [twoFactorAuthData, setTwoFactorAuthData] = useState<string | undefined>(undefined);
 
@@ -47,8 +47,8 @@ export default function Page() {
 						<p>id : {user.id}</p>
 						<p>is agent : {user.agent ? 'true' : 'false'}</p>
 						<p>memberships id : {user.membership ? user.membership.id : '-'}</p>
-						<p>start at : {user.membership?.start_at.toLocaleDateString() ?? '-'}</p>
-						<p>end at : {user.membership?.end_at.toLocaleDateString() ?? '-'}</p>
+						<p>start at : {user.membership?.start_at ?? '-'}</p>
+						<p>end at : {user.membership?.end_at ?? '-'}</p>
 					</>
 				)}
 				<Link href={'/app/api/auth/logout/'}>Log out</Link>

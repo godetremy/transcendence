@@ -1,6 +1,6 @@
 import { Prisma } from '@/database/prisma/generated/client';
 import { prisma } from '@/database/prisma/prisma';
-import { CreateOrganizationPermissionType } from '@/types/OrganizationPermission';
+import { CreateOrganizationPermissionType } from '@/types/OrganizationPermissionDetails';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 
@@ -19,6 +19,9 @@ const initializeOrganizationPermission = async (
 				service_create: true,
 				service_update: true,
 				service_delete: true,
+				album_create: true,
+				album_update: true,
+				album_delete: true,
 				members_manage: true,
 				organization_update_info: true,
 				organization_manage: true,
@@ -34,6 +37,9 @@ const initializeOrganizationPermission = async (
 				service_create: true,
 				service_update: true,
 				service_delete: true,
+				album_create: true,
+				album_update: true,
+				album_delete: true,
 				members_manage: true,
 				organization_update_info: true,
 				organization_manage_permission: true,
@@ -48,6 +54,9 @@ const initializeOrganizationPermission = async (
 				service_create: true,
 				service_update: true,
 				service_delete: true,
+				album_create: true,
+				album_update: true,
+				album_delete: true,
 			},
 		],
 	});

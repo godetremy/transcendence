@@ -1,20 +1,20 @@
 info:
   name: Events - Create event (admin)
   type: http
-  seq: 1
+  seq: 5
 
 http:
   method: POST
   url: "{{BaseURL}}/organization/:org_id/events"
   params:
     - name: org_id
-      value: 41263fd5-f568-485d-8a03-3dfd0c65d461
+      value: f9f9ada4-ae38-40df-8bfa-01eeddff8641
       type: path
   body:
     type: json
     data: |-
       {
-        "title": "test",
+        "title": "cc111111",
         "subtitle": "test1",
         "description": "test2",
         "max_registration": 50,

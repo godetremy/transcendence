@@ -13,6 +13,7 @@ export interface ListItemProps {
 	onPress?: () => void;
 	leftElement?: ReactNode;
 	rightElement?: ReactNode;
+	disabled?: boolean;
 }
 
 function ListItem({
@@ -26,15 +27,17 @@ function ListItem({
 	onPress,
 	leftElement,
 	rightElement,
+	disabled = false,
 }: ListItemProps) {
 	return (
 		<button
 			className={`${styles.listItem} ${hoverEffect ? styles.hoverable : ''} ${negative ? styles.negative : ''}`}
 			style={{
-				height: description ? '60px' : '50px',
+				minHeight: description ? '60px' : '50px',
 				borderBottom: last ? 'none' : '1px solid var(--color-border-dark)',
 			}}
 			onClick={onPress}
+			disabled={disabled}
 		>
 			{(leftElement || Icon) && (
 				<div className={styles.left}>

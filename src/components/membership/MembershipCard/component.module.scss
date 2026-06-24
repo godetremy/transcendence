@@ -7,7 +7,7 @@
 	right: -50vw;
 	bottom: -100vh;
 	padding: 100vh calc(50vw + 20px);
-	z-index: 10000;
+	z-index: 1000000;
 	background-color: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(10px);
 	display: flex;
@@ -35,11 +35,13 @@
 
 	& > h1 {
 		font: 700 28px var(--font-paragraph);
+		text-align: center;
 		margin-top: 20px;
 	}
 
 	& > p {
 		font: 500 14px var(--font-paragraph);
+		text-align: center;
 		opacity: 0.6;
 	}
 

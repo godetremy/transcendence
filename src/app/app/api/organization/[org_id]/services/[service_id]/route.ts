@@ -1,14 +1,13 @@
 import { formatPrivateService } from '@/database/format/Service';
 import { getOrganizationById } from '@/database/Organization';
-import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
-import { getOrganizationPermissionById } from '@/database/OrganizationPermission';
 import { deleteServicesById, getServicesByIdToOrganization, UpdateServices } from '@/database/Service';
-import { getUserById } from '@/database/User';
-import { decrypt } from '@/lib/session';
+import { getUserFromSession } from '@/database/User';
+import { getThrowableSession } from '@/lib/session';
 import { CreateServiceSchema } from '@/schema/ServiceShema';
 import { CreateOrUpdateServiceType } from '@/types/Service';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
+import { getUserOrganizationPermission } from '@/utils/permission';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -18,22 +17,12 @@ export async function GET(
 	return errorHandler(async () => {
 		const { service_id, org_id } = await params;
 
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		const user = await getUserById(user_id, {});
-		const organization = await getOrganizationById(org_id, {});
-		const service = await getServicesByIdToOrganization(service_id, org_id, {});
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
 
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (service == null) throw ERRORS_DETAILS.service_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
 
-		if (user.admin == false && organization.owner_id != user_id) {
-			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
-			if (member == null) throw ERRORS_DETAILS.member_not_in_organization();
-			if (member.approved == false || member.permission_id == null)
-				throw ERRORS_DETAILS.member_not_in_organization();
-		}
+		await getUserOrganizationPermission(user, org_id);
 
 		const service_value = await getServicesByIdToOrganization(service_id, org_id, {
 			organization: true,
@@ -41,7 +30,7 @@ export async function GET(
 		});
 		if (service_value === null) throw ERRORS_DETAILS.service_does_not_exists();
 
-		return NextResponse.json(formatPrivateService(service_value));
+		return NextResponse.json(formatPrivateService<object>(service_value));
 	});
 }
 
@@ -52,32 +41,24 @@ export async function PATCH(
 	return errorHandler(async () => {
 		const { org_id, service_id } = await params;
 
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		const user = await getUserById(user_id, {});
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 		const service = await getServicesByIdToOrganization(service_id, org_id, {});
 
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (service == null) throw ERRORS_DETAILS.service_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!service) throw ERRORS_DETAILS.service_does_not_exists();
 
-		if (user.admin == false && organization.owner_id != user_id) {
-			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
-			if (member == null) throw ERRORS_DETAILS.member_not_in_organization();
-			if (member.approved == false || member.permission_id == null)
-				throw ERRORS_DETAILS.member_not_in_organization();
-
-			const permission = await getOrganizationPermissionById(member.permission_id, member.organization_id, {});
-			if (permission?.service_update == null) throw ERRORS_DETAILS.permission_denied();
-		}
+		const user_permission = await getUserOrganizationPermission(user, org_id);
+		if (!user_permission.service_update) throw ERRORS_DETAILS.permission_denied();
 
 		const body = await parseBody<CreateOrUpdateServiceType>(req, CreateServiceSchema);
 
 		const service_value = await UpdateServices(body, service_id, { organization: true, category: true });
 		if (service_value == null) throw ERRORS_DETAILS.service_does_not_exists();
 
-		return NextResponse.json(formatPrivateService(service_value));
+		return NextResponse.json(formatPrivateService<object>(service_value));
 	});
 }
 
@@ -88,25 +69,17 @@ export async function DELETE(
 	return errorHandler(async () => {
 		const { org_id, service_id } = await params;
 
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		const user = await getUserById(user_id, {});
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 		const service = await getServicesByIdToOrganization(service_id, org_id, {});
 
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (service == null) throw ERRORS_DETAILS.service_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!service) throw ERRORS_DETAILS.service_does_not_exists();
 
-		if (user.admin == false && organization.owner_id != user_id) {
-			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
-			if (member == null) throw ERRORS_DETAILS.member_not_in_organization();
-			if (member.approved == false || member.permission_id == null)
-				throw ERRORS_DETAILS.member_not_in_organization();
-
-			const permission = await getOrganizationPermissionById(member.permission_id, member.organization_id, {});
-			if (permission?.service_delete == null) throw ERRORS_DETAILS.permission_denied();
-		}
+		const user_permission = await getUserOrganizationPermission(user, org_id);
+		if (!user_permission.service_delete) throw ERRORS_DETAILS.permission_denied();
 
 		await deleteServicesById(service_id, org_id, {});
 

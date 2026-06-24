@@ -19,6 +19,6 @@ export async function GET(
 		const count = await countServicesByFilter({ category_id: category_id });
 		const lists = await getServicesByCategory({ organization: true, category: true }, category_id, pagination);
 
-		return NextResponse.json(generatePaginationResponse(lists.map(formatPublicService), count, pagination));
+		return NextResponse.json(generatePaginationResponse(lists.map(formatPublicService<object>), count, pagination));
 	});
 }

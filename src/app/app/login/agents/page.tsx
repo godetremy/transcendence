@@ -39,17 +39,19 @@ export default function Page() {
 		}
 		setTimeout(
 			async () =>
-				await post<{ success: boolean; message?: string }>('/auth/login/', fields.data).then((res) => {
-					if (!res.success) {
-						if (res.message === ERRORS_DETAILS.two_factor_auth_required().message) {
-							setLoading(false);
+				await post<{ success: boolean; message?: string }>('/auth/login/', fields.data)
+					.then(() => {
+						return redirect('/app/home/');
+					})
+					.catch((err: Error) => {
+						if (err.message === 'NEXT_REDIRECT') throw err;
+						if (err.message === ERRORS_DETAILS.two_factor_auth_required().message) {
 							setShow2FA(true);
 							return;
 						}
-						setError(res.message);
-						setLoading(false);
-					} else return redirect('/app/home/');
-				}),
+						setError(err.message);
+					})
+					.finally(() => setLoading(false)),
 			2000
 		);
 	};
@@ -71,18 +73,16 @@ export default function Page() {
 
 		setTimeout(
 			async () =>
-				await post<{ success: boolean; message?: string }>('/auth/login/', fields.data).then((res) => {
-					if (!res.success) {
-						if (res.message === ERRORS_DETAILS.invalid_totp_code().message) {
-							setLoading(false);
-							setError(res.message);
-							return;
-						}
-						setError(res.message);
-						setLoading(false);
-						setShow2FA(false);
-					} else return redirect('/app/home/');
-				}),
+				await post<{ success: boolean; message?: string }>('/auth/login/', fields.data)
+					.then(() => {
+						return redirect('/app/home/');
+					})
+					.catch((err: Error) => {
+						if (err.message === 'NEXT_REDIRECT') throw err;
+						setShow2FA(err.message === ERRORS_DETAILS.invalid_totp_code().message);
+						setError(err.message);
+					})
+					.finally(() => setLoading(false)),
 			800
 		);
 	};

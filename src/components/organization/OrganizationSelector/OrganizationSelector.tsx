@@ -29,12 +29,7 @@ export function OrganizationPicker() {
 				className={`${styles.picker_button} ${open ? styles.opened : undefined}`}
 			>
 				{loadingOrganization && <Loader size={24} dark={false} />}
-				<Image
-					src={'/images/demo_profile.jpg'}
-					alt={`${currentOrganization.name} logo`}
-					width={24}
-					height={24}
-				/>
+				<Image src={currentOrganization.logo} alt={`${currentOrganization.name} logo`} width={24} height={24} />
 				<p>{currentOrganization.name}</p>
 				<ChevronDown color={'currentColor'} size={16} />
 			</button>
@@ -53,12 +48,7 @@ export function OrganizationPicker() {
 							href={`/app/organization/${organization.id}/dashboard`}
 							onNavigate={() => setOpen(false)}
 						>
-							<Image
-								src={'/images/demo_profile.jpg'}
-								alt={`${organization.name} logo`}
-								width={28}
-								height={28}
-							/>
+							<Image src={organization.logo} alt={`${organization.name} logo`} width={28} height={28} />
 							<p>{organization.name}</p>
 						</Link>
 					))}

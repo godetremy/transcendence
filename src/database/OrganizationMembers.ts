@@ -59,7 +59,7 @@ const inviteMemberToOrganization = async (
 	user_id: string,
 	permission_id: string,
 	force_approve?: boolean
-): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDeleteArgs>> => {
+): Promise<Prisma.organization_membersGetPayload<{ include: { user: true; organization_permission: true } }>> => {
 	if (!(await isUserInOrganization(organization_id, user_id))) {
 		return prisma.organization_members.create({
 			data: {
@@ -68,6 +68,10 @@ const inviteMemberToOrganization = async (
 				permission_id,
 				registered_at: new Date(),
 				approved: force_approve ?? false,
+			},
+			include: {
+				organization_permission: true,
+				user: true,
 			},
 		});
 	}
@@ -112,26 +116,30 @@ const declineInvitationToOrganization = async (
 	});
 };
 
-const deleteMember = async (user_id: string): Promise<void> => {
-	prisma.organization_members.delete({
-		where: { id: user_id },
-	});
-};
-
-const definePermissionsMember = async (user_id: string, permission_id: string): Promise<void> => {
-	prisma.organization_members.update({
-		where: { user_id: user_id },
+const definePermissionsMember = async (
+	user_id: string,
+	permission_id: string
+): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>[]> => {
+	return prisma.organization_members.updateManyAndReturn({
+		where: { user_id },
 		data: { permission_id: permission_id },
 	});
 };
 
-const getMemberById = async <T extends Prisma.membersInclude>(
-	id: string,
+const getOrganizationMemberById = async <T extends Prisma.organization_membersInclude>(
+	user_id: string,
+	organization_id: string,
 	include: T
-): Promise<Prisma.membersGetPayload<{ include: T }> | null> => {
-	return prisma.organization_members.findUnique({
-		where: { id },
+): Promise<Prisma.organization_membersGetPayload<{ include: T }> | null> => {
+	return prisma.organization_members.findFirst({
+		where: { user_id, organization_id },
 		include: include,
+	});
+};
+
+const deleteMemberFromOrganization = async (user_id: string, organization_id: string): Promise<void> => {
+	prisma.organization_members.deleteMany({
+		where: { user_id, organization_id },
 	});
 };
 
@@ -146,7 +154,7 @@ export {
 	isUserInvitedInOrganization,
 	acceptInvitationToOrganization,
 	declineInvitationToOrganization,
-	deleteMember,
 	definePermissionsMember,
-	getMemberById,
+	getOrganizationMemberById,
+	deleteMemberFromOrganization,
 };

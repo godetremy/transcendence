@@ -1,0 +1,19 @@
+info:
+  name: Album - Detail album
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{BaseURL}}/albums/:album_id"
+  params:
+    - name: album_id
+      value: e7750f55-706c-4ba6-a4c9-cb5deccc574b
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

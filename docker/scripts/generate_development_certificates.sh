@@ -17,6 +17,7 @@ CERT_FILE_CERTIFICATE_PATH="$CERTIFICATE_PATH/certificate.pem"
 KEY_FILE_CERTIFICATE_PATH="$CERTIFICATE_PATH/certificate.key.pem"
 
 export TRUST_STORES=system,nss
+mkdir -p "$CERTIFICATE_PATH"
 mkcert -install
 mkcert -cert-file "$CERT_FILE_CERTIFICATE_PATH" -key-file "$KEY_FILE_CERTIFICATE_PATH" "$NEXT_PUBLIC_BASE_URL"
 

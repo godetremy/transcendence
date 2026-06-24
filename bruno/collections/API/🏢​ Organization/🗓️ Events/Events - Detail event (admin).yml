@@ -1,7 +1,7 @@
 info:
   name: Events - Detail event (admin)
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: GET
@@ -11,7 +11,7 @@ http:
       value: 40f756b4-5d60-48f8-98e4-3726d93d311c
       type: path
     - name: org_id
-      value: 41263fd5-f568-485d-8a03-3dfd0c65d461
+      value: cf8d7a3f-d0a2-457c-996b-f282d350d092
       type: path
   auth: inherit
 

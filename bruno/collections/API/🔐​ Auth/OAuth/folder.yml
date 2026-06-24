@@ -1,7 +1,7 @@
 info:
-    name: OAuth
-    type: folder
-    seq: 7
+  name: OAuth
+  type: folder
+  seq: 7
 
 request:
-    auth: inherit
+  auth: inherit

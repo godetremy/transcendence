@@ -199,6 +199,7 @@ export const OrganizationsScalarFieldEnum = {
   description: 'description',
   logo: 'logo',
   club: 'club',
+  verified: 'verified',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const

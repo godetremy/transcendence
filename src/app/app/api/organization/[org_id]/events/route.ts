@@ -1,16 +1,15 @@
 import { countEventsByFilter, createEvent, getEventsByFilterToOrganization } from '@/database/Event';
 import { formatPrivateEvent } from '@/database/format/Event';
 import { getOrganizationById } from '@/database/Organization';
-import { getOrganizationMemberByFilter } from '@/database/OrganizationMembers';
-import { getOrganizationPermissionById } from '@/database/OrganizationPermission';
-import { getUserById } from '@/database/User';
-import { decrypt } from '@/lib/session';
+import { getUserFromSession } from '@/database/User';
+import { getThrowableSession } from '@/lib/session';
 import { CreateEventSchema } from '@/schema/EventSchema';
 import { CreateOrUpdateEventType } from '@/types/Event';
 import { getDateParams } from '@/utils/date';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { parseBody } from '@/utils/parsing';
+import { getUserOrganizationPermission } from '@/utils/permission';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -21,19 +20,15 @@ export async function GET(
 	return errorHandler(async () => {
 		const { org_id } = await params;
 		const searchParams = req.nextUrl.searchParams;
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		const user = await getUserById(user_id, {});
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		if (user.admin == false && organization.owner_id != user_id) {
-			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
-			if (member == null) throw ERRORS_DETAILS.member_not_in_organization();
-			if (member.approved == false || member.permission_id == null)
-				throw ERRORS_DETAILS.member_not_in_organization();
+		if (user.admin == false && organization.owner_id != user.id) {
+			await getUserOrganizationPermission(user, org_id);
 		}
 
 		const date = getDateParams(searchParams);
@@ -43,7 +38,17 @@ export async function GET(
 		const count = await countEventsByFilter();
 		const value = await getEventsByFilterToOrganization({ organization: true }, org_id, date, sorting, pagination);
 
-		return NextResponse.json(generatePaginationResponse(value.map(formatPrivateEvent), count, pagination));
+		return NextResponse.json(
+			generatePaginationResponse(
+				value.map(
+					formatPrivateEvent<{
+						organization: true;
+					}>
+				),
+				count,
+				pagination
+			)
+		);
 	});
 }
 
@@ -53,22 +58,16 @@ export async function POST(
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { org_id } = await params;
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
-		const user = await getUserById(user_id, {});
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
-		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		if (user.admin == false && organization.owner_id != user_id) {
-			const member = await getOrganizationMemberByFilter({ organization_id: org_id, user_id: user_id }, {});
-			if (member == null) throw ERRORS_DETAILS.member_not_in_organization();
-			if (member.approved == false || member.permission_id == null)
-				throw ERRORS_DETAILS.member_not_in_organization();
-
-			const permission = await getOrganizationPermissionById(member.permission_id, member.organization_id, {});
-			if (permission?.event_create == null) throw ERRORS_DETAILS.permission_denied();
+		if (user.admin == false && organization.owner_id != user.id) {
+			const user_permission = await getUserOrganizationPermission(user, org_id);
+			if (!user_permission.event_create) throw ERRORS_DETAILS.permission_denied();
 		}
 
 		const data = await parseBody<CreateOrUpdateEventType>(req, CreateEventSchema);

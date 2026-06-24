@@ -1,7 +1,7 @@
 import { PrivateOrganization, PublicOrganization } from './Organization';
 import { ServiceCategory } from './ServiceCategory';
 
-export interface PrivateService {
+export interface PrivateService<T = object> {
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -9,21 +9,21 @@ export interface PrivateService {
 	description: string | null;
 	location: string | null;
 	image: string;
-	start_at: Date | null;
-	end_at: Date | null;
+	start_at: string | null;
+	end_at: string | null;
 	registration_required: boolean;
 	registration_details: string;
 	registration_link: string;
 	registration_full: boolean;
 	photo_album_id: string | null;
 	source_link: string | null;
-	created_at: Date;
-	updated_at: Date;
-	organization: PrivateOrganization;
-	category: ServiceCategory;
+	created_at: string;
+	updated_at: string;
+	organization: T extends { membership: unknown } ? PrivateOrganization : never;
+	category: T extends { membership: unknown } ? ServiceCategory : never;
 }
 
-export interface PublicService {
+export interface PublicService<T = object> {
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -31,18 +31,18 @@ export interface PublicService {
 	description: string | null;
 	location: string | null;
 	image: string;
-	start_at: Date | null;
-	end_at: Date | null;
+	start_at: string | null;
+	end_at: string | null;
 	registration_required: boolean;
 	registration_details: string;
 	registration_link: string;
 	registration_full: boolean;
 	photo_album_id: string | null;
 	source_link: string | null;
-	created_at: Date;
-	updated_at: Date;
-	organization: PublicOrganization;
-	category: ServiceCategory;
+	created_at: string;
+	updated_at: string;
+	organization: T extends { membership: unknown } ? PublicOrganization : never;
+	category: T extends { membership: unknown } ? ServiceCategory : never;
 }
 
 export interface CreateOrUpdateServiceType {

@@ -10,7 +10,7 @@ http:
     type: form-urlencoded
     data:
       - name: name
-        value: Santé
+        value: other
       - name: description
         value: Prend soins de ta santé
       - name: icon
