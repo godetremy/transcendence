@@ -45,6 +45,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	cant_remove_last_admin: () => new ApiError(401, "You cant leave your admin role because you're the last admin."),
 	cant_leave_as_owner: () => new ApiError(403, "You can't leave this organization because you're the owner."),
 	already_admin: () => new ApiError(401, 'This user is already admin.'),
+	permission_in_use: () => new ApiError(403, 'The permission is currently in use.'),
 };
 
 const formatError = (error: ApiError) => {
