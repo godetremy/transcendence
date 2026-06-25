@@ -5,11 +5,12 @@ info:
 
 http:
   method: GET
-  url: "{{BaseURL}}/auth/oauth/fortytwo/authorize?code=test"
+  url: "{{BaseURL}}/auth/oauth/fortytwo/authorize"
   params:
     - name: code
       value: test
       type: query
+      disabled: true
   auth: inherit
 
 settings:

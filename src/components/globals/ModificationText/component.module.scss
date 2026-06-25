@@ -1,0 +1,22 @@
+@use '../../../app/supports';
+
+.penItem {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font: 500 14px var(--font-paragraph);
+	color: rgba(var(--color-rgb-primary-white), 0.6);
+	margin-right: 5px;
+}
+
+.button {
+	border: none;
+	appearance: none;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	color: inherit;
+}

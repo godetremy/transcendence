@@ -8,7 +8,7 @@ http:
   url: "{{BaseURL}}/users/:id"
   params:
     - name: id
-      value: 0db74d7b-2e6d-4405-8c91-b3c16e9e0731
+      value: me
       type: path
   auth: inherit
 

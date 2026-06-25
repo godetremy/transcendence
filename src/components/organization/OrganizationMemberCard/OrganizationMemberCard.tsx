@@ -60,20 +60,29 @@ export function OrganizationMemberCard({
 							userId={member.user!.id}
 						/>
 						<ListContainer>
-							<ListItem title={"Retirer de l'organisation"} negative last onPress={() => {
-								openModal({
-									title: 'Tu veux vraiment le retirer ?',
-									message: 'Cette personne pourra toujours être réinvité',
-									buttons: [
-										{ text: 'Non', onClick: closeModal },
-										{ text: 'Supprimer', negative: true, onClick: () => {
-											leave.mutate({ user_id: data.user.id});
-											closeModal();
-											close();
-										}}
-									]
-								})
-							}} />
+							<ListItem
+								title={"Retirer de l'organisation"}
+								negative
+								last
+								onPress={() => {
+									openModal({
+										title: 'Tu veux vraiment le retirer ?',
+										message: 'Cette personne pourra toujours être réinvité',
+										buttons: [
+											{ text: 'Non', onClick: closeModal },
+											{
+												text: 'Supprimer',
+												negative: true,
+												onClick: () => {
+													leave.mutate({ user_id: data.user.id });
+													closeModal();
+													close();
+												},
+											},
+										],
+									});
+								}}
+							/>
 						</ListContainer>
 					</>
 				)}

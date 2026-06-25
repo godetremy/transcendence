@@ -4,8 +4,15 @@ import { Loader } from '@/components/globals/Loader/Loader';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
+import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 
-export function OrganizationPermissionList({ org_id }: { org_id: string }) {
+export function OrganizationPermissionList({
+	org_id,
+	onPressItem,
+}: {
+	org_id: string;
+	onPressItem: (permission: OrganizationPermissionDetails) => void;
+}) {
 	const { data, isLoading, isError, error } = useQuery(getOrganizationPermission(org_id));
 
 	if (isLoading) return <Loader />;
@@ -19,7 +26,7 @@ export function OrganizationPermissionList({ org_id }: { org_id: string }) {
 					title={perm.name}
 					description={perm.description ?? 'Aucune description'}
 					last={i == data.data.length - 1}
-					onPress={() => {}}
+					onPress={() => onPressItem(perm)}
 				/>
 			))}
 		</ListContainer>

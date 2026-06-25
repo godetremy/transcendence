@@ -7,8 +7,8 @@ import {
 	getEventRegistrationsById,
 } from '@/database/RegisteredEvent';
 import { decrypt } from '@/lib/session';
-import { RegisteredEventParamSchema } from '@/schema/RegisteredEventSchema';
-import { RegisteredEventParam } from '@/types/RegisteredEvent';
+import { RegisteredParamSchema } from '@/schema/RegisteredEventSchema';
+import { RegisteredParam } from '@/types/RegisteredParameter';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
@@ -33,7 +33,7 @@ export async function PUT(
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { event_id } = await params;
-		const body = await parseBody<RegisteredEventParam>(req, RegisteredEventParamSchema);
+		const body = await parseBody<RegisteredParam>(req, RegisteredParamSchema);
 
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
@@ -44,7 +44,7 @@ export async function PUT(
 		const registered = await getEventRegistrationsById(event_id, user_id, {});
 		console.error(registered);
 
-		if (body.register) {
+		if (body.register == 'true') {
 			if (registered != null) throw ERRORS_DETAILS.event_has_register();
 
 			const count = await countEventRegistrationsByFilter({ event_id: event_id });

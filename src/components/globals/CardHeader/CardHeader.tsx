@@ -7,6 +7,7 @@ export interface CardHeaderProps {
 	onClose: () => void;
 	onAccept?: () => void;
 	loading?: boolean;
+	disabledAccept?: boolean;
 }
 
 export function CardHeader(props: CardHeaderProps) {
@@ -20,7 +21,11 @@ export function CardHeader(props: CardHeaderProps) {
 
 			<h1>{props.title}</h1>
 			{props.onAccept !== undefined && (
-				<button className={styles.primary} onClick={props.onAccept} disabled={props.loading}>
+				<button
+					className={styles.primary}
+					onClick={props.onAccept}
+					disabled={props.loading || props.disabledAccept}
+				>
 					{props.loading ? <Loader size={24} /> : <Check />}
 				</button>
 			)}

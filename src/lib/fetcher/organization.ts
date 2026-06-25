@@ -1,6 +1,6 @@
-import { deletef, get, post } from '@/lib/fetcher';
+import { deletef, get, patch, post } from '@/lib/fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
-import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
+import { CreateOrganizationPermissionType, OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
 import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
@@ -47,10 +47,48 @@ const deleteOrganizationMember = (
 	org_id: string,
 	user_id: string
 ): UseMutationOptions<OrganizationMembers<{ user: true; permission: true }>, Error, { user_id: string }> => ({
-	mutationFn: ({ user_id }: { user_id: string }) => 
+	mutationFn: ({ user_id }: { user_id: string }) =>
 		deletef<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`, Object),
 	onSuccess: () => {
-		GlobalQueryClient.invalidateQueries({queryKey: ['member', user_id]});
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'members'] });
+	},
+});
+
+const inviteOrganizationMembers = (
+	org_id: string
+): UseMutationOptions<
+	OrganizationMembers<{ user: true; permission: true }[]>,
+	Error,
+	{ permission_id: string; members: string[] }
+> => ({
+	mutationFn: ({ permission_id, members }: { permission_id: string; members: string[] }) =>
+		post<OrganizationMembers>(`/organization/${org_id}/members/invite`, {
+			permission_id: permission_id,
+			users_id: members.join(','),
+		}),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'members'] });
+	},
+});
+
+const createOrganizationPermission = (
+	org_id: string
+): UseMutationOptions<OrganizationPermissionDetails, Error, { permission: CreateOrganizationPermissionType }> => ({
+	mutationFn: ({ permission }: { permission: CreateOrganizationPermissionType }) =>
+		post<OrganizationPermissionDetails>(`/organization/${org_id}/permission`, permission),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'permissions'] });
+	},
+});
+
+const updateOrganizationPermission = (
+	org_id: string,
+	perm_id: string
+): UseMutationOptions<OrganizationPermissionDetails, Error, { permission: CreateOrganizationPermissionType }> => ({
+	mutationFn: ({ permission }: { permission: CreateOrganizationPermissionType }) =>
+		patch<OrganizationPermissionDetails>(`/organization/${org_id}/permission/${perm_id}`, permission),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'permissions', perm_id] });
 	},
 });
 
@@ -60,4 +98,7 @@ export {
 	getOrganizationMemberById,
 	updateOrganizationUserPermission,
 	deleteOrganizationMember,
+	inviteOrganizationMembers,
+	createOrganizationPermission,
+	updateOrganizationPermission,
 };

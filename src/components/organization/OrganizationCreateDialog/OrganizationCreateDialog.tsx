@@ -6,6 +6,7 @@ import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { post } from '@/lib/fetcher';
 import { PrivateOrganization } from '@/types/Organization';
 import { Loader } from '@/components/globals/Loader/Loader';
+import { Toggle } from '@/components/globals/Toggle/Toggle';
 
 export function OrganizationCreateDialog({ close }: { close: () => void }) {
 	const [creatingOrganization, setCreatingOrganization] = useState(false);
@@ -110,8 +111,7 @@ export function OrganizationCreateDialog({ close }: { close: () => void }) {
 					disabled={creatingOrganization}
 				/>
 				<label htmlFor={'club'} className={styles.club_toggle}>
-					<input
-						type={'checkbox'}
+					<Toggle
 						id={'club'}
 						checked={isClub}
 						onChange={(e) => setIsClub(e.target.checked)}

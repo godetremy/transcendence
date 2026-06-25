@@ -8,13 +8,13 @@ http:
   url: "{{BaseURL}}/users/approval/:id"
   params:
     - name: id
-      value: me
+      value: b2d948cd-9f2b-4382-b169-a00303b7f3ba
       type: path
   body:
     type: json
     data: |-
       {
-        "approve": false
+        "approve": true
       }
   auth: inherit
 

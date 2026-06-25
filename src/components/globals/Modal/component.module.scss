@@ -55,6 +55,10 @@
 					background: rgba(254, 132, 132, 0.1);
 					color: #fe8484;
 				}
+
+				&:active {
+					scale: 0.96;
+				}
 			}
 		}
 	}
@@ -67,9 +71,6 @@
 				button {
 					&:hover {
 						background-color: rgba(var(--color-rgb-primary-white), 0.1);
-					}
-					&:active {
-						scale: 0.96;
 					}
 
 					&.negative {

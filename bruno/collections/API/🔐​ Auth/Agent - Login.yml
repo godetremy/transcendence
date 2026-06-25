@@ -17,7 +17,7 @@ http:
         value: totp
         disabled: true
       - name: code
-        value: "123456"
+        value: "959608"
         disabled: true
   auth: inherit
 
