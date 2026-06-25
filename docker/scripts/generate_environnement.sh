@@ -17,6 +17,9 @@ DATABASE_PASSWORD=$(read_password "Which password do you want to use for your da
 DATABASE_NAME=$(read_with_prompt "Which name do you want to use for your database" "transcendence");
 DATABASE_PORT=5432
 
+GRAFANA_ADMIN_USER=$(read_with_prompt "Which username do you want for the Grafana admin" "admin");
+GRAFANA_ADMIN_PASSWORD=$(read_password "Which password do you want for the Grafana admin");
+
 export DEVELOPMENT_DATABASE_NAME="dev_$DATABASE_NAME"
 export STAGING_DATABASE_NAME="staging_$DATABASE_NAME"
 export PRODUCTION_DATABASE_NAME="$DATABASE_NAME"
@@ -42,6 +45,9 @@ USER_POSTGRES=$DATABASE_USERNAME
 PASSWORD_POSTGRES=$DATABASE_PASSWORD
 HOST=127.0.0.1
 PORT_POSTGRES=$DATABASE_PORT
+
+GRAFANA_ADMIN_USER=$GRAFANA_ADMIN_USER
+GRAFANA_ADMIN_PASSWORD=$GRAFANA_ADMIN_PASSWORD
 "
 
 DEVELOPMENT_ENV_CONTENT="

@@ -80,5 +80,9 @@ help:
 	@echo "  $(GREEN)fclean$(RESET)    : Prune Docker system and remove unused images/volumes"
 	@echo "  $(GREEN)help$(RESET)      : Show this help message"
 	@echo ""
+	@echo "$(BLUE)Monitoring (lance par 'make dev'):$(RESET)"
+	@echo "  Grafana    : https://grafana.dev.bde.42angouleme.fr"
+	@echo "  Prometheus : https://prometheus.dev.bde.42angouleme.fr"
+	@echo ""
 
 .PHONY: all env certs migrate dev staging prod down-dev clean-dev fclean help
