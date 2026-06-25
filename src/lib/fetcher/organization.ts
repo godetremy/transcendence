@@ -7,13 +7,14 @@ import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
 
 const getOrganizationMembers = (
-	org_id: string
+	org_id: string,
+	page: number,
 ): UseQueryOptions<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>, Error> => ({
 	queryFn: () =>
 		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
-			`/organization/${org_id}/members`
+			`/organization/${org_id}/members?page=${page}`
 		),
-	queryKey: ['organization', org_id, 'members'],
+	queryKey: ['organization', org_id, 'members', page],
 });
 
 const getOrganizationFollowers = (

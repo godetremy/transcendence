@@ -10,12 +10,14 @@ import styles from '@/app/app/(authentificated)/organization/[org_id]/settings/m
 
 export function OrganizationMembersList({
 	org_id,
+	page,
 	onPressItem,
 }: {
 	org_id: string;
+	page: number;
 	onPressItem: (member: OrganizationMembers) => void;
 }) {
-	const { data, isLoading, isError, error } = useQuery(getOrganizationMembers(org_id));
+	const { data, isLoading, isError, error } = useQuery(getOrganizationMembers(org_id, page));
 
 	if (isLoading) return <Loader />;
 	if (isError || data === undefined) return <ErrorState error={error} />;
@@ -24,7 +26,7 @@ export function OrganizationMembersList({
 		const invited_at = new Date(member.invited_at);
 		const registred_at = new Date(member.registered_at);
 
-		const permission = member.permission.name ?? 'Aucune permission';
+		const permission = member.permission!.name ?? 'Aucune permission';
 
 		return `${permission} • ${member.approved ? `A rejoins le ${registred_at.toLocaleDateString()}` : `Invité le ${invited_at.toLocaleDateString()}`}`;
 	};

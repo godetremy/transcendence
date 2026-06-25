@@ -16,6 +16,7 @@ import { OrganizationPermissionUpdateCard } from '@/components/organization/Orga
 import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 
 export default function Page() {
+	const [page, setPage] = useState<number>(0);
 	const organizationCtx = useOrganizations();
 	const organization = organizationCtx.getCurrentOrganization()!;
 
@@ -60,6 +61,7 @@ export default function Page() {
 						>
 							<OrganizationMembersList
 								org_id={organization.id}
+								page={page}
 								onPressItem={(member) => {
 									setMemberCardUser(member);
 									setShowMemberCard(true);
@@ -86,6 +88,11 @@ export default function Page() {
 				</AnimatePresence>
 			</div>
 
+			<div>
+				<p>Page : {page}</p>
+				<button onClick={() => setPage(page - 1)}>reculer</button>
+				<button onClick={() => setPage(page + 1)}>avancer</button>
+			</div>
 			<Card visible={showMemberCard} requestClose={() => setShowMemberCard(false)}>
 				{memberCardUser && (
 					<OrganizationMemberCard member={memberCardUser} close={() => setShowMemberCard(false)} />
