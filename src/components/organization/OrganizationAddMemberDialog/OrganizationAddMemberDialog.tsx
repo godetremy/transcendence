@@ -41,7 +41,9 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 		}
 		setHasSearch(true);
 		timeoutRef.current = setTimeout(() => {
-			get<PaginationResponse<PublicUser>>(`/organization/${organization.id}/users?q=${encodeURI(query.trim())}`)
+			get<PaginationResponse<PublicUser>>(
+				`/organization/${organization.id}/users?register=false&q=${encodeURI(query.trim())}`
+			)
 				.then((res) => setMembers(res.data))
 				.finally(() => {
 					setLoadingMember(false);

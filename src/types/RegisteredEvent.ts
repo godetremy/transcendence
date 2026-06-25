@@ -4,7 +4,3 @@ export interface RegisteredEventPrivate {
 	event_id: string;
 	registered_at: string;
 }
-
-export interface RegisteredEventParam {
-	register: boolean;
-}
