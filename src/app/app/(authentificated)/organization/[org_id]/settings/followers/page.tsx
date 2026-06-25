@@ -1,3 +1,9 @@
+import { NavigationBarHeader } from '@/components/globals/NavigationBarHeader/NavigationBarHeader';
+
 export default function Page() {
-	return <p>Hello, world !</p>;
+	return (
+		<NavigationBarHeader title={'Followers'}>
+			<p>Followers</p>
+		</NavigationBarHeader>
+	);
 }
