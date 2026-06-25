@@ -7,6 +7,9 @@ import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { OrganizationPermissionSchema } from '@/schema/OrganizationPermissionSchema';
 import { useMutation } from '@tanstack/react-query';
 import { updateOrganizationPermission } from '@/lib/fetcher/organization';
+import ListContainer from '@/components/globals/ListContainer/ListContainer';
+import ListItem from '@/components/globals/ListItem/ListItem';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 
 export function OrganizationPermissionUpdateCard({
 	close,
@@ -15,6 +18,7 @@ export function OrganizationPermissionUpdateCard({
 	close: () => void;
 	permission: OrganizationPermissionDetails;
 }) {
+	const { openModal, closeModal } = useModal();
 	const organizationCtx = useOrganizations();
 	const organization = organizationCtx.getCurrentOrganization()!;
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -36,16 +40,43 @@ export function OrganizationPermissionUpdateCard({
 		}, 1000);
 	};
 
+	const deletePermission = () => {
+		openModal({
+			title: `Veux-tu vraiment supprimer la permission ${permissionValue.name}`,
+			message:
+				'Cette action est définitive. Une fois supprimée, cette permission ne pourra pas être récupérée et devra être recréée manuellement si nécessaire.',
+			buttons: [
+				{
+					text: 'Finalement non',
+					onClick: closeModal,
+				},
+				{
+					text: 'Supprimer définitivement',
+					negative: true,
+					onClick: closeModal,
+				},
+			],
+		});
+	};
+
 	useEffect(() => {
-		// eslint-disable-next-line react-hooks/set-state-in-effect
 		if (OrganizationPermissionSchema.safeParse(permissionValue).success) fetchPermission(permissionValue);
 	}, [permissionValue]);
 
 	return (
 		<div className={styles.container}>
-			<CardHeader title={'Nouvelle permission'} onClose={close} />
+			<CardHeader title={'Modifier une permission'} onClose={close} />
 			<main>
 				<OrganisationPermissionEditor permission={permissionValue} setPermission={setPermissionValue} />
+				<ListContainer>
+					<ListItem
+						title={'Supprimer cette permission'}
+						negative
+						last
+						showChevron={false}
+						onPress={deletePermission}
+					/>
+				</ListContainer>
 			</main>
 		</div>
 	);
