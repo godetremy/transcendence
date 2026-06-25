@@ -9,6 +9,7 @@ import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
 import { getUserOrganizationPermission } from '@/utils/permission';
 import { NextRequest, NextResponse } from 'next/server';
+import { getOrganizationMemberByPermission, getOrganizationMembersByFilter } from '@/database/OrganizationMembers';
 
 export async function DELETE(
 	req: NextRequest,
@@ -26,6 +27,8 @@ export async function DELETE(
 
 		const user_permission = await getUserOrganizationPermission(user, org_id);
 		if (!user_permission.organization_manage_permission) throw ERRORS_DETAILS.permission_denied();
+
+		if (await getOrganizationMemberByPermission(perm_id, org_id, {})) throw ERRORS_DETAILS.permission_in_use();
 
 		const permission_result = await DeleteOrganizationPermission(perm_id, org_id);
 
