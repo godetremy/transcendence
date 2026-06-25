@@ -4,6 +4,7 @@ import { CreateOrganizationPermissionType, OrganizationPermissionDetails } from 
 import { OrganizationMembers } from '@/types/OrganizationMembers';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
 import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
+import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
 
 const getOrganizationMembers = (
 	org_id: string
@@ -12,6 +13,14 @@ const getOrganizationMembers = (
 		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
 			`/organization/${org_id}/members`
 		),
+	queryKey: ['organization', org_id, 'members'],
+});
+
+const getOrganizationFollowers = (
+	org_id: string
+): UseQueryOptions<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>, Error> => ({
+	queryFn: () =>
+		get<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>>(`/organization/${org_id}/followers`),
 	queryKey: ['organization', org_id, 'members'],
 });
 
@@ -46,9 +55,8 @@ const updateOrganizationUserPermission = (
 const deleteOrganizationMember = (
 	org_id: string,
 	user_id: string
-): UseMutationOptions<OrganizationMembers<{ user: true; permission: true }>, Error, { user_id: string }> => ({
-	mutationFn: ({ user_id }: { user_id: string }) =>
-		deletef<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`, Object),
+): UseMutationOptions<OrganizationMembers<{ user: true; permission: true }>, Error> => ({
+	mutationFn: () => deletef<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`, Object),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'members'] });
 	},
@@ -101,4 +109,5 @@ export {
 	inviteOrganizationMembers,
 	createOrganizationPermission,
 	updateOrganizationPermission,
+	getOrganizationFollowers,
 };

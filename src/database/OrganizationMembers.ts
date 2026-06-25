@@ -3,7 +3,6 @@ import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { ERRORS_DETAILS } from '@/utils/errors';
-import { BatchPayload } from '@/database/prisma/generated/internal/prismaNamespace';
 
 const getOrganizationMemberByFilter = async <T extends Prisma.organization_membersInclude>(
 	filter: Prisma.organization_membersWhereInput,

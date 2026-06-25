@@ -25,7 +25,7 @@ const formatPrivateOrganization = <T extends Prisma.organizationsInclude>(
 		organization_followers:
 			'organization_followers' in row && row.organization_followers
 				? (row.organization_followers as Prisma.organization_followersGetPayload<object>[]).map(
-						formatOrganizationFollowers
+						formatOrganizationFollowers<object>
 					)
 				: undefined,
 		events:
