@@ -13,7 +13,8 @@ export async function UploadProvider({ children }: { children: React.ReactNode }
 	const session = await decrypt(sessionCookie?.value ?? '');
 
 	const uploadCount = await countUploadRequestForTheLastHour(session.user_id);
-	if (uploadCount >= 30) throw ERRORS_DETAILS.too_many_upload();
+	//if (uploadCount >= 30) throw ERRORS_DETAILS.too_many_upload();
+	//TODO: Enable upload limit
 	const request = await createUploadRequest(session.user_id);
 
 	const token = await new SignJWT({ upload_id: request.id, file_id: request.file_id, user_id: session.user_id })

@@ -15,6 +15,11 @@ const UploadTokenContext = createContext<{
 });
 
 export function UploadTokenProvider({ children, token }: { children: ReactNode; token: string }) {
+	const triggerUploadWarning = (e: BeforeUnloadEvent) => {
+		e.preventDefault();
+		e.returnValue = '';
+	};
+
 	const uploadFiles = async (
 		files: File | File[],
 		onProgress: (progress: number) => void
@@ -38,6 +43,7 @@ export function UploadTokenProvider({ children, token }: { children: ReactNode; 
 			});
 
 			xhr.onload = () => {
+				window.removeEventListener('beforeunload', triggerUploadWarning);
 				if (xhr.status >= 200 && xhr.status < 300) {
 					resolve(JSON.parse(xhr.responseText));
 				} else {
@@ -50,6 +56,7 @@ export function UploadTokenProvider({ children, token }: { children: ReactNode; 
 			xhr.open('POST', '/app/api/upload/');
 			xhr.setRequestHeader('Authorization', `Bearer ${token}`);
 			xhr.send(formData);
+			window.addEventListener('beforeunload', triggerUploadWarning);
 		});
 	};
 
