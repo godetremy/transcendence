@@ -46,10 +46,10 @@ export async function PATCH(
 
 		if (checkAlbum.events?.organization_id != null) {
 			const user_permission = await getUserOrganizationPermission(user, checkAlbum.events.organization_id);
-			if (user_permission.album_update == false) throw ERRORS_DETAILS.permission_denied();
+			if (!user_permission.album_update) throw ERRORS_DETAILS.permission_denied();
 		} else if (checkAlbum.services?.organization_id != null) {
 			const user_permission = await getUserOrganizationPermission(user, checkAlbum.services.organization_id);
-			if (user_permission.album_update == false) throw ERRORS_DETAILS.permission_denied();
+			if (!user_permission.album_update) throw ERRORS_DETAILS.permission_denied();
 		} else throw ERRORS_DETAILS.organization_does_not_exist();
 
 		const body = await parseBody<UpdateAlbumType>(req, UpdateAlbumSchema);
@@ -58,5 +58,11 @@ export async function PATCH(
 		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
 
 		return NextResponse.json(formatPublicAlbum(album));
+	});
+}
+
+export async function DELETE(req: NextRequest): Promise<NextResponse> {
+	return errorHandler(async () => {
+		
 	});
 }

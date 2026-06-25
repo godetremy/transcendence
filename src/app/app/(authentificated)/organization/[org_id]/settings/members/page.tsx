@@ -13,7 +13,7 @@ import { OrganizationMembersList } from '@/components/organization/OrganizationM
 import { OrganizationMemberCard } from '@/components/organization/OrganizationMemberCard/OrganizationMemberCard';
 import { OrganizationPermissionCreateCard } from '@/components/organization/OrganizationPermissionCreateCard/OrganizationPermissionCreateCard';
 import { OrganizationPermissionUpdateCard } from '@/components/organization/OrganizationPermissionUpdateCard/OrganizationPermissionUpdateCard';
-import { CreateOrganizationPermissionType, OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
+import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();

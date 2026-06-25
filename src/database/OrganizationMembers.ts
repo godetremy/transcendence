@@ -3,7 +3,6 @@ import { Prisma } from './prisma/generated/client';
 import { prisma } from './prisma/prisma';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { ERRORS_DETAILS } from '@/utils/errors';
-import { BatchPayload } from '@/database/prisma/generated/internal/prismaNamespace';
 
 const getOrganizationMemberByFilter = async <T extends Prisma.organization_membersInclude>(
 	filter: Prisma.organization_membersWhereInput,
@@ -141,17 +140,28 @@ const getOrganizationMemberById = async <T extends Prisma.organization_membersIn
 	});
 };
 
+const getOrganizationMemberByPermission = async <T extends Prisma.organization_membersInclude>(
+	perm_id: string,
+	organization_id: string,
+	include: T
+): Promise<Prisma.organization_membersGetPayload<{ include: T }> | null> => {
+	return prisma.organization_members.findFirst({
+		where: { permission_id: perm_id, organization_id },
+		include: include,
+	});
+};
+
 const deleteMemberFromOrganization = async (
 	user_id: string,
 	organization_id: string
 ): Promise<Prisma.organization_membersGetPayload<Prisma.organization_membersDefaultArgs>> => {
 	return prisma.organization_members.delete({
-		where: {
+		where: { 
 			organization_id_user_id: {
 				user_id: user_id,
 				organization_id: organization_id,
-			},
-		},
+			}
+		 },
 	});
 };
 
