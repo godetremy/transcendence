@@ -7,15 +7,13 @@ const encodedKey = new TextEncoder().encode(process.env.SESSION_SECRET);
 
 export async function GET(req: NextRequest) {
 	return errorHandler(async () => {
-		const uploadToken = req.headers.get('x-upload-token');
-		const uploadId = req.headers.get('x-upload-id');
+		const uploadToken = req.headers.get('Authorization')?.replace('Bearer ', '');
 
-		if (!uploadToken || !uploadId) throw ERRORS_DETAILS.permission_denied();
+		if (!uploadToken) throw ERRORS_DETAILS.permission_denied();
 
 		const { payload } = await jwtVerify(uploadToken, encodedKey, { algorithms: ['HS256'] });
-		if (payload.upload_id !== uploadId) throw ERRORS_DETAILS.permission_denied();
 
-		const uploadReq = await getUploadRequest(uploadId);
+		const uploadReq = await getUploadRequest((payload as { upload_id: string }).upload_id);
 		if (!uploadReq) throw ERRORS_DETAILS.permission_denied();
 
 		return NextResponse.json({ success: true });

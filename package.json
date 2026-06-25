@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"dev": "dotenv -e docker/development/secrets/.env -- next dev",
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint",
@@ -45,6 +45,7 @@
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"@types/react-lottie": "^1.2.10",
+		"dotenv-cli": "^11.0.0",
 		"eslint": "^9.39.4",
 		"eslint-config-next": "16.2.2",
 		"eslint-config-prettier": "^10.1.8",

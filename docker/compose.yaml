@@ -1,0 +1,140 @@
+name: LGBTQIA+
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ${DB_NAME_POSTGRES}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRES}
+      POSTGRES_DB: ${DB_NAME_POSTGRES}
+    networks:
+      - main
+    restart: on-failure
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${USER_POSTGRES} -d $${DB_NAME_POSTGRES}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dicebear:
+    image: dicebear/api:4
+    environment:
+      WEBP_SIZE_MAX: 512
+    networks:
+      - app
+    restart: always
+    tmpfs:
+      - /run
+      - /tmp
+
+  nginx:
+    image: nginx:stable-alpine
+    depends_on:
+      - seaweed-filer
+    networks:
+      - app
+      - host-network
+      - monitoring
+
+  seaweed-master:
+    image: chrislusf/seaweedfs:3.96
+    networks:
+      - app
+    command: 'master -ip=seaweed-master -port=9333'
+
+  seaweed-filer:
+    image: chrislusf/seaweedfs:3.96
+    depends_on:
+      - seaweed-master
+    networks:
+      - app
+    command: 'filer -master=seaweed-master:9333'
+
+  seaweed-volume:
+    image: chrislusf/seaweedfs:3.96
+    depends_on:
+      - seaweed-master
+    networks:
+      - app
+    command: 'volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080'
+
+  prometheus:
+    image: prom/prometheus:v3.1.0
+    volumes:
+      - ./development/services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./development/services/prometheus/alerts.yml:/etc/prometheus/alerts.yml
+      - prometheus_data:/prometheus
+    networks:
+      - monitoring
+    restart: on-failure
+
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:v1.8.2
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    volumes:
+      - /:/host
+    networks:
+      - monitoring
+    restart: on-failure
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    privileged: true
+    volumes:
+      - /:/rootfs
+      - /var/run:/var/run
+      - /sys:/sys
+      - /var/lib/docker/:/var/lib/docker
+    networks:
+      - monitoring
+    restart: on-failure
+
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.16.0
+    environment:
+      DATA_SOURCE_NAME: 'postgresql://${USER_POSTGRES}:${PASSWORD_POSTGRES}@postgres:5432/${DB_NAME_POSTGRES}?sslmode=disable'
+    networks:
+      - monitoring
+      - main
+    restart: on-failure
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.4.0
+    command:
+      - '--nginx.scrape-uri=http://nginx:8081/stub_status'
+    networks:
+      - monitoring
+    restart: on-failure
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_SERVER_ROOT_URL: https://grafana.${NEXT_PUBLIC_BASE_URL}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+      GF_AUTH_ANONYMOUS_ENABLED: 'false'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./development/services/grafana/provisioning:/etc/grafana/provisioning
+      - ./development/services/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - monitoring
+    restart: on-failure
+
+networks:
+  main:
+    driver: bridge
+  app:
+  host-network:
+  monitoring:
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  grafana_data:

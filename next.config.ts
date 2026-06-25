@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
 	images: {
 		unoptimized: true,
 	},
+	allowedDevOrigins: ['dev.bde.42angouleme.fr'],
 };
 
 export default withMDX(nextConfig);

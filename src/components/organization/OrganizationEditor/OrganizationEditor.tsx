@@ -4,6 +4,8 @@ import { Plus } from 'lucide-react';
 import { Toggle } from '@/components/globals/Toggle/Toggle';
 import { CreateOrganizationType } from '@/types/Organization';
 import { useDropzone } from 'react-dropzone';
+import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
+import { useUpload } from '@/contexts/UploadTokenContext';
 
 export interface OrganizationEditorProps {
 	organization: CreateOrganizationType;
@@ -12,16 +14,29 @@ export interface OrganizationEditorProps {
 }
 
 export function OrganizationEditor(props: OrganizationEditorProps) {
+	const upload = useUpload();
+
 	const [logo, setLogo] = useState<string | undefined>(undefined);
 	const [error, setError] = useState<string | undefined>(undefined);
+	const [uploadImage, setUploadImage] = useState(false);
+	const [uploadProgression, setUploadProgression] = useState(0);
 
 	const onDrop = async (acceptedFiles: File[]) => {
 		if (acceptedFiles.length <= 0) {
 			setError("Ce fichier n'est pas supporté.");
 			return;
 		}
-		setLogo(URL.createObjectURL(acceptedFiles[0]));
 		setError(undefined);
+		setLogo(URL.createObjectURL(acceptedFiles[0]));
+		setUploadProgression(0);
+		setUploadImage(true);
+		upload.uploadFiles(acceptedFiles, setUploadProgression).then((file) => {
+			props.setOrganization((prev) => ({
+				...prev,
+				logo: `/images/upload/${file.name}`,
+			}));
+			setUploadImage(false);
+		});
 	};
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -49,6 +64,11 @@ export function OrganizationEditor(props: OrganizationEditorProps) {
 			>
 				{!logo && <Plus size={100} strokeWidth={2.5} />}
 				<input id={'logo'} {...getInputProps()} disabled={props.disabled} />
+				{uploadImage && (
+					<div>
+						<CircleLoader progress={uploadProgression} size={64} />
+					</div>
+				)}
 			</label>
 			<input
 				type={'text'}

@@ -36,6 +36,17 @@
 			transition: 0.2s cubic-bezier(0.15, 0, 0, 1.2);
 		}
 
+		& > div {
+			position: absolute;
+			inset: -8;
+			z-index: 10;
+			background-color: #0008;
+			border-radius: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
 		&.active {
 			border: 8px dashed rgba(var(--color-rgb-primary-purple), 1);
 			& > svg {

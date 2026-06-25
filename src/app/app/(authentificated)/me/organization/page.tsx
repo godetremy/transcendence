@@ -13,7 +13,7 @@ import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 import { PublicOrganization } from '@/types/Organization';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/globals/Card/Card';
-import { OrganizationCreateDialog } from '@/components/organization/OrganizationCreateDialog/OrganizationCreateDialog';
+import OrganizationCreateDialog from '@/components/organization/OrganizationCreateDialog/OrganizationCreateDialog';
 
 function InviteActions({
 	org_id,

@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-source ./docker/scripts/helper.sh;
+source "./docker/scripts/helper.sh"
 
-if ! command -v $MKCERT >/dev/null 2>&1
-then
+if ! command -v "$MKCERT" >/dev/null 2>&1; then
     print_error_and_exit "cannot found executable $MKCERT. Install it before with brew or apt."
 fi
 
