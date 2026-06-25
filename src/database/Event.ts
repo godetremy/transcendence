@@ -7,6 +7,7 @@ import { DateOption } from '@/types/DateParameters';
 import { DEFAULT_DATEOPTION, dateToPrisma } from '@/utils/date';
 import { CreateOrUpdateEventType } from '@/types/Event';
 import { Prisma } from './prisma/generated/client';
+import { eventsGetPayload } from '@/database/prisma/generated/models/events';
 
 const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 	include: T,
@@ -15,7 +16,7 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 	sorting?: SortingOption[],
 	pagination?: PaginationParameters
 ): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
-	const value = await prisma.events.findMany({
+	return prisma.events.findMany({
 		include: include,
 		where: {
 			organization_id: organization_id,
@@ -24,7 +25,6 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
-	return value;
 };
 
 const getEventsByFilter = async <T extends Prisma.eventsInclude>(
@@ -33,7 +33,7 @@ const getEventsByFilter = async <T extends Prisma.eventsInclude>(
 	sorting?: SortingOption[],
 	pagination?: PaginationParameters
 ): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
-	const value = await prisma.events.findMany({
+	return prisma.events.findMany({
 		include: include,
 		where: {
 			...dateToPrisma(time ?? DEFAULT_DATEOPTION),
@@ -41,7 +41,6 @@ const getEventsByFilter = async <T extends Prisma.eventsInclude>(
 		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
-	return value;
 };
 
 const createEvent = async <T extends Prisma.eventsInclude>(
@@ -63,7 +62,7 @@ const UpdateEvent = async <T extends Prisma.eventsInclude>(
 	event_id: string,
 	include: T
 ): Promise<Prisma.eventsGetPayload<{ include: T }> | null> => {
-	return await prisma.events.update({
+	return prisma.events.update({
 		where: {
 			id: event_id,
 		},
@@ -78,7 +77,7 @@ const deleteEventById = async (
 	event_id: string,
 	organization_id: string
 ): Promise<Prisma.eventsGetPayload<Prisma.eventsDefaultArgs>> => {
-	return await prisma.events.delete({
+	return prisma.events.delete({
 		where: {
 			id: event_id,
 			organization_id: organization_id,
@@ -91,7 +90,7 @@ const getEventByIdToOrganization = async <T extends Prisma.eventsInclude>(
 	organization_id: string,
 	include: T
 ): Promise<Prisma.eventsGetPayload<{ include: T }> | null> => {
-	return await prisma.events.findUnique({
+	return prisma.events.findUnique({
 		where: {
 			id: event_id,
 			organization_id: organization_id,
@@ -104,7 +103,7 @@ const getEventById = async <T extends Prisma.eventsInclude>(
 	event_id: string,
 	include: T
 ): Promise<Prisma.eventsGetPayload<{ include: T }> | null> => {
-	return await prisma.events.findUnique({
+	return prisma.events.findUnique({
 		where: {
 			id: event_id,
 		},
@@ -118,6 +117,16 @@ const countEventsByFilter = async (filter?: Prisma.eventsWhereInput): Promise<nu
 	});
 };
 
+const getEventByAlbumId = async <T extends Prisma.eventsInclude>(
+	album_id: string,
+	include: T
+): Promise<eventsGetPayload<{ include: T }> | null> => {
+	return prisma.events.findUnique({
+		where: { photos_album_id: album_id },
+		include: include,
+	});
+};
+
 export {
 	getEventsByFilter,
 	createEvent,
@@ -127,4 +136,5 @@ export {
 	countEventsByFilter,
 	getEventsByFilterToOrganization,
 	getEventByIdToOrganization,
+	getEventByAlbumId,
 };
