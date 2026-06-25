@@ -9,7 +9,7 @@ import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
 import { getUserOrganizationPermission } from '@/utils/permission';
 import { NextRequest, NextResponse } from 'next/server';
-import { getOrganizationMemberByPermission, getOrganizationMembersByFilter } from '@/database/OrganizationMembers';
+import { getOrganizationMemberByPermission } from '@/database/OrganizationMembers';
 
 export async function DELETE(
 	req: NextRequest,
