@@ -166,6 +166,7 @@ const deleteMemberFromOrganization = async (
 };
 
 export {
+	getOrganizationMemberByPermission,
 	getOrganizationMemberByFilter,
 	countOrganizationMembersByFilter,
 	getOrganizationMembersByFilter,

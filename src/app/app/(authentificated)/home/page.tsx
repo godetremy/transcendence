@@ -4,14 +4,16 @@ import { User } from '@/types/User';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
-import QRCode from 'react-qr-code';
-import { get, post } from '@/lib/fetcher';
+import { useUpload } from '@/contexts/UploadTokenContext';
+import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
 
 export default function Page() {
+	const upload = useUpload();
 	const [user, setUser] = useState<User<{ membership: true }> | null>(null);
 
-	const [twoFactorAuthData, setTwoFactorAuthData] = useState<string | undefined>(undefined);
+	const [file, setFile] = useState<File | null>(null);
 
+	const [progress, setProgress] = useState(0);
 	useEffect(() => {
 		fetch('/app/api/users/me')
 			.then((res) => res.json())
@@ -57,27 +59,21 @@ export default function Page() {
 
 				<hr />
 
-				<button
-					onClick={async () => {
-						const data = await get<{ success: boolean; uri: string }>('/users/me/2fa/configure/totp');
-						setTwoFactorAuthData(data.uri);
-					}}
-				>
-					Generate config
-				</button>
-
-				{twoFactorAuthData && <QRCode value={twoFactorAuthData} size={240} />}
-
-				<form
-					action={async (form: FormData) => {
-						const result = await post<{ success: boolean }>('/users/me/2fa/configure/totp', {
-							code: form.get('code'),
-						});
-						alert(result.success ? 'Succès' : 'Erreur');
-					}}
-				>
-					<input type={'text'} placeholder={'TOTP CODE'} name={'code'} />
-				</form>
+				<div>
+					<input type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+					<button
+						onClick={() => {
+							upload.uploadFiles(file!, setProgress).then((res) => console.log(res.name));
+						}}
+						disabled={!file}
+					>
+						Upload
+					</button>
+					<div>Token: {upload.token}</div>
+					<div>File: {file?.name ?? 'none'}</div>
+					<div>Progress: {progress}%</div>
+					<CircleLoader progress={progress} size={54} />
+				</div>
 			</section>
 		</>
 	);

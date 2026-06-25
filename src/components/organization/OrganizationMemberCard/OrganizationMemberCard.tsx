@@ -74,7 +74,7 @@ export function OrganizationMemberCard({
 												text: 'Supprimer',
 												negative: true,
 												onClick: () => {
-													leave.mutate({ user_id: data.user.id });
+													leave.mutate();
 													closeModal();
 													close();
 												},
