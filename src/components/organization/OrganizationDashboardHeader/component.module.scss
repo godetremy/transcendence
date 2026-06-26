@@ -1,4 +1,4 @@
-@use "../../../app/supports";
+@use '../../../app/supports';
 
 .header {
 	position: relative;
@@ -44,7 +44,7 @@
 			height: 1px;
 			left: calc(var(--line-left) - 0px);
 			width: var(--line-width);
-			transition: .3s;
+			transition: 0.3s;
 		}
 
 		button {
@@ -55,7 +55,7 @@
 			background-color: rgba(var(--color-rgb-primary-white), 0);
 			color: rgba(var(--color-rgb-primary-white), 0.6);
 			font: 600 14px var(--font-paragraph);
-			transition: .3s;
+			transition: 0.3s;
 			flex-shrink: 0;
 
 			&.selected {
