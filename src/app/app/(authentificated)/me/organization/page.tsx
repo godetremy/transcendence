@@ -33,10 +33,10 @@ export default function Page() {
 				<span className={styles.listSectionTitle}>Mes organisations</span>
 
 				<section className={styles.list}>
-					<OrganizationInvitesList></OrganizationInvitesList>
+					<OrganizationInvitesList />
 				</section>
 				<section className={styles.list}>
-					<OrganizationsList></OrganizationsList>
+					<OrganizationsList />
 				</section>
 			</article>
 			<Card visible={showCreateDialog} requestClose={() => setShowCreateDialog(false)}>

@@ -35,7 +35,7 @@ function InviteActions({ org_id }: { org_id: string }) {
 	);
 }
 
-export function OrganizationInvitesList({}: {}) {
+export function OrganizationInvitesList() {
 	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
 		useInfiniteQuery(getOrganizationInvites());
 
