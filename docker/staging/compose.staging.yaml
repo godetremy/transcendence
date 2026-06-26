@@ -1,6 +1,5 @@
 name: trans-staging
 
-
 services:
-  postgres:
-    restart: always
+    postgres:
+        restart: always

@@ -1,5 +1,5 @@
 name: trans-prod
 
 services:
-  postgres:
-    restart: always
+    postgres:
+        restart: always

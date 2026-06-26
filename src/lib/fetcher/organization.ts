@@ -3,26 +3,32 @@ import { PaginationResponse } from '@/types/PaginationResponse';
 import { CreateOrganizationPermissionType, OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
-import { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
+import { UseInfiniteQueryOptions, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
 import { CreateOrganizationType } from '@/types/Organization';
 
 const getOrganizationMembers = (
 	org_id: string
-): UseQueryOptions<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>, Error> => ({
-	queryFn: () =>
+): UseInfiniteQueryOptions<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>> => ({
+	queryFn: ({ pageParam = 1 }) =>
 		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
-			`/organization/${org_id}/members`
+			`/organization/${org_id}/members?page=${pageParam}`
 		),
 	queryKey: ['organization', org_id, 'members'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
 const getOrganizationFollowers = (
 	org_id: string
-): UseQueryOptions<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>, Error> => ({
-	queryFn: () =>
-		get<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>>(`/organization/${org_id}/followers`),
+): UseInfiniteQueryOptions<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>, Error> => ({
+	queryFn: ({ pageParam = 1 }) =>
+		get<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>>(
+			`/organization/${org_id}/followers?page=${pageParam}`
+		),
 	queryKey: ['organization', org_id, 'members'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
 const getOrganizationPermission = (
