@@ -37,6 +37,9 @@
 				color: rgba(var(--color-rgb-primary-white), 0.7);
 				padding-right: 1.5px;
 				transition: var(--transition-fast);
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 
 			p {

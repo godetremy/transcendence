@@ -1,0 +1,76 @@
+@use "../../../app/supports";
+
+.header {
+	position: relative;
+	padding-top: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	border-bottom: 1px solid var(--color-border-dark);
+
+	h1 {
+		padding: 0 20px;
+		font: 700 26px var(--font-paragraph);
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		height: 40px;
+		left: 0;
+		right: 0;
+		z-index: 1;
+		pointer-events: none;
+		background: linear-gradient(90deg, #000, #0000 20px, #0000 calc(100% - 20px), #000);
+	}
+
+	nav {
+		position: relative;
+		padding: 0 20px;
+		display: flex;
+		gap: 20px;
+		overflow: scroll;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			background-color: var(--color-primary-white);
+			bottom: 0;
+			height: 1px;
+			left: calc(var(--line-left) - 0px);
+			width: var(--line-width);
+			transition: .3s;
+		}
+
+		button {
+			appearance: none;
+			height: 40px;
+			border: none;
+			padding: 0 20px;
+			background-color: rgba(var(--color-rgb-primary-white), 0);
+			color: rgba(var(--color-rgb-primary-white), 0.6);
+			font: 600 14px var(--font-paragraph);
+			transition: .3s;
+			flex-shrink: 0;
+
+			&.selected {
+				color: rgba(var(--color-rgb-primary-white), 1);
+			}
+		}
+	}
+}
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.header {
+		nav {
+			&::after {
+				left: var(--line-left);
+			}
+		}
+	}
+}
