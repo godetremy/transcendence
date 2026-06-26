@@ -29,7 +29,7 @@ STAGING_SESSION_SECRET=$(read_password "Which secret do you want to use for your
 PRODUCTION_SESSION_SECRET=$(read_password "Which secret do you want to use for your session on production deploy");
 
 echo
-source "$SCRIPT_DIR/request_forty_two_api.sh"
+source "./docker/scripts/request_forty_two_api.sh"
 echo
 
 
