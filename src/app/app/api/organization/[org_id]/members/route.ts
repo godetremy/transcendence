@@ -12,7 +12,7 @@ export async function GET(
 		const { org_id } = await params;
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
-		const number = await countOrganizationMembersByFilter({});
+		const number = await countOrganizationMembersByFilter({ organization_id: org_id });
 		const list = await getOrganizationMembersByFilter(
 			{ organization_id: org_id },
 			{ user: true, organization_permission: true },

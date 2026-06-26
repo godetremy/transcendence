@@ -43,7 +43,13 @@ const getOrganizationInvites = (): UseInfiniteQueryOptions<
 
 const getOrganizationMembers = (
 	org_id: string
-): UseInfiniteQueryOptions<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>> => ({
+): UseInfiniteQueryOptions<
+	PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>,
+	Error,
+	InfiniteData<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>,
+	QueryKey,
+	number
+> => ({
 	queryFn: ({ pageParam = 1 }) =>
 		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
 			`/organization/${org_id}/members?page=${pageParam}`

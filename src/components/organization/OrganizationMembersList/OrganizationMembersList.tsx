@@ -7,7 +7,6 @@ import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
 import Image from 'next/image';
 import styles from '@/app/app/(authentificated)/organization/[org_id]/settings/members/page.module.scss';
-import { PaginationResponse } from '@/types/PaginationResponse';
 
 export function OrganizationMembersList({
 	org_id,
@@ -19,9 +18,6 @@ export function OrganizationMembersList({
 	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
 		getOrganizationMembers(org_id)
 	);
-	const typedData = data as
-		| InfiniteData<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>
-		| undefined;
 
 	if (isLoading) return <Loader />;
 	if (isError || data === undefined) return <ErrorState error={error} />;
@@ -35,28 +31,28 @@ export function OrganizationMembersList({
 		return `${permission} • ${member.approved ? `A rejoins le ${registred_at.toLocaleDateString()}` : `Invité le ${invited_at.toLocaleDateString()}`}`;
 	};
 
-	const members = typedData?.pages.flatMap((page) => page.data) ?? [];
-
 	return (
 		<div>
 			<ListContainer>
-				{members.map((member, i) => (
-					<ListItem
-						key={i}
-						title={member.user!.full_name ?? member.user!.id}
-						description={formatMembersDescription(member)}
-						leftElement={
-							<Image
-								src={member.user!.profile_picture}
-								width={40}
-								height={40}
-								alt={`Photo de ${member.user!.full_name ?? member.id}`}
-								className={styles.profilePicture}
-							/>
-						}
-						last={i == members.length - 1}
-						onPress={() => onPressItem(member)}
-					/>
+				{data.pages.map((row) => (
+					row.data.map((member, i) => (
+						<ListItem
+							key={i}
+							title={member.user!.full_name ?? member.user!.id}
+							description={formatMembersDescription(member)}
+							leftElement={
+								<Image
+									src={member.user!.profile_picture}
+									width={40}
+									height={40}
+									alt={`Photo de ${member.user!.full_name ?? member.id}`}
+									className={styles.profilePicture}
+								/>
+							}
+							last={i == data.pages.length - 1}
+							onPress={() => onPressItem(member)}
+						/>
+					))
 				))}
 			</ListContainer>
 			{isFetchingNextPage && <p>Chargement...</p>}
