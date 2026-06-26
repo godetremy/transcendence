@@ -77,11 +77,19 @@ const getOrganizationFollowers = (
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
-const getOrganizationPermission = (
+const getOrganizationPermissions = (
 	org_id: string
-): UseQueryOptions<PaginationResponse<OrganizationPermissionDetails>, Error> => ({
+): UseInfiniteQueryOptions<
+	PaginationResponse<OrganizationPermissionDetails>,
+	Error,
+	InfiniteData<PaginationResponse<OrganizationPermissionDetails>>,
+	QueryKey,
+	number
+> => ({
 	queryFn: () => get<PaginationResponse<OrganizationPermissionDetails>>(`/organization/${org_id}/permission`),
 	queryKey: ['organization', org_id, 'permissions'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
 const getOrganizationMemberById = (
@@ -178,7 +186,6 @@ const updateOrganizationPermission = (
 export {
 	createOrganization,
 	getOrganizationMembers,
-	getOrganizationPermission,
 	getOrganizationMemberById,
 	updateOrganizationUserPermission,
 	deleteOrganizationMember,
@@ -189,4 +196,5 @@ export {
 	getOrganizations,
 	getOrganizationInvites,
 	AccpetInvitation,
+	getOrganizationPermissions,
 };

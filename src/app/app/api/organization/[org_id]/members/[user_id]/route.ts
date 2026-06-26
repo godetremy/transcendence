@@ -44,7 +44,7 @@ export async function POST(
 
 		await getUserOrganizationPermission(other, org_id);
 
-		const me_permission = await getUserOrganizationPermission(me, org_id);
+		const me_permission = await getUserOrganizationPermission(me, org_id, true);
 		if (!me_permission.members_manage) throw ERRORS_DETAILS.permission_denied();
 
 		const body = await parseBody<DefineMemberPermissions>(req, MemberPermissionsDefineSchema);
@@ -82,7 +82,7 @@ export async function DELETE(
 		const me = await getUserById(session.user_id, {});
 		if (!me) throw ERRORS_DETAILS.user_does_not_exist();
 
-		const me_permission = await getUserOrganizationPermission(me, org_id);
+		const me_permission = await getUserOrganizationPermission(me, org_id, true);
 		if (!me_permission.members_manage) throw ERRORS_DETAILS.permission_denied();
 
 		const user = await getOrganizationMemberById(id.id, org_id, {});

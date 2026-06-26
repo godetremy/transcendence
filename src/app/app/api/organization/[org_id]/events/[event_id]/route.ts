@@ -25,7 +25,7 @@ export async function GET(
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		if (user.admin == false && organization.owner_id != user.id) {
-			await getUserOrganizationPermission(user, org_id);
+			await getUserOrganizationPermission(user, org_id, true);
 		}
 
 		const event_value = await getEventByIdToOrganization(event_id, org_id, {
@@ -56,7 +56,7 @@ export async function PATCH(
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		if (user.admin == false && organization.owner_id != user.id) {
-			const user_permission = await getUserOrganizationPermission(user, org_id);
+			const user_permission = await getUserOrganizationPermission(user, org_id, true);
 			if (!user_permission.event_update) throw ERRORS_DETAILS.permission_denied();
 		}
 
@@ -84,7 +84,7 @@ export async function DELETE(
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		if (user.admin == false && organization.owner_id != user.id) {
-			const user_permission = await getUserOrganizationPermission(user, org_id);
+			const user_permission = await getUserOrganizationPermission(user, org_id, true);
 			if (!user_permission.event_delete) throw ERRORS_DETAILS.permission_denied();
 		}
 

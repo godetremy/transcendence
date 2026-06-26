@@ -34,7 +34,7 @@ export function OrganizationMembersList({
 	return (
 		<div>
 			<ListContainer>
-				{data.pages.map((row) => (
+				{data.pages.map((row) =>
 					row.data.map((member, i) => (
 						<ListItem
 							key={i}
@@ -53,7 +53,7 @@ export function OrganizationMembersList({
 							onPress={() => onPressItem(member)}
 						/>
 					))
-				))}
+				)}
 			</ListContainer>
 			{isFetchingNextPage && <p>Chargement...</p>}
 

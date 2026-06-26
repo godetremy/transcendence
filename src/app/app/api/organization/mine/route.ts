@@ -19,8 +19,6 @@ export function GET(req: NextRequest) {
 
 		const list = await getOrganizationByFilter(filter, { organization_members: true }, pagination);
 		const count = await countOrganizationByFilter(filter);
-		console.error('list', list);
-		console.error('count', list);
 
 		return NextResponse.json(
 			generatePaginationResponse(

@@ -29,7 +29,7 @@ export async function GET(
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
 		if (user.admin == false && organization.owner_id != user.id) {
-			await getUserOrganizationPermission(user, org_id);
+			await getUserOrganizationPermission(user, org_id, true);
 		}
 
 		const date = getDateParams(searchParams);
@@ -64,7 +64,7 @@ export async function POST(
 		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		const user_permission = await getUserOrganizationPermission(user, org_id);
+		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.service_create) throw ERRORS_DETAILS.permission_denied();
 
 		const data = await parseBody<CreateOrUpdateServiceType>(req, CreateServiceSchema);

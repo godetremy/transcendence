@@ -18,7 +18,7 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 	return (
 		<div>
 			<ListContainer>
-				{data.pages.map((row) => (
+				{data.pages.map((row) =>
 					row.data.map((follower, i) => (
 						<ListItem
 							key={i}
@@ -35,7 +35,7 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 							last={i == row.data.length - 1}
 						/>
 					))
-				))}
+				)}
 			</ListContainer>
 			{isFetchingNextPage && <p>Chargement...</p>}
 

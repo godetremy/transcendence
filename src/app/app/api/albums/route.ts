@@ -53,7 +53,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 		if (organization == null) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		const user_permission = await getUserOrganizationPermission(user, organization.id);
+		const user_permission = await getUserOrganizationPermission(user, organization.id, true);
 		if (!user_permission.album_create) throw ERRORS_DETAILS.permission_denied();
 
 		const album = await createAlbum(body, { events: true, services: true });

@@ -31,7 +31,7 @@ export async function POST(
 
 		const body = await parseBody<MemberInviteRequestBody>(req, MemberInviteRequestBodySchema);
 
-		const permissions = await getUserOrganizationPermission(user, org_id);
+		const permissions = await getUserOrganizationPermission(user, org_id, true);
 		if (!permissions.members_manage) ERRORS_DETAILS.permission_denied();
 
 		if (!(await organizationExistById(org_id))) throw ERRORS_DETAILS.organization_does_not_exist();
