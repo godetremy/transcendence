@@ -20,7 +20,7 @@ export async function GET(
 		const { org_id } = await params;
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
-		const count = await countOrganizationFollowersByFilter({});
+		const count = await countOrganizationFollowersByFilter({ organization_id: org_id });
 		const List = await getOrganizationFollowersByFilter({ organization_id: org_id }, { user: true }, pagination);
 
 		return NextResponse.json(

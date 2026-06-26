@@ -23,7 +23,7 @@ export function OrganizationsList({}: {}) {
 							key={i}
 							title={organization.name}
 							description={organization.description ?? 'Aucune description'}
-							last={i === data.pages.length - 1}
+							last={i === row.data.length - 1}
 							onPress={() => router.push(`/app/organization/${organization.id}/dashboard`)}
 						/>
 					))

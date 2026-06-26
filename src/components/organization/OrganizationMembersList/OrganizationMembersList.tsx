@@ -1,4 +1,4 @@
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getOrganizationMembers } from '@/lib/fetcher/organization';
 import { Loader } from '@/components/globals/Loader/Loader';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
@@ -49,7 +49,7 @@ export function OrganizationMembersList({
 									className={styles.profilePicture}
 								/>
 							}
-							last={i == data.pages.length - 1}
+							last={i == row.data.length - 1}
 							onPress={() => onPressItem(member)}
 						/>
 					))
