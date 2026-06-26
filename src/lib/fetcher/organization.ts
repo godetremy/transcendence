@@ -5,6 +5,7 @@ import { OrganizationMembers } from '@/types/OrganizationMembers';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
 import { UseInfiniteQueryOptions, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
+import { CreateOrganizationType } from '@/types/Organization';
 
 const getOrganizationMembers = (
 	org_id: string
@@ -43,6 +44,17 @@ const getOrganizationMemberById = (
 ): UseQueryOptions<OrganizationMembers<{ user: true; permission: true }>, Error> => ({
 	queryFn: () => get<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`),
 	queryKey: ['organization', org_id, 'member', user_id],
+});
+
+const createOrganization = (): UseMutationOptions<
+	PaginationResponse<OrganizationPermissionDetails>,
+	Error,
+	{ org: CreateOrganizationType }
+> => ({
+	mutationFn: ({ org }) => post<PaginationResponse<OrganizationPermissionDetails>>(`/organization`, org),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organizations'] });
+	},
 });
 
 const updateOrganizationUserPermission = (
@@ -107,6 +119,7 @@ const updateOrganizationPermission = (
 });
 
 export {
+	createOrganization,
 	getOrganizationMembers,
 	getOrganizationPermission,
 	getOrganizationMemberById,

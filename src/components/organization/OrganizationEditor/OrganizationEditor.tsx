@@ -11,22 +11,23 @@ export interface OrganizationEditorProps {
 	organization: CreateOrganizationType;
 	setOrganization: Dispatch<SetStateAction<CreateOrganizationType>>;
 	disabled?: boolean;
+	error?: string;
+	setError?: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export function OrganizationEditor(props: OrganizationEditorProps) {
 	const upload = useUpload();
 
 	const [logo, setLogo] = useState<string | undefined>(undefined);
-	const [error, setError] = useState<string | undefined>(undefined);
 	const [uploadImage, setUploadImage] = useState(false);
 	const [uploadProgression, setUploadProgression] = useState(0);
 
 	const onDrop = async (acceptedFiles: File[]) => {
 		if (acceptedFiles.length <= 0) {
-			setError("Ce fichier n'est pas supporté.");
+			if (props.setError) props.setError("Ce fichier n'est pas supporté.");
 			return;
 		}
-		setError(undefined);
+		if (props.setError) props.setError(undefined);
 		setLogo(URL.createObjectURL(acceptedFiles[0]));
 		setUploadProgression(0);
 		setUploadImage(true);
@@ -92,7 +93,7 @@ export function OrganizationEditor(props: OrganizationEditorProps) {
 				/>
 				Est-ce un club ?
 			</label>
-			{error && <p className={styles.error}>{error}</p>}
+			{props.error && <p className={styles.error}>{props.error}</p>}
 		</main>
 	);
 }
