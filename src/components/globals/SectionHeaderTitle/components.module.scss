@@ -1,0 +1,33 @@
+.title {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+
+	& > h2 {
+		font-feature-settings: 'liga' off, 'clig' off;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 34px;
+		letter-spacing: 0.32px;
+		text-transform: uppercase;
+	}
+
+	& > button {
+		appearance: none;
+		border: none;
+		background: transparent;
+		color: rgba(var(--color-rgb-primary-white), 0.5);
+		font: 500 14px var(--font-paragraph);
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+
+		& > svg {
+			color: var(--color-primary-white);
+			opacity: 0.5;
+		}
+	}
+}
