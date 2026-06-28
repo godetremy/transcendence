@@ -48,7 +48,7 @@ export async function POST(
 		const organization = await getOrganizationById(org_id, {});
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		const user_permission = await getUserOrganizationPermission(user, org_id);
+		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.organization_manage_permission) throw ERRORS_DETAILS.permission_denied();
 
 		const permission = await CreateOrganizationPermissionWithOrganizationId(body, organization.id);

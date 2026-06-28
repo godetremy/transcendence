@@ -2,17 +2,30 @@ import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler } from '@/utils/errors';
 import { getThrowableSession } from '@/lib/session';
 import { formatPrivateOrganization } from '@/database/format/Organization';
-import { getOrganizationWhereMemberBelongs } from '@/database/OrganizationMembers';
+import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
+import { countOrganizationByFilter, getOrganizationByFilter } from '@/database/Organization';
+
 export function GET(req: NextRequest) {
 	return errorHandler(async () => {
 		const session = await getThrowableSession(req);
+		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
-		const list = await getOrganizationWhereMemberBelongs(session.user_id, { organization: true });
+		const filter = {
+			OR: [
+				{ owner_id: session.user_id },
+				{ organization_members: { some: { user_id: session.user_id, approved: true } } },
+			],
+		};
+
+		const list = await getOrganizationByFilter(filter, { organization_members: true }, pagination);
+		const count = await countOrganizationByFilter(filter);
 
 		return NextResponse.json(
-			list.map((member) => {
-				return formatPrivateOrganization<object>(member.organization);
-			})
+			generatePaginationResponse(
+				list.map(formatPrivateOrganization<{ organization_members: true }>),
+				count,
+				pagination
+			)
 		);
 	});
 }

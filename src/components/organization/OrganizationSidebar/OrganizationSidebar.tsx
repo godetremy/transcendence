@@ -64,9 +64,7 @@ export function OrganizationSidebar(props: OrganizationSidebarProps) {
 			>
 				<PanelLeft color={'currentColor'} />
 			</button>
-			<article className={!visibleSidebar ? styles.hidden : undefined}>
-				{props.children}
-			</article>
+			<article className={!visibleSidebar ? styles.hidden : undefined}>{props.children}</article>
 		</>
 	);
 }

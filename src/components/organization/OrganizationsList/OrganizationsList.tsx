@@ -1,16 +1,16 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getOrganizationFollowers } from '@/lib/fetcher/organization';
+import { getOrganizations } from '@/lib/fetcher/organization';
 import { Loader } from '@/components/globals/Loader/Loader';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import styles from '@/app/app/(authentificated)/organization/[org_id]/settings/members/page.module.scss';
 
-export function OrganizationFollowersList({ org_id }: { org_id: string }) {
-	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
-		getOrganizationFollowers(org_id)
-	);
+export function OrganizationsList() {
+	const router = useRouter();
+	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useInfiniteQuery(getOrganizations());
 
 	if (isLoading) return <Loader />;
 	if (isError || data === undefined) return <ErrorState error={error} />;
@@ -19,20 +19,22 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 		<div>
 			<ListContainer>
 				{data.pages.map((row) =>
-					row.data.map((follower, i) => (
+					row.data.map((organization, i) => (
 						<ListItem
 							key={i}
-							title={follower.user!.full_name ?? follower.user!.id}
+							title={organization.name}
+							description={organization.description ?? 'Aucune description'}
 							leftElement={
 								<Image
-									src={follower.user!.profile_picture}
-									width={40}
-									height={40}
-									alt={`Photo de ${follower.user!.full_name ?? follower.id}`}
-									className={styles.profilePicture}
+									src={organization.logo}
+									width={35}
+									height={35}
+									alt={`${organization.name} logo`}
+									style={{ borderRadius: 5, border: '1px solid var(--color-border-dark)' }}
 								/>
 							}
-							last={i == row.data.length - 1}
+							last={i === row.data.length - 1}
+							onPress={() => router.push(`/app/organization/${organization.id}/dashboard`)}
 						/>
 					))
 				)}

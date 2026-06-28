@@ -3,14 +3,16 @@ import styles from './component.module.scss';
 import { Pencil, Check } from 'lucide-react';
 
 type ModificationTextProps = {
-	value: string | undefined;
+	value: string;
+	onValidate: (value: string) => void;
 };
 
-function ModificationText({ value }: ModificationTextProps) {
+function ModificationText({ value, onValidate }: ModificationTextProps) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [input, setInput] = useState(value);
 
 	const handleChange = () => {
+		onValidate(input);
 		setIsEditing(false);
 	};
 
@@ -33,7 +35,7 @@ function ModificationText({ value }: ModificationTextProps) {
 					</div>
 				</div>
 			) : (
-				<span>{input}</span>
+				<span>{value}</span>
 			)}
 			{!isEditing && (
 				<div role="button" className={styles.button} onClick={() => setIsEditing(true)}>

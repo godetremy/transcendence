@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getOrganizationPermission, updateOrganizationUserPermission } from '@/lib/fetcher/organization';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { getOrganizationPermissions, updateOrganizationUserPermission } from '@/lib/fetcher/organization';
 import { Loader } from '@/components/globals/Loader/Loader';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import ListItem from '@/components/globals/ListItem/ListItem';
@@ -15,7 +15,7 @@ export function OrganizationPermissionSelector({
 	orgId: string;
 	userId: string;
 }) {
-	const { data, isLoading, isError, error } = useQuery(getOrganizationPermission(orgId));
+	const { data, isLoading, isError, error } = useInfiniteQuery(getOrganizationPermissions(orgId));
 	const update = useMutation(updateOrganizationUserPermission(orgId, userId));
 
 	if (isLoading) return <Loader />;
@@ -23,26 +23,28 @@ export function OrganizationPermissionSelector({
 
 	return (
 		<ListContainer>
-			{data.data.map((perm, i) => (
-				<ListItem
-					key={i}
-					title={perm.name}
-					description={perm.description ?? 'Aucune description'}
-					last={i == data.data.length - 1}
-					showChevron={false}
-					rightElement={
-						<label htmlFor={`check_${perm.id}`} className={styles.checkbox_label}>
-							<input
-								id={`check_${perm.id}`}
-								type={'checkbox'}
-								className={styles.checkbox}
-								onChange={(e) => (e.target.checked ? update.mutate({ perm_id: perm.id }) : {})}
-								checked={selectedPermId === perm.id}
-							/>
-						</label>
-					}
-				/>
-			))}
+			{data.pages.map((row) =>
+				row.data.map((perm, i) => (
+					<ListItem
+						key={i}
+						title={perm.name}
+						description={perm.description ?? 'Aucune description'}
+						last={i == row.data.length - 1}
+						showChevron={false}
+						rightElement={
+							<label htmlFor={`check_${perm.id}`} className={styles.checkbox_label}>
+								<input
+									id={`check_${perm.id}`}
+									type={'checkbox'}
+									className={styles.checkbox}
+									onChange={(e) => (e.target.checked ? update.mutate({ perm_id: perm.id }) : {})}
+									checked={selectedPermId === perm.id}
+								/>
+							</label>
+						}
+					/>
+				))
+			)}
 		</ListContainer>
 	);
 }

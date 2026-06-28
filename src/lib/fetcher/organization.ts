@@ -1,15 +1,55 @@
-import { deletef, get, patch, post } from '@/lib/fetcher';
+import { deletef, get, patch, post, put } from '@/lib/fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import { CreateOrganizationPermissionType, OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
-import { OrganizationMembers } from '@/types/OrganizationMembers';
+import { OrganizationInvitation, OrganizationMembers } from '@/types/OrganizationMembers';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
-import { UseInfiniteQueryOptions, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
+import {
+	InfiniteData,
+	QueryKey,
+	UseInfiniteQueryOptions,
+	UseMutationOptions,
+	UseQueryOptions,
+} from '@tanstack/react-query';
 import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
-import { CreateOrganizationType } from '@/types/Organization';
+import { CreateOrganizationType, PrivateOrganization } from '@/types/Organization';
+
+const getOrganizations = (): UseInfiniteQueryOptions<
+	PaginationResponse<PrivateOrganization<object>>,
+	Error,
+	InfiniteData<PaginationResponse<PrivateOrganization<object>>>,
+	QueryKey,
+	number
+> => ({
+	queryFn: ({ pageParam }) =>
+		get<PaginationResponse<PrivateOrganization<object>>>(`/organization/mine?page=${pageParam}`),
+	queryKey: ['organization', 'mine'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
+});
+
+const getOrganizationInvites = (): UseInfiniteQueryOptions<
+	PaginationResponse<OrganizationInvitation>,
+	Error,
+	InfiniteData<PaginationResponse<OrganizationInvitation>>,
+	QueryKey,
+	number
+> => ({
+	queryFn: ({ pageParam = 1 }) =>
+		get<PaginationResponse<OrganizationInvitation>>(`/organization/invitation/pending?page=${pageParam}`),
+	queryKey: ['organization', 'invitation', 'pending'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
+});
 
 const getOrganizationMembers = (
 	org_id: string
-): UseInfiniteQueryOptions<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>> => ({
+): UseInfiniteQueryOptions<
+	PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>,
+	Error,
+	InfiniteData<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>,
+	QueryKey,
+	number
+> => ({
 	queryFn: ({ pageParam = 1 }) =>
 		get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
 			`/organization/${org_id}/members?page=${pageParam}`
@@ -21,21 +61,35 @@ const getOrganizationMembers = (
 
 const getOrganizationFollowers = (
 	org_id: string
-): UseInfiniteQueryOptions<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>, Error> => ({
+): UseInfiniteQueryOptions<
+	PaginationResponse<PublicOrganizationFollowers<{ user: true }>>,
+	Error,
+	InfiniteData<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>>,
+	QueryKey,
+	number
+> => ({
 	queryFn: ({ pageParam = 1 }) =>
 		get<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>>(
 			`/organization/${org_id}/followers?page=${pageParam}`
 		),
-	queryKey: ['organization', org_id, 'members'],
+	queryKey: ['organization', org_id, 'folowers'],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
-const getOrganizationPermission = (
+const getOrganizationPermissions = (
 	org_id: string
-): UseQueryOptions<PaginationResponse<OrganizationPermissionDetails>, Error> => ({
+): UseInfiniteQueryOptions<
+	PaginationResponse<OrganizationPermissionDetails>,
+	Error,
+	InfiniteData<PaginationResponse<OrganizationPermissionDetails>>,
+	QueryKey,
+	number
+> => ({
 	queryFn: () => get<PaginationResponse<OrganizationPermissionDetails>>(`/organization/${org_id}/permission`),
 	queryKey: ['organization', org_id, 'permissions'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
 const getOrganizationMemberById = (
@@ -54,6 +108,17 @@ const createOrganization = (): UseMutationOptions<
 	mutationFn: ({ org }) => post<PaginationResponse<OrganizationPermissionDetails>>(`/organization`, org),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organizations'] });
+	},
+});
+
+const AccpetInvitation = (
+	org_id: string
+): UseMutationOptions<{ success: boolean; message?: string }, Error, { accept: boolean }> => ({
+	mutationFn: ({ accept }: { accept: boolean }) =>
+		put<{ success: boolean; message?: string }>(`/organization/${org_id}/members/invite`, { accept }),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'invitation', 'pending'] });
 	},
 });
 
@@ -121,7 +186,6 @@ const updateOrganizationPermission = (
 export {
 	createOrganization,
 	getOrganizationMembers,
-	getOrganizationPermission,
 	getOrganizationMemberById,
 	updateOrganizationUserPermission,
 	deleteOrganizationMember,
@@ -129,4 +193,8 @@ export {
 	createOrganizationPermission,
 	updateOrganizationPermission,
 	getOrganizationFollowers,
+	getOrganizations,
+	getOrganizationInvites,
+	AccpetInvitation,
+	getOrganizationPermissions,
 };

@@ -46,10 +46,14 @@ export async function PATCH(
 		if (checkAlbum == null) throw ERRORS_DETAILS.album_does_not_exists();
 
 		if (checkAlbum.events?.organization_id != null) {
-			const user_permission = await getUserOrganizationPermission(user, checkAlbum.events.organization_id);
+			const user_permission = await getUserOrganizationPermission(user, checkAlbum.events.organization_id, true);
 			if (!user_permission.album_update) throw ERRORS_DETAILS.permission_denied();
 		} else if (checkAlbum.services?.organization_id != null) {
-			const user_permission = await getUserOrganizationPermission(user, checkAlbum.services.organization_id);
+			const user_permission = await getUserOrganizationPermission(
+				user,
+				checkAlbum.services.organization_id,
+				true
+			);
 			if (!user_permission.album_update) throw ERRORS_DETAILS.permission_denied();
 		} else throw ERRORS_DETAILS.organization_does_not_exist();
 
@@ -76,7 +80,7 @@ export async function DELETE(
 		const user = await getUserById(session.user_id, {});
 		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
 
-		const permission = await getUserOrganizationPermission(user, event.organization_id);
+		const permission = await getUserOrganizationPermission(user, event.organization_id, true);
 		if (!permission.album_delete) throw ERRORS_DETAILS.permission_denied();
 
 		await deleteAlbumById(album_id, {});

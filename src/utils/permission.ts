@@ -6,7 +6,8 @@ import { FULL_PERMISSIONS, NULL_PERMISSIONS } from '@/const/permission';
 
 const getUserOrganizationPermission = async (
 	user: Prisma.usersGetPayload<Prisma.usersDefaultArgs>,
-	organization_id: string
+	organization_id: string,
+	check_approve: boolean = false
 ): Promise<Prisma.organization_permissionGetPayload<object>> => {
 	const organization = await getOrganizationById(organization_id, {});
 	if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
@@ -20,8 +21,9 @@ const getUserOrganizationPermission = async (
 		{ organization_permission: true, organization: true }
 	);
 
-	if (!organization_member) throw ERRORS_DETAILS.member_not_in_organization();
-	if (organization_member.approved == false) throw ERRORS_DETAILS.member_not_in_organization();
+	if (organization_member == null) throw ERRORS_DETAILS.member_not_in_organization();
+	if (check_approve == true && organization_member.approved == false)
+		throw ERRORS_DETAILS.member_not_in_organization();
 
 	return organization_member.organization_permission ?? NULL_PERMISSIONS(organization_member.organization_id);
 };

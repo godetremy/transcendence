@@ -3,7 +3,6 @@ import { decrypt } from '@/lib/session';
 import { UploadTokenProvider } from '@/contexts/UploadTokenContext';
 import { cookies } from 'next/headers';
 import { countUploadRequestForTheLastHour, createUploadRequest } from '@/database/UploadRequest';
-import { ERRORS_DETAILS } from '@/utils/errors';
 
 const encodedKey = new TextEncoder().encode(process.env.SESSION_SECRET);
 

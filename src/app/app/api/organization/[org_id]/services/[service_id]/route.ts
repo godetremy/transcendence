@@ -22,7 +22,7 @@ export async function GET(
 
 		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
 
-		await getUserOrganizationPermission(user, org_id);
+		await getUserOrganizationPermission(user, org_id, true);
 
 		const service_value = await getServicesByIdToOrganization(service_id, org_id, {
 			organization: true,
@@ -50,7 +50,7 @@ export async function PATCH(
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 		if (!service) throw ERRORS_DETAILS.service_does_not_exists();
 
-		const user_permission = await getUserOrganizationPermission(user, org_id);
+		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.service_update) throw ERRORS_DETAILS.permission_denied();
 
 		const body = await parseBody<CreateOrUpdateServiceType>(req, CreateServiceSchema);
@@ -78,7 +78,7 @@ export async function DELETE(
 		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
 		if (!service) throw ERRORS_DETAILS.service_does_not_exists();
 
-		const user_permission = await getUserOrganizationPermission(user, org_id);
+		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.service_delete) throw ERRORS_DETAILS.permission_denied();
 
 		await deleteServicesById(service_id, org_id, {});

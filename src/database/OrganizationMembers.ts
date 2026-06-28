@@ -28,11 +28,13 @@ const getOrganizationMembersByFilter = async <T extends Prisma.organization_memb
 
 const getOrganizationWhereMemberBelongs = async <T extends Prisma.organization_membersInclude>(
 	user_id: string,
-	include: T
+	include: T,
+	pagination?: PaginationParameters
 ): Promise<Prisma.organization_membersGetPayload<{ include: T }>[]> => {
 	return prisma.organization_members.findMany({
 		where: { user_id, approved: true },
 		include: include,
+		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 };
 

@@ -42,7 +42,6 @@ export async function PUT(
 		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
 
 		const registered = await getEventRegistrationsById(event_id, user_id, {});
-		console.error(registered);
 
 		if (body.register == 'true') {
 			if (registered != null) throw ERRORS_DETAILS.event_has_register();

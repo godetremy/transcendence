@@ -1,10 +1,11 @@
 import styles from './components.module.scss';
 import { Check, ChevronDown } from 'lucide-react';
 import { Loader } from '@/components/globals/Loader/Loader';
-import { useQuery } from '@tanstack/react-query';
-import { getOrganizationPermission } from '@/lib/fetcher/organization';
-import { useEffect, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { getOrganizationPermissions } from '@/lib/fetcher/organization';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { ErrorState } from '../ErrorState/ErrorState';
 
 export interface CardHeaderPermissionPickerProps {
 	orgId: string;
@@ -15,7 +16,9 @@ export interface CardHeaderPermissionPickerProps {
 }
 
 export function CardHeaderPermissionPicker(props: CardHeaderPermissionPickerProps) {
-	const { data, isLoading } = useQuery(getOrganizationPermission(props.orgId));
+	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+		getOrganizationPermissions(props.orgId)
+	);
 
 	const [open, setOpen] = useState(false);
 	const [selection, setSelection] = useState<string | undefined>(undefined);
@@ -26,10 +29,8 @@ export function CardHeaderPermissionPicker(props: CardHeaderPermissionPickerProp
 	const hiddenCheckmark = { opacity: 0, scale: 0.8 };
 	const visibleCheckmark = { opacity: 1, scale: 1 };
 
-	useEffect(() => {
-		// eslint-disable-next-line react-hooks/set-state-in-effect
-		if (!isLoading && data) setSelection(data.data[0].id);
-	}, [data, isLoading]);
+	if (isLoading) return <Loader />;
+	if (isError || data === undefined) return <ErrorState error={error} />;
 
 	return (
 		<AnimatePresence>
@@ -49,7 +50,7 @@ export function CardHeaderPermissionPicker(props: CardHeaderPermissionPickerProp
 						{isLoading || data === undefined || props.loading ? (
 							<Loader size={24} />
 						) : (
-							<>{`Ajouter en tant que ${data.data.find((v) => v.id === selection)?.name ?? 'sans rôle'}`}</>
+							<>{`Ajouter en tant que ${data.pages[0].data.find((v) => v.id === selection)?.name ?? 'sans rôle'}`}</>
 						)}
 					</button>
 					<button onClick={() => setOpen(!open)} disabled={props.loading || isLoading || data === undefined}>
@@ -65,27 +66,36 @@ export function CardHeaderPermissionPicker(props: CardHeaderPermissionPickerProp
 						animate={openedContainer}
 						exit={closedContainer}
 					>
-						{data.data.map((perm, i) => (
-							<button
-								key={i}
-								onClick={() => {
-									setSelection(perm.id);
-									setOpen(false);
-								}}
-							>
-								{selection === perm.id && (
-									<motion.div
-										initial={hiddenCheckmark}
-										animate={visibleCheckmark}
-										exit={hiddenCheckmark}
-										key={`check_${perm.id}`}
-									>
-										<Check size={18} />
-									</motion.div>
-								)}
-								{perm.name}
+						{data.pages.map((row) =>
+							row.data.map((perm, i) => (
+								<button
+									key={i}
+									onClick={() => {
+										setSelection(perm.id);
+										setOpen(false);
+									}}
+								>
+									{selection === perm.id && (
+										<motion.div
+											initial={hiddenCheckmark}
+											animate={visibleCheckmark}
+											exit={hiddenCheckmark}
+											key={`check_${perm.id}`}
+										>
+											<Check size={18} />
+										</motion.div>
+									)}
+									{perm.name}
+								</button>
+							))
+						)}
+						{isFetchingNextPage && <p>Chargement...</p>}
+
+						{hasNextPage && (
+							<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+								{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
 							</button>
-						))}
+						)}
 					</motion.div>
 				)}
 			</header>

@@ -24,6 +24,8 @@ export function Carousel(props: CarouselProps) {
 	const dragBaseXPosition = useRef(0);
 	const dragBaseTranslateX = useRef(0);
 
+	const isDragging = useRef(false);
+
 	useEffect(() => {
 		slidesProgressionRef.current = slidesProgression;
 	});
@@ -159,12 +161,14 @@ export function Carousel(props: CarouselProps) {
 		if (event.buttons !== 1) return;
 		const container = slidesContainerRef.current;
 		if (!container) return;
+		isDragging.current = true;
 		dragBaseXPosition.current = event.x;
 		dragBaseTranslateX.current = parseTranslateX(container);
 	}
 
 	function dragEventHandler(event: MouseEvent) {
 		if (event.buttons !== 1) return;
+		if (!isDragging.current) return;
 		slideTimeoutPaused.current = true;
 
 		const container = slidesContainerRef.current;
@@ -189,6 +193,8 @@ export function Carousel(props: CarouselProps) {
 	}
 
 	function endDragEventHandler() {
+		if (!isDragging.current) return;
+		isDragging.current = false;
 		const container = slidesContainerRef.current;
 		if (!container) return;
 		slideTimeoutPaused.current = false;

@@ -39,7 +39,7 @@ export async function PATCH(
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 
-		const user_permission = await getUserOrganizationPermission(user, org_id);
+		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.organization_update_info) throw ERRORS_DETAILS.permission_denied();
 
 		const value = await updateOrganization(body, org_id);
