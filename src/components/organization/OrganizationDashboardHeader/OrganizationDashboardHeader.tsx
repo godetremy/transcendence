@@ -19,6 +19,7 @@ export function OrganizationDashboardHeader(props: OrganizationDashboardHeaderPr
 			setWidth(buttonsRef.current[0].getBoundingClientRect().width);
 		}
 	}, []);
+
 	return (
 		<header className={styles.header}>
 			<h1>{props.title}</h1>
