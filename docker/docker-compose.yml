@@ -21,13 +21,13 @@ services:
             - app
 
     seaweed-master:
-        image: chrislusf/seaweedfs:3.96
+        image: chrislusf/seaweedfs
         networks:
             - app
         command: 'master -ip=seaweed-master -port=9333'
 
     seaweed-filer:
-        image: chrislusf/seaweedfs:3.96
+        image: chrislusf/seaweedfs
         depends_on:
             - seaweed-master
         networks:
@@ -35,7 +35,7 @@ services:
         command: 'filer -master=seaweed-master:9333'
 
     seaweed-volume:
-        image: chrislusf/seaweedfs:3.96
+        image: chrislusf/seaweedfs
         depends_on:
             - seaweed-master
         networks:

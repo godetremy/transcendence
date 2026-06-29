@@ -28,7 +28,7 @@ export type PhotosMinAggregateOutputType = {
   id: string | null
   path: string | null
   album_id: string | null
-  updloaded_by_id: string | null
+  uploaded_by_id: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -37,7 +37,7 @@ export type PhotosMaxAggregateOutputType = {
   id: string | null
   path: string | null
   album_id: string | null
-  updloaded_by_id: string | null
+  uploaded_by_id: string | null
   created_at: Date | null
   updated_at: Date | null
 }
@@ -46,7 +46,7 @@ export type PhotosCountAggregateOutputType = {
   id: number
   path: number
   album_id: number
-  updloaded_by_id: number
+  uploaded_by_id: number
   created_at: number
   updated_at: number
   _all: number
@@ -57,7 +57,7 @@ export type PhotosMinAggregateInputType = {
   id?: true
   path?: true
   album_id?: true
-  updloaded_by_id?: true
+  uploaded_by_id?: true
   created_at?: true
   updated_at?: true
 }
@@ -66,7 +66,7 @@ export type PhotosMaxAggregateInputType = {
   id?: true
   path?: true
   album_id?: true
-  updloaded_by_id?: true
+  uploaded_by_id?: true
   created_at?: true
   updated_at?: true
 }
@@ -75,7 +75,7 @@ export type PhotosCountAggregateInputType = {
   id?: true
   path?: true
   album_id?: true
-  updloaded_by_id?: true
+  uploaded_by_id?: true
   created_at?: true
   updated_at?: true
   _all?: true
@@ -157,7 +157,7 @@ export type PhotosGroupByOutputType = {
   id: string
   path: string
   album_id: string
-  updloaded_by_id: string
+  uploaded_by_id: string
   created_at: Date
   updated_at: Date
   _count: PhotosCountAggregateOutputType | null
@@ -187,7 +187,7 @@ export type photosWhereInput = {
   id?: Prisma.StringFilter<"photos"> | string
   path?: Prisma.StringFilter<"photos"> | string
   album_id?: Prisma.StringFilter<"photos"> | string
-  updloaded_by_id?: Prisma.StringFilter<"photos"> | string
+  uploaded_by_id?: Prisma.StringFilter<"photos"> | string
   created_at?: Prisma.DateTimeFilter<"photos"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"photos"> | Date | string
   album?: Prisma.XOR<Prisma.Photos_albumScalarRelationFilter, Prisma.photos_albumWhereInput>
@@ -199,7 +199,7 @@ export type photosOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
   album_id?: Prisma.SortOrder
-  updloaded_by_id?: Prisma.SortOrder
+  uploaded_by_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   album?: Prisma.photos_albumOrderByWithRelationInput
@@ -215,7 +215,7 @@ export type photosWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.photosWhereInput | Prisma.photosWhereInput[]
   path?: Prisma.StringFilter<"photos"> | string
   album_id?: Prisma.StringFilter<"photos"> | string
-  updloaded_by_id?: Prisma.StringFilter<"photos"> | string
+  uploaded_by_id?: Prisma.StringFilter<"photos"> | string
   created_at?: Prisma.DateTimeFilter<"photos"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"photos"> | Date | string
   album?: Prisma.XOR<Prisma.Photos_albumScalarRelationFilter, Prisma.photos_albumWhereInput>
@@ -227,7 +227,7 @@ export type photosOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
   album_id?: Prisma.SortOrder
-  updloaded_by_id?: Prisma.SortOrder
+  uploaded_by_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   _count?: Prisma.photosCountOrderByAggregateInput
@@ -242,7 +242,7 @@ export type photosScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"photos"> | string
   path?: Prisma.StringWithAggregatesFilter<"photos"> | string
   album_id?: Prisma.StringWithAggregatesFilter<"photos"> | string
-  updloaded_by_id?: Prisma.StringWithAggregatesFilter<"photos"> | string
+  uploaded_by_id?: Prisma.StringWithAggregatesFilter<"photos"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"photos"> | Date | string
   updated_at?: Prisma.DateTimeWithAggregatesFilter<"photos"> | Date | string
 }
@@ -261,7 +261,7 @@ export type photosUncheckedCreateInput = {
   id?: string
   path: string
   album_id: string
-  updloaded_by_id: string
+  uploaded_by_id: string
   created_at?: Date | string
   updated_at?: Date | string
   photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutPhotoInput
@@ -281,7 +281,7 @@ export type photosUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   album_id?: Prisma.StringFieldUpdateOperationsInput | string
-  updloaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
+  uploaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutPhotoNestedInput
@@ -291,7 +291,7 @@ export type photosCreateManyInput = {
   id?: string
   path: string
   album_id: string
-  updloaded_by_id: string
+  uploaded_by_id: string
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -307,7 +307,7 @@ export type photosUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   album_id?: Prisma.StringFieldUpdateOperationsInput | string
-  updloaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
+  uploaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -322,7 +322,7 @@ export type photosCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
   album_id?: Prisma.SortOrder
-  updloaded_by_id?: Prisma.SortOrder
+  uploaded_by_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -331,7 +331,7 @@ export type photosMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
   album_id?: Prisma.SortOrder
-  updloaded_by_id?: Prisma.SortOrder
+  uploaded_by_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -340,7 +340,7 @@ export type photosMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   path?: Prisma.SortOrder
   album_id?: Prisma.SortOrder
-  updloaded_by_id?: Prisma.SortOrder
+  uploaded_by_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
 }
@@ -473,7 +473,7 @@ export type photosUncheckedCreateWithoutPhotos_album_reportsInput = {
   id?: string
   path: string
   album_id: string
-  updloaded_by_id: string
+  uploaded_by_id: string
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -507,7 +507,7 @@ export type photosUncheckedUpdateWithoutPhotos_album_reportsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   album_id?: Prisma.StringFieldUpdateOperationsInput | string
-  updloaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
+  uploaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -524,7 +524,7 @@ export type photosCreateWithoutAlbumInput = {
 export type photosUncheckedCreateWithoutAlbumInput = {
   id?: string
   path: string
-  updloaded_by_id: string
+  uploaded_by_id: string
   created_at?: Date | string
   updated_at?: Date | string
   photos_album_reports?: Prisma.photos_album_reportsUncheckedCreateNestedManyWithoutPhotoInput
@@ -563,7 +563,7 @@ export type photosScalarWhereInput = {
   id?: Prisma.StringFilter<"photos"> | string
   path?: Prisma.StringFilter<"photos"> | string
   album_id?: Prisma.StringFilter<"photos"> | string
-  updloaded_by_id?: Prisma.StringFilter<"photos"> | string
+  uploaded_by_id?: Prisma.StringFilter<"photos"> | string
   created_at?: Prisma.DateTimeFilter<"photos"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"photos"> | Date | string
 }
@@ -615,7 +615,7 @@ export type photosUpdateManyWithWhereWithoutUpdloaded_byInput = {
 export type photosCreateManyAlbumInput = {
   id?: string
   path: string
-  updloaded_by_id: string
+  uploaded_by_id: string
   created_at?: Date | string
   updated_at?: Date | string
 }
@@ -632,7 +632,7 @@ export type photosUpdateWithoutAlbumInput = {
 export type photosUncheckedUpdateWithoutAlbumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
-  updloaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
+  uploaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos_album_reports?: Prisma.photos_album_reportsUncheckedUpdateManyWithoutPhotoNestedInput
@@ -641,7 +641,7 @@ export type photosUncheckedUpdateWithoutAlbumInput = {
 export type photosUncheckedUpdateManyWithoutAlbumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
-  updloaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
+  uploaded_by_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -715,7 +715,7 @@ export type photosSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   path?: boolean
   album_id?: boolean
-  updloaded_by_id?: boolean
+  uploaded_by_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   album?: boolean | Prisma.photos_albumDefaultArgs<ExtArgs>
@@ -728,7 +728,7 @@ export type photosSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   path?: boolean
   album_id?: boolean
-  updloaded_by_id?: boolean
+  uploaded_by_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   album?: boolean | Prisma.photos_albumDefaultArgs<ExtArgs>
@@ -739,7 +739,7 @@ export type photosSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   path?: boolean
   album_id?: boolean
-  updloaded_by_id?: boolean
+  uploaded_by_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   album?: boolean | Prisma.photos_albumDefaultArgs<ExtArgs>
@@ -750,12 +750,12 @@ export type photosSelectScalar = {
   id?: boolean
   path?: boolean
   album_id?: boolean
-  updloaded_by_id?: boolean
+  uploaded_by_id?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type photosOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "path" | "album_id" | "updloaded_by_id" | "created_at" | "updated_at", ExtArgs["result"]["photos"]>
+export type photosOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "path" | "album_id" | "uploaded_by_id" | "created_at" | "updated_at", ExtArgs["result"]["photos"]>
 export type photosInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   album?: boolean | Prisma.photos_albumDefaultArgs<ExtArgs>
   updloaded_by?: boolean | Prisma.usersDefaultArgs<ExtArgs>
@@ -782,7 +782,7 @@ export type $photosPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     path: string
     album_id: string
-    updloaded_by_id: string
+    uploaded_by_id: string
     created_at: Date
     updated_at: Date
   }, ExtArgs["result"]["photos"]>
@@ -1214,7 +1214,7 @@ export interface photosFieldRefs {
   readonly id: Prisma.FieldRef<"photos", 'String'>
   readonly path: Prisma.FieldRef<"photos", 'String'>
   readonly album_id: Prisma.FieldRef<"photos", 'String'>
-  readonly updloaded_by_id: Prisma.FieldRef<"photos", 'String'>
+  readonly uploaded_by_id: Prisma.FieldRef<"photos", 'String'>
   readonly created_at: Prisma.FieldRef<"photos", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"photos", 'DateTime'>
 }
