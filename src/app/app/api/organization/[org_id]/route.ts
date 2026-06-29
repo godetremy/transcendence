@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { deleteOrganization, getOrganizationById, updateOrganization } from '@/database/Organization';
-import { formatPublicOrganization } from '@/database/format/Organization';
+import { formatPrivateOrganization, formatPublicOrganization } from '@/database/format/Organization';
 import { CreateOrganizationType } from '@/types/Organization';
 import { CreateOrganizationSchema } from '@/schema/OrganizationSchema';
 import { parseBody } from '@/utils/parsing';
@@ -19,7 +19,7 @@ export async function GET(
 
 		if (!org) throw ERRORS_DETAILS.organization_does_not_exist();
 
-		return NextResponse.json(formatPublicOrganization<object>(org));
+		return NextResponse.json(formatPrivateOrganization<object>(org));
 	});
 }
 
@@ -44,7 +44,7 @@ export async function PATCH(
 
 		const value = await updateOrganization(body, org_id);
 
-		return NextResponse.json(formatPublicOrganization<object>(value));
+		return NextResponse.json(formatPrivateOrganization<object>(value));
 	});
 }
 

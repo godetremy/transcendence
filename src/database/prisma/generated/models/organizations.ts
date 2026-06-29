@@ -241,11 +241,11 @@ export type organizationsOrderByWithRelationInput = {
 
 export type organizationsWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name?: string
   AND?: Prisma.organizationsWhereInput | Prisma.organizationsWhereInput[]
   OR?: Prisma.organizationsWhereInput[]
   NOT?: Prisma.organizationsWhereInput | Prisma.organizationsWhereInput[]
   owner_id?: Prisma.StringFilter<"organizations"> | string
+  name?: Prisma.StringFilter<"organizations"> | string
   description?: Prisma.StringNullableFilter<"organizations"> | string | null
   logo?: Prisma.StringNullableFilter<"organizations"> | string | null
   club?: Prisma.BoolFilter<"organizations"> | boolean
@@ -257,7 +257,7 @@ export type organizationsWhereUniqueInput = Prisma.AtLeast<{
   events?: Prisma.EventsListRelationFilter
   services?: Prisma.ServicesListRelationFilter
   organization_permission?: Prisma.Organization_permissionListRelationFilter
-}, "id" | "name">
+}, "id">
 
 export type organizationsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

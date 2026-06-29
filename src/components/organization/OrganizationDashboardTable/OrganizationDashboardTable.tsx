@@ -1,7 +1,15 @@
 'use client';
 import styles from './component.module.scss';
 import { Checkbox } from '@/components/globals/Checkbox/Checkbox';
-import { Search, Filter, ArrowUpDown, Settings2, DownloadCloud, CloudUploadIcon, Plus } from 'lucide-react';
+import {
+	Search,
+	Filter,
+	ArrowUpDown,
+	Settings2,
+	DownloadCloud,
+	CloudUploadIcon,
+	Plus,
+} from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import OrganizationTableHeaderButton from '@/components/organization/OrganizationTableHeaderButton/OrganizationTableHeaderButton';
 import {

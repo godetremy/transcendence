@@ -14,20 +14,6 @@ const getOrganizationById = async <T extends Prisma.organizationsInclude>(
 	});
 };
 
-const getOrganizationByName = async <T extends Prisma.organizationsInclude>(
-	name: string,
-	include: T
-): Promise<Prisma.organizationsGetPayload<{ include: T }> | null> => {
-	return prisma.organizations.findUnique({
-		where: { name },
-		include: include,
-	});
-};
-
-const organizationExistByName = async (name: string): Promise<boolean> => {
-	return (await getOrganizationByName(name, {})) !== null;
-};
-
 const organizationExistById = async (organization_id: string): Promise<boolean> => {
 	return (await getOrganizationById(organization_id, {})) !== null;
 };
@@ -109,7 +95,5 @@ export {
 	deleteOrganization,
 	organizationExistById,
 	existOrganization,
-	organizationExistByName,
-	getOrganizationByName,
 	updateVerificationOrganization,
 };

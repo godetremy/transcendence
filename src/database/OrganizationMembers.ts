@@ -26,6 +26,17 @@ const getOrganizationMembersByFilter = async <T extends Prisma.organization_memb
 	});
 };
 
+const getOrganizationMemberByPermission = async <T extends Prisma.organization_membersInclude>(
+	perm_id: string,
+	organization_id: string,
+	include: T
+): Promise<Prisma.organization_membersGetPayload<{ include: T }> | null> => {
+	return prisma.organization_members.findFirst({
+		where: { permission_id: perm_id, organization_id },
+		include: include,
+	});
+};
+
 const getOrganizationWhereMemberBelongs = async <T extends Prisma.organization_membersInclude>(
 	user_id: string,
 	include: T,
@@ -170,4 +181,5 @@ export {
 	definePermissionsMember,
 	getOrganizationMemberById,
 	deleteMemberFromOrganization,
+	getOrganizationMemberByPermission,
 };

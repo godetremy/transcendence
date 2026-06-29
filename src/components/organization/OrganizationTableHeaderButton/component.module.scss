@@ -12,7 +12,7 @@
 	padding: 5px 10px;
 	height: 30px;
 	border-radius: 10px;
-	transition: .1s;
+	transition: 0.1s;
 
 	& > svg {
 		color: var(--color-primary-white);
@@ -33,7 +33,6 @@
 	}
 }
 
-
 @media (max-width: supports.$breakpoints-desktop) {
 	.button {
 		height: 40px !important;
@@ -50,6 +49,5 @@
 				display: none;
 			}
 		}
-
 	}
 }
