@@ -13,7 +13,7 @@ export default function OrganizationTableHeaderButton(props: OrganizationTableHe
 	return (
 		<button className={`${styles.button} ${props.primary ? styles.primary : ''}`}>
 			<props.icon size={20} />
-			{props.text}
+			<span>{props.text}</span>
 		</button>
 	);
 }

@@ -10,7 +10,7 @@
 	}
 }
 
-@media (max-width: supports.$breakpoints-tablets) {
+@media (max-width: supports.$breakpoints-laptop) {
 	.main_container {
 		& > article {
 			margin-left: 0;
