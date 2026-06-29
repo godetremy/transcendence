@@ -9,7 +9,7 @@ const getAlbumsByFilter = async <T extends Prisma.photos_albumInclude>(
 	include: T,
 	pagination?: PaginationParameters
 ): Promise<Prisma.photos_albumGetPayload<{ include: T }>[]> => {
-	return await prisma.photos_album.findMany({
+	return prisma.photos_album.findMany({
 		include: include,
 		where: filter,
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
@@ -20,7 +20,7 @@ const createAlbum = async <T extends Prisma.photos_albumInclude>(
 	data: CreateAlbumType,
 	include: T
 ): Promise<Prisma.photos_albumGetPayload<{ include: T }>> => {
-	return await prisma.photos_album.create({
+	return prisma.photos_album.create({
 		data: {
 			name: data.name,
 			description: data.description,
@@ -41,7 +41,7 @@ const UpdateAlbum = async <T extends Prisma.photos_albumInclude>(
 	album_id: string,
 	include: T
 ): Promise<Prisma.photos_albumGetPayload<{ include: T }> | null> => {
-	return await prisma.photos_album.update({
+	return prisma.photos_album.update({
 		where: {
 			id: album_id,
 		},
@@ -56,7 +56,7 @@ const deleteAlbumById = async <T extends Prisma.photos_albumInclude>(
 	album_id: string,
 	include: T
 ): Promise<Prisma.photos_albumGetPayload<{ include: T }>> => {
-	return await prisma.photos_album.delete({
+	return prisma.photos_album.delete({
 		where: {
 			id: album_id,
 		},
@@ -68,7 +68,7 @@ const getAlbumById = async <T extends Prisma.photos_albumInclude>(
 	album_id: string,
 	include: T
 ): Promise<Prisma.photos_albumGetPayload<{ include: T }> | null> => {
-	return await prisma.photos_album.findUnique({
+	return prisma.photos_album.findUnique({
 		where: {
 			id: album_id,
 		},

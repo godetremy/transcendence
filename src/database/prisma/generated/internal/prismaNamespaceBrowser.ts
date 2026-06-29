@@ -211,7 +211,7 @@ export const PhotosScalarFieldEnum = {
   id: 'id',
   path: 'path',
   album_id: 'album_id',
-  updloaded_by_id: 'updloaded_by_id',
+  uploaded_by_id: 'uploaded_by_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const
@@ -455,7 +455,7 @@ export const photosOrderByRelevanceFieldEnum = {
   id: 'id',
   path: 'path',
   album_id: 'album_id',
-  updloaded_by_id: 'updloaded_by_id'
+  uploaded_by_id: 'uploaded_by_id'
 } as const
 
 export type photosOrderByRelevanceFieldEnum = (typeof photosOrderByRelevanceFieldEnum)[keyof typeof photosOrderByRelevanceFieldEnum]

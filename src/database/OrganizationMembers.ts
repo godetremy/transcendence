@@ -142,17 +142,6 @@ const getOrganizationMemberById = async <T extends Prisma.organization_membersIn
 	});
 };
 
-const getOrganizationMemberByPermission = async <T extends Prisma.organization_membersInclude>(
-	perm_id: string,
-	organization_id: string,
-	include: T
-): Promise<Prisma.organization_membersGetPayload<{ include: T }> | null> => {
-	return prisma.organization_members.findFirst({
-		where: { permission_id: perm_id, organization_id },
-		include: include,
-	});
-};
-
 const deleteMemberFromOrganization = async (
 	user_id: string,
 	organization_id: string
@@ -181,5 +170,4 @@ export {
 	definePermissionsMember,
 	getOrganizationMemberById,
 	deleteMemberFromOrganization,
-	getOrganizationMemberByPermission,
 };
