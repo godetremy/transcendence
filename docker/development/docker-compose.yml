@@ -19,8 +19,18 @@ services:
                   exec:
                       command: nginx -s reload
     postgres:
+        env_file:
+            - ./development/secrets/.env
         ports:
             - '$DATABASE_PORT:5432'
+        networks:
+            - app
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
     seaweed-master:
         ports:

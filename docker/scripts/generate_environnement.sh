@@ -12,13 +12,13 @@ export DEVELOPMENT_URL="dev.$URL"
 export STAGING_URL="staging.$URL"
 export PRODUCTION_URL="$URL"
 
-DATABASE_USERNAME=$(read_with_prompt "Which username do you want to use for your database" "user");
-DATABASE_PASSWORD=$(read_password "Which password do you want to use for your database");
-DATABASE_NAME=$(read_with_prompt "Which name do you want to use for your database", "transcendence");
+POSTGRES_USER=$(read_with_prompt "Which username do you want to use for your database" "user");
+POSTGRES_PASSWORD=$(read_password "Which password do you want to use for your database");
+POSTGRES_DB=$(read_with_prompt "Which name do you want to use for your database", "transcendence");
 
-export DEVELOPMENT_DATABASE_NAME="dev_$DATABASE_NAME"
-export STAGING_DATABASE_NAME="staging_$DATABASE_NAME"
-export PRODUCTION_DATABASE_NAME="$DATABASE_NAME"
+export DEVELOPMENT_DATABASE_NAME="dev_$POSTGRES_DB"
+export STAGING_DATABASE_NAME="staging_$POSTGRES_DB"
+export PRODUCTION_DATABASE_NAME="$POSTGRES_DB"
 
 DEVELOPMENT_SESSION_SECRET=$(read_password "Which secret do you want to use for your session on development deploy");
 STAGING_SESSION_SECRET=$(read_password "Which secret do you want to use for your session on staging deploy");
@@ -33,14 +33,14 @@ BASE_ENV_CONTENT="# This env has been generated automatically.
 NEXT_PUBLIC_OAUTH_42_CLIENTID=$FORTYTWO_CLIENT_ID
 OAUTH_42_SECRET=$FORTYTWO_CLIENT_SECRET
 
-DATABASE_PORT=5432
-DATABASE_USERNAME=$DATABASE_USERNAME
-DATABASE_PASSWORD=$DATABASE_PASSWORD
+DATABASE_PORT=5431
+POSTGRES_USER=$POSTGRES_USER
+POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 "
 
 DEVELOPMENT_ENV_CONTENT="
 $BASE_ENV_CONTENT
-DATABASE_NAME=$DEVELOPMENT_DATABASE_NAME
+POSTGRES_DB=$DEVELOPMENT_DATABASE_NAME
 
 NEXT_PUBLIC_BASE_URL=$DEVELOPMENT_URL
 
@@ -49,7 +49,7 @@ SESSION_SECRET=$DEVELOPMENT_SESSION_SECRET
 
 STAGING_ENV_CONTENT="
 $BASE_ENV_CONTENT
-DATABASE_NAME=$STAGING_DATABASE_NAME
+POSTGRES_DB=$STAGING_DATABASE_NAME
 
 NEXT_PUBLIC_BASE_URL=$STAGING_URL
 
@@ -58,7 +58,7 @@ SESSION_SECRET=$STAGING_SESSION_SECRET
 
 PRODUCTION_ENV_CONTENT="
 $BASE_ENV_CONTENT
-DATABASE_NAME=$PRODUCTION_DATABASE_NAME
+POSTGRES_DB=$PRODUCTION_DATABASE_NAME
 
 NEXT_PUBLIC_BASE_URL=$PRODUCTION_URL
 
