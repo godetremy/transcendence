@@ -13,6 +13,8 @@ export DEVELOPMENT_ENV="$DEVELOPMENT_PATH/$DOCKER_SECRETS_PATH/.env"
 export STAGING_ENV="$STAGING_PATH/$DOCKER_SECRETS_PATH/.env"
 export PRODUCTION_ENV="$PRODUCTION_PATH/$DOCKER_SECRETS_PATH/.env"
 
+export PRISMA_MIGRATION_FOLDER='src/database/prisma/migrations'
+
 print_error() {
 	 printf "\e[0;1;31mError:\e[0m %s\n" "$1";
 }
@@ -57,7 +59,7 @@ confirm() {
 	if [[ ! $REPLY =~ ^[Yy]$ ]]
     then
     	printf "\n\e[0;90mGiving up...\e[0m\n";
-        exit 1
+        exit 0
     fi
     printf '\n'
 }
