@@ -1,7 +1,6 @@
 name: BDE
 
 services:
-
     dicebear:
         image: dicebear/api:4
         environment:

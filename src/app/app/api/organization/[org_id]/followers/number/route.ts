@@ -1,6 +1,6 @@
-import { countOrganizationFollowersByFilter } from "@/database/OrganizationFollowers";
-import { errorHandler } from "@/utils/errors";
-import { NextRequest, NextResponse } from "next/server";
+import { countOrganizationFollowersByFilter } from '@/database/OrganizationFollowers';
+import { errorHandler } from '@/utils/errors';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
 	req: NextRequest,

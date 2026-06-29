@@ -8,10 +8,10 @@ import { PublicFormatPhotoReports } from '@/database/format/Photo_reports';
 
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: Promise<{ album_id: string; report_id: string }> }
+	{ params }: { params: Promise<{ album_id: string; reports_id: string }> }
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { album_id, report_id } = await params;
+		const { album_id, reports_id } = await params;
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
@@ -20,7 +20,7 @@ export async function GET(
 		const album = await getAlbumById(album_id, {});
 		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
 
-		const report = await getReportById(report_id, {});
+		const report = await getReportById(reports_id, {});
 		if (!report) throw ERRORS_DETAILS.report_does_not_exists();
 
 		return NextResponse.json(PublicFormatPhotoReports(report));
@@ -29,10 +29,10 @@ export async function GET(
 
 export async function PUT(
 	req: NextRequest,
-	{ params }: { params: Promise<{ album_id: string; report_id: string }> }
+	{ params }: { params: Promise<{ album_id: string; reports_id: string }> }
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { album_id, report_id } = await params;
+		const { album_id, reports_id } = await params;
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
@@ -42,10 +42,10 @@ export async function PUT(
 		const album = getAlbumById(album_id, {});
 		if (!album) throw ERRORS_DETAILS.album_does_not_exist();
 
-		const report = await getReportById(report_id, {});
+		const report = await getReportById(reports_id, {});
 		if (!report) throw ERRORS_DETAILS.report_does_not_exist();
 
-		await manageReports(report_id);
+		await manageReports(reports_id);
 
 		return NextResponse.json({ success: true });
 	});
@@ -53,10 +53,10 @@ export async function PUT(
 
 export async function DELETE(
 	req: NextRequest,
-	{ params }: { params: Promise<{ album_id: string; report_id: string }> }
+	{ params }: { params: Promise<{ album_id: string; reports_id: string }> }
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
-		const { album_id, report_id } = await params;
+		const { album_id, reports_id } = await params;
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
@@ -66,10 +66,10 @@ export async function DELETE(
 		const album = getAlbumById(album_id, {});
 		if (!album) throw ERRORS_DETAILS.album_does_not_exist();
 
-		const report = await getReportById(report_id, {});
+		const report = await getReportById(reports_id, {});
 		if (!report) throw ERRORS_DETAILS.report_does_not_exist();
 
-		await deleteReports(report_id, {});
+		await deleteReports(reports_id, {});
 
 		return NextResponse.json({ success: true });
 	});

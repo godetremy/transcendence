@@ -1,21 +1,13 @@
 'use client';
 import styles from './component.module.scss';
 import { Checkbox } from '@/components/globals/Checkbox/Checkbox';
-import {
-	Search,
-	Filter,
-	ArrowUpDown,
-	Settings2,
-	DownloadCloud,
-	CloudUploadIcon,
-	Plus,
-} from 'lucide-react';
+import { Search, Filter, ArrowUpDown, Settings2, DownloadCloud, CloudUploadIcon, Plus } from 'lucide-react';
 import { ReactNode, useState } from 'react';
-import OrganizationTableHeaderButton from '@/components/organization/OrganizationTableHeaderButton/OrganizationTableHeaderButton';
 import {
 	OrganizationDashboardHeader,
 	OrganizationDashboardHeaderProps,
 } from '@/components/organization/OrganizationDashboardHeader/OrganizationDashboardHeader';
+import OrganizationTableHeaderButton from '../OrganizationTableHeaderButton/OrganizationTableHeaderButton';
 
 export interface OrganizationDashboardTableColumn {
 	text: string;
@@ -33,7 +25,7 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 
 	const toggleSelectAll = (checked: boolean) => {
 		if (checked) {
-			let selection: number[] = [];
+			const selection: number[] = [];
 			for (let i = 0; i < props.data.length; i++) {
 				selection.push(i);
 			}
@@ -41,7 +33,7 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 			return;
 		}
 		setSelected([]);
-	}
+	};
 
 	return (
 		<section className={styles.main_container}>
@@ -49,7 +41,7 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 				<OrganizationDashboardHeader {...props.header} />
 				<div className={styles.header_container}>
 					<div className={styles.search_bar}>
-						<Search size={22}/>
+						<Search size={22} />
 						<input type={'text'} placeholder={'Rechercher un événement'} />
 					</div>
 					<div className={styles.filters_options}>

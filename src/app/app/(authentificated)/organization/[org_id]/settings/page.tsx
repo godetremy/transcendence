@@ -21,12 +21,10 @@ export default function Page() {
 	const { openModal, closeModal } = useModal();
 	const router = useRouter();
 
-	const { data, isLoading, isError, error } = useQuery(
-		getOrganizationFollowerNumber(organization.id)
-	);
+	const { data, isLoading, isError, error } = useQuery(getOrganizationFollowerNumber(organization.id));
 
 	if (isLoading) return <Loader />;
-		if (isError || data === undefined) return <ErrorState error={error} />;
+	if (isError || data === undefined) return <ErrorState error={error} />;
 
 	const leaveOrganisation = () => {
 		openModal({

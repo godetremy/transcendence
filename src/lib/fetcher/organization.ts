@@ -11,7 +11,7 @@ import {
 	UseQueryOptions,
 } from '@tanstack/react-query';
 import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
-import { CreateOrganizationType, PrivateOrganization } from '@/types/Organization';
+import { CreateOrganizationType, PrivateOrganization, PublicOrganization } from '@/types/Organization';
 
 const getOrganizations = (): UseInfiniteQueryOptions<
 	PaginationResponse<PrivateOrganization<object>>,
@@ -100,12 +100,11 @@ const getOrganizationMemberById = (
 	queryKey: ['organization', org_id, 'member', user_id],
 });
 
-
 const getOrganizationFollowerNumber = (
 	org_id: string
-): UseQueryOptions<{ success: boolean, number: number}, Error> => ({
-	queryFn: () => get<{ success: boolean, number: number}>(`/organization/${org_id}/followers/number`),
-	queryKey: ['organization', org_id, 'followers', 'number' ],
+): UseQueryOptions<{ success: boolean; number: number }, Error> => ({
+	queryFn: () => get<{ success: boolean; number: number }>(`/organization/${org_id}/followers/number`),
+	queryKey: ['organization', org_id, 'followers', 'number'],
 });
 
 const createOrganization = (): UseMutationOptions<
@@ -114,6 +113,15 @@ const createOrganization = (): UseMutationOptions<
 	{ org: CreateOrganizationType }
 > => ({
 	mutationFn: ({ org }) => post<PaginationResponse<OrganizationPermissionDetails>>(`/organization`, org),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
+	},
+});
+
+const updateOrganization = (
+	org_id: string
+): UseMutationOptions<PublicOrganization, Error, { org: CreateOrganizationType }> => ({
+	mutationFn: ({ org }) => patch<PublicOrganization>(`/organization/${org_id}`, org),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
 	},
@@ -206,4 +214,5 @@ export {
 	AccpetInvitation,
 	getOrganizationPermissions,
 	getOrganizationFollowerNumber,
+	updateOrganization,
 };
