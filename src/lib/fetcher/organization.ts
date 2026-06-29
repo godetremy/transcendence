@@ -120,8 +120,9 @@ const createOrganization = (): UseMutationOptions<
 
 const updateOrganization = (
 	org_id: string
-): UseMutationOptions<PublicOrganization, Error, { org: CreateOrganizationType }> => ({
-	mutationFn: ({ org }) => patch<PublicOrganization>(`/organization/${org_id}`, org),
+): UseMutationOptions<PrivateOrganization, Error, { org: CreateOrganizationType }, PrivateOrganization> => ({
+	mutationKey: ['organization', 'update'],
+	mutationFn: ({ org }) => patch<PrivateOrganization>(`/organization/${org_id}`, org),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
 	},

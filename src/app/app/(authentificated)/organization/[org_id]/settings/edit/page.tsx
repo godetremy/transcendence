@@ -13,7 +13,7 @@ export default function Page() {
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	const [organization, setOrganization] = useState(org! as CreateOrganizationType);
-	const { mutate } = useMutation(updateOrganization(org!.id));
+	const mutation = useMutation(updateOrganization(org!.id));
 
 	useEffect(() => {
 		if (timeoutRef.current !== null) {
@@ -21,7 +21,9 @@ export default function Page() {
 			timeoutRef.current = null;
 		}
 		timeoutRef.current = setTimeout(() => {
-			mutate({ org: organization });
+			mutation.mutateAsync({ org: organization }).then((data) => {
+				organizationCtx.updateCurrentOrganization(data);
+			});
 			if (timeoutRef.current !== null) {
 				clearTimeout(timeoutRef.current);
 				timeoutRef.current = null;
