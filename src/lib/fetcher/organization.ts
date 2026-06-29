@@ -107,7 +107,7 @@ const createOrganization = (): UseMutationOptions<
 > => ({
 	mutationFn: ({ org }) => post<PaginationResponse<OrganizationPermissionDetails>>(`/organization`, org),
 	onSuccess: () => {
-		GlobalQueryClient.invalidateQueries({ queryKey: ['organizations'] });
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
 	},
 });
 
