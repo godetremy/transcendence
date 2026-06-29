@@ -1,4 +1,4 @@
-name: trans-dev
+name: BDE-dev
 
 services:
 
@@ -18,6 +18,9 @@ services:
                   target: /etc/nginx/nginx.conf
                   exec:
                       command: nginx -s reload
+    postgres:
+        ports:
+            - '$DATABASE_PORT:5432'
 
     seaweed-master:
         ports:

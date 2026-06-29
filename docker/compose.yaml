@@ -42,10 +42,29 @@ services:
             - app
         command: 'volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080'
 
+    postgres:
+        image: postgres:15-alpine
+        container_name: postgres
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: ${DATABASE_USERNAME}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+            POSTGRES_DB: ${DATABASE_NAME}
+        networks:
+            - app
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
 networks:
-    main:
-        driver: bridge
     app:
         driver: bridge
     host-network:
         driver: bridge
+
+volumes:
+    postgres_data:
