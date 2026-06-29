@@ -146,6 +146,20 @@
 	}
 }
 
+.loading_container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	font: 400 14px var(--font-paragraph);
+	opacity: 0.4;
+	height: 60px;
+
+	div {
+		margin: 0 !important;
+	}
+}
+
 @media (max-width: supports.$breakpoints-laptop) {
 	.fixed_header {
 		left: 70px;
