@@ -1,8 +1,16 @@
 'use client';
 import styles from './component.module.scss';
 import { Checkbox } from '@/components/globals/Checkbox/Checkbox';
-import { Search, Filter, ArrowUpDown, Settings2, List, LayoutGrid, DownloadCloud, CloudUploadIcon } from 'lucide-react';
-import { ReactNode } from 'react';
+import {
+	Search,
+	Filter,
+	ArrowUpDown,
+	Settings2,
+	DownloadCloud,
+	CloudUploadIcon,
+	Plus,
+} from 'lucide-react';
+import { ReactNode, useState } from 'react';
 import OrganizationTableHeaderButton from '@/components/organization/OrganizationTableHeaderButton/OrganizationTableHeaderButton';
 import {
 	OrganizationDashboardHeader,
@@ -21,39 +29,52 @@ export interface OrganizationDashboardTable {
 }
 
 export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
+	const [selected, setSelected] = useState<number[]>([]);
+
+	const toggleSelectAll = (checked: boolean) => {
+		if (checked) {
+			let selection: number[] = [];
+			for (let i = 0; i < props.data.length; i++) {
+				selection.push(i);
+			}
+			setSelected(selection);
+			return;
+		}
+		setSelected([]);
+	}
+
 	return (
 		<section className={styles.main_container}>
 			<div className={styles.fixed_header}>
 				<OrganizationDashboardHeader {...props.header} />
-				<div className={styles.filter_container}>
-					<div className={styles.searchInput}>
-						<Search />
+				<div className={styles.header_container}>
+					<div className={styles.search_bar}>
+						<Search size={22}/>
 						<input type={'text'} placeholder={'Rechercher un événement'} />
 					</div>
-					<button>
-						<Filter />
-					</button>
-					<button>
-						<ArrowUpDown />
-					</button>
-					<button>
-						<Settings2 />
-					</button>
-					<button>
-						<List />
-					</button>
-					<button>
-						<LayoutGrid />
-					</button>
-					<OrganizationTableHeaderButton icon={<CloudUploadIcon size={20} />} text={'Importer'} />
-					<OrganizationTableHeaderButton icon={<DownloadCloud size={20} />} text={'Exporter'} />
+					<div className={styles.filters_options}>
+						<button>
+							<Filter size={22} />
+						</button>
+						<button>
+							<ArrowUpDown size={22} />
+						</button>
+						<button>
+							<Settings2 size={22} />
+						</button>
+					</div>
+					<div className={styles.actions_buttons}>
+						<OrganizationTableHeaderButton icon={CloudUploadIcon} text={'Importer'} />
+						<OrganizationTableHeaderButton icon={DownloadCloud} text={'Exporter'} />
+						<OrganizationTableHeaderButton icon={Plus} text={'Nouveau'} primary={true} />
+					</div>
 				</div>
 			</div>
 			<table className={styles.table}>
 				<thead>
 					<tr>
 						<th scope="col" style={{ minWidth: 30, justifyContent: 'center' }}>
-							<Checkbox />
+							<Checkbox onChange={(e) => toggleSelectAll(e.target.checked)} />
 						</th>
 						{props.column.map((column, i) => (
 							<th
@@ -76,7 +97,14 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 					{props.data.map((row, i) => (
 						<tr key={i}>
 							<td scope="row" style={{ minWidth: 30, justifyContent: 'center' }}>
-								<Checkbox />
+								<Checkbox
+									checked={selected.includes(i)}
+									onChange={(e) =>
+										e.currentTarget.checked
+											? setSelected([...selected, i])
+											: setSelected(selected.filter((id) => id !== i))
+									}
+								/>
 							</td>
 							{row.map((column, i) => (
 								<td
