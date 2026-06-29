@@ -72,7 +72,7 @@ const getOrganizationFollowers = (
 		get<PaginationResponse<PublicOrganizationFollowers<{ user: true }>>>(
 			`/organization/${org_id}/followers?page=${pageParam}`
 		),
-	queryKey: ['organization', org_id, 'folowers'],
+	queryKey: ['organization', org_id, 'followers'],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
@@ -98,6 +98,14 @@ const getOrganizationMemberById = (
 ): UseQueryOptions<OrganizationMembers<{ user: true; permission: true }>, Error> => ({
 	queryFn: () => get<OrganizationMembers>(`/organization/${org_id}/members/${user_id}`),
 	queryKey: ['organization', org_id, 'member', user_id],
+});
+
+
+const getOrganizationFollowerNumber = (
+	org_id: string
+): UseQueryOptions<{ success: boolean, number: number}, Error> => ({
+	queryFn: () => get<{ success: boolean, number: number}>(`/organization/${org_id}/followers/number`),
+	queryKey: ['organization', org_id, 'followers', 'number' ],
 });
 
 const createOrganization = (): UseMutationOptions<
@@ -197,4 +205,5 @@ export {
 	getOrganizationInvites,
 	AccpetInvitation,
 	getOrganizationPermissions,
+	getOrganizationFollowerNumber,
 };

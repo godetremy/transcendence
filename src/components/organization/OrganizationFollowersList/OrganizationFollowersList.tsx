@@ -19,16 +19,16 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 		<div>
 			<ListContainer>
 				{data.pages.map((row) =>
-					row.data.map((follower, i) => (
+					row.data.map((followers, i) => (
 						<ListItem
 							key={i}
-							title={follower.user!.full_name ?? follower.user!.id}
+							title={followers.user!.full_name ?? followers.user!.id}
 							leftElement={
 								<Image
-									src={follower.user!.profile_picture}
+									src={followers.user!.profile_picture}
 									width={40}
 									height={40}
-									alt={`Photo de ${follower.user!.full_name ?? follower.id}`}
+									alt={`Photo de ${followers.user!.full_name ?? followers.id}`}
 									className={styles.profilePicture}
 								/>
 							}
