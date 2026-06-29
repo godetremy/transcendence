@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { useState } from 'react';
 import styles from './page.module.scss';
 import { Check, X } from 'lucide-react';
+import { ListSectionTitle } from '@/components/globals/ListSectionTitle/ListSectionTitle';
 
 function InviteActions({ org_id }: { org_id: string }) {
 	const [loading, setLoading] = useState(false);
@@ -39,8 +40,7 @@ export function OrganizationInvitesList() {
 	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
 		useInfiniteQuery(getOrganizationInvites());
 
-	if (isLoading) return <Loader />;
-	if (isError || data === undefined) return <ErrorState error={error} />;
+	if (data && data.pages[0].data.length === 0) return null;
 
 	const formatDate = (date: string) => {
 		const d = new Date(date);
@@ -48,39 +48,46 @@ export function OrganizationInvitesList() {
 	};
 
 	return (
-		<div>
-			<ListContainer>
-				{data.pages.map((row) =>
-					row.data.map((invitation, i) => (
-						<ListItem
-							key={i}
-							title={invitation.organization.name}
-							description={formatDate(invitation.invited_at)}
-							showChevron={false}
-							hoverEffect={false}
-							leftElement={
-								<div
-									style={{
-										width: 8,
-										height: 8,
-										backgroundColor: 'var(--color-primary-pink)',
-										borderRadius: 10,
-									}}
-								/>
-							}
-							rightElement={<InviteActions org_id={invitation.organization.id} />}
-							last={i === data.pages.length - 1}
-						/>
-					))
-				)}
-			</ListContainer>
-			{isFetchingNextPage && <p>Chargement...</p>}
+		<>
+			<ListSectionTitle>Invitations</ListSectionTitle>
+			{isLoading ? (
+				<Loader />
+			) : isError || data === undefined ? (
+				<ErrorState error={error} />
+			) : (
+				<ListContainer>
+					{data.pages.map((row) =>
+						row.data.map((invitation, i) => (
+							<ListItem
+								key={i}
+								title={invitation.organization.name}
+								description={formatDate(invitation.invited_at)}
+								showChevron={false}
+								hoverEffect={false}
+								leftElement={
+									<div
+										style={{
+											width: 8,
+											height: 8,
+											backgroundColor: 'var(--color-primary-pink)',
+											borderRadius: 10,
+										}}
+									/>
+								}
+								rightElement={<InviteActions org_id={invitation.organization.id} />}
+								last={i === data.pages.length - 1}
+							/>
+						))
+					)}
+				</ListContainer>
+			)}
+			{isFetchingNextPage && <Loader />}
 
 			{hasNextPage && (
 				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
 					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
 				</button>
 			)}
-		</div>
+		</>
 	);
 }

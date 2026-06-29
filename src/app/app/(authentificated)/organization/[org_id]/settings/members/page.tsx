@@ -14,6 +14,7 @@ import { OrganizationMemberCard } from '@/components/organization/OrganizationMe
 import { OrganizationPermissionCreateCard } from '@/components/organization/OrganizationPermissionCreateCard/OrganizationPermissionCreateCard';
 import { OrganizationPermissionUpdateCard } from '@/components/organization/OrganizationPermissionUpdateCard/OrganizationPermissionUpdateCard';
 import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
+import { FAB } from '@/components/globals/FAB/FAB';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -108,32 +109,27 @@ export default function Page() {
 				)}
 			</Card>
 
-			<button
-				className={styles.fab}
-				onClick={() => (selectedTab === 0 ? setShowAddMemberCard(true) : setShowCreatePermissionCard(true))}
-			>
-				<AnimatePresence mode={'wait'}>
-					{selectedTab === 0 ? (
-						<motion.div
-							key={'members_page'}
-							initial={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
-							exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
-							animate={{ scale: 1, opacity: 1, transition: { duration: 0.2 } }}
-						>
-							<UserRoundPlus />
-						</motion.div>
-					) : (
-						<motion.div
-							key={'permission_page'}
-							initial={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
-							exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
-							animate={{ scale: 1, opacity: 1, transition: { duration: 0.2 } }}
-						>
-							<Plus />
-						</motion.div>
-					)}
-				</AnimatePresence>
-			</button>
+			<FAB onClick={() => (selectedTab === 0 ? setShowAddMemberCard(true) : setShowCreatePermissionCard(true))}>
+				{selectedTab === 0 ? (
+					<motion.div
+						key={'members_page'}
+						initial={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+						exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+						animate={{ scale: 1, opacity: 1, transition: { duration: 0.2 } }}
+					>
+						<UserRoundPlus />
+					</motion.div>
+				) : (
+					<motion.div
+						key={'permission_page'}
+						initial={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+						exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.2 } }}
+						animate={{ scale: 1, opacity: 1, transition: { duration: 0.2 } }}
+					>
+						<Plus />
+					</motion.div>
+				)}
+			</FAB>
 		</NavigationBarHeader>
 	);
 }

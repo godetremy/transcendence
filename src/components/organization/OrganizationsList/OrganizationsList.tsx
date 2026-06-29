@@ -6,6 +6,7 @@ import ListItem from '@/components/globals/ListItem/ListItem';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 
 export function OrganizationsList() {
 	const router = useRouter();
@@ -14,9 +15,11 @@ export function OrganizationsList() {
 
 	if (isLoading) return <Loader />;
 	if (isError || data === undefined) return <ErrorState error={error} />;
+	if (data.pages[0].data.length === 0)
+		return <EmptyState description={"Tu n'as aucune organisation pour l'instant. Et si tu crées ta première ?"} />;
 
 	return (
-		<div>
+		<>
 			<ListContainer>
 				{data.pages.map((row) =>
 					row.data.map((organization, i) => (
@@ -46,6 +49,6 @@ export function OrganizationsList() {
 					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
 				</button>
 			)}
-		</div>
+		</>
 	);
 }
