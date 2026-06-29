@@ -89,6 +89,7 @@
 	.actions_buttons {
 		display: flex;
 		gap: 5px;
+		align-items: center;
 	}
 }
 
@@ -145,8 +146,32 @@
 	}
 }
 
+@media (max-width: supports.$breakpoints-laptop) {
+	.fixed_header {
+		left: 70px;
+	}
+}
+
 @media (max-width: supports.$breakpoints-tablets) {
 	.fixed_header {
 		left: 0;
+
+		.search_bar {
+			width: 40px;
+			margin-right: -10px;
+			background-color: transparent;
+			padding: 0;
+			align-items: center;
+			justify-content: center;
+
+			svg {
+				width: 24px;
+				height: 24px;
+			}
+
+			input {
+				display: none;
+			}
+		}
 	}
 }
