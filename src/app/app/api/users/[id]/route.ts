@@ -36,7 +36,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 		if (!user_id.is_me) throw ERRORS_DETAILS.permission_denied();
 
 		try {
-			await prisma.users.update({
+			const user = await prisma.users.update({
 				where: { id: session.user_id },
 				data: {
 					...(body.mail && { mail: body.mail }),
@@ -47,6 +47,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 					...(body.profile_picture && { profile_picture: body.profile_picture }),
 				},
 			});
+			return NextResponse.json(formatPrivateUser<object>(user));
 		} catch (err: unknown) {
 			if (err instanceof PrismaClientKnownRequestError) {
 				switch (err.code) {
@@ -58,7 +59,5 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 			}
 			throw err;
 		}
-
-		return NextResponse.json({ success: true });
 	});
 }

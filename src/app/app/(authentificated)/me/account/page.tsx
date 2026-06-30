@@ -5,15 +5,19 @@ import styles from './page.module.scss';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import ModificationText from '@/components/globals/ModificationText/ModificationText';
 import { useUser } from '@/contexts/UserContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { User } from '@/types/User';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { patch } from '@/lib/fetcher';
+import { useMutation } from '@tanstack/react-query';
+import { updateUser } from '@/lib/fetcher/user';
 
 function Page() {
 	const userCtx = useUser();
 
 	const [user, setUser] = useState<User>(userCtx!);
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const mutation = useMutation(updateUser(user.id));
 
 	useEffect(() => {
 		const value: UserUpdateParameters = {
@@ -22,6 +26,17 @@ function Page() {
 			last_name: user.last_name ?? undefined,
 			full_name: user.first_name ?? undefined,
 		};
+
+		timeoutRef.current = setTimeout(() => {
+			mutation.mutateAsync({ user: value }).then((user) => {
+				userCtx?.update(user);
+			});
+			if (timeoutRef.current !== null) {
+				clearTimeout(timeoutRef.current);
+				timeoutRef.current = null;
+			}
+		}, 1000);
+
 		patch<UserUpdateParameters>(`/users/${user.id}`, value);
 	}, [user]);
 

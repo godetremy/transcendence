@@ -11,7 +11,7 @@ import {
 	UseQueryOptions,
 } from '@tanstack/react-query';
 import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
-import { CreateOrganizationType, PrivateOrganization, PublicOrganization } from '@/types/Organization';
+import { CreateOrganizationType, PrivateOrganization } from '@/types/Organization';
 
 const getOrganizations = (): UseInfiniteQueryOptions<
 	PaginationResponse<PrivateOrganization<object>>,
