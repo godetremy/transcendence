@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { SessionPayload } from '@/types/session/SessionPayload';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
+import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 
 const createStudentUser = async (
 	me: FortyTwoCursusUserDetails,
@@ -195,6 +196,23 @@ const existUserByMail = async (mail: string): Promise<boolean> => {
 	return (await getUserByMail(mail, {})) !== null;
 };
 
+const updateUserData = async (
+	user_id: string,
+	body: UserUpdateParameters
+): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
+	return prisma.users.update({
+		where: { id: user_id },
+		data: {
+			...(body.mail && { mail: body.mail }),
+			...(body.first_name && { first_name: body.first_name }),
+			...(body.last_name && { last_name: body.last_name }),
+			...(body.full_name && { full_name: body.full_name }),
+			...(body.agent_reason && { agent_reason: body.agent_reason }),
+			...(body.profile_picture && { profile_picture: body.profile_picture }),
+		},
+	});
+};
+
 export {
 	createStudentUser,
 	createAgentsUser,
@@ -211,4 +229,5 @@ export {
 	existUserById,
 	existUserByMail,
 	getUsersByFilterAndSearch,
+	updateUserData,
 };

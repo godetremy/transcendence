@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
-import { decrypt, parseUserId } from '@/lib/session';
+import { getThrowableSession, parseUserId } from '@/lib/session';
 import { generateSecret } from 'otplib';
 import { checkTotp, saveTotpSecret, toggleTotp } from '@/database/TwoFactorAuth';
 import { getUserById } from '@/database/User';
@@ -11,7 +11,7 @@ import { TwoFactorAuthTotpBody } from '@/types/TwoFactorAuthTotpBody';
 export function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	return errorHandler(async () => {
 		const { id } = await params;
-		const session = await decrypt(req.cookies.get('session')?.value);
+		const session = await getThrowableSession(req);
 		const user_id = parseUserId(id, session);
 
 		if (!user_id.is_me) throw ERRORS_DETAILS.permission_denied();
@@ -37,7 +37,7 @@ export function POST(req: NextRequest, { params }: { params: Promise<{ id: strin
 	return errorHandler(async () => {
 		const body = await parseBody<TwoFactorAuthTotpBody>(req, TwoFactorAuthTotpBodySchema);
 		const { id } = await params;
-		const session = await decrypt(req.cookies.get('session')?.value);
+		const session = await getThrowableSession(req);
 		const user_id = parseUserId(id, session);
 
 		if (!user_id.is_me) throw ERRORS_DETAILS.permission_denied();
