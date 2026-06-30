@@ -1,3 +1,4 @@
+import styles from './component.module.scss';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getOrganizationFollowers } from '@/lib/fetcher/organization';
 import { Loader } from '@/components/globals/Loader/Loader';
@@ -5,10 +6,9 @@ import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import Image from 'next/image';
-import styles from '@/app/app/(authentificated)/organization/[org_id]/settings/members/page.module.scss';
 
 export function OrganizationFollowersList({ org_id }: { org_id: string }) {
-	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+	const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
 		getOrganizationFollowers(org_id)
 	);
 
@@ -16,9 +16,9 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 	if (isError || data === undefined) return <ErrorState error={error} />;
 
 	return (
-		<div>
+		<>
 			<ListContainer>
-				{data.pages.map((row) =>
+				{data.pages.map((row, j) =>
 					row.data.map((followers, i) => (
 						<ListItem
 							key={i}
@@ -32,7 +32,7 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 									className={styles.profilePicture}
 								/>
 							}
-							last={i == row.data.length - 1}
+							last={i == row.data.length - 1 && data.pages.length - 1 === j}
 						/>
 					))
 				)}
@@ -40,10 +40,10 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 			{isFetchingNextPage && <p>Chargement...</p>}
 
 			{hasNextPage && (
-				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+				<button className={styles.next} onClick={() => {}} disabled={isFetchingNextPage}>
 					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
 				</button>
 			)}
-		</div>
+		</>
 	);
 }
