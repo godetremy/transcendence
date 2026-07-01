@@ -9,6 +9,8 @@ export PRODUCTION_PATH='./docker/production'
 export DOCKER_SECRETS_PATH='secrets'
 export DOCKER_CERTIFICATES_PATH='certificates'
 
+export ELASTICSEARCH_CERTS_PATH='./docker/services/elasticsearch/certs'
+
 export DEVELOPMENT_ENV="$DEVELOPMENT_PATH/$DOCKER_SECRETS_PATH/.env"
 export STAGING_ENV="$STAGING_PATH/$DOCKER_SECRETS_PATH/.env"
 export PRODUCTION_ENV="$PRODUCTION_PATH/$DOCKER_SECRETS_PATH/.env"
@@ -25,11 +27,11 @@ print_error_and_exit() {
 }
 
 print_warning() {
-	 printf "\e[0;1;33mWarning:\e[0m $1\n"
+	 printf "\e[0;1;33mWarning:\e[0m %s\n" "$1"
 }
 
 print_done() {
-	 printf "\e[0;1;32mDone:\e[0m $1\n"
+	 printf "\e[0;1;32mDone:\e[0m %s\n" "$1"
 }
 
 read_with_prompt() {
