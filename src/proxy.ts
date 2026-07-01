@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { existsSync } from 'node:fs';
 import path from 'path';
 
-const ignorePath = ['/app/api/auth/'];
+const ignorePath = ['/app/api/auth/', '/app/api/webhook'];
 const ignorePathApprove = [
 	'/app/api/users/approval',
 	'/app/approval',

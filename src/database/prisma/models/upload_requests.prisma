@@ -4,7 +4,7 @@ model upload_request {
     uploaded_by_id  	String
     file_id         	String?  			@unique
 
-    uploaded_by     	users    			@relation(fields: [uploaded_by_id], references: [id])
+    uploaded_by     	users    			@relation(fields: [uploaded_by_id], references: [id], onDelete: Cascade)
     file            	files?   			@relation(fields: [file_id], references: [id])
 
     created_at      	DateTime 			@default(now())

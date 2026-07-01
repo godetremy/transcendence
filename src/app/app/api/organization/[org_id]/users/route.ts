@@ -30,7 +30,6 @@ export async function GET(
 
 		const number = await countUsersByFilter({});
 
-		console.log('register:', member.register, typeof member.register);
 		const list = await getUsersByFilterAndSearch(
 			{
 				...(member.register == 'true'

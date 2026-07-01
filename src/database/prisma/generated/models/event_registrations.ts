@@ -310,14 +310,6 @@ export type event_registrationsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type event_registrationsCreateNestedManyWithoutEventInput = {
   create?: Prisma.XOR<Prisma.event_registrationsCreateWithoutEventInput, Prisma.event_registrationsUncheckedCreateWithoutEventInput> | Prisma.event_registrationsCreateWithoutEventInput[] | Prisma.event_registrationsUncheckedCreateWithoutEventInput[]
   connectOrCreate?: Prisma.event_registrationsCreateOrConnectWithoutEventInput | Prisma.event_registrationsCreateOrConnectWithoutEventInput[]

@@ -4,40 +4,30 @@ import { NavigationBarHeader } from '@/components/globals/NavigationBarHeader/Na
 import styles from './page.module.scss';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { ArrowUpRight, Plus } from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
-import { post } from '@/lib/fetcher';
-import { redirect } from 'next/navigation';
+import { useState } from 'react';
+import { Card } from '@/components/globals/Card/Card';
+import { SumupReload } from '@/components/sumup/SumupReload';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { getBalance, getTransactions } from '@/lib/fetcher/user';
+import { useUser } from '@/contexts/UserContext';
+import { User } from '@/types/User';
+import { Loader } from '@/components/globals/Loader/Loader';
+import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 
 export default function Page() {
-	const [balanceHistory, setBalanceHistory] = useState<
-		{ title: string; history: { name: string; cost: number }[] }[]
-	>([]);
+	const [showReload, setShowReload] = useState<boolean>(false);
+	const userCtx = useUser();
+	const [user] = useState<User>(userCtx!);
 
-	function generateRandomMonth() {
-		const credits = [];
+	const { data, isLoading, isError, error } = useQuery(getBalance(user.id));
 
-		for (let i = 0; i < Math.random(); i++) {
-			const cost = Math.floor(5 - Math.random() * 10) + 1;
-			credits.push({
-				name: cost < 0 ? 'Adhesion mensuelle' : 'Rechargement de solde',
-				cost,
-			});
-		}
+	const lists = useInfiniteQuery({
+		...getTransactions(user.id, data?.id ?? ''),
+		enabled: !!data?.id,
+	});
 
-		return credits;
-	}
-
-	useEffect(() => {
-		const balanceHistory: { title: string; history: { name: string; cost: number }[] }[] = [];
-		for (let i = 0; i < 10; i++) {
-			balanceHistory.push({
-				title: `Mai 2026`,
-				history: generateRandomMonth(),
-			});
-		}
-		// eslint-disable-next-line react-hooks/set-state-in-effect
-		setBalanceHistory(balanceHistory);
-	}, []);
+	if (isLoading || lists.isLoading) return <Loader />;
+	if (isError || data === undefined || lists.isError || lists.data == undefined) return <ErrorState error={error} />;
 
 	return (
 		<>
@@ -45,15 +35,15 @@ export default function Page() {
 				<section className={styles.section}>
 					<div className={styles.balance_card}>
 						<span>Mon solde</span>
-						<p>42 000 000 Pesos</p>
+						<p>{data.account} Points</p>
 					</div>
 					<div className={styles.balance_action_container}>
-						<button className={styles.primary} onClick={
-							async () => {
-								const result = await post<{ sucess: boolean, redirect_url: string }>(`/sumup`, { description: 'test', amount: 100 });
-								return redirect(result.redirect_url);
-							}
-						}>
+						<button
+							className={styles.primary}
+							onClick={async () => {
+								setShowReload(true);
+							}}
+						>
 							<Plus /> Recharge
 						</button>
 						<button className={styles.secondary}>
@@ -61,34 +51,41 @@ export default function Page() {
 						</button>
 					</div>
 					<span className={styles.listSectionTitle}>Historique</span>
-					{balanceHistory.map((balance, i) => (
-						<Fragment key={i}>
-							<span className={styles.listSectionSubtitle}>{balance.title}</span>
-							<div className={styles.list}>
-								{balance.history.map((item, j) => (
-									<ListItem
-										title={item.name}
-										description={'Débitée le 11/05/2026 - depuis le solde'}
-										rightElement={
-											<span
-												className={styles.debit}
-												style={{
-													color: item.cost >= 0 ? '#99FFBA' : '#FE5356',
-													backgroundColor: item.cost >= 0 ? '#99FFBA20' : '#FE535620',
-												}}
-											>
-												{`${item.cost >= 0 ? '+' : ''}${item.cost.toFixed(2)}€`}
-											</span>
-										}
-										showChevron={false}
-										last={j === balance.history.length - 1}
-										key={j}
-									/>
-								))}
-							</div>
-						</Fragment>
-					))}
+					<div className={styles.list}>
+						{lists.data.pages.map((row) =>
+							row.data.map((transaction, i) => (
+								<ListItem
+									title={transaction.name ?? ''}
+									description={'Débitée le 11/05/2026 - depuis le solde'}
+									rightElement={
+										<span
+											className={styles.debit}
+											style={{
+												color: transaction.amount >= 0 ? '#99FFBA' : '#FE5356',
+												backgroundColor: transaction.amount >= 0 ? '#99FFBA20' : '#FE535620',
+											}}
+										>
+											{`${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toFixed(2)}€`}
+										</span>
+									}
+									showChevron={false}
+									last={i === row.data.length - 1}
+									key={i}
+								/>
+							))
+						)}
+						{lists.isFetchingNextPage && <p>Chargement...</p>}
+
+						{lists.hasNextPage && (
+							<button onClick={() => lists.fetchNextPage()} disabled={lists.isFetchingNextPage}>
+								{lists.isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
+							</button>
+						)}
+					</div>
 				</section>
+				<Card visible={showReload} requestClose={() => setShowReload(false)}>
+					<SumupReload />
+				</Card>
 			</NavigationBarHeader>
 		</>
 	);

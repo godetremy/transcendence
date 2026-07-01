@@ -12,6 +12,7 @@ model users {
 
 	fortytwo_user_id			Int?			@unique
 	fortytwo_oauth_id			String?			@unique
+	balance_id					String?			@unique
 
     memberships_id				String?      	@unique
 
@@ -24,6 +25,7 @@ model users {
 	created_at					DateTime		@default(now())
 	updated_at					DateTime		@updatedAt
 
+	balance						balance?				@relation(fields: [balance_id], references: [id], onDelete: Cascade)
 	fortytwo_oauth				fortytwo_oauth?			@relation(fields: [fortytwo_oauth_id], references: [id], onDelete: Cascade)
 	membership					memberships?			@relation(fields: [memberships_id], references: [id], onDelete: Cascade)
 	two_factor_auth				two_factor_auth?		@relation(fields: [two_factor_auth_id], references: [id], onDelete: Cascade)

@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  balance: 'balance',
   event_registrations: 'event_registrations',
   events: 'events',
   files: 'files',
@@ -398,6 +399,7 @@ export const ModelName = {
   photos_album: 'photos_album',
   service_categories: 'service_categories',
   services: 'services',
+  transaction: 'transaction',
   two_factor_auth: 'two_factor_auth',
   upload_request: 'upload_request',
   users: 'users',
@@ -417,10 +419,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "event_registrations" | "events" | "files" | "fortytwo_oauth" | "memberships" | "organization_followers" | "organization_members" | "organization_permission" | "organizations" | "photos" | "photos_album_reports" | "photos_album" | "service_categories" | "services" | "two_factor_auth" | "upload_request" | "users" | "webauthn_credentials"
+    modelProps: "balance" | "event_registrations" | "events" | "files" | "fortytwo_oauth" | "memberships" | "organization_followers" | "organization_members" | "organization_permission" | "organizations" | "photos" | "photos_album_reports" | "photos_album" | "service_categories" | "services" | "transaction" | "two_factor_auth" | "upload_request" | "users" | "webauthn_credentials"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    balance: {
+      payload: Prisma.$balancePayload<ExtArgs>
+      fields: Prisma.balanceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.balanceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.balanceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>
+        }
+        findFirst: {
+          args: Prisma.balanceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.balanceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>
+        }
+        findMany: {
+          args: Prisma.balanceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>[]
+        }
+        create: {
+          args: Prisma.balanceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>
+        }
+        createMany: {
+          args: Prisma.balanceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.balanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>[]
+        }
+        delete: {
+          args: Prisma.balanceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>
+        }
+        update: {
+          args: Prisma.balanceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>
+        }
+        deleteMany: {
+          args: Prisma.balanceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.balanceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.balanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>[]
+        }
+        upsert: {
+          args: Prisma.balanceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$balancePayload>
+        }
+        aggregate: {
+          args: Prisma.BalanceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBalance>
+        }
+        groupBy: {
+          args: Prisma.balanceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BalanceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.balanceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BalanceCountAggregateOutputType> | number
+        }
+      }
+    }
     event_registrations: {
       payload: Prisma.$event_registrationsPayload<ExtArgs>
       fields: Prisma.event_registrationsFieldRefs
@@ -1457,6 +1533,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    transaction: {
+      payload: Prisma.$transactionPayload<ExtArgs>
+      fields: Prisma.transactionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.transactionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.transactionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>
+        }
+        findFirst: {
+          args: Prisma.transactionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.transactionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>
+        }
+        findMany: {
+          args: Prisma.transactionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>[]
+        }
+        create: {
+          args: Prisma.transactionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>
+        }
+        createMany: {
+          args: Prisma.transactionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.transactionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>[]
+        }
+        delete: {
+          args: Prisma.transactionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>
+        }
+        update: {
+          args: Prisma.transactionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>
+        }
+        deleteMany: {
+          args: Prisma.transactionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.transactionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.transactionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>[]
+        }
+        upsert: {
+          args: Prisma.transactionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transactionPayload>
+        }
+        aggregate: {
+          args: Prisma.TransactionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransaction>
+        }
+        groupBy: {
+          args: Prisma.transactionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.transactionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionCountAggregateOutputType> | number
+        }
+      }
+    }
     two_factor_auth: {
       payload: Prisma.$two_factor_authPayload<ExtArgs>
       fields: Prisma.two_factor_authFieldRefs
@@ -1792,6 +1942,15 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const BalanceScalarFieldEnum = {
+  id: 'id',
+  account: 'account',
+  updated_at: 'updated_at'
+} as const
+
+export type BalanceScalarFieldEnum = (typeof BalanceScalarFieldEnum)[keyof typeof BalanceScalarFieldEnum]
+
+
 export const Event_registrationsScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -1988,6 +2147,17 @@ export const ServicesScalarFieldEnum = {
 export type ServicesScalarFieldEnum = (typeof ServicesScalarFieldEnum)[keyof typeof ServicesScalarFieldEnum]
 
 
+export const TransactionScalarFieldEnum = {
+  id: 'id',
+  balance_id: 'balance_id',
+  created_at: 'created_at',
+  amount: 'amount',
+  name: 'name'
+} as const
+
+export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
 export const Two_factor_authScalarFieldEnum = {
   id: 'id',
   mail_enabled: 'mail_enabled',
@@ -2021,6 +2191,7 @@ export const UsersScalarFieldEnum = {
   profile_picture: 'profile_picture',
   fortytwo_user_id: 'fortytwo_user_id',
   fortytwo_oauth_id: 'fortytwo_oauth_id',
+  balance_id: 'balance_id',
   memberships_id: 'memberships_id',
   agent: 'agent',
   agent_verified: 'agent_verified',
@@ -2060,6 +2231,13 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const balanceOrderByRelevanceFieldEnum = {
+  id: 'id'
+} as const
+
+export type balanceOrderByRelevanceFieldEnum = (typeof balanceOrderByRelevanceFieldEnum)[keyof typeof balanceOrderByRelevanceFieldEnum]
 
 
 export const event_registrationsOrderByRelevanceFieldEnum = {
@@ -2216,6 +2394,15 @@ export const servicesOrderByRelevanceFieldEnum = {
 export type servicesOrderByRelevanceFieldEnum = (typeof servicesOrderByRelevanceFieldEnum)[keyof typeof servicesOrderByRelevanceFieldEnum]
 
 
+export const transactionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  balance_id: 'balance_id',
+  name: 'name'
+} as const
+
+export type transactionOrderByRelevanceFieldEnum = (typeof transactionOrderByRelevanceFieldEnum)[keyof typeof transactionOrderByRelevanceFieldEnum]
+
+
 export const two_factor_authOrderByRelevanceFieldEnum = {
   id: 'id',
   totp_secret: 'totp_secret',
@@ -2244,6 +2431,7 @@ export const usersOrderByRelevanceFieldEnum = {
   full_name: 'full_name',
   profile_picture: 'profile_picture',
   fortytwo_oauth_id: 'fortytwo_oauth_id',
+  balance_id: 'balance_id',
   memberships_id: 'memberships_id',
   agent_reason: 'agent_reason'
 } as const
@@ -2283,20 +2471,6 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2307,6 +2481,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -2425,6 +2613,7 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  balance?: Prisma.balanceOmit
   event_registrations?: Prisma.event_registrationsOmit
   events?: Prisma.eventsOmit
   files?: Prisma.filesOmit
@@ -2439,6 +2628,7 @@ export type GlobalOmitConfig = {
   photos_album?: Prisma.photos_albumOmit
   service_categories?: Prisma.service_categoriesOmit
   services?: Prisma.servicesOmit
+  transaction?: Prisma.transactionOmit
   two_factor_auth?: Prisma.two_factor_authOmit
   upload_request?: Prisma.upload_requestOmit
   users?: Prisma.usersOmit
