@@ -51,7 +51,7 @@ export default function Page() {
 				data={events}
 				onImport={reinitializeEvents}
 				onExport={filterEvents}
-				onNew={() => router.push('new')}
+				onNew={() => router.push('events/new')}
 				loading={false}
 			/>
 		</>
