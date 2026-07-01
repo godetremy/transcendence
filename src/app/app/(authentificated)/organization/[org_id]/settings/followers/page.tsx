@@ -10,11 +10,9 @@ export default function Page() {
 	const organization = organizationCtx.getCurrentOrganization()!;
 	return (
 		<NavigationBarHeader title={'Followers'}>
-			<div className={styles.page}>
+			<div className={styles.page_container}>
 				<ListSectionTitle>Followers</ListSectionTitle>
-				<div className={styles.page_container}>
-					<OrganizationFollowersList org_id={organization.id} />
-				</div>
+				<OrganizationFollowersList org_id={organization.id} />
 			</div>
 		</NavigationBarHeader>
 	);

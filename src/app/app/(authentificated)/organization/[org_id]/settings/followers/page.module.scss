@@ -15,7 +15,8 @@
 	width: 100%;
 	max-width: 600px;
 	align-self: center;
-	position: relative;
 	display: flex;
-	flex: 1;
+	flex-direction: column;
+	gap: 20px;
+	padding-bottom: 20px;
 }

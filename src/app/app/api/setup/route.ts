@@ -4,11 +4,11 @@ import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import path from 'path';
 import { checkIsUserGlobalAdmin } from '@/utils/permission';
 import { getUserFromSession } from '@/database/User';
-import { getSession } from '@/lib/session';
+import { getThrowableSession } from '@/lib/session';
 
 export function PUT(req: NextRequest) {
 	return errorHandler(async () => {
-		const session = await getSession(req);
+		const session = await getThrowableSession(req);
 		if (!session) throw ERRORS_DETAILS.session_expired();
 
 		const user = await getUserFromSession(session, {});

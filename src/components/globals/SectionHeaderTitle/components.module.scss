@@ -25,9 +25,20 @@
 		display: flex;
 		align-items: center;
 		gap: 6px;
+		transition: var(--transition-fast);
 
 		& > svg {
 			color: var(--color-primary-white);
+			opacity: 0.5;
+			transition-property: margin-right;
+			transition: var(--transition-fast);
+		}
+
+		&:active {
+			scale: 0.95;
+		}
+		&:hover > svg{
+			margin-right: -3px;
 			opacity: 0.5;
 		}
 	}

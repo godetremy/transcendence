@@ -47,6 +47,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	already_admin: () => new ApiError(401, 'This user is already admin.'),
 	permission_in_use: () => new ApiError(403, 'The permission is currently in use.'),
 	photo_does_not_exist: () => new ApiError(403, 'This photo does not exist.'),
+	sumup_does_not_exist_url: () => new ApiError(403, 'No hosted checkout URL returned by SumUp.'),
 };
 
 const formatError = (error: ApiError) => {

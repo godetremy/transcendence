@@ -5,6 +5,8 @@ import styles from './page.module.scss';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { ArrowUpRight, Plus } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
+import { post } from '@/lib/fetcher';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
 	const [balanceHistory, setBalanceHistory] = useState<
@@ -43,10 +45,15 @@ export default function Page() {
 				<section className={styles.section}>
 					<div className={styles.balance_card}>
 						<span>Mon solde</span>
-						<p>42,67€</p>
+						<p>42 000 000 Pesos</p>
 					</div>
 					<div className={styles.balance_action_container}>
-						<button className={styles.primary}>
+						<button className={styles.primary} onClick={
+							async () => {
+								const result = await post<{ sucess: boolean, redirect_url: string }>(`/sumup`, { description: 'test', amount: 100 });
+								return redirect(result.redirect_url);
+							}
+						}>
 							<Plus /> Recharge
 						</button>
 						<button className={styles.secondary}>
