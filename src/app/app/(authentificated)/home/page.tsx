@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
 import { useUpload } from '@/contexts/UploadTokenContext';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
+import { ImageEditor } from '@/components/globals/ImageEditor/ImageEditor';
 
 export default function Page() {
 	const upload = useUpload();
 	const [user, setUser] = useState<User<{ membership: true }> | null>(null);
 
 	const [file, setFile] = useState<File | null>(null);
+	const [showEditor, setShowEditor] = useState(false);
 
 	const [progress, setProgress] = useState(0);
 	useEffect(() => {
@@ -74,6 +76,8 @@ export default function Page() {
 					<div>Progress: {progress}%</div>
 					<CircleLoader progress={progress} size={54} />
 				</div>
+				<button onClick={() => setShowEditor(true)}>Edit image</button>
+				<ImageEditor file={file} visible={showEditor} setVisible={setShowEditor} />
 			</section>
 		</>
 	);

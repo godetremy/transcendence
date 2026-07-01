@@ -26,6 +26,8 @@
 		align-items: center;
 		gap: 6px;
 		transition: var(--transition-fast);
+		padding: 8px 12px;
+		margin: -8px -12px;
 
 		& > svg {
 			color: var(--color-primary-white);

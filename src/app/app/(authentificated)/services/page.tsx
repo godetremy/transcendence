@@ -49,9 +49,9 @@ export default function Page() {
 				/>
 			</div>
 			<section className={styles.list}>
-				<SectionHeaderTitle title={'Pour toi'} />
-				<SectionHeaderTitle title={'Ajout recents'} />
-				<SectionHeaderTitle title={'Bientot'} />
+				<SectionHeaderTitle title={'Pour toi'} href={'/app/services/forYou'} />
+				<SectionHeaderTitle title={'Ajout recents'} href={'/app/services/ajoutRecent'} />
+				<SectionHeaderTitle title={'Bientot'} href={'/app/services/soon'} />
 			</section>
 		</>
 	);

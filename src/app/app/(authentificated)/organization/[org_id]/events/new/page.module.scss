@@ -1,0 +1,224 @@
+.main_container {
+	display: flex;
+
+	.edit_section {
+		flex: 1;
+		margin-right: 420px;
+
+		nav {
+			height: 60px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			position: sticky;
+			top: 0;
+			padding: 20px;
+			border-bottom: 1px solid var(--color-border-dark);
+			background-color: var(--color-primary-black);
+			z-index: 100;
+
+			button {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				border: 1px solid var(--color-border-dark);
+				background-color: #000;
+				color: var(--color-rgb-primary-white);
+				transition: var(--transition-fast);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding-right: 1.5px;
+
+				& > svg {
+					opacity: 0.6;
+				}
+			}
+
+			span {
+				font: 600 15px var(--font-paragraph);
+			}
+		}
+
+		.main_content {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			min-height: calc(100vh - 60px);
+
+			.cover {
+				width: 100%;
+				height: 200px;
+				background-color: var(--color-border-dark);
+			}
+
+			.title {
+				top: calc(200px - 60px);
+				left: 0;
+				right: 0;
+				height: 60px;
+				position: absolute;
+				background: linear-gradient(rgba(var(--color-rgb-primary-black), 0), rgba(var(--color-rgb-primary-black), 1));
+				display: flex;
+				gap: 10px;
+				align-items: center;
+				padding: 0 20px;
+
+				input {
+					appearance: none;
+					background-color: transparent;
+					outline: none;
+					border: none;
+					font: 700 26px var(--font-paragraph);
+					color: var(--color-primary-white);
+					flex: 1;
+					overflow: visible;
+				}
+
+				button {
+					appearance: none;
+					display: flex;
+					border: none;
+					height: 35px;
+					padding: 20px;
+					align-items: center;
+					justify-content: center;
+					background-color: var(--color-primary-purple);
+					color: var(--color-primary-white);
+					font: 600 14px var(--font-paragraph);
+					border-radius: 25px;
+					transition: var(--transition-fast);
+
+					&:active {
+						transform: scale(0.98);
+					}
+				}
+			}
+
+			.date_picker {
+				display: flex;
+				padding: 10px 20px;
+				align-items: center;
+				gap: 10px;
+
+				svg {
+					opacity: 0.4;
+				}
+			}
+			.location {
+				display: flex;
+				padding: 10px 20px;
+				align-items: center;
+				gap: 10px;
+
+				svg {
+					opacity: 0.4;
+				}
+
+				input {
+					appearance: none;
+					background-color: transparent;
+					outline: none;
+					border: none;
+					font: 500 15px var(--font-paragraph);
+					color: var(--color-primary-white);
+				}
+			}
+			.registration {
+				display: flex;
+				padding: 10px 20px;
+				align-items: flex-start;
+				gap: 10px;
+
+				svg {
+					opacity: 0.4;
+				}
+				div {
+					display: flex;
+					flex-direction: column;
+					gap: 10px;
+
+					.limit_registration {
+						display: flex;
+						align-items: center;
+						gap: 5px;
+						height: 22px;
+					}
+
+					.max_registration {
+						display: flex;
+						align-items: center;
+						gap: 5px;
+						height: 32px;
+						width: fit-content;
+
+						button {
+							width: 32px;
+							height: 32px;
+							border-radius: 50%;
+							border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+							background-color: #111;
+							color: var(--color-rgb-primary-white);
+							transition: var(--transition-fast);
+							display: flex;
+							align-items: center;
+							justify-content: center;
+
+							&:active {
+								transform: scale(0.9);
+							}
+						}
+
+						input {
+							appearance: none;
+							background-color: transparent;
+							outline: none;
+							border: none;
+							font: 500 15px var(--font-paragraph);
+							color: var(--color-primary-white);
+							width: 40px;
+							text-align: center;
+						}
+
+						input::-webkit-outer-spin-button,
+						input::-webkit-inner-spin-button {
+							-webkit-appearance: none;
+							margin: 0;
+						}
+
+						input[type=number] {
+							-moz-appearance:textfield;
+						}
+					}
+				}
+			}
+		}
+
+		.mdeditor {
+			flex: 1;
+
+			div[role='toolbar'] {
+				position: sticky;
+				top: 59px;
+			}
+		}
+	}
+
+	.preview_section {
+		width: 420px;
+		height: 100vh;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-left: 1px solid var(--color-border-dark);
+
+		h3 {
+			font: 700 22px var(--font-paragraph);
+			opacity: 0.4;
+		}
+	}
+}
