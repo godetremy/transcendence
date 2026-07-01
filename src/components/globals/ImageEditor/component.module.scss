@@ -6,8 +6,10 @@
 
 	.preview_container {
 		flex: 1;
-		background:
-			repeating-conic-gradient(rgba(var(--color-rgb-primary-white), 0.1) 0 25%, rgba(var(--color-rgb-primary-white), 0) 0 50%)
+		background: repeating-conic-gradient(
+				rgba(var(--color-rgb-primary-white), 0.1) 0 25%,
+				rgba(var(--color-rgb-primary-white), 0) 0 50%
+			)
 			50% / 40px 40px;
 		border-radius: 10px;
 		overflow: hidden;
@@ -35,17 +37,16 @@
 			font: 500 13px var(--font-paragraph);
 			color: rgba(var(--color-rgb-primary-white), 0.6);
 
-			input[type="range"] {
+			input[type='range'] {
 				appearance: none;
 				background-color: transparent;
-
 
 				&::-webkit-slider-runnable-track {
 					position: relative;
 					height: 40px;
 					border-radius: 10px;
 					border: 1px solid #333;
-					background: linear-gradient(to right, #333 0px, #1A1A1A 1px);
+					background: linear-gradient(to right, #333 0px, #1a1a1a 1px);
 					background-size: 27.9px;
 				}
 
@@ -56,7 +57,7 @@
 					background-color: var(--color-primary-purple);
 					border-radius: 5px;
 					margin: 4.5px;
-					transition: .3s cubic-bezier(.2,0,0,1.38);
+					transition: 0.3s cubic-bezier(0.2, 0, 0, 1.38);
 					border: 1px solid rgba(var(--color-rgb-primary-black), 0.1);
 
 					&:active {
