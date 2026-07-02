@@ -78,6 +78,7 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 				loading={addingMembers}
 				onAccept={addMembers}
 				disabledAccept={membersSelection.length === 0}
+				close={close}
 			/>
 			<section className={styles.searchbar}>
 				<input
