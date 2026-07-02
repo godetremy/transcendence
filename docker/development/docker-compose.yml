@@ -39,11 +39,11 @@ services:
     seaweed-volume:
         ports:
             - '127.0.0.1:8080:8080'
-    
+
     kibana:
         env_file:
             - ./development/secrets/.env
-    
+
     logstash:
         env_file:
             - ./development/secrets/.env

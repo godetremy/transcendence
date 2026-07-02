@@ -55,7 +55,7 @@
 				color: rgba(var(--color-rgb-primary-white), 0.7);
 				font: 500 14px var(--font-paragraph);
 				outline: none;
-				transition: .1s;
+				transition: 0.1s;
 
 				&:focus {
 					border: 2px solid rgba(var(--color-rgb-primary-purple), 1);
@@ -67,7 +67,7 @@
 				top: 66px;
 				left: 0;
 				width: 100%;
-				background-color: #1C1C1C;
+				background-color: #1c1c1c;
 				border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
 				display: none;
 				flex-direction: column;

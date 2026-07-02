@@ -10,25 +10,11 @@ PROD_FOLDER				= $(DOCKER_FOLDER)/production
 SCRIPTS_FOLDER			= $(DOCKER_FOLDER)/scripts
 
 BASE_COMPOSE			= $(DOCKER_FOLDER)/$(DOCKER_FILE)
-MONITORING_COMPOSE		= $(DOCKER_FOLDER)/monitoring.yml
+MONITORING_COMPOSE		= $(DOCKER_FOLDER)/monitoring/docker-compose.yml
 
-COMPOSE_DEV				= -f $(BASE_COMPOSE) -f $(DEV_FOLDER)/$(DOCKER_FILE) --env-file $(DEV_FOLDER)/$(SECRET_FOLDER)/.env
+COMPOSE_DEV				= -f $(BASE_COMPOSE) -f $(DEV_FOLDER)/$(DOCKER_FILE) -f $(MONITORING_COMPOSE) --env-file $(DEV_FOLDER)/$(SECRET_FOLDER)/.env
 COMPOSE_STAGING			= -f $(BASE_COMPOSE) -f $(STAGING_FOLDER)/$(DOCKER_FILE) -f $(MONITORING_COMPOSE) --env-file $(STAGING_FOLDER)/$(SECRET_FOLDER)/.env
 COMPOSE_PROD			= -f $(BASE_COMPOSE) -f $(PROD_FOLDER)/$(DOCKER_FILE) -f $(MONITORING_COMPOSE) --env-file $(PROD_FOLDER)/$(SECRET_FOLDER)/.env
-
-help:
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "  init-dev    setup de dev et le lance"
-	@echo "  env         cree l'env"
-	@echo "  certs       cree tous les certs"
-	@echo "  database    init la db"
-	@echo "  dev         lance le dev"
-	@echo "  staging     lance le staging"
-	@echo "  prod        lance le prod"
-	@echo "  down-dev    stop le dev"
-	@echo "  clean-dev   clean le dev"
-	@echo "  fclean      del tout"
 
 init-dev: env certs
 	npm i

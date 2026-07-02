@@ -1,5 +1,10 @@
 import { formatPublicUser } from '@/database/format/User';
-import { countUsersByFilter, getUserFromSession, getUsersByFilterAndSearch } from '@/database/User';
+import {
+	countUsersByFilter,
+	getUserFromSession,
+	getUsersByElasticSearch,
+	getUsersByFilterAndSearch,
+} from '@/database/User';
 import { getThrowableSession } from '@/lib/session';
 import { RegisteredParamSchema } from '@/schema/RegisteredEventSchema';
 import { UserFindSchema } from '@/schema/UserFind';
@@ -30,6 +35,13 @@ export async function GET(
 
 		const number = await countUsersByFilter({});
 
+		const searchs = await getUsersByElasticSearch(parameter.q ?? '', pagination.limit);
+
+		const users = searchs.hits.hits.map((hit) => ({
+			mail: hit._source?.mail,
+			full_name: hit._source?.full_name,
+		}));
+
 		const list = await getUsersByFilterAndSearch(
 			{
 				...(member.register == 'true'
@@ -41,10 +53,16 @@ export async function GET(
 								},
 							},
 						}),
-				...(parameter.q == null
-					? {}
+				...(parameter.q?.match('@') && parameter.q != null
+					? {
+							mail: parameter.q,
+						}
 					: {
-							OR: [{ full_name: { contains: parameter.q } }, { mail: parameter.q }],
+							full_name: {
+								in: users
+									.map((u) => u.full_name)
+									.filter((full_name): full_name is string => !!full_name),
+							},
 						}),
 			},
 			{ organization_members: { include: { organization: true } } },

@@ -7,6 +7,9 @@ import { SessionPayload } from '@/types/session/SessionPayload';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
+import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
+import { esclient } from './prisma/elasticSearch';
+import { ElasticSearchUser } from '@/types/User';
 
 const createStudentUser = async (
 	me: FortyTwoCursusUserDetails,
@@ -176,6 +179,34 @@ const getUsersByFilter = async <T extends Prisma.usersInclude>(
 	});
 };
 
+const getUsersByElasticSearch = async (q: string, limit: number): Promise<SearchResponse<ElasticSearchUser>> => {
+	return await esclient.search<ElasticSearchUser>({
+		index: 'users',
+		query: {
+			bool: {
+				should: [
+					{
+						multi_match: {
+							query: q,
+							fields: ['full_name', 'mail'],
+							type: 'phrase_prefix',
+						},
+					},
+					{
+						multi_match: {
+							query: q,
+							fields: ['full_name', 'mail'],
+							fuzziness: 'AUTO',
+						},
+					},
+				],
+				minimum_should_match: 1,
+			},
+		},
+		size: limit,
+	});
+};
+
 const getUsersByFilterAndSearch = async <T extends Prisma.usersInclude>(
 	filter: Prisma.usersWhereInput,
 	include: T,
@@ -236,4 +267,5 @@ export {
 	existUserByMail,
 	getUsersByFilterAndSearch,
 	updateUserData,
+	getUsersByElasticSearch,
 };

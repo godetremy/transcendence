@@ -11,6 +11,7 @@
 		"test": "commitlint --from=origin/main --to=HEAD; npx prettier . --check; eslint .; tsc --noEmit"
 	},
 	"dependencies": {
+		"@elastic/elasticsearch": "8.15",
 		"@mdx-js/loader": "^3.1.1",
 		"@mdx-js/react": "^3.1.1",
 		"@mdxeditor/editor": "^4.0.4",
