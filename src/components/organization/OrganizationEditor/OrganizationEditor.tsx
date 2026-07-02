@@ -18,7 +18,7 @@ export interface OrganizationEditorProps {
 export function OrganizationEditor(props: OrganizationEditorProps) {
 	const upload = useUpload();
 
-	const [logo, setLogo] = useState<string | undefined>(undefined);
+	const [logo, setLogo] = useState<string | undefined>(props.organization.logo);
 	const [uploadImage, setUploadImage] = useState(false);
 	const [uploadProgression, setUploadProgression] = useState(0);
 
