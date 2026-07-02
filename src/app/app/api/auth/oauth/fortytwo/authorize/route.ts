@@ -15,7 +15,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 		const authorization: FortyTwoOauthToken = await getFortyTwoOauthToken(code);
 		const me: FortyTwoCursusUserDetails = await getFortyTwoMe(authorization.access_token);
 
-		/*if ((await existUserByMail(me.email)) == true) throw ERRORS_DETAILS.account_exist_with_mail();*/
 		const user = await createOrUpdateStudentUser(me, authorization);
 
 		await createAndSetSession({

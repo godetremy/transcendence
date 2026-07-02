@@ -7,6 +7,7 @@ import {
 	BadgeDollarSign,
 	BookOpenText,
 	Building2,
+	Code,
 	FileLock,
 	GitCommitVerticalIcon,
 	KeyRound,
@@ -59,6 +60,12 @@ export default function Page() {
 						title={'Organisation'}
 						description={'Gère tes organisations'}
 						onPress={() => router.push('/app/me/organization')}
+					/>
+					<ListItem
+						icon={Code}
+						title={'Développeurs'}
+						description={'Gère tes applications et clés API'}
+						onPress={() => router.push('/app/me/api')}
 						last={!user?.admin}
 					/>
 					{user?.admin && (

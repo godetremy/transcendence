@@ -1,3 +1,5 @@
+@use '../../../app/supports';
+
 .card_header {
 	position: relative;
 	display: flex;
@@ -93,6 +95,14 @@
 			&:active {
 				scale: 0.98;
 			}
+		}
+	}
+}
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.card_header {
+		h1 {
+			display: none;
 		}
 	}
 }

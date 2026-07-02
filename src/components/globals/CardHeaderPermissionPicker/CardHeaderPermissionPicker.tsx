@@ -1,11 +1,10 @@
 import styles from './components.module.scss';
-import { Check, ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, X } from 'lucide-react';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getOrganizationPermissions } from '@/lib/fetcher/organization';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ErrorState } from '../ErrorState/ErrorState';
 
 export interface CardHeaderPermissionPickerProps {
 	orgId: string;
@@ -13,10 +12,11 @@ export interface CardHeaderPermissionPickerProps {
 	onAccept: (permission_id: string) => void;
 	loading?: boolean;
 	disabledAccept?: boolean;
+	close: () => void;
 }
 
 export function CardHeaderPermissionPicker(props: CardHeaderPermissionPickerProps) {
-	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
 		getOrganizationPermissions(props.orgId)
 	);
 
@@ -29,12 +29,12 @@ export function CardHeaderPermissionPicker(props: CardHeaderPermissionPickerProp
 	const hiddenCheckmark = { opacity: 0, scale: 0.8 };
 	const visibleCheckmark = { opacity: 1, scale: 1 };
 
-	if (isLoading) return <Loader />;
-	if (isError || data === undefined) return <ErrorState error={error} />;
-
 	return (
 		<AnimatePresence>
 			<header className={styles.card_header}>
+				<button onClick={props.close}>
+					<X />
+				</button>
 				<h1>{props.title}</h1>
 				<div className={styles.picker}>
 					<button

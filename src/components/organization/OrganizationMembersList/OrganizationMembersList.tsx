@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { OrganizationMembers } from '@/types/OrganizationMembers';
 import Image from 'next/image';
 import styles from '@/app/app/(authentificated)/organization/[org_id]/settings/members/page.module.scss';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 
 export function OrganizationMembersList({
 	org_id,
@@ -32,9 +33,9 @@ export function OrganizationMembersList({
 	};
 
 	return (
-		<div>
+		<>
 			<ListContainer>
-				{data.pages.map((row) =>
+				{data.pages.map((row, j) =>
 					row.data.map((member, i) => (
 						<ListItem
 							key={i}
@@ -49,19 +50,14 @@ export function OrganizationMembersList({
 									className={styles.profilePicture}
 								/>
 							}
-							last={i == row.data.length - 1}
+							last={i == row.data.length - 1 && j == data.pages.length - 1}
 							onPress={() => onPressItem(member)}
 						/>
 					))
 				)}
 			</ListContainer>
-			{isFetchingNextPage && <p>Chargement...</p>}
 
-			{hasNextPage && (
-				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
-				</button>
-			)}
-		</div>
+			{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
+		</>
 	);
 }
