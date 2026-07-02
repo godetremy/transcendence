@@ -1,19 +1,34 @@
 'use client';
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Modal } from '@/components/globals/Modal/Modal';
+import Modal from '@/components/globals/Modal/Modal';
 import { AnimatePresence } from 'motion/react';
+
+export interface ModalButtonEvent {
+	text?: string;
+	preventClosing: () => void;
+}
 
 type ModalButtonOptions = {
 	text: string;
-	onClick?: () => void;
+	onClick?: (event: ModalButtonEvent) => void;
 	negative?: boolean;
 };
+
+export interface ModalSuggestionOptions {
+	leftElement?: ReactNode;
+	text: string;
+}
 
 export type ModalOptions = {
 	title: string;
 	message?: string;
 	buttons: ModalButtonOptions[];
 	canClose?: boolean;
+	textInput?: {
+		label: string;
+		placeholder?: string;
+		onRequestCompletion?: (value: string) => Promise<ModalSuggestionOptions[]>;
+	};
 };
 
 type ModalContextType = {
