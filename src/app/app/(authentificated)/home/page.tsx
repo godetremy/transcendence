@@ -7,8 +7,10 @@ import { MembershipButton } from '@/components/membership/MembershipButton/Membe
 import { useUpload } from '@/contexts/UploadTokenContext';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
 import { ImageEditor } from '@/components/globals/ImageEditor/ImageEditor';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 
 export default function Page() {
+	const { openModal } = useModal();
 	const upload = useUpload();
 	const [user, setUser] = useState<User<{ membership: true }> | null>(null);
 
@@ -39,6 +41,56 @@ export default function Page() {
 				</div>
 			</div>
 			<section className={'content'}>
+				<button
+					onClick={() =>
+						openModal({
+							title: 'Modal demo',
+							message: 'Veniam nulla amet id incididunt consectetur.',
+							textInput: {
+								label: 'Text input',
+								placeholder: 'Enter text',
+								onRequestCompletion: (text) => {
+									return new Promise((accept) => {
+										setTimeout(() => {
+											accept([
+												{
+													text: `${text} de fou`,
+												},
+												{
+													text: `${text} de fou`,
+												},
+												{
+													text: `${text} de fou`,
+												},
+												{
+													text: `${text} de fou`,
+												},
+												{
+													text: `${text} de fou`,
+												},
+												{
+													text: `${text} de fou`,
+												},
+											]);
+										}, 100);
+									});
+								},
+							},
+							buttons: [
+								{ text: 'Cancel', negative: true },
+								{
+									text: 'Confirm',
+									onClick: (e) => {
+										console.log('Confirmed', e.text);
+										e.preventClosing();
+									},
+								},
+							],
+						})
+					}
+				>
+					Show modal
+				</button>
 				<MembershipButton />
 				{user === null ? (
 					<p>Loading...</p>
