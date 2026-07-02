@@ -29,6 +29,9 @@ const getTransactions = async <T extends Prisma.transactionInclude>(
 		where: {
 			balance_id: balance_id,
 		},
+		orderBy: {
+			created_at: 'desc',
+		},
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 		include: include,
 	});
