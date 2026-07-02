@@ -41,6 +41,20 @@ const getOrganizationInvites = (): UseInfiniteQueryOptions<
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
+const getPendingApproveOrganization = (): UseInfiniteQueryOptions<
+	PaginationResponse<PrivateOrganization<object>>,
+	Error,
+	InfiniteData<PaginationResponse<PrivateOrganization<object>>>,
+	QueryKey,
+	number
+> => ({
+	queryFn: ({ pageParam = 1 }) =>
+		get<PaginationResponse<PrivateOrganization<object>>>(`/organization/approve?page=${pageParam}`),
+	queryKey: ['organization', 'approve'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
+});
+
 const getOrganizationMembers = (
 	org_id: string
 ): UseInfiniteQueryOptions<
@@ -128,7 +142,7 @@ const updateOrganization = (
 	},
 });
 
-const AccpetInvitation = (
+const AcceptInvitation = (
 	org_id: string
 ): UseMutationOptions<{ success: boolean; message?: string }, Error, { accept: boolean }> => ({
 	mutationFn: ({ accept }: { accept: boolean }) =>
@@ -136,6 +150,16 @@ const AccpetInvitation = (
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'invitation', 'pending'] });
+	},
+});
+
+const approveOrganization = (
+	org_id: string
+): UseMutationOptions<{ success: boolean; message?: string }, Error, { accept: boolean }> => ({
+	mutationFn: ({ accept }: { accept: boolean }) =>
+		put<{ success: boolean; message?: string }>(`/organization/${org_id}/approve`, { approve: accept }),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
 	},
 });
 
@@ -212,8 +236,10 @@ export {
 	getOrganizationFollowers,
 	getOrganizations,
 	getOrganizationInvites,
-	AccpetInvitation,
+	AcceptInvitation,
 	getOrganizationPermissions,
 	getOrganizationFollowerNumber,
 	updateOrganization,
+	getPendingApproveOrganization,
+	approveOrganization,
 };
