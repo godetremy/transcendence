@@ -28,6 +28,9 @@ const createStudentUser = async (
 			membership: {
 				create: {},
 			},
+			balance: {
+				create: {},
+			},
 		},
 	});
 };
@@ -78,6 +81,7 @@ const createOrUpdateStudentUser = async (
 		create: {
 			...user_body,
 			fortytwo_oauth: { create: { ...token_body } },
+			balance: { create: {} },
 		},
 		update: {
 			...user_body,
@@ -127,6 +131,8 @@ const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.use
 		include: {
 			membership: true,
 			fortytwo_oauth: true,
+			upload_requests: true,
+			balance: true,
 		},
 	});
 };

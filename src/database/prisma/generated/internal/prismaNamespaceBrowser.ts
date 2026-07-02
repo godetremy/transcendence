@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  balance: 'balance',
   event_registrations: 'event_registrations',
   events: 'events',
   files: 'files',
@@ -65,6 +66,7 @@ export const ModelName = {
   photos_album: 'photos_album',
   service_categories: 'service_categories',
   services: 'services',
+  transaction: 'transaction',
   two_factor_auth: 'two_factor_auth',
   upload_request: 'upload_request',
   users: 'users',
@@ -85,6 +87,15 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const BalanceScalarFieldEnum = {
+  id: 'id',
+  account: 'account',
+  updated_at: 'updated_at'
+} as const
+
+export type BalanceScalarFieldEnum = (typeof BalanceScalarFieldEnum)[keyof typeof BalanceScalarFieldEnum]
 
 
 export const Event_registrationsScalarFieldEnum = {
@@ -283,6 +294,17 @@ export const ServicesScalarFieldEnum = {
 export type ServicesScalarFieldEnum = (typeof ServicesScalarFieldEnum)[keyof typeof ServicesScalarFieldEnum]
 
 
+export const TransactionScalarFieldEnum = {
+  id: 'id',
+  balance_id: 'balance_id',
+  created_at: 'created_at',
+  amount: 'amount',
+  name: 'name'
+} as const
+
+export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
 export const Two_factor_authScalarFieldEnum = {
   id: 'id',
   mail_enabled: 'mail_enabled',
@@ -316,6 +338,7 @@ export const UsersScalarFieldEnum = {
   profile_picture: 'profile_picture',
   fortytwo_user_id: 'fortytwo_user_id',
   fortytwo_oauth_id: 'fortytwo_oauth_id',
+  balance_id: 'balance_id',
   memberships_id: 'memberships_id',
   agent: 'agent',
   agent_verified: 'agent_verified',
@@ -355,6 +378,13 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const balanceOrderByRelevanceFieldEnum = {
+  id: 'id'
+} as const
+
+export type balanceOrderByRelevanceFieldEnum = (typeof balanceOrderByRelevanceFieldEnum)[keyof typeof balanceOrderByRelevanceFieldEnum]
 
 
 export const event_registrationsOrderByRelevanceFieldEnum = {
@@ -511,6 +541,15 @@ export const servicesOrderByRelevanceFieldEnum = {
 export type servicesOrderByRelevanceFieldEnum = (typeof servicesOrderByRelevanceFieldEnum)[keyof typeof servicesOrderByRelevanceFieldEnum]
 
 
+export const transactionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  balance_id: 'balance_id',
+  name: 'name'
+} as const
+
+export type transactionOrderByRelevanceFieldEnum = (typeof transactionOrderByRelevanceFieldEnum)[keyof typeof transactionOrderByRelevanceFieldEnum]
+
+
 export const two_factor_authOrderByRelevanceFieldEnum = {
   id: 'id',
   totp_secret: 'totp_secret',
@@ -539,6 +578,7 @@ export const usersOrderByRelevanceFieldEnum = {
   full_name: 'full_name',
   profile_picture: 'profile_picture',
   fortytwo_oauth_id: 'fortytwo_oauth_id',
+  balance_id: 'balance_id',
   memberships_id: 'memberships_id',
   agent_reason: 'agent_reason'
 } as const

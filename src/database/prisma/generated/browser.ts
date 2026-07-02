@@ -18,6 +18,11 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
+ * Model balance
+ * 
+ */
+export type balance = Prisma.balanceModel
+/**
  * Model event_registrations
  * 
  */
@@ -87,6 +92,11 @@ export type service_categories = Prisma.service_categoriesModel
  * 
  */
 export type services = Prisma.servicesModel
+/**
+ * Model transaction
+ * 
+ */
+export type transaction = Prisma.transactionModel
 /**
  * Model two_factor_auth
  * 

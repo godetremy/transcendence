@@ -29,8 +29,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Event_registrations
- * const event_registrations = await prisma.event_registrations.findMany()
+ * // Fetch zero or more Balances
+ * const balances = await prisma.balance.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,6 +39,11 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model balance
+ * 
+ */
+export type balance = Prisma.balanceModel
 /**
  * Model event_registrations
  * 
@@ -109,6 +114,11 @@ export type service_categories = Prisma.service_categoriesModel
  * 
  */
 export type services = Prisma.servicesModel
+/**
+ * Model transaction
+ * 
+ */
+export type transaction = Prisma.transactionModel
 /**
  * Model two_factor_auth
  * 

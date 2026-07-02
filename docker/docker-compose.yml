@@ -12,46 +12,131 @@ services:
             - /run
             - /tmp
 
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+        volumes:
+            - ./services/elasticsearch/certs:/usr/share/elasticsearch/config/certs
+            - elasticsearch_data:/usr/share/elasticsearch/data
+            - ./services/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - ./services/elasticsearch/entrypoint.sh:/usr/share/elasticsearch/config/entrypoint.sh:ro
+        environment:
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+            KIBANA_PASSWORD: ${KIBANA_PASSWORD}
+            ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+        networks:
+            - app
+        entrypoint: ['bash', '/usr/share/elasticsearch/config/entrypoint.sh']
+        restart: on-failure
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    "test -f /tmp/kibana-system-password-set && curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+                ]
+            interval: 10s
+            timeout: 10s
+            retries: 120
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:8.15.3
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+        volumes:
+            - ./services/elasticsearch/certs:/usr/share/kibana/config/certs
+            - ./services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+            - kibanadata:/usr/share/kibana/data
+        environment:
+            ELASTICSEARCH_PASSWORD: ${KIBANA_PASSWORD}
+            XPACK_SECURITY_ENCRYPTIONKEY: ${ENCRYPTION_KEY}
+            XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: ${ENCRYPTION_KEY}
+            XPACK_REPORTING_ENCRYPTIONKEY: ${ENCRYPTION_KEY}
+        networks:
+            - app
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'"]
+            interval: 10s
+            timeout: 10s
+            retries: 120
+
+    logstash:
+        image: docker.elastic.co/logstash/logstash:8.15.3
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+            postgres:
+                condition: service_healthy
+        volumes:
+            - ./services/elasticsearch/certs:/certs
+            - ./services/logstash/events.conf:/usr/share/logstash/config/events.conf
+            - ./services/logstash/events-mapping.json:/usr/share/logstash/config/events-mapping.json
+            - ./services/logstash/entrypoint.sh:/usr/share/logstash/config/entrypoint.sh
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+            XPACK_MONITORING_ENABLED: 'false'
+        networks:
+            - app
+        entrypoint: ['bash', '/usr/share/logstash/config/entrypoint.sh']
+        restart: on-failure
+        user: '1000:0'
+
     nginx:
         image: nginx:stable-alpine
         depends_on:
             - seaweed-filer
+        volumes:
+            - ./services/nginx/nginx.conf:/etc/nginx/templates/default.conf.template
+        environment:
+            NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
         networks:
             - app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
 
-    seaweed-master:
-        image: chrislusf/seaweedfs
+    postgres:
+        image: postgres:15-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
         networks:
             - app
-        command: 'master -ip=seaweed-master -port=9333'
+        restart: always
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
     seaweed-filer:
-        image: chrislusf/seaweedfs
+        image: chrislusf/seaweedfs:3.80
         depends_on:
             - seaweed-master
         networks:
             - app
         command: 'filer -master=seaweed-master:9333'
 
+    seaweed-master:
+        image: chrislusf/seaweedfs:3.80
+        networks:
+            - app
+        command: 'master -ip=seaweed-master -port=9333'
+
     seaweed-volume:
-        image: chrislusf/seaweedfs
+        image: chrislusf/seaweedfs:3.80
         depends_on:
             - seaweed-master
         networks:
             - app
         command: 'volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080'
 
-    postgres:
-        image: postgres:15-alpine
-        container_name: postgres
-        volumes:
-            - postgres_data:/var/lib/postgresql/data
-
 networks:
     app:
-        driver: bridge
-    host-network:
         driver: bridge
 
 volumes:
     postgres_data:
+    elasticsearch_data:
+    kibanadata:

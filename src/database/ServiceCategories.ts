@@ -26,7 +26,6 @@ const getServiceCategoriesByFilter = async <T extends Prisma.service_categoriesI
 };
 
 const countServiceCategoriesByFilter = async (filter: Prisma.service_categoriesWhereInput): Promise<number> => {
-	console.log(Object.keys(prisma).sort());
 	return prisma.service_categories.count({
 		where: filter,
 	});

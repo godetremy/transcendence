@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/balance'
 export type * from './models/event_registrations'
 export type * from './models/events'
 export type * from './models/files'
@@ -22,6 +23,7 @@ export type * from './models/photos_album_reports'
 export type * from './models/photos_album'
 export type * from './models/service_categories'
 export type * from './models/services'
+export type * from './models/transaction'
 export type * from './models/two_factor_auth'
 export type * from './models/upload_request'
 export type * from './models/users'

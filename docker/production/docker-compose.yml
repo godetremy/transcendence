@@ -1,5 +1,17 @@
-name: trans-prod
+name: BDE-prod
 
 services:
+    elasticsearch:
+        ports:
+            - '127.0.0.1:9200:9200'
+
+    nginx:
+        volumes:
+            - ./production/certificates:/etc/nginx/certificates
+        ports:
+            - '80:80'
+            - '443:443'
+
     postgres:
-        restart: always
+        env_file:
+            - ./production/secrets/.env
