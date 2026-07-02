@@ -299,7 +299,8 @@ export const TransactionScalarFieldEnum = {
   balance_id: 'balance_id',
   created_at: 'created_at',
   amount: 'amount',
-  name: 'name'
+  name: 'name',
+  status: 'status'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]

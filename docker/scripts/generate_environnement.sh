@@ -31,6 +31,11 @@ DEVELOPMENT_SESSION_SECRET=$(read_password "Which secret do you want to use for 
 STAGING_SESSION_SECRET=$(read_password "Which secret do you want to use for your session on staging deploy");
 PRODUCTION_SESSION_SECRET=$(read_password "Which secret do you want to use for your session on production deploy");
 
+SUMUP_API_KEY=$(read_with_prompt "Enter your Sumup key");
+SUMUP_MERCHANT_CODE=$(read_with_prompt "Enter your Sumup marchant code");
+
+ES_USERNAME=$(read_with_prompt "Enter your elastic search username");
+
 echo
 source ./docker/scripts/request_forty_two_api.sh
 echo
@@ -46,6 +51,14 @@ POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 ELASTIC_PASSWORD=$ELASTIC_PASSWORD
 KIBANA_PASSWORD=$KIBANA_PASSWORD
 ENCRYPTION_KEY=$ENCRYPTION_KEY
+
+SUMUP_API_KEY=$SUMUP_API_KEY
+SUMUP_MERCHANT_CODE=$SUMUP_MERCHANT_CODE
+
+ELASTICSEARCH_PASSWORD=$KIBANA_PASSWORD
+XPACK_SECURITY_ENCRYPTIONKEY=$ENCRYPTION_KEY
+XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=$ENCRYPTION_KEY
+XPACK_REPORTING_ENCRYPTIONKEY=$ENCRYPTION_KEY
 "
 
 MONITORING_ENV_CONTENT="
@@ -92,6 +105,19 @@ ELASTICSEARCH_URL=https://localhost:9200
 NODE_EXTRA_CA_CERTS=docker/services/elasticsearch/certs/ca/ca.crt
 "
 
+MONITORING_ENV_CONTENT="
+DATA_SOURCE_NAME=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
+
+ES_USERNAME=$ES_USERNAME
+ES_PASSWORD=$ELASTIC_PASSWORD
+
+GF_SECURITY_ADMIN_USER=$GRAFANA_ADMIN_USER
+GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_ADMIN_PASSWORD
+GF_SERVER_ROOT_URL=https://grafana.$DEVELOPMENT_DATABASE_NAME
+GF_USERS_ALLOW_SIGN_UP='false'
+GF_AUTH_ANONYMOUS_ENABLED='false'
+"
+
 mkdir -p "$DEVELOPMENT_PATH/$DOCKER_SECRETS_PATH"
 printf "%s" "$DEVELOPMENT_ENV_CONTENT" > "$DEVELOPMENT_ENV"
 print_done "generated development environment"
@@ -103,3 +129,7 @@ print_done "generated staging environment"
 mkdir -p "$PRODUCTION_PATH/$DOCKER_SECRETS_PATH"
 printf "%s" "$PRODUCTION_ENV_CONTENT" > "$PRODUCTION_ENV"
 print_done "generated production environment"
+
+mkdir -p "$MONITORING_PATH/$DOCKER_SECRETS_PATH"
+printf "%s" "$MONITORING_ENV_CONTENT" > "$MONITORING_ENV"
+print_done "generated monitoring environment"

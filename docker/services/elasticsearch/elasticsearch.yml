@@ -1,5 +1,5 @@
 node.name: elasticsearch
-cluster.name: trans-cluster
+cluster.name: BDE-cluster
 discovery.type: single-node
 network.host: 0.0.0.0
 
