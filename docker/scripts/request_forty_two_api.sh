@@ -11,4 +11,8 @@ printf "\e[0;1m─────────────────────�
 printf "\n"
 
 export FORTYTWO_CLIENT_ID=$(read_with_prompt "Enter your 42 client ID");
-export FORTYTWO_CLIENT_SECRET=$(read_with_prompt "Enter your 42 client secret");
+
+printf "\e[0;1m%s\e[0m: " "Enter your 42 client secret" >&2
+read -r -s FORTYTWO_CLIENT_SECRET
+printf "\n" >&2
+export FORTYTWO_CLIENT_SECRET

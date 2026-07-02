@@ -1,0 +1,14 @@
+server.name: kibana
+server.host: 0.0.0.0
+server.publicBaseUrl: 'https://kibana.${NEXT_PUBLIC_BASE_URL}'
+
+elasticsearch.hosts:
+    - https://elasticsearch:9200
+elasticsearch.username: kibana_system
+elasticsearch.password: '${ELASTICSEARCH_PASSWORD}'
+elasticsearch.ssl.certificateAuthorities:
+    - config/certs/ca/ca.crt
+
+xpack.security.encryptionKey: '${XPACK_SECURITY_ENCRYPTIONKEY}'
+xpack.encryptedSavedObjects.encryptionKey: '${XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY}'
+xpack.reporting.encryptionKey: '${XPACK_REPORTING_ENCRYPTIONKEY}'

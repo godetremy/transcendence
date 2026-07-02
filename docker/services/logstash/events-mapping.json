@@ -1,0 +1,67 @@
+{
+	"settings": {
+		"number_of_shards": 1,
+		"number_of_replicas": 0,
+		"analysis": {
+			"filter": {
+				"french_elision": {
+					"type": "elision",
+					"articles_case": true,
+					"articles": ["l", "m", "t", "qu", "n", "s", "j", "d", "c", "jusqu", "quoiqu", "lorsqu", "puisqu"]
+				},
+				"french_stop": {
+					"type": "stop",
+					"stopwords": "_french_"
+				},
+				"french_stemmer": {
+					"type": "stemmer",
+					"language": "light_french"
+				}
+			},
+			"analyzer": {
+				"french_custom": {
+					"type": "custom",
+					"tokenizer": "standard",
+					"filter": ["french_elision", "lowercase", "french_stop", "asciifolding", "french_stemmer"]
+				},
+				"french_fuzzy": {
+					"type": "custom",
+					"tokenizer": "standard",
+					"filter": ["french_elision", "lowercase", "asciifolding"]
+				}
+			}
+		}
+	},
+	"mappings": {
+		"properties": {
+			"id": { "type": "keyword" },
+			"organization_id": { "type": "keyword" },
+			"title": {
+				"type": "text",
+				"analyzer": "french_custom",
+				"fields": {
+					"autocomplete": { "type": "search_as_you_type", "analyzer": "french_custom" },
+					"fuzzy": { "type": "text", "analyzer": "french_fuzzy" }
+				}
+			},
+			"subtitle": { "type": "text", "analyzer": "french_custom" },
+			"description": {
+				"type": "text",
+				"analyzer": "french_custom",
+				"fields": {
+					"autocomplete": { "type": "search_as_you_type", "analyzer": "french_custom" },
+					"fuzzy": { "type": "text", "analyzer": "french_fuzzy" }
+				}
+			},
+			"location": {
+				"type": "text",
+				"analyzer": "french_custom",
+				"fields": { "raw": { "type": "keyword" } }
+			},
+			"start_at": { "type": "date" },
+			"end_at": { "type": "date" },
+			"created_at": { "type": "date" },
+			"update_at": { "type": "date" }
+		}
+	}
+}
