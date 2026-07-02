@@ -71,8 +71,8 @@ export async function POST(
 		}
 
 		const data = await parseBody<CreateOrUpdateEventType>(req, CreateEventSchema);
-		await createEvent(data, org_id, {});
+		const event = await createEvent(data, org_id, {});
 
-		return NextResponse.json({ success: true });
+		return NextResponse.json(formatPrivateEvent<object>(event));
 	});
 }

@@ -28,12 +28,20 @@ import { useDropzone } from 'react-dropzone';
 import { InputDatePicker } from '@/components/globals/DatePicker/DatePicker';
 import { AnimatePresence, motion } from 'motion/react';
 import fr from '@/locales/mdxeditor-fr.json';
+import { useMutation } from '@tanstack/react-query';
+import { createEvent } from '@/lib/fetcher/events';
+import { useOrganizations } from '@/contexts/OrganizationsContext';
 
 export default function Page() {
 	const [showRegisterLimit, setShowRegisterLimit] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date());
+	const [title, setTitle] = useState<string>('');
+	const [location, setLocation] = useState<string | null>(null);
+	const [description, setDescription] = useState<string | null>(null);
 	const [registrationLimit, setRegistrationLimit] = useState(40);
+	const orgctx = useOrganizations();
+	const [organization, setOrganization] = useState(orgctx.getCurrentOrganization()!);
 
 	const { getRootProps, getInputProps } = useDropzone({
 		onDrop: () => {},
@@ -46,6 +54,8 @@ export default function Page() {
 		},
 	});
 
+	const create = useMutation(createEvent(organization?.id));
+
 	return (
 		<article className={styles.main_container}>
 			<section className={styles.edit_section}>
@@ -54,7 +64,22 @@ export default function Page() {
 						<ChevronLeft />
 					</button>
 					<span>Nouvelle événement</span>
-					<button>
+					<button
+						onClick={() => {
+							create.mutate({
+								event: {
+									title: title,
+									subtitle: '',
+									description: description,
+									max_registration: 0,
+									location: location,
+									image: '',
+									start_at: startDate,
+									end_at: endDate,
+								},
+							});
+						}}
+					>
 						<Plus />
 						Ajouter
 					</button>
@@ -64,7 +89,11 @@ export default function Page() {
 						<input {...getInputProps()} />
 					</label>
 					<label className={styles.title}>
-						<input type="text" placeholder={"Nom de l'événement"} />
+						<input
+							type="text"
+							placeholder={"Nom de l'événement"}
+							onChange={(e) => setTitle(e.target.value)}
+						/>
 						<button>Modifer le rendu de l&#39;image</button>
 					</label>
 					<div className={styles.date_picker}>
@@ -86,7 +115,12 @@ export default function Page() {
 					</div>
 					<label className={styles.location} htmlFor={'location'}>
 						<MapPin />
-						<input type={'text'} id={'location'} placeholder={'Aucun emplacement'} />
+						<input
+							type={'text'}
+							id={'location'}
+							placeholder={'Aucun emplacement'}
+							onChange={(e) => setLocation(e.target.value)}
+						/>
 					</label>
 					<div className={styles.registration}>
 						<Users2 size={22} />
@@ -183,6 +217,7 @@ export default function Page() {
 									result = result.replace(`{{${k}}}`, String(v));
 								}
 							}
+							setDescription(result);
 							return result;
 						}}
 					/>

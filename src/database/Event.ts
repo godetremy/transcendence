@@ -47,8 +47,8 @@ const createEvent = async <T extends Prisma.eventsInclude>(
 	data: CreateOrUpdateEventType,
 	organization_id: string,
 	include: T
-): Promise<void> => {
-	await prisma.events.create({
+): Promise<Prisma.eventsGetPayload<{ include: T }>> => {
+	return prisma.events.create({
 		data: {
 			organization_id: organization_id,
 			...data,
