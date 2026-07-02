@@ -4,12 +4,16 @@ services:
     elasticsearch:
         ports:
             - '127.0.0.1:9200:9200'
+        env_file:
+            - ./development/secrets/.env
     nginx:
         volumes:
             - ./development/certificates:/etc/nginx/certificates
         ports:
             - '127.0.0.1:80:80'
             - '127.0.0.1:443:443'
+        env_file:
+            - ./development/secrets/.env
         develop:
             watch:
                 - action: sync+exec
@@ -35,3 +39,11 @@ services:
     seaweed-volume:
         ports:
             - '127.0.0.1:8080:8080'
+    
+    kibana:
+        env_file:
+            - ./development/secrets/.env
+    
+    logstash:
+        env_file:
+            - ./development/secrets/.env

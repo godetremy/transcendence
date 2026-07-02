@@ -5,6 +5,7 @@ export MKCERT='mkcert'
 export DEVELOPMENT_PATH='./docker/development'
 export STAGING_PATH='./docker/staging'
 export PRODUCTION_PATH='./docker/production'
+export MONITORING_PATH='./docker/monitoring'
 
 export DOCKER_SECRETS_PATH='secrets'
 export DOCKER_CERTIFICATES_PATH='certificates'
@@ -14,6 +15,7 @@ export ELASTICSEARCH_CERTS_PATH='./docker/services/elasticsearch/certs'
 export DEVELOPMENT_ENV="$DEVELOPMENT_PATH/$DOCKER_SECRETS_PATH/.env"
 export STAGING_ENV="$STAGING_PATH/$DOCKER_SECRETS_PATH/.env"
 export PRODUCTION_ENV="$PRODUCTION_PATH/$DOCKER_SECRETS_PATH/.env"
+export MONITORING_ENV="$MONITORING_PATH/$DOCKER_SECRETS_PATH/.env"
 
 export PRISMA_MIGRATION_FOLDER='src/database/prisma/migrations'
 
