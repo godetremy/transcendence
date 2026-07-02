@@ -18,13 +18,39 @@ export default function Page() {
 	const organizationCtx = useOrganizations();
 	const organization = organizationCtx.getCurrentOrganization()!;
 	const user = useUser();
-	const { openModal, closeModal } = useModal();
+	const { openModal } = useModal();
 	const router = useRouter();
 
 	const { data, isLoading, isError, error } = useQuery(getOrganizationFollowerNumber(organization.id));
 
 	if (isLoading) return <Loader />;
 	if (isError || data === undefined) return <ErrorState error={error} />;
+
+	const transferOwnership = () => {
+		openModal({
+			title: 'Transférer la propriété',
+			message:
+				"Choisis un membre de ton organisation à qui transmettre la propriété de l'organisation. Tu perdras tes droits d'administrateur et seules ses permissions compteront désormais.",
+			textInput: {
+				label: 'Membre',
+				placeholder: 'Rechercher un membre',
+				onRequestCompletion: async (value) => {
+					console.log('searching for ', value);
+					return [];
+				},
+			},
+			buttons: [
+				{ text: 'Je conserve mes droits' },
+				{
+					text: 'Transférer la propriété',
+					negative: true,
+					onClick: (event) => {
+						event.preventClosing();
+					},
+				},
+			],
+		});
+	};
 
 	const leaveOrganisation = () => {
 		openModal({
@@ -35,14 +61,12 @@ export default function Page() {
 			buttons: [
 				{
 					text: 'Finalement je reste',
-					onClick: closeModal,
 				},
 				{
 					text: "Quitter l'organisation",
 					negative: true,
 					onClick: () => {
 						deletef(`/organization/${organization.id}/members/me`, {}).then(() => {
-							closeModal();
 							router.replace('/app/me');
 						});
 					},
@@ -90,7 +114,7 @@ export default function Page() {
 							title={'Transférer la propriété'}
 							negative={true}
 							showChevron={false}
-							onPress={() => {}}
+							onPress={transferOwnership}
 						/>
 					)}
 					<ListItem
