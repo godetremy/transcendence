@@ -6,14 +6,23 @@ import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import Image from 'next/image';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
+import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 
 export function OrganizationFollowersList({ org_id }: { org_id: string }) {
-	const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+	const { data, isLoading, isError, error, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(
 		getOrganizationFollowers(org_id)
 	);
 
 	if (isLoading) return <Loader />;
 	if (isError || data === undefined) return <ErrorState error={error} />;
+	if (data.pages.length === 0 || data.pages[0].data.length === 0)
+		return (
+			<EmptyState
+				title={"Tu n'as aucun follower"}
+				description={'Tu verras ici les étudiants qui suivent de près ton organisation...'}
+			/>
+		);
 
 	return (
 		<>
@@ -37,13 +46,7 @@ export function OrganizationFollowersList({ org_id }: { org_id: string }) {
 					))
 				)}
 			</ListContainer>
-			{isFetchingNextPage && <p>Chargement...</p>}
-
-			{hasNextPage && (
-				<button className={styles.next} onClick={() => {}} disabled={isFetchingNextPage}>
-					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
-				</button>
-			)}
+			{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
 		</>
 	);
 }
