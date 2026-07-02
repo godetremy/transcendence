@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
-import { AcceptInvitation, getOrganizationInvites } from '@/lib/fetcher/organization';
+import { approveOrganization, getPendingApproveOrganization } from '@/lib/fetcher/organization';
 import { Loader } from '@/components/globals/Loader/Loader';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import ListItem from '@/components/globals/ListItem/ListItem';
@@ -8,13 +8,17 @@ import { useState } from 'react';
 import styles from './page.module.scss';
 import { Check, X } from 'lucide-react';
 import { ListSectionTitle } from '@/components/globals/ListSectionTitle/ListSectionTitle';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
+import Image from 'next/image';
+import { PrivateOrganization } from '@/types/Organization';
 
 function InviteActions({ org_id }: { org_id: string }) {
 	const [loading, setLoading] = useState(false);
-	const invite = useMutation(AcceptInvitation(org_id));
+	const { mutate } = useMutation(approveOrganization(org_id));
+
 	const sendAction = (accept: boolean) => {
 		setLoading(true);
-		invite.mutate({ accept });
+		mutate({ accept });
 		setLoading(false);
 	};
 
@@ -36,46 +40,46 @@ function InviteActions({ org_id }: { org_id: string }) {
 	);
 }
 
-export function OrganizationInvitesList() {
-	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useInfiniteQuery(getOrganizationInvites());
+export function PendingApproveOrganizationList() {
+	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+		getPendingApproveOrganization()
+	);
 
 	if (data && data.pages[0].data.length === 0) return null;
 
-	const formatDate = (date: string) => {
-		const d = new Date(date);
-		return `Invitation reçu le ${d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+	const formatDescription = (organization: PrivateOrganization<object>) => {
+		const d = new Date(organization.created_at);
+		return `Crée par ${organization.owner_id} le ${d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}`;
 	};
 
 	return (
 		<>
-			<ListSectionTitle>Invitations</ListSectionTitle>
+			<ListSectionTitle>Demandes d&#39;approbations d&#39;organisation</ListSectionTitle>
 			{isLoading ? (
 				<Loader />
 			) : isError || data === undefined ? (
 				<ErrorState error={error} />
 			) : (
 				<ListContainer>
-					{data.pages.map((row) =>
-						row.data.map((invitation, i) => (
+					{data.pages.map((row, j) =>
+						row.data.map((organization, i) => (
 							<ListItem
 								key={i}
-								title={invitation.organization.name}
-								description={formatDate(invitation.invited_at)}
+								title={organization.name}
+								description={formatDescription(organization)}
 								showChevron={false}
 								hoverEffect={false}
 								leftElement={
-									<div
-										style={{
-											width: 8,
-											height: 8,
-											backgroundColor: 'var(--color-primary-pink)',
-											borderRadius: 10,
-										}}
+									<Image
+										src={organization.logo}
+										width={35}
+										height={35}
+										alt={`${organization.name} logo`}
+										style={{ borderRadius: 5, border: '1px solid var(--color-border-dark)' }}
 									/>
 								}
-								rightElement={<InviteActions org_id={invitation.organization.id} />}
-								last={i === data.pages.length - 1}
+								rightElement={<InviteActions org_id={organization.id} />}
+								last={i === row.data.length - 1 && j === data.pages.length - 1}
 							/>
 						))
 					)}
@@ -83,11 +87,7 @@ export function OrganizationInvitesList() {
 			)}
 			{isFetchingNextPage && <Loader />}
 
-			{hasNextPage && (
-				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
-				</button>
-			)}
+			{hasNextPage && <ShowMoreButton onClick={fetchNextPage} loading={isFetchingNextPage} />}
 		</>
 	);
 }
