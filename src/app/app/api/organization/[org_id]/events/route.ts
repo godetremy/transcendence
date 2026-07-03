@@ -36,13 +36,20 @@ export async function GET(
 		const pagination = getPaginationParams(searchParams);
 
 		const count = await countEventsByFilter();
-		const value = await getEventsByFilterToOrganization({ organization: true }, org_id, date, sorting, pagination);
+		const value = await getEventsByFilterToOrganization(
+			{ organization: true, event_registration: true },
+			org_id,
+			date,
+			sorting,
+			pagination
+		);
 
 		return NextResponse.json(
 			generatePaginationResponse(
 				value.map(
 					formatPrivateEvent<{
 						organization: true;
+						event_registration: true;
 					}>
 				),
 				count,
@@ -71,8 +78,8 @@ export async function POST(
 		}
 
 		const data = await parseBody<CreateOrUpdateEventType>(req, CreateEventSchema);
-		await createEvent(data, org_id, {});
+		const event = await createEvent(data, org_id, user.full_name ?? '', {});
 
-		return NextResponse.json({ success: true });
+		return NextResponse.json(formatPrivateEvent<object>(event));
 	});
 }

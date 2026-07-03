@@ -78,6 +78,7 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 				loading={addingMembers}
 				onAccept={addMembers}
 				disabledAccept={membersSelection.length === 0}
+				close={close}
 			/>
 			<section className={styles.searchbar}>
 				<input
@@ -98,7 +99,7 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 						<Loader size={24} />
 					) : (
 						<>
-							{members.length === 0 ? (
+							{!members || members.length === 0 ? (
 								<EmptyState
 									title={hasSearch ? 'Aucun résultats' : 'Fait une recherche pour commencer'}
 									description={

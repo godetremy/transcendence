@@ -20,9 +20,9 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 		include: include,
 		where: {
 			organization_id: organization_id,
-			...dateToPrisma(time ?? DEFAULT_DATEOPTION),
+			//...dateToPrisma(time ?? DEFAULT_DATEOPTION),
 		},
-		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
+		//...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 };
@@ -46,12 +46,14 @@ const getEventsByFilter = async <T extends Prisma.eventsInclude>(
 const createEvent = async <T extends Prisma.eventsInclude>(
 	data: CreateOrUpdateEventType,
 	organization_id: string,
+	owner: string,
 	include: T
-): Promise<void> => {
-	await prisma.events.create({
+): Promise<Prisma.eventsGetPayload<{ include: T }>> => {
+	return prisma.events.create({
 		data: {
 			organization_id: organization_id,
 			...data,
+			owner: owner,
 		},
 		include: include,
 	});

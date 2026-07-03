@@ -29,6 +29,11 @@ export interface FindUser {
 	q: string | null;
 }
 
+export interface ElasticSearchUser {
+	full_name: string;
+	mail: string;
+}
+
 export interface AgentRequest extends PublicUser {
 	reason: string | null;
 }

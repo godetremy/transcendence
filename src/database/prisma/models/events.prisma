@@ -5,6 +5,7 @@ model events {
 
 	image							String
 	title							String
+	owner							String
 	subtitle						String?
 	description						String?
 

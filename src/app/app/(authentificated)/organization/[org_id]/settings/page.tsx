@@ -11,8 +11,6 @@ import { useUser } from '@/contexts/UserContext';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import { useQuery } from '@tanstack/react-query';
 import { getOrganizationFollowerNumber } from '@/lib/fetcher/organization';
-import { Loader } from '@/components/globals/Loader/Loader';
-import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -21,10 +19,7 @@ export default function Page() {
 	const { openModal } = useModal();
 	const router = useRouter();
 
-	const { data, isLoading, isError, error } = useQuery(getOrganizationFollowerNumber(organization.id));
-
-	if (isLoading) return <Loader />;
-	if (isError || data === undefined) return <ErrorState error={error} />;
+	const { data, isLoading } = useQuery(getOrganizationFollowerNumber(organization.id));
 
 	const transferOwnership = () => {
 		openModal({
@@ -102,7 +97,11 @@ export default function Page() {
 					<ListItem
 						icon={UsersRound}
 						title={'Followers'}
-						description={`${data.number} personnes suivent ton organisation`}
+						description={
+							isLoading || data === undefined
+								? 'Étudiants qui suivent ton organization'
+								: `${data.number} personnes suivent ton organisation`
+						}
 						onPress={() => router.push('settings/followers')}
 						last
 					/>

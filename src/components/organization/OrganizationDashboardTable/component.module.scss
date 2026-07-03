@@ -1,15 +1,5 @@
 @use '../../../app/supports';
 
-@keyframes headerFakeFixed {
-	from {
-		translate: 0 0;
-	}
-
-	to {
-		translate: 0 -110px;
-	}
-}
-
 .main_container {
 	padding-top: 170px;
 	width: fit-content;
@@ -20,10 +10,7 @@
 	position: fixed;
 	top: 0;
 	left: 370px;
-	right: 0;
-	animation: headerFakeFixed linear auto both;
-	animation-timeline: scroll();
-	animation-range: 0 110px;
+	width: calc(100vw - 370px);
 	background-color: var(--color-primary-black);
 	z-index: 100;
 }
@@ -162,12 +149,14 @@
 
 @media (max-width: supports.$breakpoints-laptop) {
 	.fixed_header {
+		width: calc(100vw - 70px);
 		left: 70px;
 	}
 }
 
 @media (max-width: supports.$breakpoints-tablets) {
 	.fixed_header {
+		width: 100vw;
 		left: 0;
 
 		.search_bar {
