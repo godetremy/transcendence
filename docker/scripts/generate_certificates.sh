@@ -54,6 +54,8 @@ generate_elasticsearch_certificates() {
 		-subj '/CN=trans-ca' -out "$ca_dir/ca.crt"
 
 	_generate_es_server_cert elasticsearch 'DNS:elasticsearch,DNS:localhost,IP:127.0.0.1'
+	_generate_es_server_cert logstash 'DNS:logstash'
+	_generate_es_server_cert filebeat 'DNS:filebeat'
 
 	find "$ELASTICSEARCH_CERTS_PATH" -type d -exec chmod 755 {} \;
 	find "$ELASTICSEARCH_CERTS_PATH" -type f -exec chmod 644 {} \;

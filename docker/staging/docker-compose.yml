@@ -4,13 +4,33 @@ services:
     elasticsearch:
         ports:
             - '127.0.0.1:9200:9200'
+        env_file:
+            - ./staging/secrets/.env
+
+    kibana:
+        env_file:
+            - ./staging/secrets/.env
+
+    logstash:
+        env_file:
+            - ./staging/secrets/.env
 
     nginx:
+        depends_on:
+            - node
         volumes:
             - ./staging/certificates:/etc/nginx/certificates
+        env_file:
+            - ./staging/secrets/.env
+        environment:
+            NODE_UPSTREAM: node:3000
         ports:
             - '80:80'
             - '443:443'
+
+    node:
+        env_file:
+            - ./staging/secrets/.env
 
     postgres:
         env_file:

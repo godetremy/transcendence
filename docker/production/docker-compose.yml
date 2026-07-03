@@ -4,13 +4,33 @@ services:
     elasticsearch:
         ports:
             - '127.0.0.1:9200:9200'
+        env_file:
+            - ./production/secrets/.env
+
+    kibana:
+        env_file:
+            - ./production/secrets/.env
+
+    logstash:
+        env_file:
+            - ./production/secrets/.env
 
     nginx:
+        depends_on:
+            - node
         volumes:
             - ./production/certificates:/etc/nginx/certificates
+        env_file:
+            - ./production/secrets/.env
+        environment:
+            NODE_UPSTREAM: node:3000
         ports:
             - '80:80'
             - '443:443'
+
+    node:
+        env_file:
+            - ./production/secrets/.env
 
     postgres:
         env_file:
