@@ -4,6 +4,7 @@ import createMDX from '@next/mdx';
 const withMDX = createMDX({});
 
 const nextConfig: NextConfig = {
+	output: 'standalone',
 	images: {
 		unoptimized: true,
 	},

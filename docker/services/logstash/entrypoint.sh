@@ -18,4 +18,11 @@ if [ "$(curl -s -o /dev/null -w '%{http_code}' --cacert "$CA" -u "$AUTH" "$ES/ev
 		--data-binary @/usr/share/logstash/config/events-mapping.json
 fi
 
-exec /usr/local/bin/docker-entrypoint logstash -f /usr/share/logstash/config/events.conf
+curl -fsS --cacert "$CA" -u "$AUTH" -X PUT "$ES/_ilm/policy/logs-policy" \
+	-H 'Content-Type: application/json' \
+	--data-binary @/usr/share/logstash/config/logs-ilm-policy.json >/dev/null
+curl -fsS --cacert "$CA" -u "$AUTH" -X PUT "$ES/_index_template/bde-logs" \
+	-H 'Content-Type: application/json' \
+	--data-binary @/usr/share/logstash/config/logs-template.json >/dev/null
+
+exec /usr/local/bin/docker-entrypoint logstash

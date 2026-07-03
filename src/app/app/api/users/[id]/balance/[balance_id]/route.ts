@@ -21,7 +21,6 @@ export async function GET(
 		const number = await countTransaction(balance_id);
 		const list = await getTransactions({}, balance_id, pagination);
 
-		console.log(balance_id, list, number);
 		return NextResponse.json(generatePaginationResponse(list.map(formatTransaction), number, pagination));
 	});
 }

@@ -5,12 +5,15 @@ import styles from './page.module.scss';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { Handshake, KeyRound, LogOut, Paintbrush, UsersRound } from 'lucide-react';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
-import { deletef } from '@/lib/fetcher';
+import { deletef, get } from '@/lib/fetcher';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/contexts/UserContext';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import { useQuery } from '@tanstack/react-query';
 import { getOrganizationFollowerNumber } from '@/lib/fetcher/organization';
+import Image from 'next/image';
+import { PaginationResponse } from '@/types/PaginationResponse';
+import { OrganizationMembers } from '@/types/OrganizationMembers';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -29,9 +32,22 @@ export default function Page() {
 			textInput: {
 				label: 'Membre',
 				placeholder: 'Rechercher un membre',
-				onRequestCompletion: async (value) => {
-					console.log('searching for ', value);
-					return [];
+				onRequestCompletion: async (query) => {
+					const res = await get<PaginationResponse<OrganizationMembers<{ user: true; permission: true }>>>(
+						`/organization/${organization.id}/members?exclude=${user?.id}false&q=${encodeURI(query.trim())}`
+					);
+					return res.data.map((u) => ({
+						text: u.user.full_name ?? '',
+						leftElement: (
+							<Image
+								src={u.user.profile_picture}
+								width={30}
+								height={30}
+								alt={`Photo de ${u.user.full_name}`}
+								className={styles.profilePicture}
+							/>
+						),
+					}));
 				},
 			},
 			buttons: [

@@ -1,0 +1,4 @@
+- pipeline.id: events
+  path.config: '/usr/share/logstash/config/events.conf'
+- pipeline.id: logs
+  path.config: '/usr/share/logstash/config/logs.conf'
