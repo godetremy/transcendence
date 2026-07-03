@@ -3,6 +3,7 @@ import { PrivateOrganization, PublicOrganization } from './Organization';
 import { RegisteredEventPrivate } from './RegisteredEvent';
 
 export interface PrivateEvent<T = object> {
+	register_number: T extends { organization: unknown } ? number : never;
 	owner: string;
 	id: string;
 	title: string;

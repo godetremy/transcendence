@@ -36,13 +36,20 @@ export async function GET(
 		const pagination = getPaginationParams(searchParams);
 
 		const count = await countEventsByFilter();
-		const value = await getEventsByFilterToOrganization({ organization: true }, org_id, date, sorting, pagination);
+		const value = await getEventsByFilterToOrganization(
+			{ organization: true, event_registration: true },
+			org_id,
+			date,
+			sorting,
+			pagination
+		);
 
 		return NextResponse.json(
 			generatePaginationResponse(
 				value.map(
 					formatPrivateEvent<{
 						organization: true;
+						event_registration: true;
 					}>
 				),
 				count,

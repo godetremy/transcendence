@@ -71,7 +71,7 @@ export default function Page() {
 									title: title,
 									subtitle: '',
 									description: description,
-									max_registration: 0,
+									max_registration: registrationLimit,
 									location: location,
 									image: '',
 									start_at: startDate,

@@ -35,6 +35,10 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 		end_at: end_at.toISOString(),
 		created_at: created_at.toISOString(),
 		update_at: update_at.toISOString(),
+		register_number:
+			'event_registration' in row && row.event_registration
+				? (row.event_registration as Prisma.event_registrationsGetPayload<object>[]).length
+				: undefined,
 		organization:
 			'organization' in row && row.organization
 				? formatPrivateOrganization<object>(row.organization as Prisma.organizationsGetPayload<object>)

@@ -10,7 +10,7 @@ export default function Page() {
 	const router = useRouter();
 	const orgctx = useOrganizations();
 	const [organization, setOrganization] = useState(orgctx.getCurrentOrganization()!);
-	
+
 	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
 		getEvents(organization.id)
 	);
@@ -47,23 +47,25 @@ export default function Page() {
 		return `${d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}`;
 	};
 
-	 const listEvents = useMemo(() => {
-        if (!data) return [];
+	const listEvents = useMemo(() => {
+		if (!data) return [];
 
-        return data.pages.flatMap((page) =>
-            page.data.map((event) => ({
-                key: event.id,
-                children: [
-                    <p key={1}>{formatDate(event.start_at)}</p>,
-                    <p key={2}>{event.title}</p>,
-                    <p key={3}>{formatDate(event.created_at)}</p>,
-                    <p key={4}>{event.owner}</p>,
-                    <p key={5}>{event.max_registration == 0 ? '∞' : event.max_registration}</p>,
-                    <p key={6}>demo</p>,
-                ],
-            }))
-        );
-    }, [data]);
+		return data.pages.flatMap((page) =>
+			page.data.map((event) => ({
+				key: event.id,
+				children: [
+					<p key={1}>{formatDate(event.start_at)}</p>,
+					<p key={2}>{event.title}</p>,
+					<p key={3}>{formatDate(event.created_at)}</p>,
+					<p key={4}>{event.owner}</p>,
+					<p key={5}>
+						{event.register_number}/{event.max_registration == 0 ? '∞' : event.max_registration}
+					</p>,
+					<p key={6}>demo</p>,
+				],
+			}))
+		);
+	}, [data]);
 
 	console.log(data);
 
