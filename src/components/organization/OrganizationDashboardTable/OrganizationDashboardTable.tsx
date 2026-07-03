@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 import { AnimatePresence } from 'motion/react';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
+import { useScroll, useTransform } from 'framer-motion';
 
 export interface OrganizationDashboardTableColumn {
 	text: string;
@@ -43,9 +44,13 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 		setSelected([]);
 	};
 
+	const { scrollY } = useScroll();
+
+	const translateY = useTransform(scrollY, [0, 110], [0, -110]);
+
 	return (
 		<section className={styles.main_container}>
-			<div className={styles.fixed_header}>
+			<motion.div className={styles.fixed_header} style={{ translateY }}>
 				<OrganizationDashboardHeader {...props.header} />
 				<div className={styles.header_container}>
 					<div className={styles.search_bar}>
@@ -88,7 +93,7 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 						)}
 					</div>
 				</div>
-			</div>
+			</motion.div>
 			<table className={styles.table}>
 				<thead>
 					<tr>
