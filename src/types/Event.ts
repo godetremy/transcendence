@@ -3,6 +3,7 @@ import { PrivateOrganization, PublicOrganization } from './Organization';
 import { RegisteredEventPrivate } from './RegisteredEvent';
 
 export interface PrivateEvent<T = object> {
+	owner: string;
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -20,6 +21,7 @@ export interface PrivateEvent<T = object> {
 }
 
 export interface PublicEvent<T = object> {
+	owner: string;
 	id: string;
 	title: string;
 	subtitle: string | null;

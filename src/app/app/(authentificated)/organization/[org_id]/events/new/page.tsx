@@ -166,9 +166,12 @@ export default function Page() {
 					</div>
 
 					<MDXEditor
-						markdown="# Hello world\n![demo](https://picsum.photos/200/300)"
+						markdown={description ?? ''}
 						className={styles.mdeditor}
 						contentEditableClassName={'event_markdown'}
+						onChange={(newMarkdown) => {
+							setDescription(newMarkdown);
+						}}
 						plugins={[
 							headingsPlugin(),
 							quotePlugin(),
@@ -217,7 +220,6 @@ export default function Page() {
 									result = result.replace(`{{${k}}}`, String(v));
 								}
 							}
-							setDescription(result);
 							return result;
 						}}
 					/>

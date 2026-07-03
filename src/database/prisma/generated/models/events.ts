@@ -39,6 +39,7 @@ export type EventsMinAggregateOutputType = {
   organization_id: string | null
   image: string | null
   title: string | null
+  owner: string | null
   subtitle: string | null
   description: string | null
   max_registration: number | null
@@ -55,6 +56,7 @@ export type EventsMaxAggregateOutputType = {
   organization_id: string | null
   image: string | null
   title: string | null
+  owner: string | null
   subtitle: string | null
   description: string | null
   max_registration: number | null
@@ -71,6 +73,7 @@ export type EventsCountAggregateOutputType = {
   organization_id: number
   image: number
   title: number
+  owner: number
   subtitle: number
   description: number
   max_registration: number
@@ -97,6 +100,7 @@ export type EventsMinAggregateInputType = {
   organization_id?: true
   image?: true
   title?: true
+  owner?: true
   subtitle?: true
   description?: true
   max_registration?: true
@@ -113,6 +117,7 @@ export type EventsMaxAggregateInputType = {
   organization_id?: true
   image?: true
   title?: true
+  owner?: true
   subtitle?: true
   description?: true
   max_registration?: true
@@ -129,6 +134,7 @@ export type EventsCountAggregateInputType = {
   organization_id?: true
   image?: true
   title?: true
+  owner?: true
   subtitle?: true
   description?: true
   max_registration?: true
@@ -232,6 +238,7 @@ export type EventsGroupByOutputType = {
   organization_id: string
   image: string
   title: string
+  owner: string
   subtitle: string | null
   description: string | null
   max_registration: number | null
@@ -271,6 +278,7 @@ export type eventsWhereInput = {
   organization_id?: Prisma.StringFilter<"events"> | string
   image?: Prisma.StringFilter<"events"> | string
   title?: Prisma.StringFilter<"events"> | string
+  owner?: Prisma.StringFilter<"events"> | string
   subtitle?: Prisma.StringNullableFilter<"events"> | string | null
   description?: Prisma.StringNullableFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableFilter<"events"> | number | null
@@ -290,6 +298,7 @@ export type eventsOrderByWithRelationInput = {
   organization_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   max_registration?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -314,6 +323,7 @@ export type eventsWhereUniqueInput = Prisma.AtLeast<{
   organization_id?: Prisma.StringFilter<"events"> | string
   image?: Prisma.StringFilter<"events"> | string
   title?: Prisma.StringFilter<"events"> | string
+  owner?: Prisma.StringFilter<"events"> | string
   subtitle?: Prisma.StringNullableFilter<"events"> | string | null
   description?: Prisma.StringNullableFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableFilter<"events"> | number | null
@@ -332,6 +342,7 @@ export type eventsOrderByWithAggregationInput = {
   organization_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   max_registration?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -356,6 +367,7 @@ export type eventsScalarWhereWithAggregatesInput = {
   organization_id?: Prisma.StringWithAggregatesFilter<"events"> | string
   image?: Prisma.StringWithAggregatesFilter<"events"> | string
   title?: Prisma.StringWithAggregatesFilter<"events"> | string
+  owner?: Prisma.StringWithAggregatesFilter<"events"> | string
   subtitle?: Prisma.StringNullableWithAggregatesFilter<"events"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableWithAggregatesFilter<"events"> | number | null
@@ -371,6 +383,7 @@ export type eventsCreateInput = {
   id?: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -389,6 +402,7 @@ export type eventsUncheckedCreateInput = {
   organization_id: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -405,6 +419,7 @@ export type eventsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -423,6 +438,7 @@ export type eventsUncheckedUpdateInput = {
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -440,6 +456,7 @@ export type eventsCreateManyInput = {
   organization_id: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -455,6 +472,7 @@ export type eventsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -470,6 +488,7 @@ export type eventsUncheckedUpdateManyInput = {
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -497,6 +516,7 @@ export type eventsCountOrderByAggregateInput = {
   organization_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_registration?: Prisma.SortOrder
@@ -517,6 +537,7 @@ export type eventsMaxOrderByAggregateInput = {
   organization_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_registration?: Prisma.SortOrder
@@ -533,6 +554,7 @@ export type eventsMinOrderByAggregateInput = {
   organization_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_registration?: Prisma.SortOrder
@@ -667,6 +689,7 @@ export type eventsCreateWithoutEvent_registrationInput = {
   id?: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -684,6 +707,7 @@ export type eventsUncheckedCreateWithoutEvent_registrationInput = {
   organization_id: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -715,6 +739,7 @@ export type eventsUpdateWithoutEvent_registrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -732,6 +757,7 @@ export type eventsUncheckedUpdateWithoutEvent_registrationInput = {
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -747,6 +773,7 @@ export type eventsCreateWithoutOrganizationInput = {
   id?: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -763,6 +790,7 @@ export type eventsUncheckedCreateWithoutOrganizationInput = {
   id?: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -809,6 +837,7 @@ export type eventsScalarWhereInput = {
   organization_id?: Prisma.StringFilter<"events"> | string
   image?: Prisma.StringFilter<"events"> | string
   title?: Prisma.StringFilter<"events"> | string
+  owner?: Prisma.StringFilter<"events"> | string
   subtitle?: Prisma.StringNullableFilter<"events"> | string | null
   description?: Prisma.StringNullableFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableFilter<"events"> | number | null
@@ -824,6 +853,7 @@ export type eventsCreateWithoutPhotos_albumInput = {
   id?: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -841,6 +871,7 @@ export type eventsUncheckedCreateWithoutPhotos_albumInput = {
   organization_id: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -872,6 +903,7 @@ export type eventsUpdateWithoutPhotos_albumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -889,6 +921,7 @@ export type eventsUncheckedUpdateWithoutPhotos_albumInput = {
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -904,6 +937,7 @@ export type eventsCreateManyOrganizationInput = {
   id?: string
   image: string
   title: string
+  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -919,6 +953,7 @@ export type eventsUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -935,6 +970,7 @@ export type eventsUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -951,6 +987,7 @@ export type eventsUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -998,6 +1035,7 @@ export type eventsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   organization_id?: boolean
   image?: boolean
   title?: boolean
+  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
@@ -1018,6 +1056,7 @@ export type eventsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   organization_id?: boolean
   image?: boolean
   title?: boolean
+  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
@@ -1036,6 +1075,7 @@ export type eventsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   organization_id?: boolean
   image?: boolean
   title?: boolean
+  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
@@ -1054,6 +1094,7 @@ export type eventsSelectScalar = {
   organization_id?: boolean
   image?: boolean
   title?: boolean
+  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
@@ -1065,7 +1106,7 @@ export type eventsSelectScalar = {
   update_at?: boolean
 }
 
-export type eventsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "image" | "title" | "subtitle" | "description" | "max_registration" | "location" | "start_at" | "end_at" | "photos_album_id" | "created_at" | "update_at", ExtArgs["result"]["events"]>
+export type eventsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "image" | "title" | "owner" | "subtitle" | "description" | "max_registration" | "location" | "start_at" | "end_at" | "photos_album_id" | "created_at" | "update_at", ExtArgs["result"]["events"]>
 export type eventsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   photos_album?: boolean | Prisma.events$photos_albumArgs<ExtArgs>
@@ -1093,6 +1134,7 @@ export type $eventsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     organization_id: string
     image: string
     title: string
+    owner: string
     subtitle: string | null
     description: string | null
     max_registration: number | null
@@ -1532,6 +1574,7 @@ export interface eventsFieldRefs {
   readonly organization_id: Prisma.FieldRef<"events", 'String'>
   readonly image: Prisma.FieldRef<"events", 'String'>
   readonly title: Prisma.FieldRef<"events", 'String'>
+  readonly owner: Prisma.FieldRef<"events", 'String'>
   readonly subtitle: Prisma.FieldRef<"events", 'String'>
   readonly description: Prisma.FieldRef<"events", 'String'>
   readonly max_registration: Prisma.FieldRef<"events", 'Int'>
