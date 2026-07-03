@@ -13,7 +13,7 @@ const adapter = new PrismaPg(pool);
 
 const globalForPrisma = global as unknown as { prisma: ReturnType<typeof createPrismaClient> };
 
-const addQuery = async (
+const addUserQuery = async (
 	result: PayloadToResult<$usersPayload<DefaultArgs>, RenameAndNestPayloadKeys<$usersPayload<DefaultArgs>>>
 ) => {
 	if (result?.id) {
@@ -27,6 +27,7 @@ const addQuery = async (
 		});
 	}
 };
+
 function createPrismaClient() {
 	const client = new PrismaClient({ adapter });
 
@@ -35,17 +36,17 @@ function createPrismaClient() {
 			users: {
 				async create({ args, query }) {
 					const result = await query(args);
-					await addQuery(result);
+					await addUserQuery(result);
 					return result;
 				},
 				async update({ args, query }) {
 					const result = await query(args);
-					await addQuery(result);
+					await addUserQuery(result);
 					return result;
 				},
 				async upsert({ args, query }) {
 					const result = await query(args);
-					await addQuery(result);
+					await addUserQuery(result);
 					return result;
 				},
 				async delete({ args, query }) {

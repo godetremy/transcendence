@@ -20,3 +20,10 @@
 	margin-top: -10px;
 	opacity: 0.6;
 }
+
+.profilePicture {
+	border: 1px solid var(--color-border-dark);
+	border-radius: 100%;
+	object-fit: cover;
+	aspect-ratio: 1;
+}
