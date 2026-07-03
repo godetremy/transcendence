@@ -4,7 +4,6 @@ import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { get, post } from '../fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
 
-
 const getEvents = (
 	org_id: string
 ): UseInfiniteQueryOptions<
