@@ -6,7 +6,7 @@ import { DefaultArgs, PayloadToResult, RenameAndNestPayloadKeys } from '@prisma/
 import { $usersPayload } from './generated/models';
 
 const pool = new Pool({
-	connectionString: `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@localhost:${process.env.DATABASE_PORT}/${process.env.POSTGRES_DB}`,
+	connectionString: `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.DATABASE_PORT}/${process.env.POSTGRES_DB}`,
 });
 
 const adapter = new PrismaPg(pool);
