@@ -3,6 +3,7 @@ $breakpoints-phone: 600px;
 $breakpoints-tablets: 768px;
 $breakpoints-laptop: 992px;
 $breakpoints-desktop: 1200px;
+$breakpoints-large: 1500px;
 
 @mixin hover($breakpoint) {
 	@media (hover: hover) and (min-width: calc(#{$breakpoint} + 1px)) {

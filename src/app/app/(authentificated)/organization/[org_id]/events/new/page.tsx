@@ -1,50 +1,63 @@
 'use client';
 import styles from './page.module.scss';
-import {
-	MDXEditor,
-	headingsPlugin,
-	listsPlugin,
-	quotePlugin,
-	thematicBreakPlugin,
-	toolbarPlugin,
-	UndoRedo,
-	BoldItalicUnderlineToggles,
-	markdownShortcutPlugin,
-	linkPlugin,
-	InsertImage,
-	InsertTable,
-	InsertThematicBreak,
-	BlockTypeSelect,
-	linkDialogPlugin,
-	tablePlugin,
-	imagePlugin,
-	CreateLink,
-	Separator,
-} from '@mdxeditor/editor';
+import { useEditor, EditorContent, useEditorState } from '@tiptap/react';
 import { Toggle } from '@/components/globals/Toggle/Toggle';
-import { CalendarFold, ChevronLeft, MapPin, Minus, Plus, Users2 } from 'lucide-react';
+import { CalendarFold, ChevronLeft, MapPin, Minus, Plus, ScanEye, Users2 } from 'lucide-react';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { InputDatePicker } from '@/components/globals/DatePicker/DatePicker';
 import { AnimatePresence, motion } from 'motion/react';
-import fr from '@/locales/mdxeditor-fr.json';
 import { useMutation } from '@tanstack/react-query';
 import { createEvent } from '@/lib/fetcher/events';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
+import StarterKit from '@tiptap/starter-kit';
+import { Markdown } from '@tiptap/markdown';
+import { ImageEditor } from '@/components/globals/ImageEditor/ImageEditor';
+import { CreateOrUpdateEventType } from '@/types/Event';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-	const [showRegisterLimit, setShowRegisterLimit] = useState(false);
-	const [startDate, setStartDate] = useState(new Date());
-	const [endDate, setEndDate] = useState(new Date());
-	const [title, setTitle] = useState<string>('');
-	const [location, setLocation] = useState<string | null>(null);
-	const [description, setDescription] = useState<string | null>(null);
-	const [registrationLimit, setRegistrationLimit] = useState(40);
+	const router = useRouter();
 	const orgctx = useOrganizations();
-	const [organization, setOrganization] = useState(orgctx.getCurrentOrganization()!);
+	const organization = orgctx.getCurrentOrganization()!;
+
+	const { mutate } = useMutation(createEvent(organization.id));
+
+	const [showImageEdit, setShowImageEdit] = useState(false);
+
+	const [event, setEvent] = useState<CreateOrUpdateEventType>({
+		title: '',
+		subtitle: '',
+		description: '',
+		max_registration: null,
+		location: '',
+		image: '',
+		start_at: new Date(),
+		end_at: new Date(),
+	});
+
+	const [image, setImage] = useState<File | null>(null);
+	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
+
+	const editor = useEditor({
+		extensions: [StarterKit, Markdown],
+		content: '',
+		contentType: 'markdown',
+	});
+
+	useEditorState({
+		editor,
+		selector: (ctx) => {
+			if (!ctx.editor) return;
+			ctx.editor.on('update', () => setEvent((prev) => ({ ...prev, description: ctx.editor.getMarkdown() })));
+		},
+	});
 
 	const { getRootProps, getInputProps } = useDropzone({
-		onDrop: () => {},
+		onDrop: (acceptedFiles) => {
+			setPreviewBlob(URL.createObjectURL(acceptedFiles[0]));
+			setImage(acceptedFiles[0]);
+		},
 		maxFiles: 1,
 		noClick: true,
 		//disabled: props.disabled,
@@ -54,30 +67,23 @@ export default function Page() {
 		},
 	});
 
-	const create = useMutation(createEvent(organization?.id));
-
 	return (
 		<article className={styles.main_container}>
 			<section className={styles.edit_section}>
 				<nav>
-					<button>
-						<ChevronLeft />
+					<button className={styles.icon} onClick={() => router.back()}>
+						<ChevronLeft style={{ marginRight: 1.5 }} />
 					</button>
 					<span>Nouvelle événement</span>
+					<button>
+						<ScanEye />
+						Prévisualiser
+					</button>
 					<button
-						onClick={() => {
-							create.mutate({
-								event: {
-									title: title,
-									subtitle: '',
-									description: description,
-									max_registration: registrationLimit,
-									location: location,
-									image: '',
-									start_at: startDate,
-									end_at: endDate,
-								},
-							});
+						className={styles.primary}
+						onClick={(e) => {
+							mutate({ event });
+							if (!e.getModifierState('Shift')) router.push('../events');
 						}}
 					>
 						<Plus />
@@ -85,32 +91,44 @@ export default function Page() {
 					</button>
 				</nav>
 				<div className={styles.main_content}>
-					<label {...getRootProps()} className={styles.cover}>
+					<label
+						{...getRootProps()}
+						className={styles.cover}
+						style={{ backgroundImage: `url(${previewBlob})` }}
+					>
 						<input {...getInputProps()} />
 					</label>
 					<label className={styles.title}>
-						<input
-							type="text"
-							placeholder={"Nom de l'événement"}
-							onChange={(e) => setTitle(e.target.value)}
-						/>
-						<button>Modifer le rendu de l&#39;image</button>
+						<div className={styles.titles_container}>
+							<input
+								type="text"
+								placeholder={"Nom de l'événement"}
+								className={styles.title_input}
+								value={event.title}
+								onChange={(e) => setEvent((prev) => ({ ...prev, title: e.target.value }))}
+								autoFocus
+							/>
+							<input
+								type="text"
+								placeholder={"Sous-titre de l'événement"}
+								className={styles.subtitle_input}
+								value={event.subtitle ?? ''}
+								onChange={(e) => setEvent((prev) => ({ ...prev, subtitle: e.target.value }))}
+							/>
+						</div>
+						<button onClick={() => setShowImageEdit(true)}>Modifer le rendu de l&#39;image</button>
 					</label>
 					<div className={styles.date_picker}>
 						<CalendarFold size={22} />
 						Du
 						<InputDatePicker
-							selected={startDate}
-							onChange={(date) => {
-								if (date) setStartDate(date);
-							}}
+							selected={event.start_at}
+							onChange={(date) => setEvent((prev) => ({ ...prev, start_at: date ?? new Date() }))}
 						/>
 						au
 						<InputDatePicker
-							selected={endDate}
-							onChange={(date) => {
-								if (date) setEndDate(date);
-							}}
+							selected={event.end_at}
+							onChange={(date) => setEvent((prev) => ({ ...prev, end_at: date ?? new Date() }))}
 						/>
 					</div>
 					<label className={styles.location} htmlFor={'location'}>
@@ -119,7 +137,8 @@ export default function Page() {
 							type={'text'}
 							id={'location'}
 							placeholder={'Aucun emplacement'}
-							onChange={(e) => setLocation(e.target.value)}
+							value={event.location ?? ''}
+							onChange={(e) => setEvent((prev) => ({ ...prev, location: e.target.value }))}
 						/>
 					</label>
 					<div className={styles.registration}>
@@ -128,13 +147,20 @@ export default function Page() {
 							<label htmlFor={'limit_registration'} className={styles.limit_registration}>
 								<Toggle
 									id={'limit_registration'}
-									checked={showRegisterLimit}
-									onChange={(e) => setShowRegisterLimit(e.target.checked)}
+									checked={event.max_registration !== null}
+									onChange={(e) => {
+										const checked = e.currentTarget.checked;
+
+										setEvent((prev) => ({
+											...prev,
+											max_registration: checked ? 40 : null,
+										}));
+									}}
 								/>
 								<span>Limiter les inscriptions</span>
 							</label>
 							<AnimatePresence initial={false}>
-								{showRegisterLimit && (
+								{event.max_registration !== null && (
 									<motion.label
 										htmlFor={'max_registration'}
 										className={styles.max_registration}
@@ -143,7 +169,12 @@ export default function Page() {
 										exit={{ opacity: 0, marginTop: -22, marginBottom: -30 }}
 									>
 										<button
-											onClick={() => setRegistrationLimit(Math.max(0, registrationLimit - 1))}
+											onClick={() =>
+												setEvent((prev) => ({
+													...prev,
+													max_registration: (prev.max_registration ?? 40) - 1,
+												}))
+											}
 										>
 											<Minus size={22} />
 										</button>
@@ -151,11 +182,21 @@ export default function Page() {
 											type={'number'}
 											id={'max_registration'}
 											placeholder={'40'}
-											value={registrationLimit}
-											onChange={(e) => setRegistrationLimit(parseInt(e.target.value))}
+											value={event.max_registration ?? 40}
+											onChange={(e) =>
+												setEvent((prev) => ({
+													...prev,
+													max_registration: parseInt(e.target.value),
+												}))
+											}
 										/>
 										<button
-											onClick={() => setRegistrationLimit(Math.max(0, registrationLimit + 1))}
+											onClick={() =>
+												setEvent((prev) => ({
+													...prev,
+													max_registration: (prev.max_registration ?? 40) + 1,
+												}))
+											}
 										>
 											<Plus size={22} />
 										</button>
@@ -164,70 +205,18 @@ export default function Page() {
 							</AnimatePresence>
 						</div>
 					</div>
-
-					<MDXEditor
-						markdown={description ?? ''}
-						className={styles.mdeditor}
-						contentEditableClassName={'event_markdown'}
-						onChange={(newMarkdown) => {
-							setDescription(newMarkdown);
-						}}
-						plugins={[
-							headingsPlugin(),
-							quotePlugin(),
-							listsPlugin(),
-							thematicBreakPlugin(),
-							linkPlugin(),
-							linkDialogPlugin(),
-							markdownShortcutPlugin(),
-							tablePlugin(),
-							imagePlugin({
-								imageUploadHandler: () => {
-									return Promise.resolve('https://picsum.photos/200/300');
-								},
-								imageAutocompleteSuggestions: [
-									'https://picsum.photos/200/300',
-									'https://picsum.photos/200',
-								],
-							}),
-							toolbarPlugin({
-								toolbarClassName: 'my-classname',
-								toolbarContents: () => (
-									<>
-										<BlockTypeSelect />
-										<BoldItalicUnderlineToggles />
-										<Separator />
-										<CreateLink />
-										<InsertImage />
-										<InsertTable />
-										<InsertThematicBreak />
-										<UndoRedo />
-									</>
-								),
-							}),
-						]}
+					<div className={styles.editor_toolbar}></div>
+					<EditorContent
+						editor={editor}
+						className={styles.editor_container}
 						placeholder={'Entre ta description ici. (psst... On supporte le markdown)'}
-						translation={(key, defaultValue, interpolations) => {
-							const text = key.split('.').reduce<unknown>((obj, part) => {
-								if (obj && typeof obj === 'object') {
-									return (obj as Record<string, unknown>)[part];
-								}
-								return undefined;
-							}, fr);
-							let result = typeof text === 'string' ? text : defaultValue;
-							if (interpolations) {
-								for (const [k, v] of Object.entries(interpolations)) {
-									result = result.replace(`{{${k}}}`, String(v));
-								}
-							}
-							return result;
-						}}
 					/>
 				</div>
 			</section>
 			<section className={styles.preview_section}>
 				<h3>Preview coming soon...</h3>
 			</section>
+			{image && <ImageEditor file={image} visible={showImageEdit} setVisible={setShowImageEdit} />}
 		</article>
 	);
 }
