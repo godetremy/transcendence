@@ -20,6 +20,9 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 	return prisma.events.findMany({
 		where: filter,
 		include: include,
+		orderBy: {
+			start_at: 'asc'
+		},
 		//...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
