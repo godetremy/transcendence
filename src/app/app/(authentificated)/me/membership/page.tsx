@@ -13,6 +13,7 @@ import { useUser } from '@/contexts/UserContext';
 import { User } from '@/types/User';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
+import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 
 export default function Page() {
 	const [showReload, setShowReload] = useState<boolean>(false);
@@ -74,8 +75,9 @@ export default function Page() {
 								/>
 							))
 						)}
+						{lists.data.pages[0].data.length === 0 && !lists.isLoading && <EmptyState />}
 						{lists.isFetchingNextPage && <p>Chargement...</p>}
-
+						
 						{lists.hasNextPage && (
 							<button onClick={() => lists.fetchNextPage()} disabled={lists.isFetchingNextPage}>
 								{lists.isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
