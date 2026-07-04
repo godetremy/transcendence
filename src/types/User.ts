@@ -25,10 +25,6 @@ export interface PublicUser {
 	is_member: boolean;
 }
 
-export interface FindUser {
-	q: string | null;
-}
-
 export interface ElasticSearchUser {
 	full_name: string;
 	mail: string;

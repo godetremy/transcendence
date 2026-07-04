@@ -1,8 +1,8 @@
 import { formatOrganizationMembers } from '@/database/format/OrganizationMembers';
 import { countOrganizationMembersByFilter, getOrganizationMembersByFilter } from '@/database/OrganizationMembers';
 import { getUsersByElasticSearch } from '@/database/User';
-import { UserFindSchema } from '@/schema/UserFind';
-import { FindUser } from '@/types/User';
+import { SearchQuerySchema } from '@/schema/searchQuery';
+import { SearchQuery } from '@/types/searchQuery';
 import { errorHandler } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { parseParams } from '@/utils/parsing';
@@ -16,7 +16,7 @@ export async function GET(
 		const { org_id } = await params;
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
-		const parameter = parseParams<FindUser>(req.nextUrl.searchParams, UserFindSchema);
+		const parameter = parseParams<SearchQuery>(req.nextUrl.searchParams, SearchQuerySchema);
 		const searchs = await getUsersByElasticSearch(parameter.q ?? '', pagination.limit);
 
 		const users = searchs.hits.hits.map((hit) => ({

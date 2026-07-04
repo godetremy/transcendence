@@ -29,6 +29,7 @@ export interface OrganizationDashboardTable {
 	loading?: boolean;
 	activeMenu?: number;
 	onActiveMenuChange?: (index: number) => void;
+	onSearch?: (search: string) => void;
 }
 
 export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
@@ -67,7 +68,13 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 				<div className={styles.header_container}>
 					<div className={styles.search_bar}>
 						<Search size={22} />
-						<input type={'text'} placeholder={'Rechercher un événement'} />
+						<input
+							type={'text'}
+							placeholder={'Rechercher un événement'}
+							onChange={(e) => {
+								if (props.onSearch) props.onSearch(e.target.value);
+							}}
+						/>
 					</div>
 					<div className={styles.filters_options}>
 						<button>

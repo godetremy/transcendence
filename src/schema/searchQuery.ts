@@ -1,5 +1,5 @@
 import { z } from 'zod';
 
-export const UserFindSchema = z.object({
+export const SearchQuerySchema = z.object({
 	q: z.string().trim().nullable(),
 });

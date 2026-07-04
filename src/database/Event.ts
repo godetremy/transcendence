@@ -5,23 +5,21 @@ import { DEFAULT_SORTINGOPTIONS, sortingToPrisma } from '@/utils/sorting';
 import { SortingOption } from '@/types/SortingParameters';
 import { DateOption } from '@/types/DateParameters';
 import { DEFAULT_DATEOPTION, dateToPrisma } from '@/utils/date';
-import { CreateOrUpdateEventType } from '@/types/Event';
+import { CreateOrUpdateEventType, ElasticSearchEvent } from '@/types/Event';
 import { Prisma } from './prisma/generated/client';
 import { eventsGetPayload } from '@/database/prisma/generated/models/events';
+import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
+import { esclient } from './prisma/elasticSearch';
 
 const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
+	filter: Prisma.eventsWhereInput,
 	include: T,
-	organization_id: string,
-	time?: DateOption,
 	sorting?: SortingOption[],
 	pagination?: PaginationParameters
 ): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
 	return prisma.events.findMany({
+		where: filter,
 		include: include,
-		where: {
-			organization_id: organization_id,
-			...dateToPrisma(time ?? DEFAULT_DATEOPTION),
-		},
 		//...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
@@ -40,6 +38,34 @@ const getEventsByFilter = async <T extends Prisma.eventsInclude>(
 		},
 		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
+	});
+};
+
+const getEventsByElasticSearch = async (q: string, limit: number): Promise<SearchResponse<ElasticSearchEvent>> => {
+	return await esclient.search<ElasticSearchEvent>({
+		index: 'events',
+		query: {
+			bool: {
+				should: [
+					{
+						multi_match: {
+							query: q,
+							fields: ['title^3', 'subtitle^2', 'description'],
+							type: 'phrase_prefix',
+						},
+					},
+					{
+						multi_match: {
+							query: q,
+							fields: ['title^3', 'subtitle^2', 'description'],
+							fuzziness: 'AUTO',
+						},
+					},
+				],
+				minimum_should_match: 1,
+			},
+		},
+		size: limit,
 	});
 };
 
@@ -139,4 +165,5 @@ export {
 	getEventsByFilterToOrganization,
 	getEventByIdToOrganization,
 	getEventByAlbumId,
+	getEventsByElasticSearch,
 };

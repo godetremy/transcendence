@@ -47,3 +47,11 @@ export interface CreateOrUpdateEventType {
 	start_at: Date;
 	end_at: Date;
 }
+
+export interface ElasticSearchEvent {
+	id: string;
+	organization_id: string;
+	title: string;
+	subtitle: string;
+	description: string;
+}

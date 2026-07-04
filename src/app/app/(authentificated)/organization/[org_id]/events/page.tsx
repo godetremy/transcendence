@@ -11,12 +11,14 @@ export default function Page() {
 	const orgctx = useOrganizations();
 	const [organization] = useState(orgctx.getCurrentOrganization()!);
 	const [activeMenu, setActiveMenu] = useState<number>(0);
+	const [search, setSearch] = useState<string>('');
 
 	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
 		getEvents(
 			organization.id,
 			activeMenu == 2 ? null : new Date().toISOString(),
 			activeMenu == 0 ? null : activeMenu == 2 ? new Date().toISOString() : addDays(new Date(), 7).toISOString(),
+			search,
 			activeMenu
 		)
 	);
@@ -103,6 +105,7 @@ export default function Page() {
 				loading={false}
 				activeMenu={activeMenu}
 				onActiveMenuChange={setActiveMenu}
+				onSearch={setSearch}
 			/>
 			{hasNextPage && (
 				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
