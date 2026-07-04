@@ -27,10 +27,22 @@ export interface OrganizationDashboardTable {
 	onExport?: () => void;
 	onNew?: () => void;
 	loading?: boolean;
+	activeMenu?: number;
+	onActiveMenuChange?: (index: number) => void;
 }
 
 export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 	const [selected, setSelected] = useState<number[]>([]);
+	const [internalActiveMenu, setInternalActiveMenu] = useState(0);
+
+	const activeMenu = props.activeMenu ?? internalActiveMenu;
+	const setActiveMenu = (index: number) => {
+		if (props.onActiveMenuChange) {
+			props.onActiveMenuChange(index);
+		} else {
+			setInternalActiveMenu(index);
+		}
+	};
 
 	const toggleSelectAll = (checked: boolean) => {
 		if (checked) {
@@ -51,7 +63,7 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 	return (
 		<section className={styles.main_container}>
 			<motion.div className={styles.fixed_header} style={{ translateY }}>
-				<OrganizationDashboardHeader {...props.header} />
+				<OrganizationDashboardHeader {...props.header} selected={activeMenu} onSelectChange={setActiveMenu} />
 				<div className={styles.header_container}>
 					<div className={styles.search_bar}>
 						<Search size={22} />

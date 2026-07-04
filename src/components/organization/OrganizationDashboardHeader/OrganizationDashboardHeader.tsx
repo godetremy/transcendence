@@ -5,12 +5,16 @@ import { CSSProperties, useEffect, useRef, useState } from 'react';
 export interface OrganizationDashboardHeaderProps {
 	title: string;
 	menu: Array<{ text: string; onPress?: () => void }>;
+	selected?: number;
+	onSelectChange?: (index: number) => void;
 }
 
 export function OrganizationDashboardHeader(props: OrganizationDashboardHeaderProps) {
-	const [selected, setSelected] = useState<number>(0);
+	const [internalSelected, setInternalSelected] = useState<number>(0);
 	const [width, setWidth] = useState(0);
 	const [left, setLeft] = useState(20);
+
+	const selected = props.selected ?? internalSelected;
 
 	const buttonsRef = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -39,7 +43,10 @@ export function OrganizationDashboardHeader(props: OrganizationDashboardHeaderPr
 						}}
 						id={`org_dashboard_item_${i}`}
 						onClick={(event) => {
-							setSelected(i);
+							if (props.onSelectChange) {
+								props.onSelectChange(i);
+							}
+							setInternalSelected(i);
 							const rect = event.currentTarget.getBoundingClientRect();
 							let left = 20;
 							for (let j = 0; j < i; j++) {
@@ -49,7 +56,7 @@ export function OrganizationDashboardHeader(props: OrganizationDashboardHeaderPr
 							setLeft(left);
 							if (item.onPress) item.onPress();
 						}}
-						className={selected === i ? styles.selected : undefined}
+						className={internalSelected === i ? styles.selected : undefined}
 					>
 						{item.text}
 					</button>

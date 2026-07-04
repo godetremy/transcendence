@@ -12,14 +12,22 @@ const getDateParams = (params: URLSearchParams): DateOption => {
 	return data;
 };
 
-const dateToPrisma = (time: DateOption): { start_at: { gte: Date }; end_at: { lte: Date } } => {
+const dateToPrisma = (time: DateOption): { start_at?: { gte: Date }; end_at?: { lte: Date } } => {
 	return {
-		start_at: {
-			gte: new Date(time.from),
-		},
-		end_at: {
-			lte: new Date(time.to),
-		},
+		...(time.from == null
+			? {}
+			: {
+					start_at: {
+						gte: new Date(time.from),
+					},
+				}),
+		...(time.to == null
+			? {}
+			: {
+					end_at: {
+						lte: new Date(time.to),
+					},
+				}),
 	};
 };
 

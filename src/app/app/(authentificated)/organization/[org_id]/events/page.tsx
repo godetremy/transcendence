@@ -9,10 +9,16 @@ import { ReactNode, useMemo, useRef, useState } from 'react';
 export default function Page() {
 	const router = useRouter();
 	const orgctx = useOrganizations();
-	const [organization, setOrganization] = useState(orgctx.getCurrentOrganization()!);
+	const [organization] = useState(orgctx.getCurrentOrganization()!);
+	const [activeMenu, setActiveMenu] = useState<number>(0);
 
 	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
-		getEvents(organization.id)
+		getEvents(
+			organization.id,
+			activeMenu == 2 ? null : new Date().toISOString(),
+			activeMenu == 0 ? null : activeMenu == 2 ? new Date().toISOString() : addDays(new Date(), 7).toISOString(),
+			activeMenu
+		)
 	);
 
 	const [events, setEvents] = useState<Array<{ key: string; children: ReactNode[] }>>([]);
@@ -20,6 +26,12 @@ export default function Page() {
 	const filterEvents = () => {
 		setEvents(events.filter((event, i) => i % 3));
 	};
+
+	function addDays(date: Date, days: number): Date {
+		const result = new Date(date);
+		result.setDate(result.getDate() + days);
+		return result;
+	}
 
 	const id = useRef(0);
 
@@ -59,7 +71,9 @@ export default function Page() {
 					<p key={3}>{formatDate(event.created_at)}</p>,
 					<p key={4}>{event.owner}</p>,
 					<p key={5}>
-						{event.register_number}/{event.max_registration == 0 ? '∞' : event.max_registration}
+						{event.max_registration == null
+							? '--'
+							: `${event.register_number}/${event.max_registration == 0 ? '∞' : event.max_registration}`}
 					</p>,
 					<p key={6}>demo</p>,
 				],
@@ -87,6 +101,8 @@ export default function Page() {
 				onExport={filterEvents}
 				onNew={() => router.push('events/new')}
 				loading={false}
+				activeMenu={activeMenu}
+				onActiveMenuChange={setActiveMenu}
 			/>
 			{hasNextPage && (
 				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>

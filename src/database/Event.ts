@@ -20,7 +20,7 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 		include: include,
 		where: {
 			organization_id: organization_id,
-			//...dateToPrisma(time ?? DEFAULT_DATEOPTION),
+			...dateToPrisma(time ?? DEFAULT_DATEOPTION),
 		},
 		//...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
