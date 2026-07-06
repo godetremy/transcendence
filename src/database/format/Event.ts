@@ -56,11 +56,7 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 	} as unknown as PrivateEvent<T>;
 };
 
-const formatDataEvent = (
-	data: ImportEventType[],
-	org_id: string,
-	owner: string
-): Prisma.eventsCreateManyInput | Prisma.eventsCreateManyInput[] => {
+const formatDataEvent = (data: ImportEventType[], org_id: string, owner: string): Prisma.eventsCreateManyInput[] => {
 	return data.map((row) => ({
 		title: row.title,
 		subtitle: row.subtitle,

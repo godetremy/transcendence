@@ -1,4 +1,3 @@
-import * as z from 'zod';
 import { NextRequest, NextResponse } from 'next/server';
 import { getThrowableSession } from '@/lib/session';
 import { createManyEvent } from '@/database/Event';
@@ -7,7 +6,9 @@ import { parseCsv, parseJson, parseXlsx } from '@/utils/parsing';
 import { ImportEventType } from '@/types/Event';
 import { getUserFromSession } from '@/database/User';
 import { getOrganizationById } from '@/database/Organization';
-import { ERRORS_DETAILS } from '@/utils/errors';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+import { ImportFileSchema } from '@/schema/ImportFileShema';
+import { CreateEventSchema } from '@/schema/EventSchema';
 
 export function getExt(file: File): string | null {
 	const parts = file.name.split('.');
@@ -21,7 +22,7 @@ export async function POST(
 	req: NextRequest,
 	{ params }: { params: Promise<{ org_id: string }> }
 ): Promise<NextResponse> {
-	try {
+	return errorHandler(async () => {
 		const { org_id } = await params;
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
@@ -32,48 +33,37 @@ export async function POST(
 
 		const body = await req.formData();
 		const file = body.get('file');
-		if (!file || !(file instanceof File)) return NextResponse.json({ error: 'Wrong format' }, { status: 400 });
+		if (!file || !(file instanceof File)) throw ERRORS_DETAILS.invalid_parameter();
 
 		const ext = getExt(file);
-		const fileCheck = z
-			.file()
-			.mime([
-				'application/json',
-				'text/csv',
-				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-			]);
-		const result = fileCheck.safeParse(file);
-		if (!result.success) return NextResponse.json({ error: 'Invalid file' }, { status: 400 });
+
+		const result = ImportFileSchema.safeParse(file);
+		if (!result.success) throw ERRORS_DETAILS.invalid_parameter();
+
+		let data: ImportEventType[];
 		switch (ext) {
 			case 'json':
-				const dataJ = await parseJson<ImportEventType>(file);
-				const allEventJ = await createManyEvent(
-					formatDataEvent(dataJ, organization.id, user.full_name ?? ''),
-					{}
-				);
-				return NextResponse.json(allEventJ.map(formatPrivateEvent<object>));
+				data = await parseJson<ImportEventType>(file);
+				break;
 			case 'csv':
-				const dataC = await parseCsv<ImportEventType>(file);
-				const allEventC = await createManyEvent(
-					formatDataEvent(dataC, organization.id, user.full_name ?? ''),
-					{}
-				);
-				return NextResponse.json(allEventC.map(formatPrivateEvent<object>));
+				data = await parseCsv<ImportEventType>(file);
+				break;
 			case 'xlsx':
-				const dataX = await parseXlsx<ImportEventType>(file);
-				const allEventX = await createManyEvent(
-					formatDataEvent(dataX, organization.id, user.full_name ?? ''),
-					{}
-				);
-				return NextResponse.json(allEventX.map(formatPrivateEvent<object>));
+				data = await parseXlsx<ImportEventType>(file);
+				break;
 
 			default:
 				return NextResponse.json({ error: 'Invalid file' }, { status: 400 });
 		}
-	} catch (err: unknown) {
-		console.error(err);
-		return new NextResponse('Failed to create event.', {
-			status: 500,
-		});
-	}
+
+		const checkData = formatDataEvent(data, organization.id, user.full_name ?? '');
+		if (checkData.length == 0) throw ERRORS_DETAILS.invalid_parameter();
+		for (const row of checkData) {
+			const checkRow = CreateEventSchema.safeParse(row);
+			if (!checkRow.success) throw ERRORS_DETAILS.invalid_parameter();
+		}
+
+		const listEvent = await createManyEvent(formatDataEvent(data, organization.id, user.full_name ?? ''), {});
+		return NextResponse.json(listEvent.map(formatPrivateEvent<object>));
+	});
 }
