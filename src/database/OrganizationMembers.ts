@@ -43,7 +43,25 @@ const getOrganizationWhereMemberBelongs = async <T extends Prisma.organization_m
 	pagination?: PaginationParameters
 ): Promise<Prisma.organization_membersGetPayload<{ include: T }>[]> => {
 	return prisma.organization_members.findMany({
-		where: { user_id, approved: true },
+		where: {
+			OR: [
+				{
+					user_id: user_id,
+					approved: true,
+				},
+				{
+					organization: { owner_id: user_id },
+				},
+				{
+					user: {
+						admin: true,
+					}
+				}
+			],
+			organization: {
+				verified: true,
+			}
+		},
 		include: include,
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
