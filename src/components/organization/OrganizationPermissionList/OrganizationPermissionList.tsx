@@ -30,19 +30,21 @@ export function OrganizationPermissionList({
 		);
 
 	return (
-		<ListContainer>
-			{data.pages.map((row, j) =>
-				row.data.map((perm, i) => (
-					<ListItem
-						key={i}
-						title={perm.name}
-						description={perm.description ?? 'Aucune description'}
-						last={i == row.data.length - 1 && data.pages.length - 1 === j}
-						onPress={() => onPressItem(perm)}
-					/>
-				))
-			)}
+		<>
+			<ListContainer>
+				{data.pages.map((row, j) =>
+					row.data.map((perm, i) => (
+						<ListItem
+							key={i}
+							title={perm.name}
+							description={perm.description ?? 'Aucune description'}
+							last={i == row.data.length - 1 && data.pages.length - 1 === j}
+							onPress={() => onPressItem(perm)}
+						/>
+					))
+				)}
+			</ListContainer>
 			{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
-		</ListContainer>
+		</>
 	);
 }

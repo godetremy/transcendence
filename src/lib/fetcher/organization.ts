@@ -100,7 +100,7 @@ const getOrganizationPermissions = (
 	QueryKey,
 	number
 > => ({
-	queryFn: () => get<PaginationResponse<OrganizationPermissionDetails>>(`/organization/${org_id}/permission`),
+	queryFn: ({ pageParam = 1 }) => get<PaginationResponse<OrganizationPermissionDetails>>(`/organization/${org_id}/permission?page=${pageParam}`),
 	queryKey: ['organization', org_id, 'permissions'],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),

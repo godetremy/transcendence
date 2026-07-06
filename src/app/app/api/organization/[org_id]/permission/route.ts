@@ -23,7 +23,7 @@ export async function GET(
 		const { org_id } = await params;
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
-		const number = await countOrganizationPermissionByFilter({});
+		const number = await countOrganizationPermissionByFilter({ organization_id: org_id });
 		const list = await getOrganizationPermissionByFilter({ organization_id: org_id }, {}, pagination);
 
 		return NextResponse.json(
