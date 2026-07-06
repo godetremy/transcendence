@@ -129,6 +129,7 @@ export async function POST(
 		}
 
 		const data = await parseBody<CreateOrUpdateEventType>(req, CreateEventSchema);
+		if (data.start_at > data.end_at) throw ERRORS_DETAILS.invalid_parameter(data.start_at.toISOString());
 		const event = await createEvent(data, org_id, user.full_name ?? '', {});
 
 		return NextResponse.json(formatPrivateEvent<object>(event));
