@@ -8,6 +8,7 @@ import { useState } from 'react';
 import styles from './page.module.scss';
 import { Check, X } from 'lucide-react';
 import { ListSectionTitle } from '@/components/globals/ListSectionTitle/ListSectionTitle';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 
 function InviteActions({ org_id }: { org_id: string }) {
 	const [loading, setLoading] = useState(false);
@@ -82,12 +83,7 @@ export function OrganizationInvitesList() {
 				</ListContainer>
 			)}
 			{isFetchingNextPage && <Loader />}
-
-			{hasNextPage && (
-				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
-				</button>
-			)}
+			{hasNextPage && <ShowMoreButton onClick={fetchNextPage} loading={isFetchingNextPage} />}
 		</>
 	);
 }

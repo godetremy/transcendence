@@ -160,6 +160,7 @@ const approveOrganization = (
 		put<{ success: boolean; message?: string }>(`/organization/${org_id}/approve`, { approve: accept }),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
+		GlobalQueryClient.invalidateQueries({queryKey: ['organization', 'approve']});
 	},
 });
 

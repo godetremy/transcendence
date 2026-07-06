@@ -12,8 +12,14 @@ export function GET(req: NextRequest) {
 
 		const filter = {
 			OR: [
-				{ owner_id: session.user_id },
-				{ organization_members: { some: { user_id: session.user_id, approved: true } } },
+				{
+					owner_id: session.user_id,
+					verified: true,
+				},
+				{
+					organization_members: { some: { user_id: session.user_id, approved: true } },
+					verified: true,
+				},
 			],
 		};
 

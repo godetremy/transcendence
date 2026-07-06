@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 
 export function OrganizationsList() {
 	const router = useRouter();
@@ -43,12 +44,7 @@ export function OrganizationsList() {
 				)}
 			</ListContainer>
 			{isFetchingNextPage && <p>Chargement...</p>}
-
-			{hasNextPage && (
-				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
-				</button>
-			)}
+			{hasNextPage && <ShowMoreButton onClick={fetchNextPage} loading={isFetchingNextPage} />}
 		</>
 	);
 }
