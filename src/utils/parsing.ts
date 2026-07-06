@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { ERRORS_DETAILS } from '@/utils/errors';
+import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
 
 async function parseBody<T>(req: NextRequest, schema: z.ZodSchema): Promise<T> {
 	const content_type = req.headers.get('content-type')?.toLowerCase() || 'text/plain';
@@ -59,4 +61,28 @@ const parseParams = <T>(param: URLSearchParams, schema: z.ZodObject): T => {
 	return tab as T;
 };
 
-export { parseBody, parseParams };
+const parseJson = async <T>(file: File): Promise<T[]> => {
+	const text = await file.text();
+	return JSON.parse(text) as T[];
+};
+
+const parseCsv = async <T>(file: File): Promise<T[]> => {
+	const text = await file.text();
+	const result = Papa.parse<T>(text, {
+		header: true,
+		skipEmptyLines: true,
+	});
+
+	return result.data;
+};
+
+const parseXlsx = async <T>(file: File): Promise<T[]> => {
+	const buffer = await file.arrayBuffer();
+	const tab = XLSX.read(buffer, { type: 'array' });
+	const name = tab.SheetNames[0];
+	const data = tab.Sheets[name];
+
+	return XLSX.utils.sheet_to_json<T>(data);
+};
+
+export { parseBody, parseParams, parseCsv, parseJson, parseXlsx };

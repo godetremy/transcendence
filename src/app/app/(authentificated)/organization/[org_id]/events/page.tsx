@@ -1,10 +1,11 @@
 'use client';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { getEvents } from '@/lib/fetcher/events';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { ReactNode, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 export default function Page() {
 	const router = useRouter();
@@ -23,11 +24,7 @@ export default function Page() {
 		)
 	);
 
-	const [events, setEvents] = useState<Array<{ key: string; children: ReactNode[] }>>([]);
-
-	const filterEvents = () => {
-		setEvents(events.filter((event, i) => i % 3));
-	};
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	function addDays(date: Date, days: number): Date {
 		const result = new Date(date);
@@ -35,26 +32,30 @@ export default function Page() {
 		return result;
 	}
 
-	const id = useRef(0);
+	const handleFileChange = useCallback(
+		async (e: React.ChangeEvent<HTMLInputElement>) => {
+			const file = e.target.files?.[0];
+			if (!file) return;
 
-	const reinitializeEvents = () => {
-		const array: Array<{ key: string; children: ReactNode[] }> = [];
-		for (let i = 0; i < 10; i++) {
-			array.push({
-				key: id.current.toString(),
-				children: [
-					<p key={1}>Demo</p>,
-					<p key={2}>Demo</p>,
-					<p key={3}>Demo</p>,
-					<p key={4}>Demo</p>,
-					<p key={5}>Demo</p>,
-					<p key={6}>Demo</p>,
-				],
+			const formData = new FormData();
+			formData.append('file', file);
+			formData.append('name', file.name);
+
+			await fetch(`/app/api/organization/${organization.id}/events/import`, {
+				method: 'POST',
+				body: formData,
 			});
-			id.current = id.current + 1;
-		}
-		setEvents([...events, ...array]);
+
+			e.target.value = '';
+		},
+		[organization.id]
+	);
+
+	const openFilePicker = () => {
+		fileInputRef.current?.click();
 	};
+
+	const importEvents = () => {};
 
 	const formatDate = (date: string) => {
 		const d = new Date(date);
@@ -85,6 +86,13 @@ export default function Page() {
 
 	return (
 		<>
+			<input
+				type="file"
+				ref={fileInputRef}
+				style={{ display: 'none' }}
+				onChange={handleFileChange}
+				accept=".csv,.xlsx"
+			/>
 			<OrganizationDashboardTable
 				header={{
 					title: `Events`,
@@ -99,19 +107,15 @@ export default function Page() {
 					{ text: '', width: 50 },
 				]}
 				data={listEvents}
-				onImport={reinitializeEvents}
-				onExport={filterEvents}
+				onImport={openFilePicker}
+				onExport={openFilePicker}
 				onNew={() => router.push('events/new')}
 				loading={false}
 				activeMenu={activeMenu}
 				onActiveMenuChange={setActiveMenu}
 				onSearch={setSearch}
 			/>
-			{hasNextPage && (
-				<button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-					{isFetchingNextPage ? 'Chargement...' : 'Voir la suite'}
-				</button>
-			)}
+			{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
 		</>
 	);
 }

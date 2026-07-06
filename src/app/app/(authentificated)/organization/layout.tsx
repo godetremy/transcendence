@@ -12,11 +12,11 @@ export default async function Layout({ children }: { children: ReactNode }) {
 	const sessionCookie = Cookies.get('session');
 	const session = await decrypt(sessionCookie?.value ?? '');
 
-	const organizations = (await getOrganizationWhereMemberBelongs(session.user_id, { organization: true, user: true})).map(
-		(member) => {
-			return formatPrivateOrganization<object>(member.organization);
-		}
-	);
+	const organizations = (
+		await getOrganizationWhereMemberBelongs(session.user_id, { organization: true, user: true })
+	).map((member) => {
+		return formatPrivateOrganization<object>(member.organization);
+	});
 
 	return (
 		<OrganizationsProvider organizations={organizations}>

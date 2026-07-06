@@ -58,8 +58,8 @@ const getOrganizationWhereMemberBelongs = async <T extends Prisma.organization_m
 				{
 					user: {
 						admin: true,
-					}
-				}
+					},
+				},
 			],
 		},
 		distinct: ['organization_id'],

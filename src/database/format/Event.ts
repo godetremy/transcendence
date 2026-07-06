@@ -1,5 +1,5 @@
 import { Prisma } from '@/database/prisma/generated/client';
-import { PrivateEvent, PublicEvent } from '@/types/Event';
+import { CreateOrUpdateEventType, ImportEventType, PrivateEvent, PublicEvent } from '@/types/Event';
 import { formatPrivateOrganization, formatPublicOrganization } from './Organization';
 import { formatPrivateAlbum } from './Album';
 import { formatPrivateRegisteredEvent } from './EventRegistrations';
@@ -56,4 +56,23 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 	} as unknown as PrivateEvent<T>;
 };
 
-export { formatPrivateEvent, formatPublicEvent };
+const formatDataEvent = (
+	data: ImportEventType[],
+	org_id: string,
+	owner: string
+): Prisma.eventsCreateManyInput | Prisma.eventsCreateManyInput[] => {
+	return data.map((row) => ({
+		title: row.title,
+		subtitle: row.subtitle,
+		description: row.description,
+		max_registration: Number(row.max_registration),
+		location: row.location,
+		image: row.image,
+		start_at: new Date(row.start_at),
+		end_at: new Date(row.end_at),
+		organization_id: org_id,
+		owner: owner,
+	}));
+};
+
+export { formatPrivateEvent, formatPublicEvent, formatDataEvent };

@@ -100,7 +100,8 @@ const getOrganizationPermissions = (
 	QueryKey,
 	number
 > => ({
-	queryFn: ({ pageParam = 1 }) => get<PaginationResponse<OrganizationPermissionDetails>>(`/organization/${org_id}/permission?page=${pageParam}`),
+	queryFn: ({ pageParam = 1 }) =>
+		get<PaginationResponse<OrganizationPermissionDetails>>(`/organization/${org_id}/permission?page=${pageParam}`),
 	queryKey: ['organization', org_id, 'permissions'],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
@@ -160,7 +161,7 @@ const approveOrganization = (
 		put<{ success: boolean; message?: string }>(`/organization/${org_id}/approve`, { approve: accept }),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'mine'] });
-		GlobalQueryClient.invalidateQueries({queryKey: ['organization', 'approve']});
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', 'approve'] });
 	},
 });
 

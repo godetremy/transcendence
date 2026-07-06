@@ -21,8 +21,9 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 		where: filter,
 		include: include,
 		orderBy: {
-			start_at: 'asc'
+			start_at: 'asc',
 		},
+		distinct: ['id'],
 		//...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
@@ -53,15 +54,15 @@ const getEventsByElasticSearch = async (q: string, limit: number): Promise<Searc
 					{
 						multi_match: {
 							query: q,
-							fields: ['title^3', 'subtitle^2', 'description'],
-							type: 'phrase_prefix',
+							fields: ['title^3', 'subtitle', 'description'],
+							type: 'bool_prefix',
 						},
 					},
 					{
 						multi_match: {
 							query: q,
-							fields: ['title^3', 'subtitle^2', 'description'],
-							fuzziness: 'AUTO',
+							fields: ['title^3', 'subtitle', 'description'],
+							fuzziness: q.length <= 3 ? 0 : 'AUTO',
 						},
 					},
 				],
@@ -84,6 +85,16 @@ const createEvent = async <T extends Prisma.eventsInclude>(
 			...data,
 			owner: owner,
 		},
+		include: include,
+	});
+};
+
+const createManyEvent = async <T extends Prisma.eventsInclude>(
+	data: Prisma.eventsCreateManyInput | Prisma.eventsCreateManyInput[],
+	include: T
+): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
+	return prisma.events.createManyAndReturn({
+		data: data,
 		include: include,
 	});
 };
@@ -169,4 +180,5 @@ export {
 	getEventByIdToOrganization,
 	getEventByAlbumId,
 	getEventsByElasticSearch,
+	createManyEvent,
 };
