@@ -19,7 +19,7 @@ export function SumupReload() {
 
 	return (
 		<div className={styles.main_container}>
-			<p>montant</p>
+			<p className={styles.tittle}>Montant</p>
 			<div className={styles.container}>
 				<div className={styles.addbutton}>
 					<button

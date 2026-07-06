@@ -3,9 +3,20 @@
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 30px;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
 
+.tittle{
+	max-width: 600px;
+	width: 100%;
+	font: 600 25px var(--font-paragraph);
+	margin-bottom: -15px;
+	margin-top: 10px;
+
+}
 .addbutton {
 	display: flex;
 	flex-direction: row;
