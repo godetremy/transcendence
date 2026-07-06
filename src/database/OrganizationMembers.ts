@@ -44,6 +44,9 @@ const getOrganizationWhereMemberBelongs = async <T extends Prisma.organization_m
 ): Promise<Prisma.organization_membersGetPayload<{ include: T }>[]> => {
 	return prisma.organization_members.findMany({
 		where: {
+			organization: {
+				verified: true,
+			},
 			OR: [
 				{
 					user_id: user_id,
@@ -58,10 +61,8 @@ const getOrganizationWhereMemberBelongs = async <T extends Prisma.organization_m
 					}
 				}
 			],
-			organization: {
-				verified: true,
-			}
 		},
+		distinct: ['organization_id'],
 		include: include,
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
