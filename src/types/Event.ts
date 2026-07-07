@@ -59,6 +59,22 @@ export interface ImportEventType {
 	end_at: string;
 }
 
+export interface ExportEventBodyType {
+	type: string;
+	filename: string;
+}
+
+export interface ExportEventType {
+	title: string;
+	subtitle: string | null;
+	description: string | null;
+	max_registration: number | null;
+	location: string | null;
+	start_at: string;
+	end_at: string;
+	owner: string;
+}
+
 export interface ElasticSearchEvent {
 	id: string;
 	organization_id: string;

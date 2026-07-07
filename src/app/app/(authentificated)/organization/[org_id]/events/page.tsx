@@ -55,7 +55,37 @@ export default function Page() {
 		fileInputRef.current?.click();
 	};
 
-	const importEvents = () => {};
+	const exportEvents = useCallback(async () => {
+		try {
+			const response = await fetch(`/app/api/organization/${organization.id}/events/export`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					type: 'xlsx',
+					filename: 'events',
+				}),
+			});
+
+			if (!response.ok) {
+				throw new Error('Export failed');
+			}
+
+			const blob = await response.blob();
+
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'events.xlsx';
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error("Erreur lors de l'export:", error);
+		}
+	}, [organization.id]);
 
 	const formatDate = (date: string) => {
 		const d = new Date(date);
@@ -91,7 +121,7 @@ export default function Page() {
 				ref={fileInputRef}
 				style={{ display: 'none' }}
 				onChange={handleFileChange}
-				accept=".csv,.xlsx"
+				accept=".csv,.xlsx,.json"
 			/>
 			<OrganizationDashboardTable
 				header={{
@@ -108,7 +138,7 @@ export default function Page() {
 				]}
 				data={listEvents}
 				onImport={openFilePicker}
-				onExport={openFilePicker}
+				onExport={exportEvents}
 				onNew={() => router.push('events/new')}
 				loading={false}
 				activeMenu={activeMenu}

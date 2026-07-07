@@ -1,5 +1,5 @@
 import { Prisma } from '@/database/prisma/generated/client';
-import { CreateOrUpdateEventType, ImportEventType, PrivateEvent, PublicEvent } from '@/types/Event';
+import { ExportEventType, ImportEventType, PrivateEvent, PublicEvent } from '@/types/Event';
 import { formatPrivateOrganization, formatPublicOrganization } from './Organization';
 import { formatPrivateAlbum } from './Album';
 import { formatPrivateRegisteredEvent } from './EventRegistrations';
@@ -56,6 +56,19 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 	} as unknown as PrivateEvent<T>;
 };
 
+const formatExportEvent = (row: Prisma.eventsGetPayload<object>): ExportEventType => {
+	return {
+		title: row.title,
+		subtitle: row.subtitle,
+		description: row.description,
+		max_registration: row.max_registration,
+		location: row.location,
+		end_at: row.end_at.toISOString(),
+		start_at: row.start_at.toISOString(),
+		owner: row.owner,
+	};
+};
+
 const formatDataEvent = (data: ImportEventType[], org_id: string, owner: string): Prisma.eventsCreateManyInput[] => {
 	return data.map((row) => ({
 		title: row.title,
@@ -71,4 +84,4 @@ const formatDataEvent = (data: ImportEventType[], org_id: string, owner: string)
 	}));
 };
 
-export { formatPrivateEvent, formatPublicEvent, formatDataEvent };
+export { formatPrivateEvent, formatPublicEvent, formatDataEvent, formatExportEvent };
