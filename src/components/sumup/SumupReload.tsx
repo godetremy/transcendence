@@ -31,6 +31,7 @@ export function SumupReload() {
 						<Minus />
 					</button>
 					<input
+						className={styles.input}
 						placeholder={checkout.amount.toString()}
 						type="number"
 						onChange={(e) =>
@@ -54,7 +55,7 @@ export function SumupReload() {
 						});
 					}}
 				>
-					valider ( montant en points {checkout?.amount * 10})
+					Valider ( montant en points {checkout?.amount * 10} )
 				</button>
 			</div>
 		</div>
