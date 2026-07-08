@@ -13,16 +13,21 @@ import { AnimatePresence } from 'motion/react';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 import { useScroll, useTransform } from 'framer-motion';
+import { SortButton, SortingOption } from '@/components/globals/SortButton/SortButton';
+import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 
 export interface OrganizationDashboardTableColumn {
+	id?: string;
 	text: string;
 	width?: number;
+	sortable?: boolean;
 }
 
 export interface OrganizationDashboardTable {
 	header: OrganizationDashboardHeaderProps;
 	column: OrganizationDashboardTableColumn[];
 	data: Array<{ key: string; children: ReactNode[] }>;
+	error: Error | null;
 	onImport?: () => void;
 	onExport?: () => void;
 	onNew?: () => void;
@@ -30,6 +35,7 @@ export interface OrganizationDashboardTable {
 	activeMenu?: number;
 	onActiveMenuChange?: (index: number) => void;
 	onSearch?: (search: string) => void;
+	onChangeSort?: (sort: SortingOption[]) => void;
 }
 
 export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
@@ -80,9 +86,19 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 						<button>
 							<Filter size={22} />
 						</button>
-						<button>
+						<SortButton
+							sortingOptions={props.column
+								.filter((c) => c.sortable ?? true)
+								.map((v) => ({
+									id: v.id ?? v.text.toLowerCase().replace(/\s/g, '_'),
+									title: v.text,
+								}))}
+							onChangeSort={(sort) => {
+								props.onChangeSort?.(sort);
+							}}
+						>
 							<ArrowUpDown size={22} />
-						</button>
+						</SortButton>
 						<button>
 							<Settings2 size={22} />
 						</button>
@@ -176,13 +192,14 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 					</AnimatePresence>
 				</tbody>
 			</table>
-			{props.data.length === 0 && !props.loading && <EmptyState />}
+			{props.error === null && props.data.length === 0 && !props.loading && <EmptyState />}
 			{props.loading && (
 				<span className={styles.loading_container}>
 					<Loader size={20} />
 					Chargement des données...
 				</span>
 			)}
+			{props.error && <ErrorState error={props.error} />}
 		</section>
 	);
 }

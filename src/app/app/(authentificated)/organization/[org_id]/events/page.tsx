@@ -14,7 +14,7 @@ export default function Page() {
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [search, setSearch] = useState<string>('');
 
-	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
+	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, error } = useInfiniteQuery(
 		getEvents(
 			organization.id,
 			activeMenu == 2 ? null : new Date().toISOString(),
@@ -129,21 +129,26 @@ export default function Page() {
 					menu: [{ text: 'À venir' }, { text: 'Dans la semaine' }, { text: 'Passée' }],
 				}}
 				column={[
-					{ text: 'Date', width: 70 },
-					{ text: 'Nom de l’événement' },
-					{ text: 'Crée le', width: 80 },
-					{ text: 'Crée par', width: 200 },
-					{ text: 'Inscrits', width: 100 },
-					{ text: '', width: 50 },
+					{ id: 'date', text: 'Date', width: 70 },
+					{ id: 'name', text: 'Nom de l’événement' },
+					{ id: 'created_at', text: 'Crée le', width: 80 },
+					{ id: 'created_by', text: 'Crée par', width: 200 },
+					{ id: 'register', text: 'Inscrits', width: 100 },
+					{ text: '', width: 50, sortable: false },
 				]}
 				data={listEvents}
 				onImport={openFilePicker}
 				onExport={exportEvents}
 				onNew={() => router.push('events/new')}
-				loading={false}
+				loading={isLoading}
+				error={error}
 				activeMenu={activeMenu}
 				onActiveMenuChange={setActiveMenu}
 				onSearch={setSearch}
+				onChangeSort={(sort) => {
+					const generatedParameters = sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(',');
+					console.log(generatedParameters);
+				}}
 			/>
 			{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
 		</>

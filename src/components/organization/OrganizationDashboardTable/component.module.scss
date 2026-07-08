@@ -12,7 +12,7 @@
 	left: 370px;
 	width: calc(100vw - 370px);
 	background-color: var(--color-primary-black);
-	z-index: 100;
+	z-index: 100000;
 }
 
 .header_container {
@@ -52,7 +52,7 @@
 		margin-right: auto;
 		align-items: center;
 
-		button {
+		& > button {
 			appearance: none;
 			height: 34px;
 			aspect-ratio: 1;
