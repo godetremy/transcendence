@@ -3,7 +3,7 @@
 	appearance: none;
 	border: none;
 	width: 100%;
-	max-width: 350px;
+	max-width: 362px;
 	aspect-ratio: 16 / 9;
 	cursor: pointer;
 	background-color: var(--color-border-light);
@@ -39,8 +39,9 @@
 	position: absolute;
 	left: 80px;
 	bottom: 10px;
+	opacity: 0.8;
 	color: var(--color-primary-white);
 	display: flex;
 	align-items: center;
-	gap: 6px;
+	gap: 2px;
 }
