@@ -1,0 +1,46 @@
+.card {
+	position: relative;
+	appearance: none;
+	border: none;
+	width: 100%;
+	max-width: 350px;
+	aspect-ratio: 16 / 9;
+	cursor: pointer;
+	background-color: var(--color-border-light);
+
+	&:active {
+		scale: 0.98;
+	}
+}
+
+.image {
+	object-fit: cover;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 16px;
+	opacity: 0.8;
+}
+.calendar {
+	position: absolute;
+	left: 10px;
+	bottom: 10px;
+}
+.h1{
+	font: 600 25px var(--font-title);
+	position: absolute;
+	left: 80px;
+	bottom: 30px;
+	color: var(--color-primary-white);
+}
+.p{
+	font: var(--font-paragraph);
+	position: absolute;
+	left: 80px;
+	bottom: 10px;
+	color: var(--color-primary-white);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
