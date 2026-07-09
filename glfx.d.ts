@@ -1,7 +1,7 @@
 declare module 'glfx' {
 	interface FxCanvas extends HTMLCanvasElement {
 		draw(texture: FxTexture): FxCanvas;
-		texture(texture: HTMLImageElement): FxTexture;
+		texture(texture: HTMLImageElement | ImageBitmap): FxTexture;
 		brightnessContrast(brightness: number, contrast: number): FxCanvas;
 		hueSaturation(hue: number, saturation: number): FxCanvas;
 		unsharpMask(radius: number, amount: number): FxCanvas;
@@ -9,7 +9,7 @@ declare module 'glfx' {
 	}
 
 	interface FxTexture {
-		loadContentsOf(el: HTMLImageElement | HTMLCanvasElement): void;
+		loadContentsOf(el: HTMLImageElement | HTMLCanvasElement | ImageBitmap): void;
 		destroy(): void;
 	}
 

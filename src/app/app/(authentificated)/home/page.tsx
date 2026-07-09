@@ -1,13 +1,13 @@
 'use client';
-
 import { User } from '@/types/User';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
 import { useUpload } from '@/contexts/UploadTokenContext';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
-import { ImageEditor } from '@/components/globals/ImageEditor/ImageEditor';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
+import { ImageEditor } from '@/utils/image';
+import { ImageEditorCard } from '@/components/globals/ImageEditor/ImageEditorCard';
 
 export default function Page() {
 	const { openModal } = useModal();
@@ -15,14 +15,29 @@ export default function Page() {
 	const [user, setUser] = useState<User<{ membership: true }> | null>(null);
 
 	const [file, setFile] = useState<File | null>(null);
-	const [showEditor, setShowEditor] = useState(false);
+	const [render, setRender] = useState<Blob | null>(null);
+
+	const [showEditor, setShowEditor] = useState<boolean>(false);
+	const editor = useRef<ImageEditor | null>(null);
 
 	const [progress, setProgress] = useState(0);
 	useEffect(() => {
+		editor.current = new ImageEditor();
 		fetch('/app/api/users/me')
 			.then((res) => res.json())
 			.then(setUser);
+		return () => editor.current?.destroy();
 	}, []);
+
+	useEffect(() => {
+		if (!file) return;
+
+		editor.current
+			?.loadTexture(file)
+			.then(() => editor.current?.edit({ brightness: 0, contrast: 0, sharpness: 0 }))
+			.catch((e) => console.error(e))
+			.finally(() => console.log('End load'));
+	}, [file]);
 
 	return (
 		<>
@@ -128,8 +143,22 @@ export default function Page() {
 					<div>Progress: {progress}%</div>
 					<CircleLoader progress={progress} size={54} />
 				</div>
-				<button onClick={() => setShowEditor(true)}>Edit image</button>
-				<ImageEditor file={file} visible={showEditor} setVisible={setShowEditor} />
+
+				<button onClick={() => setShowEditor(true)}>open editor</button>
+				<button onClick={() => document.body.appendChild(editor.current.canvas)}>Append canva to body</button>
+				<button onClick={() => editor.current?.render().then(setRender)}>Render</button>
+				<button
+					onClick={() => {
+						editor.current?.render().then((blob) => {
+							upload.uploadFiles(blob, setProgress).then((res) => console.log(res));
+						});
+					}}
+				>
+					Render and upload
+				</button>
+				{render && <img src={URL.createObjectURL(render)} alt="render" style={{ maxWidth: '100%' }} />}
+
+				<ImageEditorCard editor={editor} visible={showEditor} setVisible={setShowEditor} />
 			</section>
 		</>
 	);
