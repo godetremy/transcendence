@@ -4,7 +4,7 @@ import { createContext, ReactNode, useContext } from 'react';
 const UploadTokenContext = createContext<{
 	token: string;
 	uploadFiles: (
-		files: File | File[],
+		files: File | Blob,
 		onProgress: (progress: number) => void
 	) => Promise<{ name: string; size: number }>;
 }>({
@@ -21,17 +21,13 @@ export function UploadTokenProvider({ children, token }: { children: ReactNode; 
 	};
 
 	const uploadFiles = async (
-		files: File | File[],
+		file: File | Blob,
 		onProgress: (progress: number) => void
 	): Promise<{ name: string; size: number }> => {
 		return new Promise((resolve, reject) => {
-			const filesList = Array.isArray(files) ? files : [files];
-
 			const formData = new FormData();
 
-			for (let i = 0; i < filesList.length; i++) {
-				formData.append('file', filesList[i], crypto.randomUUID());
-			}
+			formData.append('file', file, crypto.randomUUID());
 
 			const xhr = new XMLHttpRequest();
 
