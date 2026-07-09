@@ -20,37 +20,37 @@ export default function Page() {
 				<h1 className={styles.h1}>AUJOURD'HUI</h1>
 				<EventPreview
 					image={'/images/demo_event_01.png'}
-					date={12}
-					title={'coucou'}
+					date={Date.now()}
+					title={'🎙️ Soirée Karaoké'}
 					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
 				<EventPreview
 					image={'/images/demo_event_01.png'}
-					date={12}
-					title={'coucou'}
+					date={Date.now()}
+					title={'🎙️ Soirée Karaoké'}
 					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
 				<EventPreview
 					image={'/images/demo_event_01.png'}
-					date={12}
-					title={'coucou'}
+					date={Date.now()}
+					title={'🎙️ Soirée Karaoké'}
 					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
 				<h1 className={styles.h1}>DEMAIN</h1>
 				<EventPreview
 					image={'/images/demo_event_01.png'}
-					date={12}
-					title={'coucou'}
+					date={Date.now()}
+					title={'🎙️ Soirée Karaoké'}
 					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
 				<EventPreview
 					image={'/images/demo_event_01.png'}
-					date={12}
-					title={'coucou'}
+					date={Date.now()}
+					title={'🎙️ Soirée Karaoké'}
 					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
