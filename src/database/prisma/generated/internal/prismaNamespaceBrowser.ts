@@ -159,7 +159,9 @@ export type MembershipsScalarFieldEnum = (typeof MembershipsScalarFieldEnum)[key
 export const Organization_followersScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  organization_id: 'organization_id'
+  organization_id: 'organization_id',
+  total_followers: 'total_followers',
+  update_at: 'update_at'
 } as const
 
 export type Organization_followersScalarFieldEnum = (typeof Organization_followersScalarFieldEnum)[keyof typeof Organization_followersScalarFieldEnum]

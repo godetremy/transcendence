@@ -1,5 +1,6 @@
 import { getEventById } from '@/database/Event';
 import { formatPublicEvent } from '@/database/format/Event';
+import { createViewElasticSearch } from '@/database/prisma/elasticSearch';
 import {
 	countEventRegistrationsByFilter,
 	createEventRegistrationsById,
@@ -22,6 +23,8 @@ export async function GET(
 
 		const event_value = await getEventById(event_id, { organization: true });
 		if (event_value === null) throw ERRORS_DETAILS.event_does_not_exists();
+
+		createViewElasticSearch(event_value.organization_id, event_id);
 
 		return NextResponse.json(formatPublicEvent<object>(event_value));
 	});

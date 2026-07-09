@@ -1,7 +1,7 @@
 import { prisma } from '@/database/prisma/prisma';
-import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { Prisma } from '@/database/prisma/generated/client';
+import { createFollowersElasticSearch, deleteFollowersElasticSearch } from './prisma/elasticSearch';
 
 const countOrganizationFollowersByFilter = async (filter: Prisma.organization_followersWhereInput): Promise<number> => {
 	return prisma.organization_followers.count({
@@ -17,7 +17,6 @@ const getOrganizationFollowersByFilter = async <T extends Prisma.organization_fo
 	return prisma.organization_followers.findMany({
 		where: filter,
 		include: include,
-		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 };
 
@@ -26,14 +25,18 @@ const manageFollow = async (
 	follow: boolean,
 	id: string
 ): Promise<Prisma.organization_followersGetPayload<Prisma.organization_followersDefaultArgs>> => {
+	const number = await countOrganizationFollowersByFilter({ organization_id: id });
 	if (follow) {
+		createFollowersElasticSearch(id);
 		return prisma.organization_followers.create({
 			data: {
+				total_followers: number + 1,
 				user_id: user,
 				organization_id: id,
 			},
 		});
 	}
+	deleteFollowersElasticSearch(id);
 	return prisma.organization_followers.delete({
 		where: { id: user },
 	});

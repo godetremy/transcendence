@@ -1,35 +1,35 @@
 @use '../../../app/supports';
 
 .calendar {
-  width: 55px;
-  height: 55px;
-  background-color: var(--color-primary-white);
-  mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 50 50' fill='%23F00' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20C0 10.5719 0 5.85786 2.92893 2.92893C5.85786 0 10.5719 0 20 0H30C39.4281 0 44.1421 0 47.0711 2.92893C50 5.85786 50 10.5719 50 20V30C50 39.4281 50 44.1421 47.0711 47.0711C44.1421 50 39.4281 50 30 50H20C10.5719 50 5.85786 50 2.92893 47.0711C0 44.1421 0 39.4281 0 30V20Z'/%3E%3C/svg%3E");
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
+	width: 55px;
+	height: 55px;
+	background-color: var(--color-primary-white);
+	mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 50 50' fill='%23F00' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20C0 10.5719 0 5.85786 2.92893 2.92893C5.85786 0 10.5719 0 20 0H30C39.4281 0 44.1421 0 47.0711 2.92893C50 5.85786 50 10.5719 50 20V30C50 39.4281 50 44.1421 47.0711 47.0711C44.1421 50 39.4281 50 30 50H20C10.5719 50 5.85786 50 2.92893 47.0711C0 44.1421 0 39.4281 0 30V20Z'/%3E%3C/svg%3E");
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
 
-  &.skeleton {
-    background-color: var(--color-primary-white);
-  }
+	&.skeleton {
+		background-color: var(--color-primary-white);
+	}
 
-  .month {
-    height: 19px;
-    background: linear-gradient(180deg, #FE7577 0%, #FE5356 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font: 500 11px var(--font-paragraph);
-  }
+	.month {
+		height: 19px;
+		background: linear-gradient(180deg, #fe7577 0%, #fe5356 100%);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font: 500 11px var(--font-paragraph);
+	}
 
-  .day {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font: 600 22px var(--font-paragraph);
-    line-height: 0.6;
-    margin-top: -3px;
-    color: var(--color-primary-black);
-  }
+	.day {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font: 600 22px var(--font-paragraph);
+		line-height: 0.6;
+		margin-top: -3px;
+		color: var(--color-primary-black);
+	}
 }
