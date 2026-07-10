@@ -69,20 +69,6 @@ export async function GET(
 										.filter((title): title is string => !!title),
 								},
 							},
-							{
-								subtitle: {
-									in: elasticSearchEvents
-										.map((u) => u.subtitle)
-										.filter((subtitle): subtitle is string => !!subtitle),
-								},
-							},
-							{
-								description: {
-									in: elasticSearchEvents
-										.map((u) => u.description)
-										.filter((description): description is string => !!description),
-								},
-							},
 						],
 					}),
 		};
