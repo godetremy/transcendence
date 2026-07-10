@@ -22,12 +22,12 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 		include: include,
 		distinct: ['id'],
 		orderBy: sorting ?? { start_at: 'asc' },
-		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, [
+		...(!sorting ? {} : sortingToPrisma(sorting, [
 			'date|start_at',
 			'name|title',
 			'created_at|created_at',
 			'created_by|owner',
-		]),
+		])),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 };

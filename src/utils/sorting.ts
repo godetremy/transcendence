@@ -13,6 +13,7 @@ const getSortingParams = (params: URLSearchParams): SortingOption[] => {
 		const fields = sort.split(',').map((s) => s.trim());
 		for (const field of fields) {
 			const detail = field.split(' ');
+			if (detail[0].length == 0) return sorting;
 
 			const option: SortingOption = DEFAULT_SORTINGOPTION;
 
