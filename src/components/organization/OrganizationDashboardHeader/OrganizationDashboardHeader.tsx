@@ -14,8 +14,6 @@ export function OrganizationDashboardHeader(props: OrganizationDashboardHeaderPr
 	const [width, setWidth] = useState(0);
 	const [left, setLeft] = useState(20);
 
-	const selected = props.selected ?? internalSelected;
-
 	const buttonsRef = useRef<Array<HTMLButtonElement | null>>([]);
 
 	useEffect(() => {

@@ -6,11 +6,17 @@ import { getEvents } from '@/lib/fetcher/events';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
+import { PrivateEvent } from '@/types/Event';
 
 export default function Page() {
 	const router = useRouter();
 	const orgctx = useOrganizations();
-	const [organization] = useState(orgctx.getCurrentOrganization()!);
+	const modal = useModal();
+	const organization = orgctx.getCurrentOrganization()!;
+
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [search, setSearch] = useState<string>('');
 
@@ -92,12 +98,23 @@ export default function Page() {
 		return `${d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}`;
 	};
 
+	const deleteEvent = async (event: PrivateEvent<object>) => {
+		modal.openModal({
+			title: `Veux-tu vraiment supprimer « ${event.title} » ?`,
+			message: 'Attention, une fois supprimer tu ne pourras pas le récupérer.',
+			buttons: [
+				{ text: 'Je le laisse' },
+				{ negative: true, text: 'Supprimer cette événement', onClick: () => {} },
+			],
+		});
+	};
+
 	const listEvents = useMemo(() => {
 		if (!data) return [];
 
-		return data.pages.flatMap((page) =>
-			page.data.map((event) => ({
-				key: event.id,
+		return data.pages.flatMap((page, page_index) =>
+			page.data.map((event, index) => ({
+				key: `${page_index}_${index}`,
 				children: [
 					<p key={1}>{formatDate(event.start_at)}</p>,
 					<p key={2}>{event.title}</p>,
@@ -108,7 +125,24 @@ export default function Page() {
 							? '--'
 							: `${event.register_number}/${event.max_registration == 0 ? '∞' : event.max_registration}`}
 					</p>,
-					<p key={6}>demo</p>,
+					<MenuButton
+						key={index}
+						containerKey={`${page_index}_${index}`}
+						alignRight={true}
+						menu={[
+							{
+								title: 'Modifier',
+								icon: Pencil,
+								onClick: () => {},
+							},
+							{
+								title: 'Supprimer',
+								icon: Trash2,
+								negative: true,
+								onClick: async () => deleteEvent(event),
+							},
+						]}
+					/>,
 				],
 			}))
 		);
