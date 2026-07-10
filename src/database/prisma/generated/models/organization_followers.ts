@@ -28,18 +28,21 @@ export type Organization_followersMinAggregateOutputType = {
   id: string | null
   user_id: string | null
   organization_id: string | null
+  update_at: Date | null
 }
 
 export type Organization_followersMaxAggregateOutputType = {
   id: string | null
   user_id: string | null
   organization_id: string | null
+  update_at: Date | null
 }
 
 export type Organization_followersCountAggregateOutputType = {
   id: number
   user_id: number
   organization_id: number
+  update_at: number
   _all: number
 }
 
@@ -48,18 +51,21 @@ export type Organization_followersMinAggregateInputType = {
   id?: true
   user_id?: true
   organization_id?: true
+  update_at?: true
 }
 
 export type Organization_followersMaxAggregateInputType = {
   id?: true
   user_id?: true
   organization_id?: true
+  update_at?: true
 }
 
 export type Organization_followersCountAggregateInputType = {
   id?: true
   user_id?: true
   organization_id?: true
+  update_at?: true
   _all?: true
 }
 
@@ -139,6 +145,7 @@ export type Organization_followersGroupByOutputType = {
   id: string
   user_id: string
   organization_id: string
+  update_at: Date
   _count: Organization_followersCountAggregateOutputType | null
   _min: Organization_followersMinAggregateOutputType | null
   _max: Organization_followersMaxAggregateOutputType | null
@@ -166,6 +173,7 @@ export type organization_followersWhereInput = {
   id?: Prisma.StringFilter<"organization_followers"> | string
   user_id?: Prisma.StringFilter<"organization_followers"> | string
   organization_id?: Prisma.StringFilter<"organization_followers"> | string
+  update_at?: Prisma.DateTimeFilter<"organization_followers"> | Date | string
   user?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
 }
@@ -174,6 +182,7 @@ export type organization_followersOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  update_at?: Prisma.SortOrder
   user?: Prisma.usersOrderByWithRelationInput
   organization?: Prisma.organizationsOrderByWithRelationInput
   _relevance?: Prisma.organization_followersOrderByRelevanceInput
@@ -186,6 +195,7 @@ export type organization_followersWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.organization_followersWhereInput | Prisma.organization_followersWhereInput[]
   user_id?: Prisma.StringFilter<"organization_followers"> | string
   organization_id?: Prisma.StringFilter<"organization_followers"> | string
+  update_at?: Prisma.DateTimeFilter<"organization_followers"> | Date | string
   user?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
 }, "id">
@@ -194,6 +204,7 @@ export type organization_followersOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  update_at?: Prisma.SortOrder
   _count?: Prisma.organization_followersCountOrderByAggregateInput
   _max?: Prisma.organization_followersMaxOrderByAggregateInput
   _min?: Prisma.organization_followersMinOrderByAggregateInput
@@ -206,10 +217,12 @@ export type organization_followersScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"organization_followers"> | string
   user_id?: Prisma.StringWithAggregatesFilter<"organization_followers"> | string
   organization_id?: Prisma.StringWithAggregatesFilter<"organization_followers"> | string
+  update_at?: Prisma.DateTimeWithAggregatesFilter<"organization_followers"> | Date | string
 }
 
 export type organization_followersCreateInput = {
   id?: string
+  update_at?: Date | string
   user: Prisma.usersCreateNestedOneWithoutOrganization_followersInput
   organization: Prisma.organizationsCreateNestedOneWithoutOrganization_followersInput
 }
@@ -218,10 +231,12 @@ export type organization_followersUncheckedCreateInput = {
   id?: string
   user_id: string
   organization_id: string
+  update_at?: Date | string
 }
 
 export type organization_followersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.usersUpdateOneRequiredWithoutOrganization_followersNestedInput
   organization?: Prisma.organizationsUpdateOneRequiredWithoutOrganization_followersNestedInput
 }
@@ -230,22 +245,26 @@ export type organization_followersUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type organization_followersCreateManyInput = {
   id?: string
   user_id: string
   organization_id: string
+  update_at?: Date | string
 }
 
 export type organization_followersUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type organization_followersUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type organization_followersOrderByRelevanceInput = {
@@ -258,18 +277,21 @@ export type organization_followersCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  update_at?: Prisma.SortOrder
 }
 
 export type organization_followersMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  update_at?: Prisma.SortOrder
 }
 
 export type organization_followersMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  update_at?: Prisma.SortOrder
 }
 
 export type Organization_followersListRelationFilter = {
@@ -368,12 +390,14 @@ export type organization_followersUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type organization_followersCreateWithoutOrganizationInput = {
   id?: string
+  update_at?: Date | string
   user: Prisma.usersCreateNestedOneWithoutOrganization_followersInput
 }
 
 export type organization_followersUncheckedCreateWithoutOrganizationInput = {
   id?: string
   user_id: string
+  update_at?: Date | string
 }
 
 export type organization_followersCreateOrConnectWithoutOrganizationInput = {
@@ -409,16 +433,19 @@ export type organization_followersScalarWhereInput = {
   id?: Prisma.StringFilter<"organization_followers"> | string
   user_id?: Prisma.StringFilter<"organization_followers"> | string
   organization_id?: Prisma.StringFilter<"organization_followers"> | string
+  update_at?: Prisma.DateTimeFilter<"organization_followers"> | Date | string
 }
 
 export type organization_followersCreateWithoutUserInput = {
   id?: string
+  update_at?: Date | string
   organization: Prisma.organizationsCreateNestedOneWithoutOrganization_followersInput
 }
 
 export type organization_followersUncheckedCreateWithoutUserInput = {
   id?: string
   organization_id: string
+  update_at?: Date | string
 }
 
 export type organization_followersCreateOrConnectWithoutUserInput = {
@@ -450,41 +477,49 @@ export type organization_followersUpdateManyWithWhereWithoutUserInput = {
 export type organization_followersCreateManyOrganizationInput = {
   id?: string
   user_id: string
+  update_at?: Date | string
 }
 
 export type organization_followersUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.usersUpdateOneRequiredWithoutOrganization_followersNestedInput
 }
 
 export type organization_followersUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type organization_followersUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type organization_followersCreateManyUserInput = {
   id?: string
   organization_id: string
+  update_at?: Date | string
 }
 
 export type organization_followersUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.organizationsUpdateOneRequiredWithoutOrganization_followersNestedInput
 }
 
 export type organization_followersUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type organization_followersUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -493,6 +528,7 @@ export type organization_followersSelect<ExtArgs extends runtime.Types.Extension
   id?: boolean
   user_id?: boolean
   organization_id?: boolean
+  update_at?: boolean
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization_followers"]>
@@ -501,6 +537,7 @@ export type organization_followersSelectCreateManyAndReturn<ExtArgs extends runt
   id?: boolean
   user_id?: boolean
   organization_id?: boolean
+  update_at?: boolean
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization_followers"]>
@@ -509,6 +546,7 @@ export type organization_followersSelectUpdateManyAndReturn<ExtArgs extends runt
   id?: boolean
   user_id?: boolean
   organization_id?: boolean
+  update_at?: boolean
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization_followers"]>
@@ -517,9 +555,10 @@ export type organization_followersSelectScalar = {
   id?: boolean
   user_id?: boolean
   organization_id?: boolean
+  update_at?: boolean
 }
 
-export type organization_followersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "organization_id", ExtArgs["result"]["organization_followers"]>
+export type organization_followersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "organization_id" | "update_at", ExtArgs["result"]["organization_followers"]>
 export type organization_followersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
@@ -543,6 +582,7 @@ export type $organization_followersPayload<ExtArgs extends runtime.Types.Extensi
     id: string
     user_id: string
     organization_id: string
+    update_at: Date
   }, ExtArgs["result"]["organization_followers"]>
   composites: {}
 }
@@ -971,6 +1011,7 @@ export interface organization_followersFieldRefs {
   readonly id: Prisma.FieldRef<"organization_followers", 'String'>
   readonly user_id: Prisma.FieldRef<"organization_followers", 'String'>
   readonly organization_id: Prisma.FieldRef<"organization_followers", 'String'>
+  readonly update_at: Prisma.FieldRef<"organization_followers", 'DateTime'>
 }
     
 
