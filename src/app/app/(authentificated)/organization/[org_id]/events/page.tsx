@@ -1,5 +1,4 @@
 'use client';
-import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { getEvents } from '@/lib/fetcher/events';
@@ -148,7 +147,7 @@ export default function Page() {
 				],
 			}))
 		);
-	}, [data]);
+	}, [data, deleteEvent]);
 
 	return (
 		<>
@@ -176,7 +175,7 @@ export default function Page() {
 				onImport={openFilePicker}
 				onExport={exportEvents}
 				onNew={() => router.push('events/new')}
-				loading={isLoading}
+				loading={isLoading || isFetchingNextPage}
 				error={error}
 				activeMenu={activeMenu}
 				onActiveMenuChange={setActiveMenu}
@@ -185,8 +184,9 @@ export default function Page() {
 					setGeneratedParameters(sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(','));
 					console.log(generatedParameters);
 				}}
+				hasNextPage={hasNextPage}
+				onLoadNextPage={fetchNextPage}
 			/>
-			{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
 		</>
 	);
 }

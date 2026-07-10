@@ -15,6 +15,7 @@ import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 import { useScroll, useTransform } from 'framer-motion';
 import { SortButton, SortingOption } from '@/components/globals/SortButton/SortButton';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 
 export interface OrganizationDashboardTableColumn {
 	id?: string;
@@ -36,6 +37,8 @@ export interface OrganizationDashboardTable {
 	onActiveMenuChange?: (index: number) => void;
 	onSearch?: (search: string) => void;
 	onChangeSort?: (sort: SortingOption[]) => void;
+	hasNextPage?: boolean;
+	onLoadNextPage?: () => void;
 }
 
 export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
@@ -200,6 +203,9 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 				</span>
 			)}
 			{props.error && <ErrorState error={props.error} />}
+			{props.hasNextPage && !props.loading && (
+				<ShowMoreButton onClick={() => props.onLoadNextPage?.()} className={styles.next_page_button} />
+			)}
 		</section>
 	);
 }
