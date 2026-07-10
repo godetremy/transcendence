@@ -29,6 +29,21 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 	});
 };
 
+const getEventsDashBoard = async <T extends Prisma.eventsInclude>(
+	filter: Prisma.eventsWhereInput,
+	include: T,
+	sorting?: SortingOption[]
+): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
+	return prisma.events.findMany({
+		where: filter,
+		include: include,
+		orderBy: {
+			start_at: 'asc',
+		},
+		distinct: ['id'],
+	});
+};
+
 const getEventsByFilter = async <T extends Prisma.eventsInclude>(
 	include: T,
 	time?: DateOption,
@@ -181,4 +196,5 @@ export {
 	getEventByAlbumId,
 	getEventsByElasticSearch,
 	createManyEvent,
+	getEventsDashBoard,
 };

@@ -30,7 +30,6 @@ const manageFollow = async (
 		createFollowersElasticSearch(id);
 		return prisma.organization_followers.create({
 			data: {
-				total_followers: number + 1,
 				user_id: user,
 				organization_id: id,
 			},

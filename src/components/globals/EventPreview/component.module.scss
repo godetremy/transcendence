@@ -16,7 +16,7 @@
 	&::after {
 		position: absolute;
 		inset: 0;
-		content: "";
+		content: '';
 		border-radius: 16px;
 		border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
 	}
@@ -30,7 +30,11 @@
 	}
 
 	& > .details {
-		background: linear-gradient(rgba(var(--color-rgb-primary-black), 0), rgba(var(--color-rgb-primary-black), 0.8), rgba(var(--color-rgb-primary-black), 1));
+		background: linear-gradient(
+			rgba(var(--color-rgb-primary-black), 0),
+			rgba(var(--color-rgb-primary-black), 0.8),
+			rgba(var(--color-rgb-primary-black), 1)
+		);
 		border-radius: 0 0 16px 16px;
 		display: flex;
 		align-items: center;
@@ -54,7 +58,7 @@
 				display: flex;
 				gap: 5px;
 				align-items: center;
-				opacity: .6;
+				opacity: 0.6;
 			}
 		}
 
@@ -70,7 +74,7 @@
 	bottom: 10px;
 }
 
-.h1{
+.h1 {
 	font: 600 25px var(--font-paragraph);
 	position: absolute;
 	left: 80px;

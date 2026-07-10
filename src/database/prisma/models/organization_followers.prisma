@@ -3,8 +3,6 @@ model organization_followers {
 	user_id				String
 	organization_id		String
 
-	total_followers		Int
-
 	update_at			DateTime		@updatedAt
 
 	user				users			@relation(fields: [user_id], references: [id])

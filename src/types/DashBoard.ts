@@ -1,4 +1,4 @@
-export interface DatasetsType {
+export interface DatasetsAreaType {
 	fill: boolean;
 	label: string;
 	data: number[];
@@ -6,9 +6,22 @@ export interface DatasetsType {
 	backgroundColor: string;
 }
 
-export interface DashboardEventType {
+export interface DatasetsDoughnutType {
+	borderWidth: number;
+	label: string;
+	data: number[];
+	borderColor: string[];
+	backgroundColor: string[];
+}
+
+export interface OptionArea {
 	labels: string[];
-	datasets: DatasetsType[];
+	datasets: DatasetsAreaType[];
+}
+
+export interface OptionDoughnut {
+	labels: string[];
+	datasets: DatasetsDoughnutType[];
 }
 
 export interface DashboardReturnType {
@@ -19,9 +32,29 @@ export interface DashboardReturnType {
 			data: number[];
 		}[];
 	};
+	doughnut: {
+		followers: {
+			labels: string[];
+			list: {
+				label: string;
+				data: number[];
+			}[];
+		};
+		register: {
+			labels: string[];
+			list: {
+				label: string;
+				data: number[];
+			}[];
+		};
+	};
+	totalViews: number;
+	totalFollowers: number;
+	percentageViews: number;
+	percentageFollowers: number;
 }
 
-export interface DashboardTabValueType {
+export interface DashboardValueType {
 	labels: string[];
 	list: {
 		label: string;

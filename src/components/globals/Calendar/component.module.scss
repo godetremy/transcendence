@@ -13,15 +13,15 @@
 		background-color: var(--color-primary-white);
 	}
 
-  .month {
-    height: 19px;
-    background: linear-gradient(180deg, #FE7577 0%, #FE5356 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font: 500 11px var(--font-paragraph);
-    color: var(--color-primary-white);
-  }
+	.month {
+		height: 19px;
+		background: linear-gradient(180deg, #fe7577 0%, #fe5356 100%);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font: 500 11px var(--font-paragraph);
+		color: var(--color-primary-white);
+	}
 
 	.day {
 		flex: 1;

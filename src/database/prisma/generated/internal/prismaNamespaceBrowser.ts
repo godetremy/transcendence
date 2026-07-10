@@ -160,7 +160,6 @@ export const Organization_followersScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   organization_id: 'organization_id',
-  total_followers: 'total_followers',
   update_at: 'update_at'
 } as const
 

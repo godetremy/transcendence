@@ -14,12 +14,14 @@ import {
 	Title,
 	Tooltip,
 	Legend,
+	Filler,
+	ArcElement,
 } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Title, Tooltip, Legend, Filler);
 
-import { Line } from 'react-chartjs-2';
-import { DashboardEventType, DashboardReturnType, DashboardTabValueType } from '@/types/DashBoard';
+import { Doughnut, Line } from 'react-chartjs-2';
+import { DashboardReturnType, DashboardValueType, OptionArea, OptionDoughnut } from '@/types/DashBoard';
 
 export const options = {
 	responsive: true,
@@ -69,7 +71,10 @@ export default function Page() {
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [org] = useState<PrivateOrganization>(organizationctx.getCurrentOrganization()!);
 
-	const [dashboard, setDashboard] = useState<DashboardEventType>();
+	const [dashboardArea, setDashboardArea] = useState<OptionArea>();
+	const [dashboardDoughnutFollowers, setDashboardDoughnutFollowers] = useState<OptionDoughnut>();
+	const [dashboardDoughnutRegister, setDashboardDoughnutRegister] = useState<OptionDoughnut>();
+	const [data, setData] = useState<DashboardReturnType>();
 
 	function addDays(date: Date, days: number): Date {
 		const result = new Date(date);
@@ -92,9 +97,10 @@ export default function Page() {
 		return [addDays(today, -365), today];
 	}
 
-	const color = ['rgb(159, 153, 255)', 'rgb(153, 255, 186)', 'rgb(253, 132, 254)'];
+	const colorBackground = ['rgb(159, 153, 255)', 'rgb(153, 255, 186)', 'rgb(253, 132, 254)'];
+	const color = ['rgb(86, 79, 175)', 'rgb(75, 167, 104)', 'rgb(160, 56, 160)'];
 
-	function formatGraph(data: DashboardTabValueType): DashboardEventType {
+	function formatOptionArea(data: DashboardValueType): OptionArea {
 		return {
 			labels: data.labels,
 			datasets: data.list.map((row, i) => {
@@ -103,7 +109,22 @@ export default function Page() {
 					label: row.label,
 					data: row.data,
 					borderColor: color[i % 3],
-					backgroundColor: color[i % 3],
+					backgroundColor: colorBackground[i % 3],
+				};
+			}),
+		};
+	}
+
+	function formatOptionDoughnut(data: DashboardValueType): OptionDoughnut {
+		return {
+			labels: data.labels,
+			datasets: data.list.map((row) => {
+				return {
+					label: row.label,
+					data: row.data,
+					borderColor: data.labels.map((row, i) => color[i % 3]),
+					backgroundColor: data.labels.map((row, i) => colorBackground[i % 3]),
+					borderWidth: 3,
 				};
 			}),
 		};
@@ -135,7 +156,10 @@ export default function Page() {
 				});
 
 				const data = await get<DashboardReturnType>(`/organization/${org.id}/dashboard?${params.toString()}`);
-				setDashboard(formatGraph(data.area));
+				setDashboardArea(formatOptionArea(data.area));
+				setDashboardDoughnutFollowers(formatOptionDoughnut(data.doughnut.followers));
+				setDashboardDoughnutRegister(formatOptionDoughnut(data.doughnut.register));
+				setData(data);
 			} catch (error) {
 				console.error('Erreur lors du chargement du dashboard :', error);
 			}
@@ -157,8 +181,32 @@ export default function Page() {
 				onSelectChange={setActiveMenu}
 				selected={activeMenu}
 			/>
+			{data != null ? (
+				<>
+					<h1>
+						Views : {data.totalViews} {data.percentageViews.toPrecision(3)}%
+					</h1>
+					<h1>
+						Followers : {data.totalFollowers} {data.percentageFollowers.toPrecision(3)}%
+					</h1>
+				</>
+			) : null}
 			<div style={{ height: 500 }}>
-				{dashboard ? <Line options={options} data={dashboard} /> : <p>Chargement du dashboard...</p>}
+				{dashboardArea ? <Line options={options} data={dashboardArea} /> : <p>Chargement du dashboard...</p>}
+			</div>
+			<div style={{ height: 200 }}>
+				{dashboardDoughnutFollowers ? (
+					<Doughnut data={dashboardDoughnutFollowers} />
+				) : (
+					<p>Chargement du dashboard...</p>
+				)}
+			</div>
+			<div style={{ height: 200 }}>
+				{dashboardDoughnutRegister ? (
+					<Doughnut data={dashboardDoughnutRegister} />
+				) : (
+					<p>Chargement du dashboard...</p>
+				)}
 			</div>
 		</>
 	);

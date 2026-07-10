@@ -1,4 +1,6 @@
 import { getDashBoardFollowersByElasticSearch, getDashBoardViewsByElasticSearch } from '@/database/dashBoard';
+import { getEventsDashBoard } from '@/database/Event';
+import { formatPrivateEvent } from '@/database/format/Event';
 import { getOrganizationById } from '@/database/Organization';
 import { getUserFromSession } from '@/database/User';
 import { getThrowableSession } from '@/lib/session';
@@ -55,8 +57,11 @@ function generateLabelsAndRanges(from: Date, to: Date): { labels: string[]; rang
 	return { labels, ranges };
 }
 
-function bucketizeData(data: { data: number; update_at: string }[], ranges: { start: Date; end: Date }[]): number[] {
-	let lastValue = 0;
+function bucketizeData(
+	data: { cumulative_data: number; update_at: string }[],
+	ranges: { start: Date; end: Date }[]
+): number[] {
+	let lastValue_cumulative = 0;
 
 	return ranges.map(({ start, end }) => {
 		const itemsInRange = data.filter((item) => {
@@ -65,10 +70,10 @@ function bucketizeData(data: { data: number; update_at: string }[], ranges: { st
 		});
 
 		if (itemsInRange.length > 0) {
-			lastValue = itemsInRange[itemsInRange.length - 1].data;
+			lastValue_cumulative = itemsInRange[itemsInRange.length - 1].cumulative_data;
 		}
 
-		return lastValue;
+		return lastValue_cumulative;
 	});
 }
 
@@ -94,28 +99,42 @@ export async function GET(
 		const followers = await getDashBoardFollowersByElasticSearch(org_id);
 		const elasticSearchFollowers = (followers.aggregations?.views_over_time.buckets ?? [])
 			.map((hit) => ({
-				data: hit.cumulative_views?.value,
+				cumulative_data: hit.cumulative_views?.value,
 				update_at: hit.key_as_string,
 			}))
 			.filter(
-				(row): row is { data: number; update_at: string } =>
-					row.data !== undefined && row.update_at !== undefined
+				(row): row is { cumulative_data: number; data: number; update_at: string } =>
+					row.cumulative_data !== undefined && row.update_at !== undefined
 			);
 
 		const views = await getDashBoardViewsByElasticSearch(org_id);
 		const elasticSearchViews = (views.aggregations?.views_over_time.buckets ?? [])
 			.map((hit) => ({
-				data: hit.cumulative_views?.value,
+				cumulative_data: hit.cumulative_views?.value,
 				update_at: hit.key_as_string,
 			}))
 			.filter(
-				(row): row is { data: number; update_at: string } =>
-					row.data !== undefined && row.update_at !== undefined
-			)!;
+				(row): row is { cumulative_data: number; update_at: string } =>
+					row.cumulative_data !== undefined && row.update_at !== undefined
+			);
+
+		const events = await getEventsDashBoard({ organization_id: org_id }, { event_registration: true });
+		const listEvents = events.map(formatPrivateEvent<{ event_registration: true }>);
+		const dataEvents = listEvents.map((row) => ({
+			numberRegister: row.register_number,
+			maxRegister: row.max_registration,
+			update_at: row.created_at,
+		}));
 
 		let filteredCountsViews: number[] = [];
 		let filteredCountsFollowers: number[] = [];
 		let labels: string[] = [];
+
+		let filteredEvents: {
+			numberRegister: never;
+			maxRegister: number | null;
+			update_at: string;
+		}[] = [];
 
 		if (date.from != null && date.to != null) {
 			const fromDate = new Date(date.from);
@@ -133,6 +152,7 @@ export async function GET(
 
 			filteredCountsViews = bucketizeData(listGraphViews, ranges);
 			filteredCountsFollowers = bucketizeData(listGraphFollowers, ranges);
+			filteredEvents = dataEvents.filter((item) => item.update_at <= date.to! && item.update_at >= date.from!);
 		} else {
 			const allDates = [...elasticSearchViews, ...elasticSearchFollowers].map((d) => new Date(d.update_at));
 			const minDate = allDates.length > 0 ? new Date(Math.min(...allDates.map((d) => d.getTime()))) : new Date();
@@ -143,8 +163,24 @@ export async function GET(
 
 			filteredCountsViews = bucketizeData(elasticSearchViews, ranges);
 			filteredCountsFollowers = bucketizeData(elasticSearchFollowers, ranges);
+			filteredEvents = dataEvents;
 		}
 
+		const totalRegistered = filteredEvents.reduce(
+			(accumulator, currentValue) => accumulator + currentValue.numberRegister,
+			0
+		);
+		const totalPlaceRegister = filteredEvents.reduce(
+			(accumulator, currentValue) =>
+				accumulator + (currentValue.maxRegister == null ? 0 : currentValue.maxRegister),
+			0
+		);
+		const ratioViews =
+			((filteredCountsViews[filteredCountsViews.length - 1] - filteredCountsViews[0]) * 100) /
+			(filteredCountsViews[filteredCountsViews.length - 1] -
+				filteredCountsViews[0] +
+				(filteredCountsFollowers[filteredCountsFollowers.length - 1] - filteredCountsFollowers[0]));
+		const ratioPlaceRegister = (totalPlaceRegister * 100) / (totalPlaceRegister + totalRegistered);
 		return NextResponse.json({
 			area: {
 				labels,
@@ -159,6 +195,39 @@ export async function GET(
 					},
 				],
 			},
+			doughnut: {
+				followers: {
+					labels: ['Followers', 'Vues'],
+					list: [
+						{
+							label: 'Vues/Followers',
+							data: [100 - Number(ratioViews.toPrecision(3)), Number(ratioViews.toPrecision(3))],
+						},
+					],
+				},
+				register: {
+					labels: ['inscrit', 'pas-inscrit'],
+					list: [
+						{
+							label: 'inscrit/pas-inscrit',
+							data: [
+								100 - Number(ratioPlaceRegister.toPrecision(3)),
+								Number(ratioPlaceRegister.toPrecision(3)),
+							],
+						},
+					],
+				},
+			},
+			totalViews: filteredCountsViews[filteredCountsViews.length - 1],
+			totalFollowers: filteredCountsFollowers[filteredCountsFollowers.length - 1],
+			percentageViews:
+				filteredCountsViews[0] == 0
+					? filteredCountsViews[filteredCountsViews.length - 1]
+					: filteredCountsViews[filteredCountsViews.length - 1] / filteredCountsViews[0],
+			percentageFollowers:
+				filteredCountsFollowers[0] == 0
+					? filteredCountsFollowers[filteredCountsFollowers.length - 1]
+					: filteredCountsFollowers[filteredCountsFollowers.length - 1] / filteredCountsFollowers[0],
 		});
 	});
 }
