@@ -147,6 +147,11 @@
 	}
 }
 
+.next_page_button {
+	margin-top: 20px;
+	justify-self: center;
+}
+
 @media (max-width: supports.$breakpoints-laptop) {
 	.fixed_header {
 		width: calc(100vw - 70px);
