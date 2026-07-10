@@ -6,6 +6,7 @@ import { PaginationResponse } from '@/types/PaginationResponse';
 
 const getEvents = (
 	org_id: string,
+	generatedParameters: string | null,
 	from: string | null,
 	to: string | null,
 	q: string | null,
@@ -19,9 +20,9 @@ const getEvents = (
 > => ({
 	queryFn: ({ pageParam }) =>
 		get<PaginationResponse<PrivateEvent<object>>>(
-			`/organization/${org_id}/events?page=${pageParam}${from == null ? '' : '&from=' + from}${to == null ? '' : '&to=' + to}${q == null || q.length == 0 ? '' : '&q=' + encodeURI(q.trim())}`
+			`/organization/${org_id}/events?page=${pageParam}${from == null ? '' : '&from=' + from}${to == null ? '' : '&to=' + to}${q == null || q.length == 0 ? '' : '&q=' + encodeURI(q.trim())}${generatedParameters == null ? '' : '&sort=' + encodeURI(generatedParameters.trim())}`
 		),
-	queryKey: ['organization', org_id, 'event', activeMenu, q],
+	queryKey: ['organization', org_id, 'event', activeMenu, q, generatedParameters],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
