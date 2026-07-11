@@ -22,10 +22,12 @@ export default function Page() {
 
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [search, setSearch] = useState<string>('');
+	const [generatedParameters, setGeneratedParameters] = useState<string | null>(null);
 
 	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, error } = useInfiniteQuery(
 		getEvents(
 			organization.id,
+			generatedParameters,
 			activeMenu == 2 ? null : new Date().toISOString(),
 			activeMenu == 0 ? null : activeMenu == 2 ? new Date().toISOString() : addDays(new Date(), 7).toISOString(),
 			search,
@@ -94,7 +96,7 @@ export default function Page() {
 		} catch (error) {
 			console.error("Erreur lors de l'export:", error);
 		}
-	}, [organization.id]);
+	}, [organization.id, generatedParameters]);
 
 	const deleteEvent = async (event: PrivateEvent<object>) => {
 		modal.openModal({
@@ -197,7 +199,7 @@ export default function Page() {
 				onActiveMenuChange={setActiveMenu}
 				onSearch={setSearch}
 				onChangeSort={(sort) => {
-					const generatedParameters = sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(',');
+					setGeneratedParameters(sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(','));
 					console.log(generatedParameters);
 				}}
 				hasNextPage={hasNextPage}

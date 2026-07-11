@@ -20,11 +20,14 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 	return prisma.events.findMany({
 		where: filter,
 		include: include,
-		orderBy: {
-			start_at: 'asc',
-		},
 		distinct: ['id'],
-		//...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
+		orderBy: sorting ?? { start_at: 'asc' },
+		...(!sorting ? {} : sortingToPrisma(sorting, [
+			'date|start_at',
+			'name|title',
+			'created_at|created_at',
+			'created_by|owner',
+		])),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
 };
