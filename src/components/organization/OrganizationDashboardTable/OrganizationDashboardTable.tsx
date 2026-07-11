@@ -160,9 +160,27 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 						{props.data.map((row, i) => (
 							<motion.tr
 								key={row.key}
-								initial={{ opacity: 0, marginTop: -60 }}
-								animate={{ opacity: 1, marginTop: 0 }}
-								exit={{ opacity: 0, marginTop: -60 }}
+								initial={{
+									opacity: 0,
+									marginTop: -60,
+									y: 30,
+									filter: 'blur(10px)',
+									transition: { type: 'spring', stiffness: 600, damping: 60 },
+								}}
+								animate={{
+									opacity: 1,
+									marginTop: 0,
+									y: 0,
+									filter: '',
+									transition: { type: 'spring', stiffness: 600, damping: 60 },
+								}}
+								exit={{
+									opacity: 0,
+									marginTop: -60,
+									y: 30,
+									filter: 'blur(10px)',
+									transition: { type: 'spring', stiffness: 600, damping: 60 },
+								}}
 							>
 								<td scope="row" style={{ minWidth: 30, justifyContent: 'center' }}>
 									<Checkbox

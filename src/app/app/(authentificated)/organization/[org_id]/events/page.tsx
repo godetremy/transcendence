@@ -1,4 +1,5 @@
 'use client';
+import styles from './page.module.scss';
 import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { getEvents } from '@/lib/fetcher/events';
@@ -9,6 +10,9 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { PrivateEvent } from '@/types/Event';
+import { Calendar } from '@/components/globals/Calendar/Calendar';
+import Image from 'next/image';
+import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
 
 export default function Page() {
 	const router = useRouter();
@@ -92,11 +96,6 @@ export default function Page() {
 		}
 	}, [organization.id]);
 
-	const formatDate = (date: string) => {
-		const d = new Date(date);
-		return `${d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}`;
-	};
-
 	const deleteEvent = async (event: PrivateEvent<object>) => {
 		modal.openModal({
 			title: `Veux-tu vraiment supprimer « ${event.title} » ?`,
@@ -115,15 +114,34 @@ export default function Page() {
 			page.data.map((event, index) => ({
 				key: `${page_index}_${index}`,
 				children: [
-					<p key={1}>{formatDate(event.start_at)}</p>,
-					<p key={2}>{event.title}</p>,
-					<p key={3}>{formatDate(event.created_at)}</p>,
-					<p key={4}>{event.owner}</p>,
-					<p key={5}>
-						{event.max_registration == null
-							? '--'
-							: `${event.register_number}/${event.max_registration == 0 ? '∞' : event.max_registration}`}
+					<Calendar key={0} date={event.start_at} size={'small'} />,
+					<p key={2} className={styles.title}>
+						{event.title}
 					</p>,
+					<span key={3} className={styles.detail}>
+						{new Date(event.created_at).toLocaleDateString('fr-FR', { dateStyle: 'short' })}
+					</span>,
+					<div key={4} className={styles.group}>
+						<Image
+							src={'https://cdn.intra.42.fr/users/451bc6a5cf2b4b27c5688d42fbc01694/rgodet.jpg'}
+							alt={`Photo de ${event.owner}`}
+							width={20}
+							height={20}
+							className={styles.avatar}
+						/>
+						<span className={styles.detail}>{event.owner}</span>
+					</div>,
+					<div key={5} className={styles.group}>
+						<CircleLoader
+							progress={event.event_registration.length / (event.max_registration ?? 1)}
+							size={20}
+							strokeWidth={10}
+						/>
+						<span className={styles.detail}>
+							{event.event_registration.length}/
+							{event.max_registration == null ? '∞' : event.max_registration}
+						</span>
+					</div>,
 					<MenuButton
 						key={index}
 						containerKey={`${page_index}_${index}`}
@@ -164,7 +182,7 @@ export default function Page() {
 				column={[
 					{ id: 'date', text: 'Date', width: 70 },
 					{ id: 'name', text: 'Nom de l’événement' },
-					{ id: 'created_at', text: 'Crée le', width: 80 },
+					{ id: 'created_at', text: 'Crée le', width: 100 },
 					{ id: 'created_by', text: 'Crée par', width: 200 },
 					{ id: 'register', text: 'Inscrits', width: 100 },
 					{ text: '', width: 50, sortable: false },
