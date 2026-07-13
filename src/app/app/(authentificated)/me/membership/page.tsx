@@ -14,6 +14,7 @@ import { User } from '@/types/User';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
+import ListContainer from '@/components/globals/ListContainer/ListContainer';
 
 export default function Page() {
 	const [showReload, setShowReload] = useState<boolean>(false);
@@ -47,36 +48,37 @@ export default function Page() {
 						>
 							<Plus /> Recharge
 						</button>
-						<button className={styles.secondary}>
-							<ArrowUpRight /> Virement
-						</button>
 					</div>
 					<span className={styles.listSectionTitle}>Historique</span>
-					<div className={styles.list}>
-						{lists.data.pages.map((row) =>
-							row.data.map((transaction, i) => (
-								<ListItem
-									title={transaction.name ?? ''}
-									description={'Débitée le 11/05/2026 - depuis le solde'}
-									rightElement={
-										<span
-											className={styles.debit}
-											style={{
-												color: transaction.amount >= 0 ? '#99FFBA' : '#FE5356',
-												backgroundColor: transaction.amount >= 0 ? '#99FFBA20' : '#FE535620',
-											}}
-										>
-											{`${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toFixed(2)}€`}
-										</span>
-									}
-									showChevron={false}
-									last={i === row.data.length - 1}
-									key={i}
-								/>
-							))
-						)}
-						{lists.data.pages[0].data.length === 0 && !lists.isLoading && <EmptyState />}
-					</div>
+					{lists.data.pages[0].data.length === 0 ? (
+						<EmptyState title="Tu n'as fait aucun achats..." description='Et si tu essayez pour voir ?'/>
+					) :  (
+						<ListContainer>
+							{lists.data.pages.map((row) =>
+								row.data.map((transaction, i) => (
+									<ListItem
+										title={transaction.name ?? ''}
+										description={'Débitée le 11/05/2026 - depuis le solde'}
+										rightElement={
+											<span
+												className={styles.debit}
+												style={{
+													color: transaction.amount >= 0 ? '#99FFBA' : '#FE5356',
+													backgroundColor: transaction.amount >= 0 ? '#99FFBA20' : '#FE535620',
+												}}
+											>
+												{`${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toFixed(2)}€`}
+											</span>
+										}
+										showChevron={false}
+										last={i === row.data.length - 1}
+										key={i}
+									/>
+								))
+							)}
+						</ListContainer>
+					)}
+					
 				</section>
 				<Card visible={showReload} requestClose={() => setShowReload(false)}>
 					<SumupReload />

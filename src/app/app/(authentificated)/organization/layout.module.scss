@@ -5,16 +5,13 @@
 	flex-direction: column;
 
 	& > article {
-		margin-left: 300px;
 		transition: 0.3s cubic-bezier(0.5, 0, 0, 1);
-		width: calc(100vw - 370px);
 	}
 }
 
 @media (max-width: supports.$breakpoints-laptop) {
 	.main_container {
 		& > article {
-			margin-left: 0;
 			width: 100vw;
 		}
 	}
