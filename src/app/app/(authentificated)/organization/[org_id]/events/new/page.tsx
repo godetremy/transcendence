@@ -11,9 +11,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
+import { ImageEditorCard } from '@/components/globals/ImageEditor/ImageEditorCard';
 import { CreateOrUpdateEventType } from '@/types/Event';
 import { useRouter } from 'next/navigation';
-import { ImageEditorCard } from '@/components/globals/ImageEditor/ImageEditorCard';
 import { createEventMutate } from '@/lib/fetcher/events';
 
 export default function Page() {
