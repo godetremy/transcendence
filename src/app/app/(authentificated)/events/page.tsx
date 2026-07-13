@@ -1,60 +1,82 @@
+'use client';
 import styles from './page.module.scss';
-import { EventPreview } from '@/components/globals/EventPreview/EventPreview';
+import { EventCard } from '@/components/globals/EventCard/EventCard';
 import { Search } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Page() {
+	const [selectedTag, setSelectedTag] = useState(0);
+
 	return (
-		<>
-			<div className={styles.page}>
-				<div className={styles.groupButton}>
-					<div className={styles.scrollArea}>
-						<button className={styles.first}>Tous</button>
-						<button className={styles.button}>Inscrit</button>
-						<button className={styles.button}>Par les clubs</button>
-						<button className={styles.button}>Par les clubs</button>
-					</div>
+		<div className={styles.page}>
+			<header>
+				<section className={styles.tags_container}>
+					<label>
+						<input
+							type={'radio'}
+							value={0}
+							checked={selectedTag === 0}
+							onChange={() => setSelectedTag(0)}
+						/>
+						Tous
+					</label>
+					<label>
+						<input
+							type={'radio'}
+							value={1}
+							checked={selectedTag === 1}
+							onChange={() => setSelectedTag(1)}
+						/>
+						Inscrit
+					</label>
+					<label>
+						<input
+							type={'radio'}
+							value={2}
+							checked={selectedTag === 2}
+							onChange={() => setSelectedTag(2)}
+						/>
+						Par les clubs
+					</label>
+					<label>
+						<input
+							type={'radio'}
+							value={3}
+							checked={selectedTag === 3}
+							onChange={() => setSelectedTag(3)}
+						/>
+						Passée
+					</label>
+				</section>
+				<section className={styles.search_container}>
 					<button className={styles.buttonSearch}>
-						<Search size={16} />
+						<Search size={18} />
 					</button>
-				</div>
-				<h1 className={styles.h1}>AUJOURD&apos;HUI</h1>
-				<EventPreview
+				</section>
+			</header>
+			<main>
+				<span>Aujourd&#39;hui</span>
+				<EventCard
 					image={'/images/demo_event_01.png'}
-					date={Date.now()}
+					date={new Date()}
 					title={'🎙️ Soirée Karaoké'}
-					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
-				<EventPreview
+				<EventCard
 					image={'/images/demo_event_01.png'}
-					date={Date.now()}
+					date={new Date()}
 					title={'🎙️ Soirée Karaoké'}
-					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
-				<EventPreview
+				<span>Aujourd&#39;hui</span>
+				<EventCard
 					image={'/images/demo_event_01.png'}
-					date={Date.now()}
+					date={new Date()}
 					title={'🎙️ Soirée Karaoké'}
-					time={'Lundi de 12h a 15h'}
 					location={'Terrasse'}
 				/>
-				<h1 className={styles.h1}>DEMAIN</h1>
-				<EventPreview
-					image={'/images/demo_event_01.png'}
-					date={Date.now()}
-					title={'🎙️ Soirée Karaoké'}
-					time={'Lundi de 12h a 15h'}
-					location={'Terrasse'}
-				/>
-				<EventPreview
-					image={'/images/demo_event_01.png'}
-					date={Date.now()}
-					title={'🎙️ Soirée Karaoké'}
-					time={'Lundi de 12h a 15h'}
-					location={'Terrasse'}
-				/>
-			</div>
-		</>
+				<div style={{ height: 10000 }} />
+			</main>
+		</div>
 	);
 }

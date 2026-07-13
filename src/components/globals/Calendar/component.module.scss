@@ -6,6 +6,7 @@
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
+	font-family: var(--font-paragraph);
 
 	&.skeleton {
 		background-color: var(--color-primary-white);
@@ -50,17 +51,19 @@
 	}
 
 	&.medium {
-		width: 55px;
-		height: 55px;
+		width: 52px;
+		height: 52px;
 		border-radius: 10px;
 
 		.month {
-			height: 19px;
-			font-size: 11px;
-			margin-top: -2px;
+			height: 18px;
+			font-size: 10px;
+			font-weight: 500;
+			padding-top: 1px;
 		}
 
 		.day {
+			font-weight: 600;
 			font-size: 22px;
 			margin-top: -3px;
 		}
