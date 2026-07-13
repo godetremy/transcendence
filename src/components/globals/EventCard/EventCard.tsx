@@ -1,18 +1,19 @@
 import styles from './component.module.scss';
 import { ChevronRight, Clock, MapPin } from 'lucide-react';
-import { ComponentPropsWithoutRef } from 'react';
 import { Calendar } from '@/components/globals/Calendar/Calendar';
+import Link from 'next/link';
 
-export interface EventCardProps extends ComponentPropsWithoutRef<'button'> {
+export interface EventCardProps {
+	id: string;
 	image: string;
 	date: Date | string;
 	title: string;
 	location: string;
 }
 
-export function EventCard({ image, date, title, location, ...props }: EventCardProps) {
+export function EventCard({ image, date, title, location, id }: EventCardProps) {
 	return (
-		<button {...props} className={styles.card} style={{ backgroundImage: `url(${image})` }}>
+		<Link href={`/app/events/${id}`} className={styles.card} style={{ backgroundImage: `url(${image})` }}>
 			<div className={styles.details}>
 				<Calendar date={date} size={'medium'} />
 
@@ -27,6 +28,6 @@ export function EventCard({ image, date, title, location, ...props }: EventCardP
 				</div>
 				<ChevronRight />
 			</div>
-		</button>
+		</Link>
 	);
 }

@@ -74,7 +74,7 @@ export default function Sidebar() {
 	const sidebarVariants: Variants = {
 		closed: {
 			width: 70,
-			boxShadow: '0 0 80px rgba(0, 0, 0, 0.5)',
+			boxShadow: '0 0 80px rgba(0, 0, 0, 0)',
 		},
 		open: {
 			width: 300,

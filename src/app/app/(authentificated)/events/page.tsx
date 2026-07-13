@@ -57,25 +57,27 @@ export default function Page() {
 			<main>
 				<span>Aujourd&#39;hui</span>
 				<EventCard
+					id={'blablabla'}
 					image={'/images/demo_event_01.png'}
 					date={new Date()}
 					title={'🎙️ Soirée Karaoké'}
 					location={'Terrasse'}
 				/>
 				<EventCard
+					id={'blablabla'}
 					image={'/images/demo_event_01.png'}
 					date={new Date()}
 					title={'🎙️ Soirée Karaoké'}
 					location={'Terrasse'}
 				/>
-				<span>Aujourd&#39;hui</span>
+				<span>Demain</span>
 				<EventCard
+					id={'blablabla'}
 					image={'/images/demo_event_01.png'}
 					date={new Date()}
 					title={'🎙️ Soirée Karaoké'}
 					location={'Terrasse'}
 				/>
-				<div style={{ height: 10000 }} />
 			</main>
 		</div>
 	);
