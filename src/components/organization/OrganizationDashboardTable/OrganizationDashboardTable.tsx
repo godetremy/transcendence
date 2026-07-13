@@ -171,7 +171,7 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 									opacity: 1,
 									marginTop: 0,
 									y: 0,
-									filter: '',
+									filter: 'blur(0px)',
 									transition: { type: 'spring', stiffness: 600, damping: 60 },
 								}}
 								exit={{

@@ -97,7 +97,7 @@ export async function GET(
 		const date = parseParams<DateOption>(req.nextUrl.searchParams, DateDashBoardParamSchema);
 
 		const followers = await getDashBoardFollowersByElasticSearch(org_id);
-		const elasticSearchFollowers = (followers.aggregations?.views_over_time.buckets ?? [])
+		const elasticSearchFollowers = (followers?.aggregations?.views_over_time.buckets ?? [])
 			.map((hit) => ({
 				cumulative_data: hit.cumulative_views?.value,
 				update_at: hit.key_as_string,
@@ -108,7 +108,7 @@ export async function GET(
 			);
 
 		const views = await getDashBoardViewsByElasticSearch(org_id);
-		const elasticSearchViews = (views.aggregations?.views_over_time.buckets ?? [])
+		const elasticSearchViews = (views?.aggregations?.views_over_time.buckets ?? [])
 			.map((hit) => ({
 				cumulative_data: hit.cumulative_views?.value,
 				update_at: hit.key_as_string,

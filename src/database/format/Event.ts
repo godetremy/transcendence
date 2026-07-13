@@ -3,13 +3,14 @@ import { ExportEventType, ImportEventType, PrivateEvent, PublicEvent } from '@/t
 import { formatPrivateOrganization, formatPublicOrganization } from './Organization';
 import { formatPrivateAlbum } from './Album';
 import { formatPrivateRegisteredEvent } from './EventRegistrations';
+import { formatPublicUser } from './User';
 
 const formatPublicEvent = <T extends Prisma.eventsInclude>(
 	row: Prisma.eventsGetPayload<{ include: T }>
 ): PublicEvent<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, ...event } = row;
+	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, owner_id, ...event } = row;
 	return {
 		...event,
 		start_at: start_at.toISOString(),
@@ -28,7 +29,7 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 ): PrivateEvent<T> => {
 	// This filter private database data.
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, ...event } = row;
+	const { organization_id, photos_album_id, start_at, end_at, created_at, update_at, owner_id, ...event } = row;
 	return {
 		...event,
 		start_at: start_at.toISOString(),
@@ -53,6 +54,7 @@ const formatPrivateEvent = <T extends Prisma.eventsInclude>(
 						formatPrivateRegisteredEvent
 					)
 				: undefined,
+		owner: 'owner' in row && row.owner ? formatPublicUser(row.owner as Prisma.usersGetPayload<object>) : undefined,
 	} as unknown as PrivateEvent<T>;
 };
 
@@ -65,11 +67,10 @@ const formatExportEvent = (row: Prisma.eventsGetPayload<object>): ExportEventTyp
 		location: row.location,
 		end_at: row.end_at.toISOString(),
 		start_at: row.start_at.toISOString(),
-		owner: row.owner,
 	};
 };
 
-const formatDataEvent = (data: ImportEventType[], org_id: string, owner: string): Prisma.eventsCreateManyInput[] => {
+const formatDataEvent = (data: ImportEventType[], org_id: string, owner_id: string): Prisma.eventsCreateManyInput[] => {
 	return data.map((row) => ({
 		title: row.title,
 		subtitle: row.subtitle,
@@ -80,7 +81,7 @@ const formatDataEvent = (data: ImportEventType[], org_id: string, owner: string)
 		start_at: new Date(row.start_at),
 		end_at: new Date(row.end_at),
 		organization_id: org_id,
-		owner: owner,
+		owner_id: owner_id,
 	}));
 };
 

@@ -111,16 +111,16 @@ export type Event_registrationsScalarFieldEnum = (typeof Event_registrationsScal
 export const EventsScalarFieldEnum = {
   id: 'id',
   organization_id: 'organization_id',
+  owner_id: 'owner_id',
+  photos_album_id: 'photos_album_id',
   image: 'image',
   title: 'title',
-  owner: 'owner',
   subtitle: 'subtitle',
   description: 'description',
   max_registration: 'max_registration',
   location: 'location',
   start_at: 'start_at',
   end_at: 'end_at',
-  photos_album_id: 'photos_album_id',
   created_at: 'created_at',
   update_at: 'update_at'
 } as const
@@ -410,13 +410,13 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 export const eventsOrderByRelevanceFieldEnum = {
   id: 'id',
   organization_id: 'organization_id',
+  owner_id: 'owner_id',
+  photos_album_id: 'photos_album_id',
   image: 'image',
   title: 'title',
-  owner: 'owner',
   subtitle: 'subtitle',
   description: 'description',
-  location: 'location',
-  photos_album_id: 'photos_album_id'
+  location: 'location'
 } as const
 
 export type eventsOrderByRelevanceFieldEnum = (typeof eventsOrderByRelevanceFieldEnum)[keyof typeof eventsOrderByRelevanceFieldEnum]

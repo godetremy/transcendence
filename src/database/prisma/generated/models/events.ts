@@ -37,16 +37,16 @@ export type EventsSumAggregateOutputType = {
 export type EventsMinAggregateOutputType = {
   id: string | null
   organization_id: string | null
+  owner_id: string | null
+  photos_album_id: string | null
   image: string | null
   title: string | null
-  owner: string | null
   subtitle: string | null
   description: string | null
   max_registration: number | null
   location: string | null
   start_at: Date | null
   end_at: Date | null
-  photos_album_id: string | null
   created_at: Date | null
   update_at: Date | null
 }
@@ -54,16 +54,16 @@ export type EventsMinAggregateOutputType = {
 export type EventsMaxAggregateOutputType = {
   id: string | null
   organization_id: string | null
+  owner_id: string | null
+  photos_album_id: string | null
   image: string | null
   title: string | null
-  owner: string | null
   subtitle: string | null
   description: string | null
   max_registration: number | null
   location: string | null
   start_at: Date | null
   end_at: Date | null
-  photos_album_id: string | null
   created_at: Date | null
   update_at: Date | null
 }
@@ -71,16 +71,16 @@ export type EventsMaxAggregateOutputType = {
 export type EventsCountAggregateOutputType = {
   id: number
   organization_id: number
+  owner_id: number
+  photos_album_id: number
   image: number
   title: number
-  owner: number
   subtitle: number
   description: number
   max_registration: number
   location: number
   start_at: number
   end_at: number
-  photos_album_id: number
   created_at: number
   update_at: number
   _all: number
@@ -98,16 +98,16 @@ export type EventsSumAggregateInputType = {
 export type EventsMinAggregateInputType = {
   id?: true
   organization_id?: true
+  owner_id?: true
+  photos_album_id?: true
   image?: true
   title?: true
-  owner?: true
   subtitle?: true
   description?: true
   max_registration?: true
   location?: true
   start_at?: true
   end_at?: true
-  photos_album_id?: true
   created_at?: true
   update_at?: true
 }
@@ -115,16 +115,16 @@ export type EventsMinAggregateInputType = {
 export type EventsMaxAggregateInputType = {
   id?: true
   organization_id?: true
+  owner_id?: true
+  photos_album_id?: true
   image?: true
   title?: true
-  owner?: true
   subtitle?: true
   description?: true
   max_registration?: true
   location?: true
   start_at?: true
   end_at?: true
-  photos_album_id?: true
   created_at?: true
   update_at?: true
 }
@@ -132,16 +132,16 @@ export type EventsMaxAggregateInputType = {
 export type EventsCountAggregateInputType = {
   id?: true
   organization_id?: true
+  owner_id?: true
+  photos_album_id?: true
   image?: true
   title?: true
-  owner?: true
   subtitle?: true
   description?: true
   max_registration?: true
   location?: true
   start_at?: true
   end_at?: true
-  photos_album_id?: true
   created_at?: true
   update_at?: true
   _all?: true
@@ -236,16 +236,16 @@ export type eventsGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type EventsGroupByOutputType = {
   id: string
   organization_id: string
+  owner_id: string
+  photos_album_id: string | null
   image: string
   title: string
-  owner: string
   subtitle: string | null
   description: string | null
   max_registration: number | null
   location: string | null
   start_at: Date
   end_at: Date
-  photos_album_id: string | null
   created_at: Date
   update_at: Date
   _count: EventsCountAggregateOutputType | null
@@ -276,18 +276,19 @@ export type eventsWhereInput = {
   NOT?: Prisma.eventsWhereInput | Prisma.eventsWhereInput[]
   id?: Prisma.StringFilter<"events"> | string
   organization_id?: Prisma.StringFilter<"events"> | string
+  owner_id?: Prisma.StringFilter<"events"> | string
+  photos_album_id?: Prisma.StringNullableFilter<"events"> | string | null
   image?: Prisma.StringFilter<"events"> | string
   title?: Prisma.StringFilter<"events"> | string
-  owner?: Prisma.StringFilter<"events"> | string
   subtitle?: Prisma.StringNullableFilter<"events"> | string | null
   description?: Prisma.StringNullableFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableFilter<"events"> | number | null
   location?: Prisma.StringNullableFilter<"events"> | string | null
   start_at?: Prisma.DateTimeFilter<"events"> | Date | string
   end_at?: Prisma.DateTimeFilter<"events"> | Date | string
-  photos_album_id?: Prisma.StringNullableFilter<"events"> | string | null
   created_at?: Prisma.DateTimeFilter<"events"> | Date | string
   update_at?: Prisma.DateTimeFilter<"events"> | Date | string
+  owner?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
   photos_album?: Prisma.XOR<Prisma.Photos_albumNullableScalarRelationFilter, Prisma.photos_albumWhereInput> | null
   event_registration?: Prisma.Event_registrationsListRelationFilter
@@ -296,18 +297,19 @@ export type eventsWhereInput = {
 export type eventsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  owner_id?: Prisma.SortOrder
+  photos_album_id?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   max_registration?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
-  photos_album_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   update_at?: Prisma.SortOrder
+  owner?: Prisma.usersOrderByWithRelationInput
   organization?: Prisma.organizationsOrderByWithRelationInput
   photos_album?: Prisma.photos_albumOrderByWithRelationInput
   event_registration?: Prisma.event_registrationsOrderByRelationAggregateInput
@@ -321,9 +323,9 @@ export type eventsWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.eventsWhereInput[]
   NOT?: Prisma.eventsWhereInput | Prisma.eventsWhereInput[]
   organization_id?: Prisma.StringFilter<"events"> | string
+  owner_id?: Prisma.StringFilter<"events"> | string
   image?: Prisma.StringFilter<"events"> | string
   title?: Prisma.StringFilter<"events"> | string
-  owner?: Prisma.StringFilter<"events"> | string
   subtitle?: Prisma.StringNullableFilter<"events"> | string | null
   description?: Prisma.StringNullableFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableFilter<"events"> | number | null
@@ -332,6 +334,7 @@ export type eventsWhereUniqueInput = Prisma.AtLeast<{
   end_at?: Prisma.DateTimeFilter<"events"> | Date | string
   created_at?: Prisma.DateTimeFilter<"events"> | Date | string
   update_at?: Prisma.DateTimeFilter<"events"> | Date | string
+  owner?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
   photos_album?: Prisma.XOR<Prisma.Photos_albumNullableScalarRelationFilter, Prisma.photos_albumWhereInput> | null
   event_registration?: Prisma.Event_registrationsListRelationFilter
@@ -340,16 +343,16 @@ export type eventsWhereUniqueInput = Prisma.AtLeast<{
 export type eventsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  owner_id?: Prisma.SortOrder
+  photos_album_id?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   max_registration?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
-  photos_album_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   update_at?: Prisma.SortOrder
   _count?: Prisma.eventsCountOrderByAggregateInput
@@ -365,16 +368,16 @@ export type eventsScalarWhereWithAggregatesInput = {
   NOT?: Prisma.eventsScalarWhereWithAggregatesInput | Prisma.eventsScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"events"> | string
   organization_id?: Prisma.StringWithAggregatesFilter<"events"> | string
+  owner_id?: Prisma.StringWithAggregatesFilter<"events"> | string
+  photos_album_id?: Prisma.StringNullableWithAggregatesFilter<"events"> | string | null
   image?: Prisma.StringWithAggregatesFilter<"events"> | string
   title?: Prisma.StringWithAggregatesFilter<"events"> | string
-  owner?: Prisma.StringWithAggregatesFilter<"events"> | string
   subtitle?: Prisma.StringNullableWithAggregatesFilter<"events"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableWithAggregatesFilter<"events"> | number | null
   location?: Prisma.StringNullableWithAggregatesFilter<"events"> | string | null
   start_at?: Prisma.DateTimeWithAggregatesFilter<"events"> | Date | string
   end_at?: Prisma.DateTimeWithAggregatesFilter<"events"> | Date | string
-  photos_album_id?: Prisma.StringNullableWithAggregatesFilter<"events"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"events"> | Date | string
   update_at?: Prisma.DateTimeWithAggregatesFilter<"events"> | Date | string
 }
@@ -383,7 +386,6 @@ export type eventsCreateInput = {
   id?: string
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -392,6 +394,7 @@ export type eventsCreateInput = {
   end_at: Date | string
   created_at?: Date | string
   update_at?: Date | string
+  owner: Prisma.usersCreateNestedOneWithoutEventsInput
   organization: Prisma.organizationsCreateNestedOneWithoutEventsInput
   photos_album?: Prisma.photos_albumCreateNestedOneWithoutEventsInput
   event_registration?: Prisma.event_registrationsCreateNestedManyWithoutEventInput
@@ -400,16 +403,16 @@ export type eventsCreateInput = {
 export type eventsUncheckedCreateInput = {
   id?: string
   organization_id: string
+  owner_id: string
+  photos_album_id?: string | null
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
   location?: string | null
   start_at: Date | string
   end_at: Date | string
-  photos_album_id?: string | null
   created_at?: Date | string
   update_at?: Date | string
   event_registration?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutEventInput
@@ -419,7 +422,6 @@ export type eventsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -428,6 +430,7 @@ export type eventsUpdateInput = {
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.usersUpdateOneRequiredWithoutEventsNestedInput
   organization?: Prisma.organizationsUpdateOneRequiredWithoutEventsNestedInput
   photos_album?: Prisma.photos_albumUpdateOneWithoutEventsNestedInput
   event_registration?: Prisma.event_registrationsUpdateManyWithoutEventNestedInput
@@ -436,16 +439,16 @@ export type eventsUpdateInput = {
 export type eventsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event_registration?: Prisma.event_registrationsUncheckedUpdateManyWithoutEventNestedInput
@@ -454,16 +457,16 @@ export type eventsUncheckedUpdateInput = {
 export type eventsCreateManyInput = {
   id?: string
   organization_id: string
+  owner_id: string
+  photos_album_id?: string | null
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
   location?: string | null
   start_at: Date | string
   end_at: Date | string
-  photos_album_id?: string | null
   created_at?: Date | string
   update_at?: Date | string
 }
@@ -472,7 +475,6 @@ export type eventsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -486,16 +488,16 @@ export type eventsUpdateManyMutationInput = {
 export type eventsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -514,16 +516,16 @@ export type eventsOrderByRelevanceInput = {
 export type eventsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  owner_id?: Prisma.SortOrder
+  photos_album_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_registration?: Prisma.SortOrder
   location?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
-  photos_album_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   update_at?: Prisma.SortOrder
 }
@@ -535,16 +537,16 @@ export type eventsAvgOrderByAggregateInput = {
 export type eventsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  owner_id?: Prisma.SortOrder
+  photos_album_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_registration?: Prisma.SortOrder
   location?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
-  photos_album_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   update_at?: Prisma.SortOrder
 }
@@ -552,16 +554,16 @@ export type eventsMaxOrderByAggregateInput = {
 export type eventsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organization_id?: Prisma.SortOrder
+  owner_id?: Prisma.SortOrder
+  photos_album_id?: Prisma.SortOrder
   image?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  owner?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   description?: Prisma.SortOrder
   max_registration?: Prisma.SortOrder
   location?: Prisma.SortOrder
   start_at?: Prisma.SortOrder
   end_at?: Prisma.SortOrder
-  photos_album_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   update_at?: Prisma.SortOrder
 }
@@ -685,11 +687,52 @@ export type eventsUncheckedUpdateOneWithoutPhotos_albumNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.eventsUpdateToOneWithWhereWithoutPhotos_albumInput, Prisma.eventsUpdateWithoutPhotos_albumInput>, Prisma.eventsUncheckedUpdateWithoutPhotos_albumInput>
 }
 
+export type eventsCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.eventsCreateWithoutOwnerInput, Prisma.eventsUncheckedCreateWithoutOwnerInput> | Prisma.eventsCreateWithoutOwnerInput[] | Prisma.eventsUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.eventsCreateOrConnectWithoutOwnerInput | Prisma.eventsCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.eventsCreateManyOwnerInputEnvelope
+  connect?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+}
+
+export type eventsUncheckedCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.eventsCreateWithoutOwnerInput, Prisma.eventsUncheckedCreateWithoutOwnerInput> | Prisma.eventsCreateWithoutOwnerInput[] | Prisma.eventsUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.eventsCreateOrConnectWithoutOwnerInput | Prisma.eventsCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.eventsCreateManyOwnerInputEnvelope
+  connect?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+}
+
+export type eventsUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.eventsCreateWithoutOwnerInput, Prisma.eventsUncheckedCreateWithoutOwnerInput> | Prisma.eventsCreateWithoutOwnerInput[] | Prisma.eventsUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.eventsCreateOrConnectWithoutOwnerInput | Prisma.eventsCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.eventsUpsertWithWhereUniqueWithoutOwnerInput | Prisma.eventsUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.eventsCreateManyOwnerInputEnvelope
+  set?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  disconnect?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  delete?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  connect?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  update?: Prisma.eventsUpdateWithWhereUniqueWithoutOwnerInput | Prisma.eventsUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.eventsUpdateManyWithWhereWithoutOwnerInput | Prisma.eventsUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.eventsScalarWhereInput | Prisma.eventsScalarWhereInput[]
+}
+
+export type eventsUncheckedUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.eventsCreateWithoutOwnerInput, Prisma.eventsUncheckedCreateWithoutOwnerInput> | Prisma.eventsCreateWithoutOwnerInput[] | Prisma.eventsUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.eventsCreateOrConnectWithoutOwnerInput | Prisma.eventsCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.eventsUpsertWithWhereUniqueWithoutOwnerInput | Prisma.eventsUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.eventsCreateManyOwnerInputEnvelope
+  set?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  disconnect?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  delete?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  connect?: Prisma.eventsWhereUniqueInput | Prisma.eventsWhereUniqueInput[]
+  update?: Prisma.eventsUpdateWithWhereUniqueWithoutOwnerInput | Prisma.eventsUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.eventsUpdateManyWithWhereWithoutOwnerInput | Prisma.eventsUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.eventsScalarWhereInput | Prisma.eventsScalarWhereInput[]
+}
+
 export type eventsCreateWithoutEvent_registrationInput = {
   id?: string
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -698,6 +741,7 @@ export type eventsCreateWithoutEvent_registrationInput = {
   end_at: Date | string
   created_at?: Date | string
   update_at?: Date | string
+  owner: Prisma.usersCreateNestedOneWithoutEventsInput
   organization: Prisma.organizationsCreateNestedOneWithoutEventsInput
   photos_album?: Prisma.photos_albumCreateNestedOneWithoutEventsInput
 }
@@ -705,16 +749,16 @@ export type eventsCreateWithoutEvent_registrationInput = {
 export type eventsUncheckedCreateWithoutEvent_registrationInput = {
   id?: string
   organization_id: string
+  owner_id: string
+  photos_album_id?: string | null
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
   location?: string | null
   start_at: Date | string
   end_at: Date | string
-  photos_album_id?: string | null
   created_at?: Date | string
   update_at?: Date | string
 }
@@ -739,7 +783,6 @@ export type eventsUpdateWithoutEvent_registrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -748,6 +791,7 @@ export type eventsUpdateWithoutEvent_registrationInput = {
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.usersUpdateOneRequiredWithoutEventsNestedInput
   organization?: Prisma.organizationsUpdateOneRequiredWithoutEventsNestedInput
   photos_album?: Prisma.photos_albumUpdateOneWithoutEventsNestedInput
 }
@@ -755,16 +799,16 @@ export type eventsUpdateWithoutEvent_registrationInput = {
 export type eventsUncheckedUpdateWithoutEvent_registrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -773,7 +817,6 @@ export type eventsCreateWithoutOrganizationInput = {
   id?: string
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -782,22 +825,23 @@ export type eventsCreateWithoutOrganizationInput = {
   end_at: Date | string
   created_at?: Date | string
   update_at?: Date | string
+  owner: Prisma.usersCreateNestedOneWithoutEventsInput
   photos_album?: Prisma.photos_albumCreateNestedOneWithoutEventsInput
   event_registration?: Prisma.event_registrationsCreateNestedManyWithoutEventInput
 }
 
 export type eventsUncheckedCreateWithoutOrganizationInput = {
   id?: string
+  owner_id: string
+  photos_album_id?: string | null
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
   location?: string | null
   start_at: Date | string
   end_at: Date | string
-  photos_album_id?: string | null
   created_at?: Date | string
   update_at?: Date | string
   event_registration?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutEventInput
@@ -835,16 +879,16 @@ export type eventsScalarWhereInput = {
   NOT?: Prisma.eventsScalarWhereInput | Prisma.eventsScalarWhereInput[]
   id?: Prisma.StringFilter<"events"> | string
   organization_id?: Prisma.StringFilter<"events"> | string
+  owner_id?: Prisma.StringFilter<"events"> | string
+  photos_album_id?: Prisma.StringNullableFilter<"events"> | string | null
   image?: Prisma.StringFilter<"events"> | string
   title?: Prisma.StringFilter<"events"> | string
-  owner?: Prisma.StringFilter<"events"> | string
   subtitle?: Prisma.StringNullableFilter<"events"> | string | null
   description?: Prisma.StringNullableFilter<"events"> | string | null
   max_registration?: Prisma.IntNullableFilter<"events"> | number | null
   location?: Prisma.StringNullableFilter<"events"> | string | null
   start_at?: Prisma.DateTimeFilter<"events"> | Date | string
   end_at?: Prisma.DateTimeFilter<"events"> | Date | string
-  photos_album_id?: Prisma.StringNullableFilter<"events"> | string | null
   created_at?: Prisma.DateTimeFilter<"events"> | Date | string
   update_at?: Prisma.DateTimeFilter<"events"> | Date | string
 }
@@ -853,7 +897,6 @@ export type eventsCreateWithoutPhotos_albumInput = {
   id?: string
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -862,6 +905,7 @@ export type eventsCreateWithoutPhotos_albumInput = {
   end_at: Date | string
   created_at?: Date | string
   update_at?: Date | string
+  owner: Prisma.usersCreateNestedOneWithoutEventsInput
   organization: Prisma.organizationsCreateNestedOneWithoutEventsInput
   event_registration?: Prisma.event_registrationsCreateNestedManyWithoutEventInput
 }
@@ -869,9 +913,9 @@ export type eventsCreateWithoutPhotos_albumInput = {
 export type eventsUncheckedCreateWithoutPhotos_albumInput = {
   id?: string
   organization_id: string
+  owner_id: string
   image: string
   title: string
-  owner: string
   subtitle?: string | null
   description?: string | null
   max_registration?: number | null
@@ -903,7 +947,182 @@ export type eventsUpdateWithoutPhotos_albumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.usersUpdateOneRequiredWithoutEventsNestedInput
+  organization?: Prisma.organizationsUpdateOneRequiredWithoutEventsNestedInput
+  event_registration?: Prisma.event_registrationsUpdateManyWithoutEventNestedInput
+}
+
+export type eventsUncheckedUpdateWithoutPhotos_albumInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_registration?: Prisma.event_registrationsUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type eventsCreateWithoutOwnerInput = {
+  id?: string
+  image: string
+  title: string
+  subtitle?: string | null
+  description?: string | null
+  max_registration?: number | null
+  location?: string | null
+  start_at: Date | string
+  end_at: Date | string
+  created_at?: Date | string
+  update_at?: Date | string
+  organization: Prisma.organizationsCreateNestedOneWithoutEventsInput
+  photos_album?: Prisma.photos_albumCreateNestedOneWithoutEventsInput
+  event_registration?: Prisma.event_registrationsCreateNestedManyWithoutEventInput
+}
+
+export type eventsUncheckedCreateWithoutOwnerInput = {
+  id?: string
+  organization_id: string
+  photos_album_id?: string | null
+  image: string
+  title: string
+  subtitle?: string | null
+  description?: string | null
+  max_registration?: number | null
+  location?: string | null
+  start_at: Date | string
+  end_at: Date | string
+  created_at?: Date | string
+  update_at?: Date | string
+  event_registration?: Prisma.event_registrationsUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type eventsCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.eventsWhereUniqueInput
+  create: Prisma.XOR<Prisma.eventsCreateWithoutOwnerInput, Prisma.eventsUncheckedCreateWithoutOwnerInput>
+}
+
+export type eventsCreateManyOwnerInputEnvelope = {
+  data: Prisma.eventsCreateManyOwnerInput | Prisma.eventsCreateManyOwnerInput[]
+  skipDuplicates?: boolean
+}
+
+export type eventsUpsertWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.eventsWhereUniqueInput
+  update: Prisma.XOR<Prisma.eventsUpdateWithoutOwnerInput, Prisma.eventsUncheckedUpdateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.eventsCreateWithoutOwnerInput, Prisma.eventsUncheckedCreateWithoutOwnerInput>
+}
+
+export type eventsUpdateWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.eventsWhereUniqueInput
+  data: Prisma.XOR<Prisma.eventsUpdateWithoutOwnerInput, Prisma.eventsUncheckedUpdateWithoutOwnerInput>
+}
+
+export type eventsUpdateManyWithWhereWithoutOwnerInput = {
+  where: Prisma.eventsScalarWhereInput
+  data: Prisma.XOR<Prisma.eventsUpdateManyMutationInput, Prisma.eventsUncheckedUpdateManyWithoutOwnerInput>
+}
+
+export type eventsCreateManyOrganizationInput = {
+  id?: string
+  owner_id: string
+  photos_album_id?: string | null
+  image: string
+  title: string
+  subtitle?: string | null
+  description?: string | null
+  max_registration?: number | null
+  location?: string | null
+  start_at: Date | string
+  end_at: Date | string
+  created_at?: Date | string
+  update_at?: Date | string
+}
+
+export type eventsUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.usersUpdateOneRequiredWithoutEventsNestedInput
+  photos_album?: Prisma.photos_albumUpdateOneWithoutEventsNestedInput
+  event_registration?: Prisma.event_registrationsUpdateManyWithoutEventNestedInput
+}
+
+export type eventsUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event_registration?: Prisma.event_registrationsUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type eventsUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  owner_id?: Prisma.StringFieldUpdateOperationsInput | string
+  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type eventsCreateManyOwnerInput = {
+  id?: string
+  organization_id: string
+  photos_album_id?: string | null
+  image: string
+  title: string
+  subtitle?: string | null
+  description?: string | null
+  max_registration?: number | null
+  location?: string | null
+  start_at: Date | string
+  end_at: Date | string
+  created_at?: Date | string
+  update_at?: Date | string
+}
+
+export type eventsUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -913,88 +1132,39 @@ export type eventsUpdateWithoutPhotos_albumInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.organizationsUpdateOneRequiredWithoutEventsNestedInput
-  event_registration?: Prisma.event_registrationsUpdateManyWithoutEventNestedInput
-}
-
-export type eventsUncheckedUpdateWithoutPhotos_albumInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  organization_id?: Prisma.StringFieldUpdateOperationsInput | string
-  image?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
-  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  event_registration?: Prisma.event_registrationsUncheckedUpdateManyWithoutEventNestedInput
-}
-
-export type eventsCreateManyOrganizationInput = {
-  id?: string
-  image: string
-  title: string
-  owner: string
-  subtitle?: string | null
-  description?: string | null
-  max_registration?: number | null
-  location?: string | null
-  start_at: Date | string
-  end_at: Date | string
-  photos_album_id?: string | null
-  created_at?: Date | string
-  update_at?: Date | string
-}
-
-export type eventsUpdateWithoutOrganizationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  image?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
-  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos_album?: Prisma.photos_albumUpdateOneWithoutEventsNestedInput
   event_registration?: Prisma.event_registrationsUpdateManyWithoutEventNestedInput
 }
 
-export type eventsUncheckedUpdateWithoutOrganizationInput = {
+export type eventsUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event_registration?: Prisma.event_registrationsUncheckedUpdateManyWithoutEventNestedInput
 }
 
-export type eventsUncheckedUpdateManyWithoutOrganizationInput = {
+export type eventsUncheckedUpdateManyWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organization_id?: Prisma.StringFieldUpdateOperationsInput | string
+  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  owner?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   max_registration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   start_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   end_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  photos_album_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   update_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1033,18 +1203,19 @@ export type EventsCountOutputTypeCountEvent_registrationArgs<ExtArgs extends run
 export type eventsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   organization_id?: boolean
+  owner_id?: boolean
+  photos_album_id?: boolean
   image?: boolean
   title?: boolean
-  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
   location?: boolean
   start_at?: boolean
   end_at?: boolean
-  photos_album_id?: boolean
   created_at?: boolean
   update_at?: boolean
+  owner?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   photos_album?: boolean | Prisma.events$photos_albumArgs<ExtArgs>
   event_registration?: boolean | Prisma.events$event_registrationArgs<ExtArgs>
@@ -1054,18 +1225,19 @@ export type eventsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type eventsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   organization_id?: boolean
+  owner_id?: boolean
+  photos_album_id?: boolean
   image?: boolean
   title?: boolean
-  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
   location?: boolean
   start_at?: boolean
   end_at?: boolean
-  photos_album_id?: boolean
   created_at?: boolean
   update_at?: boolean
+  owner?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   photos_album?: boolean | Prisma.events$photos_albumArgs<ExtArgs>
 }, ExtArgs["result"]["events"]>
@@ -1073,18 +1245,19 @@ export type eventsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type eventsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   organization_id?: boolean
+  owner_id?: boolean
+  photos_album_id?: boolean
   image?: boolean
   title?: boolean
-  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
   location?: boolean
   start_at?: boolean
   end_at?: boolean
-  photos_album_id?: boolean
   created_at?: boolean
   update_at?: boolean
+  owner?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   photos_album?: boolean | Prisma.events$photos_albumArgs<ExtArgs>
 }, ExtArgs["result"]["events"]>
@@ -1092,32 +1265,35 @@ export type eventsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type eventsSelectScalar = {
   id?: boolean
   organization_id?: boolean
+  owner_id?: boolean
+  photos_album_id?: boolean
   image?: boolean
   title?: boolean
-  owner?: boolean
   subtitle?: boolean
   description?: boolean
   max_registration?: boolean
   location?: boolean
   start_at?: boolean
   end_at?: boolean
-  photos_album_id?: boolean
   created_at?: boolean
   update_at?: boolean
 }
 
-export type eventsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "image" | "title" | "owner" | "subtitle" | "description" | "max_registration" | "location" | "start_at" | "end_at" | "photos_album_id" | "created_at" | "update_at", ExtArgs["result"]["events"]>
+export type eventsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organization_id" | "owner_id" | "photos_album_id" | "image" | "title" | "subtitle" | "description" | "max_registration" | "location" | "start_at" | "end_at" | "created_at" | "update_at", ExtArgs["result"]["events"]>
 export type eventsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   photos_album?: boolean | Prisma.events$photos_albumArgs<ExtArgs>
   event_registration?: boolean | Prisma.events$event_registrationArgs<ExtArgs>
   _count?: boolean | Prisma.EventsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type eventsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   photos_album?: boolean | Prisma.events$photos_albumArgs<ExtArgs>
 }
 export type eventsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.organizationsDefaultArgs<ExtArgs>
   photos_album?: boolean | Prisma.events$photos_albumArgs<ExtArgs>
 }
@@ -1125,6 +1301,7 @@ export type eventsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $eventsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "events"
   objects: {
+    owner: Prisma.$usersPayload<ExtArgs>
     organization: Prisma.$organizationsPayload<ExtArgs>
     photos_album: Prisma.$photos_albumPayload<ExtArgs> | null
     event_registration: Prisma.$event_registrationsPayload<ExtArgs>[]
@@ -1132,16 +1309,16 @@ export type $eventsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     organization_id: string
+    owner_id: string
+    photos_album_id: string | null
     image: string
     title: string
-    owner: string
     subtitle: string | null
     description: string | null
     max_registration: number | null
     location: string | null
     start_at: Date
     end_at: Date
-    photos_album_id: string | null
     created_at: Date
     update_at: Date
   }, ExtArgs["result"]["events"]>
@@ -1538,6 +1715,7 @@ readonly fields: eventsFieldRefs;
  */
 export interface Prisma__eventsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  owner<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   organization<T extends Prisma.organizationsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.organizationsDefaultArgs<ExtArgs>>): Prisma.Prisma__organizationsClient<runtime.Types.Result.GetResult<Prisma.$organizationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   photos_album<T extends Prisma.events$photos_albumArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.events$photos_albumArgs<ExtArgs>>): Prisma.Prisma__photos_albumClient<runtime.Types.Result.GetResult<Prisma.$photos_albumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   event_registration<T extends Prisma.events$event_registrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.events$event_registrationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$event_registrationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1572,16 +1750,16 @@ export interface Prisma__eventsClient<T, Null = never, ExtArgs extends runtime.T
 export interface eventsFieldRefs {
   readonly id: Prisma.FieldRef<"events", 'String'>
   readonly organization_id: Prisma.FieldRef<"events", 'String'>
+  readonly owner_id: Prisma.FieldRef<"events", 'String'>
+  readonly photos_album_id: Prisma.FieldRef<"events", 'String'>
   readonly image: Prisma.FieldRef<"events", 'String'>
   readonly title: Prisma.FieldRef<"events", 'String'>
-  readonly owner: Prisma.FieldRef<"events", 'String'>
   readonly subtitle: Prisma.FieldRef<"events", 'String'>
   readonly description: Prisma.FieldRef<"events", 'String'>
   readonly max_registration: Prisma.FieldRef<"events", 'Int'>
   readonly location: Prisma.FieldRef<"events", 'String'>
   readonly start_at: Prisma.FieldRef<"events", 'DateTime'>
   readonly end_at: Prisma.FieldRef<"events", 'DateTime'>
-  readonly photos_album_id: Prisma.FieldRef<"events", 'String'>
   readonly created_at: Prisma.FieldRef<"events", 'DateTime'>
   readonly update_at: Prisma.FieldRef<"events", 'DateTime'>
 }

@@ -63,7 +63,7 @@ export async function POST(
 			if (!checkRow.success) throw ERRORS_DETAILS.invalid_parameter();
 		}
 
-		const listEvent = await createManyEvent(formatDataEvent(data, organization.id, user.full_name ?? ''), {});
+		const listEvent = await createManyEvent(formatDataEvent(data, organization.id, user.id), {});
 		return NextResponse.json(listEvent.map(formatPrivateEvent<object>));
 	});
 }

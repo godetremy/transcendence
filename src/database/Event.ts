@@ -61,14 +61,14 @@ const getEventsByFilter = async <T extends Prisma.eventsInclude>(
 const createEvent = async <T extends Prisma.eventsInclude>(
 	data: CreateOrUpdateEventType,
 	organization_id: string,
-	owner: string,
+	user: Prisma.usersGetPayload<{}>,
 	include: T
 ): Promise<Prisma.eventsGetPayload<{ include: T }>> => {
 	return prisma.events.create({
 		data: {
 			organization_id: organization_id,
 			...data,
-			owner: owner,
+			owner_id: user.id,
 		},
 		include: include,
 	});
