@@ -2,8 +2,8 @@
 import styles from './page.module.scss';
 import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { getEvents } from '@/lib/fetcher/events';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { deleteEventMutate, exportEventMutate, getEvents, importEventMutate, updateEventMutate } from '@/lib/fetcher/events';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -35,6 +35,11 @@ export default function Page() {
 		)
 	);
 
+	const deleteEventMutation = useMutation(deleteEventMutate(organization.id));
+	const exportEventMutation = useMutation(exportEventMutate(organization.id));
+	const importEventMutation = useMutation(importEventMutate(organization.id));
+	const updateEventMutation = useMutation(updateEventMutate(organization.id));
+
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	function addDays(date: Date, days: number): Date {
@@ -52,11 +57,7 @@ export default function Page() {
 			formData.append('file', file);
 			formData.append('name', file.name);
 
-			await fetch(`/app/api/organization/${organization.id}/events/import`, {
-				method: 'POST',
-				body: formData,
-			});
-
+			importEventMutation.mutate({ body: formData });
 			e.target.value = '';
 		},
 		[organization.id]
@@ -67,24 +68,9 @@ export default function Page() {
 	};
 
 	const exportEvents = useCallback(async () => {
+		const response = await exportEventMutation.mutateAsync({ type: 'xlsx', filename: 'events' });
 		try {
-			const response = await fetch(`/app/api/organization/${organization.id}/events/export`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					type: 'xlsx',
-					filename: 'events',
-				}),
-			});
-
-			if (!response.ok) {
-				throw new Error('Export failed');
-			}
-
 			const blob = await response.blob();
-
 			const url = window.URL.createObjectURL(blob);
 			const a = document.createElement('a');
 			a.href = url;
@@ -98,13 +84,19 @@ export default function Page() {
 		}
 	}, [organization.id, generatedParameters]);
 
-	const deleteEvent = async (event: PrivateEvent<object>) => {
+	const deleteEventModal = async (event: PrivateEvent<object>) => {
 		modal.openModal({
 			title: `Veux-tu vraiment supprimer « ${event.title} » ?`,
 			message: 'Attention, une fois supprimer tu ne pourras pas le récupérer.',
 			buttons: [
 				{ text: 'Je le laisse' },
-				{ negative: true, text: 'Supprimer cette événement', onClick: () => {} },
+				{
+					negative: true,
+					text: 'Supprimer cette événement',
+					onClick: () => {
+						deleteEventMutation.mutate({ event });
+					},
+				},
 			],
 		});
 	};
@@ -152,20 +144,22 @@ export default function Page() {
 							{
 								title: 'Modifier',
 								icon: Pencil,
-								onClick: () => {},
+								onClick: () => {
+									//updateEventMutation.mutate(event, event.id);
+								},
 							},
 							{
 								title: 'Supprimer',
 								icon: Trash2,
 								negative: true,
-								onClick: async () => deleteEvent(event),
+								onClick: async () => deleteEventModal(event),
 							},
 						]}
 					/>,
 				],
 			}))
 		);
-	}, [data, deleteEvent]);
+	}, [data, deleteEventModal]);
 
 	return (
 		<>
