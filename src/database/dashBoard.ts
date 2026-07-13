@@ -5,7 +5,7 @@ import { FollowersDocument, ViewDocument, ViewsOverTimeAggregations } from '@/ty
 const getDashBoardViewsByElasticSearch = async (
 	organization_id: string,
 	id?: string
-): Promise<SearchResponse<ViewDocument, ViewsOverTimeAggregations>> => {
+): Promise<SearchResponse<ViewDocument, ViewsOverTimeAggregations> | null> => {
 	const views = await esclient.search<{ timestamp: string }>({
 		index: 'views',
 		size: 1,
@@ -23,6 +23,8 @@ const getDashBoardViewsByElasticSearch = async (
 	const elasticSearchViews = views.hits.hits.map((hit) => ({
 		update_at: hit._source?.timestamp,
 	}));
+
+	if (elasticSearchViews[0] == undefined) return null;
 
 	return esclient.search<ViewDocument, ViewsOverTimeAggregations>({
 		index: 'views',
@@ -61,7 +63,7 @@ const getDashBoardViewsByElasticSearch = async (
 
 const getDashBoardFollowersByElasticSearch = async (
 	organization_id: string
-): Promise<SearchResponse<FollowersDocument, ViewsOverTimeAggregations>> => {
+): Promise<SearchResponse<FollowersDocument, ViewsOverTimeAggregations> | null> => {
 	const followers = await esclient.search<{ timestamp: string }>({
 		index: 'followers',
 		size: 1,
@@ -76,6 +78,8 @@ const getDashBoardFollowersByElasticSearch = async (
 	const elasticSearchFollowers = followers.hits.hits.map((hit) => ({
 		update_at: hit._source?.timestamp,
 	}));
+
+	if (elasticSearchFollowers[0] == undefined) return null;
 
 	return esclient.search<FollowersDocument, ViewsOverTimeAggregations>({
 		index: 'followers',

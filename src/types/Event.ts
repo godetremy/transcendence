@@ -1,10 +1,11 @@
 import { PublicAlbum } from './album';
 import { PrivateOrganization, PublicOrganization } from './Organization';
 import { RegisteredEventPrivate } from './RegisteredEvent';
+import { PublicUser } from './User';
 
 export interface PrivateEvent<T = object> {
 	register_number: T extends { organization: unknown } ? number : never;
-	owner: string;
+	owner_id: string;
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -16,13 +17,13 @@ export interface PrivateEvent<T = object> {
 	end_at: string;
 	created_at: string;
 	update_at: string;
+	owner: T extends { users: unknown } ? PublicUser : never;
 	organization: T extends { organization: unknown } ? PrivateOrganization : never;
 	photos_album: T extends { photos_album: unknown } ? PublicAlbum : never;
 	event_registration: T extends { event_registration: unknown } ? RegisteredEventPrivate[] : never;
 }
 
 export interface PublicEvent<T = object> {
-	owner: string;
 	id: string;
 	title: string;
 	subtitle: string | null;
@@ -72,5 +73,4 @@ export interface ExportEventType {
 	location: string | null;
 	start_at: string;
 	end_at: string;
-	owner: string;
 }

@@ -12,14 +12,14 @@ const getEvents = (
 	q: string | null,
 	activeMenu: number | null
 ): UseInfiniteQueryOptions<
-	PaginationResponse<PrivateEvent<object>>,
+	PaginationResponse<PrivateEvent<{ event_registration: true; users: true }>>,
 	Error,
-	InfiniteData<PaginationResponse<PrivateEvent<object>>>,
+	InfiniteData<PaginationResponse<PrivateEvent<{ event_registration: true; users: true }>>>,
 	QueryKey,
 	number
 > => ({
 	queryFn: ({ pageParam }) =>
-		get<PaginationResponse<PrivateEvent<object>>>(
+		get<PaginationResponse<PrivateEvent<{ event_registration: true; users: true }>>>(
 			`/organization/${org_id}/events?page=${pageParam}${from == null ? '' : '&from=' + from}${to == null ? '' : '&to=' + to}${q == null || q.length == 0 ? '' : '&q=' + encodeURI(q.trim())}${generatedParameters == null ? '' : '&sort=' + encodeURI(generatedParameters.trim())}`
 		),
 	queryKey: ['organization', org_id, 'event', activeMenu, q, generatedParameters],

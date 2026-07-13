@@ -31,7 +31,7 @@ export function OrganizationEditor(props: OrganizationEditorProps) {
 		setLogo(URL.createObjectURL(acceptedFiles[0]));
 		setUploadProgression(0);
 		setUploadImage(true);
-		upload.uploadFiles(acceptedFiles, setUploadProgression).then((file) => {
+		upload.uploadFiles(acceptedFiles[0], setUploadProgression).then((file) => {
 			props.setOrganization((prev) => ({
 				...prev,
 				logo: `/images/upload/${file.name}`,

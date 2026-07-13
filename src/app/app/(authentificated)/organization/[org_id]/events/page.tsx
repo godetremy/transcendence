@@ -76,6 +76,7 @@ export default function Page() {
 	const exportEvents = useCallback(async () => {
 		const response = await exportEventMutation.mutateAsync({ type: 'xlsx', filename: 'events' });
 		try {
+			if (!response.ok) throw ('Invalid file')
 			const blob = await response.blob();
 			const url = window.URL.createObjectURL(blob);
 			const a = document.createElement('a');
@@ -123,13 +124,13 @@ export default function Page() {
 					</span>,
 					<div key={4} className={styles.group}>
 						<Image
-							src={'https://cdn.intra.42.fr/users/451bc6a5cf2b4b27c5688d42fbc01694/rgodet.jpg'}
-							alt={`Photo de ${event.owner}`}
+							src={event.owner.profile_picture}
+							alt={`Photo de ${event.owner.full_name}`}
 							width={20}
 							height={20}
 							className={styles.avatar}
 						/>
-						<span className={styles.detail}>{event.owner}</span>
+						<span className={styles.detail}>{event.owner.full_name}</span>
 					</div>,
 					<div key={5} className={styles.group}>
 						<CircleLoader
@@ -186,7 +187,7 @@ export default function Page() {
 					{ id: 'name', text: 'Nom de l’événement' },
 					{ id: 'created_at', text: 'Crée le', width: 100 },
 					{ id: 'created_by', text: 'Crée par', width: 200 },
-					{ id: 'register', text: 'Inscrits', width: 100 },
+					{ id: 'register', text: 'Inscrits', width: 100, sortable: false },
 					{ text: '', width: 50, sortable: false },
 				]}
 				data={listEvents}
@@ -200,7 +201,6 @@ export default function Page() {
 				onSearch={setSearch}
 				onChangeSort={(sort) => {
 					setGeneratedParameters(sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(','));
-					console.log(generatedParameters);
 				}}
 				hasNextPage={hasNextPage}
 				onLoadNextPage={fetchNextPage}

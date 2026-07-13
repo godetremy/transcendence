@@ -176,7 +176,6 @@ export default function Page() {
 				onSearch={setSearch}
 				onChangeSort={(sort) => {
 					setGeneratedParameters(sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(','));
-					console.log(generatedParameters);
 				}}
 				hasNextPage={hasNextPage}
 				onLoadNextPage={fetchNextPage}
