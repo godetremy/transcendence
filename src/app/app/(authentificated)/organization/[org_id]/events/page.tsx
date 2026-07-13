@@ -2,13 +2,7 @@
 import styles from './page.module.scss';
 import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import {
-	deleteEventMutate,
-	exportEventMutate,
-	getEvents,
-	importEventMutate,
-	updateEventMutate,
-} from '@/lib/fetcher/events';
+import { deleteEventMutate, exportEventMutate, getEvents, importEventMutate } from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -44,7 +38,6 @@ export default function Page() {
 	const deleteEventMutation = useMutation(deleteEventMutate(organization.id));
 	const exportEventMutation = useMutation(exportEventMutate(organization.id));
 	const importEventMutation = useMutation(importEventMutate(organization.id));
-	const updateEventMutation = useMutation(updateEventMutate(organization.id));
 
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -76,7 +69,7 @@ export default function Page() {
 	const exportEvents = useCallback(async () => {
 		const response = await exportEventMutation.mutateAsync({ type: 'xlsx', filename: 'events' });
 		try {
-			if (!response.ok) throw ('Invalid file')
+			if (!response.ok) throw 'Invalid file';
 			const blob = await response.blob();
 			const url = window.URL.createObjectURL(blob);
 			const a = document.createElement('a');
@@ -152,7 +145,7 @@ export default function Page() {
 								title: 'Modifier',
 								icon: Pencil,
 								onClick: () => {
-									//updateEventMutation.mutate(event, event.id);
+									router.push(`events/${event.id}/edit`);
 								},
 							},
 							{

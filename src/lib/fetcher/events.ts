@@ -1,4 +1,10 @@
-import { InfiniteData, QueryKey, UseInfiniteQueryOptions, UseMutationOptions } from '@tanstack/react-query';
+import {
+	InfiniteData,
+	QueryKey,
+	UseInfiniteQueryOptions,
+	UseMutationOptions,
+	UseQueryOptions,
+} from '@tanstack/react-query';
 import { GlobalQueryClient } from './queryClient';
 import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { deletef, get, patch, post } from '../fetcher';
@@ -25,6 +31,14 @@ const getEvents = (
 	queryKey: ['organization', org_id, 'event', activeMenu, q, generatedParameters],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
+});
+
+const getEvent = (
+	org_id: string,
+	event_id: string
+): UseQueryOptions<PrivateEvent<{ user: true; permission: true }>, Error> => ({
+	queryFn: () => get<PrivateEvent>(`/organization/${org_id}/events/${event_id}`),
+	queryKey: ['organization', org_id, 'event', event_id],
 });
 
 const createEventMutate = (
@@ -72,4 +86,12 @@ const updateEventMutate = (
 	},
 });
 
-export { createEventMutate, getEvents, deleteEventMutate, exportEventMutate, importEventMutate, updateEventMutate };
+export {
+	createEventMutate,
+	getEvents,
+	deleteEventMutate,
+	exportEventMutate,
+	importEventMutate,
+	updateEventMutate,
+	getEvent,
+};
