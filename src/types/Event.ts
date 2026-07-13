@@ -74,11 +74,3 @@ export interface ExportEventType {
 	end_at: string;
 	owner: string;
 }
-
-export interface ElasticSearchEvent {
-	id: string;
-	organization_id: string;
-	title: string;
-	subtitle: string;
-	description: string;
-}

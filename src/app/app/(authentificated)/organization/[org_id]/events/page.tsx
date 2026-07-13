@@ -2,7 +2,13 @@
 import styles from './page.module.scss';
 import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { deleteEventMutate, exportEventMutate, getEvents, importEventMutate, updateEventMutate } from '@/lib/fetcher/events';
+import {
+	deleteEventMutate,
+	exportEventMutate,
+	getEvents,
+	importEventMutate,
+	updateEventMutate,
+} from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';

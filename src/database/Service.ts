@@ -10,17 +10,13 @@ import { CreateOrUpdateServiceType } from '@/types/Service';
 
 const getServicesByFilterToOrganization = async <T extends Prisma.servicesInclude>(
 	include: T,
-	organization_id: string,
-	time?: DateOption,
+	filter?: Prisma.servicesWhereInput,
 	sorting?: SortingOption[],
 	pagination?: PaginationParameters
 ): Promise<Prisma.servicesGetPayload<{ include: T }>[]> => {
 	return await prisma.services.findMany({
 		include: include,
-		where: {
-			organization_id: organization_id,
-			...dateToPrisma(time ?? DEFAULT_DATEOPTION),
-		},
+		where: filter,
 		...sortingToPrisma(sorting ?? DEFAULT_SORTINGOPTIONS, ['title', 'description']),
 		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
@@ -66,6 +62,16 @@ const createServices = async <T extends Prisma.servicesInclude>(
 			organization_id: organization_id,
 			...data,
 		},
+		include: include,
+	});
+};
+
+const createManyServices = async <T extends Prisma.servicesInclude>(
+	data: Prisma.servicesCreateManyInput | Prisma.servicesCreateManyInput[],
+	include: T
+): Promise<Prisma.servicesGetPayload<{ include: T }>[]> => {
+	return prisma.services.createManyAndReturn({
+		data: data,
 		include: include,
 	});
 };
@@ -142,4 +148,5 @@ export {
 	getServicesByFilterToOrganization,
 	getServicesByIdToOrganization,
 	getServicesByCategory,
+	createManyServices,
 };

@@ -1,4 +1,4 @@
-import { PrivateService, PublicService } from '@/types/Service';
+import { ExportServiceType, ImportServiceType, PrivateService, PublicService } from '@/types/Service';
 import { Prisma } from '../prisma/generated/client';
 import { formatPrivateOrganization, formatPublicOrganization } from './Organization';
 import { formatServiceCategory } from './ServiceCategories';
@@ -45,4 +45,37 @@ const formatPrivateService = <T extends Prisma.servicesInclude>(
 	} as unknown as PrivateService<T>;
 };
 
-export { formatPublicService, formatPrivateService };
+const formatExportService = (row: Prisma.servicesGetPayload<object>): ExportServiceType => {
+	return {
+		title: row.title,
+		subtitle: row.subtitle ?? '',
+		description: row.description ?? '',
+		registration_required: row.registration_required,
+		registration_details: row.registration_details,
+		registration_link: row.registration_link,
+		edition: row.edition,
+		location: row.location ?? '',
+		end_at: row.end_at == null ? '' : row.end_at.toISOString(),
+		start_at: row.start_at == null ? '' : row.start_at.toISOString(),
+	};
+};
+
+const formatDataService = (data: ImportServiceType[], org_id: string): Prisma.servicesCreateManyInput[] => {
+	return data.map((row) => ({
+		title: row.title,
+		subtitle: row.subtitle,
+		description: row.description,
+		registration_required: row.registration_required,
+		registration_details: row.registration_details,
+		registration_link: row.registration_link,
+		edition: row.edition,
+		location: row.location,
+		...(row.start_at != null ? { start_at: new Date(row.start_at) } : {}),
+		...(row.end_at != null ? { end_at: new Date(row.end_at) } : {}),
+		organization_id: org_id,
+		image: '',
+		category_id: '',
+	}));
+};
+
+export { formatPublicService, formatPrivateService, formatExportService, formatDataService };

@@ -61,3 +61,34 @@ export interface CreateOrUpdateServiceType {
 	end_at: Date | null;
 	registration_full: boolean;
 }
+
+export interface ImportServiceType {
+	title: string;
+	subtitle: string;
+	description: string;
+	registration_required: boolean;
+	registration_details: string;
+	registration_link: string;
+	location: string;
+	edition: number;
+	start_at: string | null;
+	end_at: string | null;
+}
+
+export interface ExportServiceBodyType {
+	type: string;
+	filename: string;
+}
+
+export interface ExportServiceType {
+	title: string;
+	subtitle: string;
+	description: string;
+	registration_required: boolean;
+	registration_details: string;
+	registration_link: string;
+	location: string;
+	edition: number;
+	start_at: string | null;
+	end_at: string | null;
+}

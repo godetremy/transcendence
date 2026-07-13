@@ -1,9 +1,5 @@
-import {
-	countEventsByFilter,
-	createEvent,
-	getEventsByElasticSearch,
-	getEventsByFilterToOrganization,
-} from '@/database/Event';
+import { getEventsOrServicesByElasticSearch } from '@/database/elasticSearch';
+import { countEventsByFilter, createEvent, getEventsByFilterToOrganization } from '@/database/Event';
 import { formatPrivateEvent } from '@/database/format/Event';
 import { getOrganizationById } from '@/database/Organization';
 import { Prisma } from '@/database/prisma/generated/client';
@@ -45,15 +41,24 @@ export async function GET(
 
 		const query = parseParams<SearchQuery>(req.nextUrl.searchParams, SearchQuerySchema);
 
-		const searchs = await getEventsByElasticSearch(query.q ?? '', pagination.limit);
+		const searchs = await getEventsOrServicesByElasticSearch(query.q ?? '', pagination.limit, 'events');
 
-		const elasticSearchEvents = searchs.hits.hits.map((hit) => ({
-			org_id: hit._source?.organization_id,
-			id: hit._source?.id,
-			title: hit._source?.title,
-			subtitle: hit._source?.subtitle,
-			description: hit._source?.description,
-		}));
+		let elasticSearchEvents: {
+			org_id: string | undefined;
+			id: string | undefined;
+			title: string | undefined;
+			subtitle: string | undefined;
+			description: string | undefined;
+		}[] = [];
+		if (searchs) {
+			elasticSearchEvents = searchs.hits.hits.map((hit) => ({
+				org_id: hit._source?.organization_id,
+				id: hit._source?.id,
+				title: hit._source?.title,
+				subtitle: hit._source?.subtitle,
+				description: hit._source?.description,
+			}));
+		}
 
 		const filter: Prisma.eventsWhereInput = {
 			organization_id: org_id,
