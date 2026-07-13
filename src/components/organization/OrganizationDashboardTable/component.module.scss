@@ -9,10 +9,10 @@
 .fixed_header {
 	position: fixed;
 	top: 0;
-	left: 370px;
-	width: calc(100vw - 370px);
+	left: 70px;
+	width: calc(100vw - 70px);
 	background-color: var(--color-primary-black);
-	z-index: 100000;
+	z-index: 10000;
 }
 
 .header_container {
@@ -150,13 +150,6 @@
 .next_page_button {
 	margin-top: 20px;
 	justify-self: center;
-}
-
-@media (max-width: supports.$breakpoints-laptop) {
-	.fixed_header {
-		width: calc(100vw - 70px);
-		left: 70px;
-	}
 }
 
 @media (max-width: supports.$breakpoints-tablets) {

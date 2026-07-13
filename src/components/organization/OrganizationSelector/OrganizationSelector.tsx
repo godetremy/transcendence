@@ -29,7 +29,7 @@ export function OrganizationPicker() {
 				className={`${styles.picker_button} ${open ? styles.opened : undefined}`}
 			>
 				{loadingOrganization && <Loader size={24} dark={false} />}
-				<Image src={currentOrganization.logo} alt={`${currentOrganization.name} logo`} width={24} height={24} />
+				<Image src={currentOrganization.logo} alt={`${currentOrganization.name} logo`} width={30} height={30} />
 				<p>{currentOrganization.name}</p>
 				<ChevronDown color={'currentColor'} size={16} />
 			</button>

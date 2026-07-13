@@ -44,6 +44,12 @@ export function OrganizationSidebar(props: OrganizationSidebarProps) {
 			<aside className={`${styles.sidebar} ${!visibleSidebar ? styles.hidden : undefined}`}>
 				<header>
 					<OrganizationPicker />
+					<button
+						onClick={() => setVisibleSidebar(!visibleSidebar)}
+						className={`${styles.sidebar_button} ${!visibleSidebar ? styles.hidden : ''}`}
+					>
+						<PanelLeft color={'currentColor'} />
+					</button>
 				</header>
 				{pages.map((page, i) => (
 					<Link
@@ -58,12 +64,7 @@ export function OrganizationSidebar(props: OrganizationSidebarProps) {
 					</Link>
 				))}
 			</aside>
-			<button
-				onClick={() => setVisibleSidebar(!visibleSidebar)}
-				className={`${styles.sidebar_button} ${!visibleSidebar ? styles.hidden : ''}`}
-			>
-				<PanelLeft color={'currentColor'} />
-			</button>
+
 			<article className={!visibleSidebar ? styles.hidden : undefined}>{props.children}</article>
 		</>
 	);
