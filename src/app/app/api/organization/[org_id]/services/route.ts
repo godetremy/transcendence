@@ -1,15 +1,19 @@
+import { getEventsOrServicesByElasticSearch } from '@/database/elasticSearch';
 import { formatPrivateService } from '@/database/format/Service';
 import { getOrganizationById } from '@/database/Organization';
+import { Prisma } from '@/database/prisma/generated/client';
 import { countServicesByFilter, createServices, getServicesByFilterToOrganization } from '@/database/Service';
 import { getServiceCategoryById } from '@/database/ServiceCategories';
 import { getUserFromSession } from '@/database/User';
 import { getThrowableSession } from '@/lib/session';
+import { SearchQuerySchema } from '@/schema/searchQuery';
 import { CreateServiceSchema } from '@/schema/ServiceShema';
+import { SearchQuery } from '@/types/searchQuery';
 import { CreateOrUpdateServiceType } from '@/types/Service';
-import { getDateParams } from '@/utils/date';
+import { dateToPrisma, DEFAULT_DATEOPTION, getDateParams } from '@/utils/date';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
-import { parseBody } from '@/utils/parsing';
+import { parseBody, parseParams } from '@/utils/parsing';
 import { getUserOrganizationPermission } from '@/utils/permission';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
@@ -36,11 +40,49 @@ export async function GET(
 		const sorting = getSortingParams(searchParams);
 		const pagination = getPaginationParams(searchParams);
 
-		const count = await countServicesByFilter();
+		const query = parseParams<SearchQuery>(req.nextUrl.searchParams, SearchQuerySchema);
+
+		const searchs = await getEventsOrServicesByElasticSearch(query.q ?? '', pagination.limit, 'services');
+
+		let elasticSearchServices: {
+			org_id: string | undefined;
+			id: string | undefined;
+			title: string | undefined;
+			subtitle: string | undefined;
+			description: string | undefined;
+		}[] = [];
+		if (searchs) {
+			elasticSearchServices = searchs.hits.hits.map((hit) => ({
+				org_id: hit._source?.organization_id,
+				id: hit._source?.id,
+				title: hit._source?.title,
+				subtitle: hit._source?.subtitle,
+				description: hit._source?.description,
+			}));
+		}
+
+		const filter: Prisma.servicesWhereInput = {
+			organization_id: org_id,
+			...dateToPrisma(date ?? DEFAULT_DATEOPTION),
+			...(query.q == null
+				? {}
+				: {
+						OR: [
+							{
+								title: {
+									in: elasticSearchServices
+										.map((u) => u.title)
+										.filter((title): title is string => !!title),
+								},
+							},
+						],
+					}),
+		};
+
+		const count = await countServicesByFilter(filter);
 		const value = await getServicesByFilterToOrganization(
 			{ organization: true, category: true },
-			org_id,
-			date,
+			filter,
 			sorting,
 			pagination
 		);
@@ -72,8 +114,8 @@ export async function POST(
 		const category = await getServiceCategoryById(data.category_id, {});
 		if (category == null) throw ERRORS_DETAILS.category_does_not_exists();
 
-		await createServices(data, org_id, {});
+		const service = await createServices(data, org_id, {});
 
-		return NextResponse.json({ success: true });
+		return NextResponse.json(formatPrivateService<object>(service));
 	});
 }

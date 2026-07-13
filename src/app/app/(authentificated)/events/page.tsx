@@ -17,7 +17,7 @@ export default function Page() {
 						<Search size={16} />
 					</button>
 				</div>
-				<h1 className={styles.h1}>AUJOURD'HUI</h1>
+				<h1 className={styles.h1}>AUJOURD&apos;HUI</h1>
 				<EventPreview
 					image={'/images/demo_event_01.png'}
 					date={Date.now()}

@@ -37,8 +37,8 @@ const createEventMutate = (
 });
 
 const deleteEventMutate = (
-	org_id: string,
-): UseMutationOptions<PrivateEvent<object>, Error, { event : PrivateEvent<object> }> => ({
+	org_id: string
+): UseMutationOptions<PrivateEvent<object>, Error, { event: PrivateEvent<object> }> => ({
 	mutationFn: ({ event }) => deletef<PrivateEvent<object>>(`/organization/${org_id}/events/${event.id}`, {}),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'event'] });
@@ -46,17 +46,16 @@ const deleteEventMutate = (
 });
 
 const exportEventMutate = (
-	org_id: string,
-): UseMutationOptions<Response, Error, { type: string, filename: string }> => ({
-	mutationFn: ({ type, filename }) => post<Response>(`/organization/${org_id}/events/export`, { type, filename }, false),
+	org_id: string
+): UseMutationOptions<Response, Error, { type: string; filename: string }> => ({
+	mutationFn: ({ type, filename }) =>
+		post<Response>(`/organization/${org_id}/events/export`, { type, filename }, false),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'event'] });
 	},
 });
 
-const importEventMutate = (
-	org_id: string,
-): UseMutationOptions<Response, Error, { body: FormData }> => ({
+const importEventMutate = (org_id: string): UseMutationOptions<Response, Error, { body: FormData }> => ({
 	mutationFn: ({ body }) => post<Response>(`/organization/${org_id}/events/import`, body, false, false),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'event'] });
@@ -64,9 +63,10 @@ const importEventMutate = (
 });
 
 const updateEventMutate = (
-	org_id: string,
-): UseMutationOptions<PrivateEvent<object>, Error, { event: CreateOrUpdateEventType, event_id: string }> => ({
-	mutationFn: ({ event, event_id }) => patch<PrivateEvent<object>>(`/organization/${org_id}/events/${event_id}`, event),
+	org_id: string
+): UseMutationOptions<PrivateEvent<object>, Error, { event: CreateOrUpdateEventType; event_id: string }> => ({
+	mutationFn: ({ event, event_id }) =>
+		patch<PrivateEvent<object>>(`/organization/${org_id}/events/${event_id}`, event),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'event'] });
 	},

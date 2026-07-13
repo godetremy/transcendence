@@ -1,7 +1,13 @@
 'use client';
 import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { deleteEventMutate, exportEventMutate, getEvents, importEventMutate, updateEventMutate } from '@/lib/fetcher/events';
+import {
+	deleteEventMutate,
+	exportEventMutate,
+	getEvents,
+	importEventMutate,
+	updateEventMutate,
+} from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -36,7 +42,6 @@ export default function Page() {
 	const importEventMutation = useMutation(importEventMutate(organization.id));
 	const updateEventMutation = useMutation(updateEventMutate(organization.id));
 
-
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	function addDays(date: Date, days: number): Date {
@@ -54,7 +59,7 @@ export default function Page() {
 			formData.append('file', file);
 			formData.append('name', file.name);
 
-			importEventMutation.mutate({ body: formData});
+			importEventMutation.mutate({ body: formData });
 			e.target.value = '';
 		},
 		[organization.id]
@@ -92,9 +97,13 @@ export default function Page() {
 			message: 'Attention, une fois supprimer tu ne pourras pas le récupérer.',
 			buttons: [
 				{ text: 'Je le laisse' },
-				{ negative: true, text: 'Supprimer cette événement', onClick: () => {
-					deleteEventMutation.mutate({ event });
-				} },
+				{
+					negative: true,
+					text: 'Supprimer cette événement',
+					onClick: () => {
+						deleteEventMutation.mutate({ event });
+					},
+				},
 			],
 		});
 	};

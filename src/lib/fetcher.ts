@@ -10,11 +10,10 @@ const get = async <T>(route: string): Promise<T> => {
 const post = async <T>(route: string, body: object, parse: boolean = true, stringify: boolean = true): Promise<T> => {
 	const f = await fetch(`/app/api${route}`, {
 		method: 'POST',
-		headers:  stringify ? {'Content-Type': 'application/json'} : {}, 
+		headers: stringify ? { 'Content-Type': 'application/json' } : {},
 		body: stringify ? JSON.stringify(body) : (body as BodyInit),
 	});
-	if (parse == false)
-		return f as T;
+	if (parse == false) return f as T;
 	const j = await f.json();
 	if (!f.ok) throw new Error(j.message);
 	return j as T;
