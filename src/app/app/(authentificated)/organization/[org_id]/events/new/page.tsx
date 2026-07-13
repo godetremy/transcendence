@@ -8,20 +8,20 @@ import { useDropzone } from 'react-dropzone';
 import { InputDatePicker } from '@/components/globals/DatePicker/DatePicker';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMutation } from '@tanstack/react-query';
-import { createEvent } from '@/lib/fetcher/events';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
-import { ImageEditor } from '@/components/globals/ImageEditor/ImageEditor';
 import { CreateOrUpdateEventType } from '@/types/Event';
 import { useRouter } from 'next/navigation';
+import { ImageEditorCard } from '@/components/globals/ImageEditor/ImageEditorCard';
+import { createEventMutate } from '@/lib/fetcher/events';
 
 export default function Page() {
 	const router = useRouter();
 	const orgctx = useOrganizations();
 	const organization = orgctx.getCurrentOrganization()!;
 
-	const { mutate } = useMutation(createEvent(organization.id));
+	const { mutate } = useMutation(createEventMutate(organization.id));
 
 	const [showImageEdit, setShowImageEdit] = useState(false);
 
@@ -216,7 +216,7 @@ export default function Page() {
 			<section className={styles.preview_section}>
 				<h3>Preview coming soon...</h3>
 			</section>
-			{image && <ImageEditor file={image} visible={showImageEdit} setVisible={setShowImageEdit} />}
+			{image && <ImageEditorCard file={image} visible={showImageEdit} setVisible={setShowImageEdit} />}
 		</article>
 	);
 }
