@@ -76,7 +76,7 @@ export default function Page() {
 	const exportEvents = useCallback(async () => {
 		const response = await exportEventMutation.mutateAsync({ type: 'xlsx', filename: 'events' });
 		try {
-			if (!response.ok) throw 'Invalid file';
+			if (!response.ok) throw ('Invalid file')
 			const blob = await response.blob();
 			const url = window.URL.createObjectURL(blob);
 			const a = document.createElement('a');
@@ -187,7 +187,7 @@ export default function Page() {
 					{ id: 'name', text: 'Nom de l’événement' },
 					{ id: 'created_at', text: 'Crée le', width: 100 },
 					{ id: 'created_by', text: 'Crée par', width: 200 },
-					{ id: 'register', text: 'Inscrits', width: 100 },
+					{ id: 'register', text: 'Inscrits', width: 100, sortable: false },
 					{ text: '', width: 50, sortable: false },
 				]}
 				data={listEvents}
