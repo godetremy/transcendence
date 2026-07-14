@@ -38,6 +38,7 @@ export default function Page() {
 				setEvent={setEvent}
 				onSubmit={handleSubmit}
 				onNew={() => router.push('../events')}
+				createEvent={true}
 			></OrganizationEventEditor>
 		</>
 	);

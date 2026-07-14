@@ -7,15 +7,16 @@ import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { CalendarFold, ChevronLeft, MapPin, Minus, Plus, ScanEye, Users2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styles from './page.module.scss';
 
 export interface OrganizationEventEditor {
-	event: CreateOrUpdateEventType | null;
+	event: CreateOrUpdateEventType;
 	setEvent: Dispatch<SetStateAction<CreateOrUpdateEventType>>;
 	onSubmit: () => void;
 	onNew?: () => void;
+	createEvent: Boolean;
 }
 
 export function OrganizationEventEditor(props: OrganizationEventEditor) {
@@ -23,22 +24,25 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 
 	const [image, setImage] = useState<File | null>(null);
 	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
+	const hasLoadedContent = useRef(false);
 
 	const editor = useEditor({
 		extensions: [StarterKit, Markdown],
 		content: '',
 		contentType: 'markdown',
-	});
-
-	useEditorState({
-		editor,
-		selector: (ctx) => {
-			if (!ctx.editor) return;
-			ctx.editor.on('update', () =>
-				props.setEvent((prev) => ({ ...prev, description: ctx.editor.getMarkdown() }))
-			);
+		onUpdate: ({ editor }) => {
+			queueMicrotask(() => {
+				props.setEvent((prev) => ({ ...prev, description: editor.getMarkdown() }));
+			});
 		},
 	});
+
+	useEffect(() => {
+		if (editor && props.event.description && !hasLoadedContent.current) {
+			editor.commands.setContent(props.event.description, { emitUpdate: false });
+			hasLoadedContent.current = true;
+		}
+	}, [editor, props.event.description]);
 
 	const { getRootProps, getInputProps } = useDropzone({
 		onDrop: (acceptedFiles) => {
@@ -54,19 +58,6 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 		},
 	});
 
-	if (props.event == null) {
-		props.event = {
-			title: '',
-			subtitle: '',
-			description: '',
-			max_registration: null,
-			location: '',
-			image: '',
-			start_at: new Date(),
-			end_at: new Date(),
-		};
-	}
-
 	return (
 		<article className={styles.main_container}>
 			<section className={styles.edit_section}>
@@ -74,7 +65,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 					<button className={styles.icon} onClick={() => props.onNew?.()}>
 						<ChevronLeft style={{ marginRight: 1.5 }} />
 					</button>
-					<span>Nouvelle événement</span>
+					<span>{props.createEvent ? `Nouvelle` : `Edition d'`} événement</span>
 					<button>
 						<ScanEye />
 						Prévisualiser
@@ -88,7 +79,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 						}}
 					>
 						<Plus />
-						Ajouter
+						{props.createEvent ? `Ajouter` : `Editer`}
 					</button>
 				</nav>
 				<div className={styles.main_content}>
