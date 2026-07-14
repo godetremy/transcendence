@@ -5,8 +5,8 @@ import { Calendar } from '@/components/globals/Calendar/Calendar';
 import { Clock, MapPin } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useMediaQuery } from '@/contexts/MediaQueryProvider';
-import { useQuery } from '@tanstack/react-query';
-import { getEventPublic } from '@/lib/fetcher/events';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getEventPublic, getregisterUserToEvent, registerEventMutate } from '@/lib/fetcher/events';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { getDay, getHours } from 'date-fns';
@@ -17,6 +17,8 @@ export default function Page() {
 	const { event_id } = useParams();
 
 	const { data, isLoading, isError, error } = useQuery(getEventPublic(event_id as string));
+	const register = useQuery(getregisterUserToEvent(event_id as string));
+	const mutation = useMutation(registerEventMutate(event_id as string));
 	const isMobile = useMediaQuery('(max-width: 768px)');
 	const headerSize = () => (isMobile ? 180 : 280);
 	const { scrollY } = useScroll();
@@ -39,15 +41,15 @@ export default function Page() {
 
 	return (
 		<>
-			{isLoading ? (
+			{isLoading && register.isLoading ? (
 				<Loader />
-			) : isError || data === undefined ? (
+			) : isError || data === undefined || register.data === undefined ? (
 				<ErrorState error={error} />
 			) : (
 				<div className={styles.main_container}>
 					<motion.header
 						style={{
-							backgroundImage: `url('/images/demo_event_01.png')`,
+							backgroundImage: `url(${data.organization.logo})`,
 							backgroundSize: backgroundSize,
 							borderBottom: borderBottom,
 						}}
@@ -96,8 +98,13 @@ export default function Page() {
 							className={styles.cta_button}
 							whileHover={{ scale: 1.02 }}
 							whileTap={{ scale: 0.99 }}
+							onClick={() => {
+								register.data.register == true
+									? mutation.mutate({ register: 'false' })
+									: mutation.mutate({ register: 'true' });
+							}}
 						>
-							S&#39;inscrire
+							{register.data.register === true ? 'Se désinscrire' : "S'inscrire"}
 						</motion.button>
 					</footer>
 				</div>

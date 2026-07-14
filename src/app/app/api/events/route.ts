@@ -57,7 +57,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 			data: value.filter((e) => e.start_at.toISOString() >= yearsEnd).map(formatPublicEvent<object>),
 		});
 
-		console.log(dateValue);
 		return NextResponse.json(generatePaginationResponse(dateValue, count, pagination));
 	});
 }

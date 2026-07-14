@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { GlobalQueryClient } from './queryClient';
 import { CreateOrUpdateEventType, PrivateEvent, PublicEvent } from '@/types/Event';
-import { deletef, get, patch, post } from '../fetcher';
+import { deletef, get, patch, post, put } from '../fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import { DateParse } from '@/app/app/api/events/route';
 
@@ -60,8 +60,8 @@ const getEvent = (org_id: string, event_id: string): UseQueryOptions<PrivateEven
 	queryKey: ['organization', org_id, 'event', event_id],
 });
 
-const getEventPublic = (event_id: string): UseQueryOptions<PublicEvent, Error> => ({
-	queryFn: () => get<PublicEvent>(`/events/${event_id}`),
+const getEventPublic = (event_id: string): UseQueryOptions<PublicEvent<{ organization: true }>, Error> => ({
+	queryFn: () => get<PublicEvent<{ organization: true }>>(`/events/${event_id}`),
 	queryKey: ['event', 'public', event_id],
 });
 
@@ -72,6 +72,20 @@ const createEventMutate = (
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'event'] });
 	},
+});
+
+const registerEventMutate = (
+	event_id: string
+): UseMutationOptions<{ success: true }, Error, { register: string | null }> => ({
+	mutationFn: ({ register }) => put<{ success: true }>(`/events/${event_id}`, { register }),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['event', 'public', event_id] });
+	},
+});
+
+const getregisterUserToEvent = (event_id: string): UseQueryOptions<{ success: boolean; register: boolean }, Error> => ({
+	queryFn: () => get<{ success: boolean; register: boolean }>(`/events/${event_id}/register`),
+	queryKey: ['event', 'public', event_id, 'register'],
 });
 
 const deleteEventMutate = (
@@ -120,4 +134,6 @@ export {
 	getEvent,
 	getEventsPublic,
 	getEventPublic,
+	registerEventMutate,
+	getregisterUserToEvent,
 };

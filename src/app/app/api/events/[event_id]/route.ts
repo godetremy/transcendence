@@ -26,7 +26,7 @@ export async function GET(
 
 		createViewElasticSearch(event_value.organization_id, event_id);
 
-		return NextResponse.json(formatPublicEvent<object>(event_value));
+		return NextResponse.json(formatPublicEvent<{ organization: true }>(event_value));
 	});
 }
 
