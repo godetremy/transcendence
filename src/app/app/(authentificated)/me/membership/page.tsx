@@ -3,7 +3,7 @@
 import { NavigationBarHeader } from '@/components/globals/NavigationBarHeader/NavigationBarHeader';
 import styles from './page.module.scss';
 import ListItem from '@/components/globals/ListItem/ListItem';
-import { ArrowUpRight, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Card } from '@/components/globals/Card/Card';
 import { SumupReload } from '@/components/sumup/SumupReload';
@@ -51,8 +51,8 @@ export default function Page() {
 					</div>
 					<span className={styles.listSectionTitle}>Historique</span>
 					{lists.data.pages[0].data.length === 0 ? (
-						<EmptyState title="Tu n'as fait aucun achats..." description='Et si tu essayez pour voir ?'/>
-					) :  (
+						<EmptyState title="Tu n'as fait aucun achats..." description="Et si tu essayez pour voir ?" />
+					) : (
 						<ListContainer>
 							{lists.data.pages.map((row) =>
 								row.data.map((transaction, i) => (
@@ -64,7 +64,8 @@ export default function Page() {
 												className={styles.debit}
 												style={{
 													color: transaction.amount >= 0 ? '#99FFBA' : '#FE5356',
-													backgroundColor: transaction.amount >= 0 ? '#99FFBA20' : '#FE535620',
+													backgroundColor:
+														transaction.amount >= 0 ? '#99FFBA20' : '#FE535620',
 												}}
 											>
 												{`${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toFixed(2)}€`}
@@ -78,7 +79,6 @@ export default function Page() {
 							)}
 						</ListContainer>
 					)}
-					
 				</section>
 				<Card visible={showReload} requestClose={() => setShowReload(false)}>
 					<SumupReload />

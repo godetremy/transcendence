@@ -1,6 +1,6 @@
 import styles from './component.module.scss';
 import { CardHeader } from '@/components/globals/CardHeader/CardHeader';
-import { OrganisationPermissionEditor } from '@/components/organization/OrganisationPermissionEditor/OrganisationPermissionEditor';
+import { OrganisationPermissionEditor } from '@/components/organization/OrganizationPermissionEditor/OrganisationPermissionEditor';
 import { useEffect, useRef, useState } from 'react';
 import { OrganizationPermissionDetails } from '@/types/OrganizationPermissionDetails';
 import { useOrganizations } from '@/contexts/OrganizationsContext';

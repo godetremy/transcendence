@@ -29,8 +29,7 @@ const getEventsByFilterToOrganization = async <T extends Prisma.eventsInclude>(
 
 const getEventsDashBoard = async <T extends Prisma.eventsInclude>(
 	filter: Prisma.eventsWhereInput,
-	include: T,
-	sorting?: SortingOption[]
+	include: T
 ): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
 	return prisma.events.findMany({
 		where: filter,

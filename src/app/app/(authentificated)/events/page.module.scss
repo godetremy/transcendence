@@ -82,7 +82,6 @@
 				}
 
 				&:has(input:checked) {
-
 					color: var(--color-primary-black);
 				}
 			}
@@ -97,11 +96,11 @@
 			margin-right: 60px;
 			height: 100%;
 			background: linear-gradient(
-					90deg,
-					rgba(var(--color-rgb-primary-black), 1) 0,
-					rgba(var(--color-rgb-primary-black), 0) 20px,
-					rgba(var(--color-rgb-primary-black), 0) calc(100% - 20px),
-					rgba(var(--color-rgb-primary-black), 1) 100%,
+				90deg,
+				rgba(var(--color-rgb-primary-black), 1) 0,
+				rgba(var(--color-rgb-primary-black), 0) 20px,
+				rgba(var(--color-rgb-primary-black), 0) calc(100% - 20px),
+				rgba(var(--color-rgb-primary-black), 1) 100%
 			);
 			pointer-events: none;
 		}
