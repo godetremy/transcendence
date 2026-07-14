@@ -32,7 +32,7 @@ export function SumupReload() {
 					</button>
 					<input
 						className={styles.input}
-						placeholder={checkout.amount.toString()}
+						value={checkout.amount}
 						type="number"
 						onChange={(e) =>
 							setCheckout((prev) => ({ ...prev, amount: Number(e.target.value) }) as SumupCreateCheckouts)
