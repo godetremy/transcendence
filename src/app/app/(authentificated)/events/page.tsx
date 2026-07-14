@@ -1,11 +1,26 @@
 'use client';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 import styles from './page.module.scss';
 import { EventCard } from '@/components/globals/EventCard/EventCard';
+import { getEventsPublic } from '@/lib/fetcher/events';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
+import { Loader } from '@/components/globals/Loader/Loader';
+import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 
 export default function Page() {
 	const [selectedTag, setSelectedTag] = useState(0);
+	const [search, setSearch] = useState<string>('');
+
+	const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, error } = useInfiniteQuery(
+		getEventsPublic(
+			null,
+			selectedTag == 2 ? null : new Date().toISOString(),
+			search,
+			selectedTag
+		)
+	);
 
 	return (
 		<div className={styles.page}>
@@ -55,29 +70,38 @@ export default function Page() {
 				</section>
 			</header>
 			<main>
-				<span>Aujourd&#39;hui</span>
-				<EventCard
-					id={'blablabla'}
-					image={'/images/demo_event_01.png'}
-					date={new Date()}
-					title={'🎙️ Soirée Karaoké'}
-					location={'Terrasse'}
-				/>
-				<EventCard
-					id={'blablabla'}
-					image={'/images/demo_event_01.png'}
-					date={new Date()}
-					title={'🎙️ Soirée Karaoké'}
-					location={'Terrasse'}
-				/>
-				<span>Demain</span>
-				<EventCard
-					id={'blablabla'}
-					image={'/images/demo_event_01.png'}
-					date={new Date()}
-					title={'🎙️ Soirée Karaoké'}
-					location={'Terrasse'}
-				/>
+				{isLoading ? (
+				<Loader />
+				) : isError || data === undefined ? (
+					<ErrorState error={error} />
+				) : (
+						data.pages.map((row) =>
+							row.data.map((category) =>
+								category.data.length === 0 ? null : (
+									<div key={category.name} className={styles.category}>
+										<span>{category.name}</span>
+										{category.data.map((event) => (
+											<EventCard
+												key={event.id}
+												id={event.id}
+												image={
+													event.image && event.image !== 'null'
+														? event.image
+														: '/images/demo_event_01.png'
+												}
+												date={event.start_at}
+												title={event.title}
+												location={event.location ?? 'aucun lieu'}
+											/>
+										))}
+									</div>
+								)
+							)
+						)
+				)}
+				{hasNextPage && !isLoading && (
+					<ShowMoreButton onClick={() => fetchNextPage?.()} className={styles.next_page_button} />
+				)}
 			</main>
 		</div>
 	);

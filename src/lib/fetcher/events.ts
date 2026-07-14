@@ -9,6 +9,7 @@ import { GlobalQueryClient } from './queryClient';
 import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { deletef, get, patch, post } from '../fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
+import { DateParse } from '@/app/app/api/events/route';
 
 const getEvents = (
 	org_id: string,
@@ -29,6 +30,27 @@ const getEvents = (
 			`/organization/${org_id}/events?page=${pageParam}${from == null ? '' : '&from=' + from}${to == null ? '' : '&to=' + to}${q == null || q.length == 0 ? '' : '&q=' + encodeURI(q.trim())}${generatedParameters == null ? '' : '&sort=' + encodeURI(generatedParameters.trim())}`
 		),
 	queryKey: ['organization', org_id, 'event', activeMenu, q, generatedParameters],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
+});
+
+const getEventsPublic = (
+	from: string | null,
+	to: string | null,
+	q: string | null,
+	activeMenu: number | null
+): UseInfiniteQueryOptions<
+	PaginationResponse<DateParse<{ event_registration: true; users: true }>>,
+	Error,
+	InfiniteData<PaginationResponse<DateParse<{ event_registration: true; users: true }>>>,
+	QueryKey,
+	number
+> => ({
+	queryFn: ({ pageParam }) =>
+		get<PaginationResponse<DateParse<{ event_registration: true; users: true }>>>(
+			`/events?page=${pageParam}${from == null ? '' : '&from=' + from}${to == null ? '' : '&to=' + to}${q == null || q.length == 0 ? '' : '&q=' + encodeURI(q.trim())}`
+		),
+	queryKey: ['event', 'public', activeMenu, q],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
@@ -94,4 +116,5 @@ export {
 	importEventMutate,
 	updateEventMutate,
 	getEvent,
+	getEventsPublic,
 };
