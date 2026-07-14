@@ -14,12 +14,7 @@ export default function Page() {
 	const [search, setSearch] = useState<string>('');
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, error } = useInfiniteQuery(
-		getEventsPublic(
-			null,
-			selectedTag == 2 ? null : new Date().toISOString(),
-			search,
-			selectedTag
-		)
+		getEventsPublic(null, selectedTag == 2 ? null : new Date().toISOString(), search, selectedTag)
 	);
 
 	return (
@@ -71,33 +66,33 @@ export default function Page() {
 			</header>
 			<main>
 				{isLoading ? (
-				<Loader />
+					<Loader />
 				) : isError || data === undefined ? (
 					<ErrorState error={error} />
 				) : (
-						data.pages.map((row) =>
-							row.data.map((category) =>
-								category.data.length === 0 ? null : (
-									<div key={category.name} className={styles.category}>
-										<span>{category.name}</span>
-										{category.data.map((event) => (
-											<EventCard
-												key={event.id}
-												id={event.id}
-												image={
-													event.image && event.image !== 'null'
-														? event.image
-														: '/images/demo_event_01.png'
-												}
-												date={event.start_at}
-												title={event.title}
-												location={event.location ?? 'aucun lieu'}
-											/>
-										))}
-									</div>
-								)
+					data.pages.map((row) =>
+						row.data.map((category) =>
+							category.data.length === 0 ? null : (
+								<div key={category.name} className={styles.category}>
+									<span>{category.name}</span>
+									{category.data.map((event) => (
+										<EventCard
+											key={event.id}
+											id={event.id}
+											image={
+												event.image && event.image !== 'null'
+													? event.image
+													: '/images/demo_event_01.png'
+											}
+											date={event.start_at}
+											title={event.title}
+											location={event.location ?? 'aucun lieu'}
+										/>
+									))}
+								</div>
 							)
 						)
+					)
 				)}
 				{hasNextPage && !isLoading && (
 					<ShowMoreButton onClick={() => fetchNextPage?.()} className={styles.next_page_button} />

@@ -6,7 +6,7 @@ import {
 	UseQueryOptions,
 } from '@tanstack/react-query';
 import { GlobalQueryClient } from './queryClient';
-import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
+import { CreateOrUpdateEventType, PrivateEvent, PublicEvent } from '@/types/Event';
 import { deletef, get, patch, post } from '../fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import { DateParse } from '@/app/app/api/events/route';
@@ -55,12 +55,14 @@ const getEventsPublic = (
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
-const getEvent = (
-	org_id: string,
-	event_id: string
-): UseQueryOptions<PrivateEvent<{ user: true; permission: true }>, Error> => ({
+const getEvent = (org_id: string, event_id: string): UseQueryOptions<PrivateEvent, Error> => ({
 	queryFn: () => get<PrivateEvent>(`/organization/${org_id}/events/${event_id}`),
 	queryKey: ['organization', org_id, 'event', event_id],
+});
+
+const getEventPublic = (event_id: string): UseQueryOptions<PublicEvent, Error> => ({
+	queryFn: () => get<PublicEvent>(`/events/${event_id}`),
+	queryKey: ['event', 'public', event_id],
 });
 
 const createEventMutate = (
@@ -117,4 +119,5 @@ export {
 	updateEventMutate,
 	getEvent,
 	getEventsPublic,
+	getEventPublic,
 };
