@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 		const user_id = parseUserId(id, session);
 
 		const user = await getUserById(user_id.id, { membership: true });
-		if (user === null) throw ERRORS_DETAILS.account_does_not_exists();
+		if (user === null) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 		const formated_user: User | PublicUser = user_id.is_me
 			? formatPrivateUser<{ membership: true }>(user)
 			: formatPublicUser(user);

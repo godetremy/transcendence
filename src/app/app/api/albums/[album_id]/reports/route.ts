@@ -16,7 +16,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const pagination = getPaginationParams(searchParams);
 		const session = await getThrowableSession(req);
 		const user = await getUserById(session.user_id, {});
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+		if (user == null) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 		if (!user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const count = await countPhotoReportsByFilter({});

@@ -10,7 +10,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		if (!session.agent) throw ERRORS_DETAILS.permission_denied();
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 
 		await createAndSetSession({
 			user_id: user.id,

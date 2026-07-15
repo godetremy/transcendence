@@ -13,7 +13,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 		if (!user_id.is_me) throw ERRORS_DETAILS.permission_denied();
 
 		const user_account = await getUserById(user_id.id, {});
-		if (!user_account) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user_account) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 
 		await deleteUser(user_id.id);
 		return redirect('/app/api/auth/logout/');

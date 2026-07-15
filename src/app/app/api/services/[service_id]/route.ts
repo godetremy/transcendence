@@ -12,7 +12,7 @@ export async function GET(
 		const { service_id } = await params;
 
 		const service_value = await getServicesById(service_id, { organization: true, category: true });
-		if (service_value === null) throw ERRORS_DETAILS.service_does_not_exists();
+		if (service_value === null) throw ERRORS_DETAILS.does_not_exists('Ce service');
 
 		createViewElasticSearch(service_value.organization_id, service_id);
 

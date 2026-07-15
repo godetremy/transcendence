@@ -21,13 +21,13 @@ export async function POST(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const body = await parseBody<ExportServiceBodyType>(req, ExportFileSchema);
 
 		const services = await getServicesByFilterToOrganization({}, { organization_id: org_id });
-		if (services.length == 0) throw ERRORS_DETAILS.service_does_not_exists();
+		if (services.length == 0) throw ERRORS_DETAILS.does_not_exists('Ce service');
 		const formatServices = services.map(formatExportService);
 
 		let data: string;

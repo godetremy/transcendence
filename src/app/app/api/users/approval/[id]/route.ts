@@ -11,7 +11,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 		const body = await parseBody<ApprovalParameters>(req, ApprovalParametersSchema);
 
 		const user = await getUserById(id, {});
-		if (user === null) throw ERRORS_DETAILS.account_does_not_exists();
+		if (user === null) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 		if (!user.agent || user.agent_verified !== null) throw ERRORS_DETAILS.account_unsupported_action();
 
 		const updated_user = await updateUserApproval(id, body.approve);

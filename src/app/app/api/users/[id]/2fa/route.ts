@@ -15,7 +15,7 @@ export function GET(req: NextRequest, { params }: { params: Promise<{ id: string
 		const user = await getUserById(user_id.id, {
 			two_factor_auth: true,
 		});
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 
 		return NextResponse.json(formatTwoFactorAuth(user.two_factor_auth));
 	});

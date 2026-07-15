@@ -12,7 +12,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 		checkIsUserGlobalAdmin(user);
 
 		const number = await countOrganizationByFilter({ verified: false });

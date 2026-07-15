@@ -10,7 +10,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const body = await parseBody<AgentsSignUpParameters>(req, AgentsSignUpParametersSchema);
 
-		if (await existUserByMail(body.mail)) throw ERRORS_DETAILS.account_already_exists();
+		if (await existUserByMail(body.mail)) throw ERRORS_DETAILS.already_exists('Ce compte');
 		const total = await countUsersByFilter({});
 
 		let user;

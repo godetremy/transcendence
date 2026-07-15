@@ -10,7 +10,7 @@ const getUserOrganizationPermission = async (
 	check_approve: boolean = false
 ): Promise<Prisma.organization_permissionGetPayload<object>> => {
 	const organization = await getOrganizationById(organization_id, {});
-	if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+	if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 	if (user.admin) return FULL_PERMISSIONS(organization.id);
 	if (organization.verified == null || !organization.verified) throw ERRORS_DETAILS.organization_does_not_verified();

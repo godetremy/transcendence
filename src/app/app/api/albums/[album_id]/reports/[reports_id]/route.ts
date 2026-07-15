@@ -15,10 +15,10 @@ export async function GET(
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+		if (user == null) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 
 		const album = await getAlbumById(album_id, {});
-		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
+		if (album == null) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const report = await getReportById(reports_id, {});
 		if (!report) throw ERRORS_DETAILS.report_does_not_exists();

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { CreateOrUpdateEventType } from '@/types/Event';
+import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { createEventMutate } from '@/lib/fetcher/events';
 import { OrganizationEventEditor } from '@/components/organization/OrganizationEventEditor/OrganizationEventEditor';
 import { useRouter } from 'next/navigation';
@@ -12,7 +12,7 @@ export default function Page() {
 	const orgctx = useOrganizations();
 	const organization = orgctx.getCurrentOrganization()!;
 
-	const { mutate } = useMutation(createEventMutate(organization.id));
+	const createEvent = useMutation(createEventMutate(organization.id));
 
 	const [event, setEvent] = useState<CreateOrUpdateEventType>({
 		title: '',
@@ -25,10 +25,8 @@ export default function Page() {
 		end_at: new Date(),
 	});
 
-	const handleSubmit = () => {
-		if (event) {
-			mutate({ event });
-		}
+	const handleSubmit = (): Promise<PrivateEvent<object>> => {
+		return createEvent.mutateAsync({ event });
 	};
 
 	return (

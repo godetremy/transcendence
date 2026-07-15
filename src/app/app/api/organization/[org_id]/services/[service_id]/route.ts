@@ -20,7 +20,7 @@ export async function GET(
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
 
 		await getUserOrganizationPermission(user, org_id, true);
 
@@ -28,7 +28,7 @@ export async function GET(
 			organization: true,
 			category: true,
 		});
-		if (service_value === null) throw ERRORS_DETAILS.service_does_not_exists();
+		if (service_value === null) throw ERRORS_DETAILS.does_not_exists('Ce service');
 
 		return NextResponse.json(formatPrivateService<object>(service_value));
 	});
@@ -46,9 +46,9 @@ export async function PATCH(
 		const organization = await getOrganizationById(org_id, {});
 		const service = await getServicesByIdToOrganization(service_id, org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (!service) throw ERRORS_DETAILS.service_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
+		if (!service) throw ERRORS_DETAILS.does_not_exists('Ce service');
 
 		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.service_update) throw ERRORS_DETAILS.permission_denied();
@@ -56,7 +56,7 @@ export async function PATCH(
 		const body = await parseBody<CreateOrUpdateServiceType>(req, CreateServiceSchema);
 
 		const service_value = await UpdateServices(body, service_id, { organization: true, category: true });
-		if (service_value == null) throw ERRORS_DETAILS.service_does_not_exists();
+		if (service_value == null) throw ERRORS_DETAILS.does_not_exists('Ce service');
 
 		return NextResponse.json(formatPrivateService<object>(service_value));
 	});
@@ -74,9 +74,9 @@ export async function DELETE(
 		const organization = await getOrganizationById(org_id, {});
 		const service = await getServicesByIdToOrganization(service_id, org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
-		if (!service) throw ERRORS_DETAILS.service_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
+		if (!service) throw ERRORS_DETAILS.does_not_exists('Ce service');
 
 		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.service_delete) throw ERRORS_DETAILS.permission_denied();

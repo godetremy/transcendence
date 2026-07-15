@@ -1,7 +1,7 @@
 import { InputDatePicker } from '@/components/globals/DatePicker/DatePicker';
 import { ImageEditorCard } from '@/components/globals/ImageEditor/ImageEditorCard';
 import { Toggle } from '@/components/globals/Toggle/Toggle';
-import { CreateOrUpdateEventType } from '@/types/Event';
+import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { Markdown } from '@tiptap/markdown';
 import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -10,11 +10,12 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styles from './page.module.scss';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 
 export interface OrganizationEventEditor {
 	event: CreateOrUpdateEventType;
 	setEvent: Dispatch<SetStateAction<CreateOrUpdateEventType>>;
-	onSubmit: () => void;
+	onSubmit: () => Promise<PrivateEvent<object>>;
 	onNew?: () => void;
 	createEvent: Boolean;
 }
@@ -25,6 +26,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 	const [image, setImage] = useState<File | null>(null);
 	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
 	const hasLoadedContent = useRef(false);
+	const { openModal } = useModal();
 
 	const editor = useEditor({
 		extensions: [StarterKit, Markdown],
@@ -72,10 +74,27 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 					</button>
 					<button
 						className={styles.primary}
-						onClick={(e) => {
-							props.onSubmit();
-							props.onNew?.();
-							console.log(props.onNew);
+						onClick={async (e) => {
+							try {
+								await props.onSubmit();
+							}
+							catch (err: unknown) {
+								console.log(err);
+								openModal({
+									title: 'Erreur',
+									message: (err as Error).message,
+									buttons: [
+										{ text: 'Cancel', negative: true },
+										{
+											text: 'Confirm',
+											onClick: (e) => {
+												e.preventClosing();
+											},
+										},
+									],
+								})
+							}
+							//console.log(props.onNew);
 						}}
 					>
 						<Plus />

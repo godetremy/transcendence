@@ -22,7 +22,7 @@ export async function GET(
 		const { event_id } = await params;
 
 		const event_value = await getEventById(event_id, { organization: true });
-		if (event_value === null) throw ERRORS_DETAILS.event_does_not_exists();
+		if (event_value === null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 
 		createViewElasticSearch(event_value.organization_id, event_id);
 
@@ -42,7 +42,7 @@ export async function PUT(
 		const user_id = (await decrypt(cookie?.value)).user_id;
 
 		const event = await getEventById(event_id, {});
-		if (event == null) throw ERRORS_DETAILS.event_does_not_exists();
+		if (event == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 
 		const registered = await getEventRegistrationsById(event_id, user_id, {});
 
@@ -54,12 +54,12 @@ export async function PUT(
 				throw ERRORS_DETAILS.event_max_inscription();
 
 			const value = await createEventRegistrationsById(event_id, user_id, {});
-			if (value == null) throw ERRORS_DETAILS.event_does_not_exists();
+			if (value == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 		} else {
 			if (registered == null) throw ERRORS_DETAILS.event_does_not_register();
 
 			const value = await deleteEventRegistrationsById(event_id, user_id, {});
-			if (value == null) throw ERRORS_DETAILS.event_does_not_exists();
+			if (value == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 		}
 
 		return NextResponse.json({ success: true });
