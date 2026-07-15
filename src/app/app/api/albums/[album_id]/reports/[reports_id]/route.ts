@@ -15,7 +15,7 @@ export async function GET(
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
-		if (user == null) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (user == null) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const album = await getAlbumById(album_id, {});
 		if (album == null) throw ERRORS_DETAILS.does_not_exists('Cet album');

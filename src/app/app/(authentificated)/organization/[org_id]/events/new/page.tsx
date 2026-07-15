@@ -37,7 +37,7 @@ export default function Page() {
 				onSubmit={handleSubmit}
 				onNew={() => router.push('../events')}
 				createEvent={true}
-			></OrganizationEventEditor>
+			/>
 		</>
 	);
 }

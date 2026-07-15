@@ -19,7 +19,7 @@ export async function PUT(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		checkIsUserGlobalAdmin(user);

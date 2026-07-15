@@ -21,7 +21,7 @@ export async function GET(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {
@@ -52,7 +52,7 @@ export async function PATCH(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {
@@ -80,7 +80,7 @@ export async function DELETE(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {

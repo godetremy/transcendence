@@ -28,7 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 

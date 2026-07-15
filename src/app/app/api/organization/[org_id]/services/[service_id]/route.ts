@@ -20,7 +20,7 @@ export async function GET(
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		await getUserOrganizationPermission(user, org_id, true);
 
@@ -46,7 +46,7 @@ export async function PATCH(
 		const organization = await getOrganizationById(org_id, {});
 		const service = await getServicesByIdToOrganization(service_id, org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 		if (!service) throw ERRORS_DETAILS.does_not_exists('Ce service');
 
@@ -74,7 +74,7 @@ export async function DELETE(
 		const organization = await getOrganizationById(org_id, {});
 		const service = await getServicesByIdToOrganization(service_id, org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 		if (!service) throw ERRORS_DETAILS.does_not_exists('Ce service');
 

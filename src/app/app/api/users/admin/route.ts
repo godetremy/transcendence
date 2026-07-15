@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 		const body = await parseBody<AdminAppendBody>(req, AdminAppendBodySchema);
 
 		const user = await getUserByMail(body.mail, {});
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (user.admin) throw ERRORS_DETAILS.already_admin();
 
 		return NextResponse.json(formatPrivateUser<object>(await updateUserAdminStatus(user.id, true)));

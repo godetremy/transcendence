@@ -32,7 +32,7 @@ export async function PATCH(
 
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const org = await getOrganizationById(org_id, {});
 		if (!org) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
@@ -61,7 +61,7 @@ export async function DELETE(
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
 
-		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (org.owner_id != user.id && !user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const value = await deleteOrganization(org_id);

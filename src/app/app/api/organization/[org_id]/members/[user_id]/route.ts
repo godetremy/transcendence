@@ -40,7 +40,7 @@ export async function POST(
 		const session = await getThrowableSession(req);
 		const me = await getUserFromSession(session, {});
 		const other = await getUserById(user_id, {});
-		if (!me || !other) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!me || !other) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		await getUserOrganizationPermission(other, org_id);
 
@@ -62,7 +62,7 @@ export async function POST(
 
 		const data = await definePermissionsMember(user_id, body.permissions);
 		const member = await getOrganizationMemberById(user_id, org_id, { user: true, organization_permission: true });
-		if (data.length <= 0 || member === null) throw ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (data.length <= 0 || member === null) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		return NextResponse.json(formatOrganizationMembers<{ user: true; organization_permission: true }>(member));
 	});

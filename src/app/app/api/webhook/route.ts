@@ -16,7 +16,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 		if (!user_id) ERRORS_DETAILS.missing_parameter();
 
 		const user = await getUserById(user_id!, {});
-		if (!user || !user.balance_id || user.agent) ERRORS_DETAILS.does_not_exists('Ce compte');;
+		if (!user || !user.balance_id || user.agent) ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const body = await parseBody<CheckoutSumup>(req, CheckoutSumupShema);
 		if (body.status != 'SUCCESSFUL') ERRORS_DETAILS.permission_denied();
