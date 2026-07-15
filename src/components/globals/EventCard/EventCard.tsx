@@ -21,7 +21,7 @@ export function EventCard({ image, date, title, location, id }: EventCardProps) 
 					<h3>{title}</h3>
 					<div className={styles.tags}>
 						<Clock size={16} />
-						<span>{'DEMO'}</span>
+						<span style={{ overflow: 'visible' }}>{'DEMO'}</span>
 						<MapPin size={16} />
 						<span>{location}</span>
 					</div>
