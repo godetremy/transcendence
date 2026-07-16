@@ -44,7 +44,9 @@
 		"react-dom": "19.2.4",
 		"react-dropzone": "^15.0.0",
 		"react-lottie": "^1.2.10",
+		"react-markdown": "^10.1.0",
 		"react-qr-code": "^2.0.21",
+		"remark-gfm": "^4.0.1",
 		"sass": "^1.99.0",
 		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
 	},
