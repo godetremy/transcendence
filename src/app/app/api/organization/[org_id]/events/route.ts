@@ -28,8 +28,8 @@ export async function GET(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization || organization.verified == false) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization || organization.verified == false) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {
 			await getUserOrganizationPermission(user, org_id, true);
@@ -112,8 +112,8 @@ export async function POST(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization || organization.verified == false) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization || organization.verified == false) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {
 			const user_permission = await getUserOrganizationPermission(user, org_id, true);

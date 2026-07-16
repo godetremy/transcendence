@@ -43,10 +43,10 @@ export async function POST(
 
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const organization = await getOrganizationById(org_id, {});
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.organization_manage_permission) throw ERRORS_DETAILS.permission_denied();

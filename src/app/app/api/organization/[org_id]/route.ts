@@ -17,7 +17,7 @@ export async function GET(
 		const { org_id } = await params;
 		const org = await getOrganizationById(org_id, {});
 
-		if (!org) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!org) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		return NextResponse.json(formatPrivateOrganization<object>(org));
 	});
@@ -32,10 +32,10 @@ export async function PATCH(
 
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const org = await getOrganizationById(org_id, {});
-		if (!org) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!org) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const body = await parseBody<CreateOrganizationType>(req, CreateOrganizationSchema);
 
@@ -56,12 +56,12 @@ export async function DELETE(
 		const { org_id } = await params;
 		const org = await getOrganizationById(org_id, {});
 
-		if (!org) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!org) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 		if (org.owner_id != user.id && !user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const value = await deleteOrganization(org_id);

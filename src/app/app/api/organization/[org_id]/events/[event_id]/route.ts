@@ -21,8 +21,8 @@ export async function GET(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {
 			await getUserOrganizationPermission(user, org_id, true);
@@ -33,7 +33,7 @@ export async function GET(
 			event_registration: true,
 			photos_album: true,
 		});
-		if (event_value === null) throw ERRORS_DETAILS.event_does_not_exists();
+		if (event_value === null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 
 		return NextResponse.json(
 			formatPrivateEvent<{ organization: true; event_registration: true; photos_album: true }>(event_value)
@@ -52,8 +52,8 @@ export async function PATCH(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {
 			const user_permission = await getUserOrganizationPermission(user, org_id, true);
@@ -80,8 +80,8 @@ export async function DELETE(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		if (user.admin == false && organization.owner_id != user.id) {
 			const user_permission = await getUserOrganizationPermission(user, org_id, true);

@@ -28,17 +28,17 @@ export async function POST(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const body = await req.formData();
 		const file = body.get('file');
-		if (!file || !(file instanceof File)) throw ERRORS_DETAILS.invalid_parameter();
+		if (!file || !(file instanceof File)) throw ERRORS_DETAILS.invalid_parameter('fichier');
 
 		const ext = getExt(file);
 
 		const result = ImportFileSchema.safeParse(file);
-		if (!result.success) throw ERRORS_DETAILS.invalid_parameter();
+		if (!result.success) throw ERRORS_DETAILS.invalid_parameter(result.error.issues[0].message);
 
 		let data: ImportServiceType[];
 		switch (ext) {
@@ -57,10 +57,10 @@ export async function POST(
 		}
 
 		const checkData = formatDataService(data, organization.id);
-		if (checkData.length == 0) throw ERRORS_DETAILS.invalid_parameter();
+		if (checkData.length == 0) throw ERRORS_DETAILS.invalid_parameter('fichier');
 		for (const row of checkData) {
 			const checkRow = CreateServiceSchema.safeParse(row);
-			if (!checkRow.success) throw ERRORS_DETAILS.invalid_parameter();
+			if (!checkRow.success) throw ERRORS_DETAILS.invalid_parameter(checkRow.error.issues[0].message);
 		}
 
 		const listEvent = await createManyServices(formatDataService(data, organization.id), {});

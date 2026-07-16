@@ -5,8 +5,8 @@ import { Calendar } from '@/components/globals/Calendar/Calendar';
 import { CalendarPlus, Clock, MapPin, Navigation } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useMediaQuery } from '@/contexts/MediaQueryProvider';
-import { useQuery } from '@tanstack/react-query';
-import { getEventPublic } from '@/lib/fetcher/events';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getEventPublic, getregisterUserToEvent, registerEventMutate } from '@/lib/fetcher/events';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import ReactMarkdown from 'react-markdown';
@@ -18,6 +18,8 @@ export default function Page() {
 	const { event_id }: { event_id: string } = useParams();
 
 	const { data, isLoading, isError, error } = useQuery(getEventPublic(event_id));
+	const register = useQuery(getregisterUserToEvent(event_id as string));
+	const mutation = useMutation(registerEventMutate(event_id as string));
 
 	const { scrollY } = useScroll();
 	const isMobile = useMediaQuery('(max-width: 768px)');
@@ -113,8 +115,17 @@ export default function Page() {
 				)}
 			</article>
 			<footer className={styles.cta_container}>
-				<motion.button className={styles.cta_button} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.99 }}>
-					S&#39;inscrire
+				<motion.button
+					className={styles.cta_button}
+					whileHover={{ scale: 1.02 }}
+					whileTap={{ scale: 0.99 }}
+					onClick={() => {
+						register.data.register == true
+							? mutation.mutate({ register: 'false' })
+							: mutation.mutate({ register: 'true' });
+					}}
+				>
+					{register.data.register === true ? 'Se désinscrire' : "S'inscrire"}
 				</motion.button>
 			</footer>
 		</div>

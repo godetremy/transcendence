@@ -39,14 +39,16 @@ export function ImageEditorCard({ editor, visible, setVisible }: ImageEditorProp
 	}, [editor, render, visible]);
 
 	useEffect(() => {
-		if (!editor.current) return;
-		editor.current.edit(params);
-		editor.current.renderPreview().then((blob) => {
-			setRender((prev) => {
-				if (prev) URL.revokeObjectURL(prev);
-				return URL.createObjectURL(blob);
+		try {
+			if (!editor.current) return;
+			editor.current.edit(params);
+			editor.current.renderPreview().then((blob) => {
+				setRender((prev) => {
+					if (prev) URL.revokeObjectURL(prev);
+					return URL.createObjectURL(blob);
+				});
 			});
-		});
+		} catch {}
 	}, [params, editor]);
 
 	if (!editor.current) return null;

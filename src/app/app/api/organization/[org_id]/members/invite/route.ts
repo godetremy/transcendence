@@ -34,7 +34,7 @@ export async function POST(
 		const permissions = await getUserOrganizationPermission(user, org_id, true);
 		if (!permissions.members_manage) ERRORS_DETAILS.permission_denied();
 
-		if (!(await organizationExistById(org_id))) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!(await organizationExistById(org_id))) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 		if (!(await existPermissionInOrganization(body.permission_id, org_id)))
 			throw ERRORS_DETAILS.permission_does_not_exists();
 
@@ -54,7 +54,7 @@ export function PUT(req: NextRequest, { params }: { params: Promise<{ org_id: st
 
 		const body = await parseBody<MemberInviteResponseRequestBody>(req, MemberInviteResponseRequestBodySchema);
 
-		if (!(await organizationExistById(org_id))) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!(await organizationExistById(org_id))) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		await isUserInvitedInOrganization(org_id, user.id);
 

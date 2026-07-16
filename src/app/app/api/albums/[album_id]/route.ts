@@ -19,10 +19,10 @@ export async function GET(
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+		if (user == null) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const album = await getAlbumById(album_id, {});
-		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
+		if (album == null) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		return NextResponse.json(formatPublicAlbum(album));
 	});
@@ -37,13 +37,13 @@ export async function PATCH(
 
 		const session = await getThrowableSession(req);
 		const user = await getUserById(session.user_id, {});
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+		if (user == null) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const checkAlbum = await getAlbumById(album_id, {
 			events: { include: { organization: true } },
 			services: { include: { organization: true } },
 		});
-		if (checkAlbum == null) throw ERRORS_DETAILS.album_does_not_exists();
+		if (checkAlbum == null) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		if (checkAlbum.events?.organization_id != null) {
 			const user_permission = await getUserOrganizationPermission(user, checkAlbum.events.organization_id, true);
@@ -55,12 +55,12 @@ export async function PATCH(
 				true
 			);
 			if (!user_permission.album_update) throw ERRORS_DETAILS.permission_denied();
-		} else throw ERRORS_DETAILS.organization_does_not_exist();
+		} else throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const body = await parseBody<UpdateAlbumType>(req, UpdateAlbumSchema);
 
 		const album = await UpdateAlbum(body, album_id, {});
-		if (album == null) throw ERRORS_DETAILS.album_does_not_exists();
+		if (album == null) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		return NextResponse.json(formatPublicAlbum(album));
 	});

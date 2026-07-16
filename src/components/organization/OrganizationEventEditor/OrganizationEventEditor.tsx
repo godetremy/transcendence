@@ -1,20 +1,22 @@
 import { InputDatePicker } from '@/components/globals/DatePicker/DatePicker';
 import { ImageEditorCard } from '@/components/globals/ImageEditor/ImageEditorCard';
 import { Toggle } from '@/components/globals/Toggle/Toggle';
-import { CreateOrUpdateEventType } from '@/types/Event';
+import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { Markdown } from '@tiptap/markdown';
-import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { CalendarFold, ChevronLeft, MapPin, Minus, Plus, ScanEye, Users2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styles from './page.module.scss';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
+import { ImageEditor } from '@/utils/image';
 
 export interface OrganizationEventEditor {
 	event: CreateOrUpdateEventType;
 	setEvent: Dispatch<SetStateAction<CreateOrUpdateEventType>>;
-	onSubmit: () => void;
+	onSubmit: () => Promise<PrivateEvent<object>>;
 	onNew?: () => void;
 	createEvent: Boolean;
 }
@@ -25,8 +27,29 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 	const [image, setImage] = useState<File | null>(null);
 	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
 	const hasLoadedContent = useRef(false);
+	const { openModal } = useModal();
 
-	const editor = useEditor({
+	const editor = useRef<ImageEditor | null>(null);
+
+	useEffect(() => {
+		editor.current = new ImageEditor();
+		return () => editor.current?.destroy();
+	}, []);
+
+	useEffect(() => {
+		if (!image) return;
+
+		editor.current
+			?.loadTexture(image)
+			.then(() => {
+				editor.current?.edit({ brightness: 0, contrast: 0, sharpness: 0 });
+				editor.current?.renderPreview().then((blob) => setPreviewBlob(URL.createObjectURL(blob)));
+			})
+			.catch((e) => console.error(e))
+			.finally(() => console.log('End load'));
+	}, [image]);
+
+	const editorDescribe = useEditor({
 		extensions: [StarterKit, Markdown],
 		content: '',
 		contentType: 'markdown',
@@ -38,15 +61,14 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 	});
 
 	useEffect(() => {
-		if (editor && props.event.description && !hasLoadedContent.current) {
-			editor.commands.setContent(props.event.description, { emitUpdate: false });
+		if (editorDescribe && props.event.description && !hasLoadedContent.current) {
+			editorDescribe.commands.setContent(props.event.description, { emitUpdate: false });
 			hasLoadedContent.current = true;
 		}
-	}, [editor, props.event.description]);
+	}, [editorDescribe, props.event.description]);
 
 	const { getRootProps, getInputProps } = useDropzone({
 		onDrop: (acceptedFiles) => {
-			setPreviewBlob(URL.createObjectURL(acceptedFiles[0]));
 			setImage(acceptedFiles[0]);
 		},
 		maxFiles: 1,
@@ -72,10 +94,26 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 					</button>
 					<button
 						className={styles.primary}
-						onClick={(e) => {
-							props.onSubmit();
-							props.onNew?.();
-							console.log(props.onNew);
+						onClick={async (e) => {
+							try {
+								await props.onSubmit();
+							} catch (err: unknown) {
+								console.log(err);
+								openModal({
+									title: 'Erreur',
+									message: (err as Error).message,
+									buttons: [
+										{ text: 'Cancel', negative: true },
+										{
+											text: 'Confirm',
+											onClick: (e) => {
+												e.preventClosing();
+											},
+										},
+									],
+								});
+							}
+							//console.log(props.onNew);
 						}}
 					>
 						<Plus />
@@ -199,7 +237,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 					</div>
 					<div className={styles.editor_toolbar}></div>
 					<EditorContent
-						editor={editor}
+						editor={editorDescribe}
 						className={styles.editor_container}
 						placeholder={'Entre ta description ici. (psst... On supporte le markdown)'}
 					/>
@@ -208,7 +246,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 			<section className={styles.preview_section}>
 				<h3>Preview coming soon...</h3>
 			</section>
-			{image && <ImageEditorCard file={image} visible={showImageEdit} setVisible={setShowImageEdit} />}
+			{image && <ImageEditorCard editor={editor} visible={showImageEdit} setVisible={setShowImageEdit} />}
 		</article>
 	);
 }

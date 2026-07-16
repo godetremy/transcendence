@@ -17,7 +17,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 		const session = await getThrowableSession(req);
 		if (session.user_id != id) ERRORS_DETAILS.permission_denied();
 		const user = await getUserById(session.user_id, {});
-		if (!user || !user.balance_id) ERRORS_DETAILS.account_does_not_exists();
+		if (!user || !user.balance_id) ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const body = await parseBody<SumupCreateCheckouts>(req, SumupCreateCheckoutsSchema);
 		const reference = randomUUID();
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 		const session = await getThrowableSession(req);
 		if (session.user_id != id) throw ERRORS_DETAILS.permission_denied();
 		const user = await getUserById(session.user_id, { balance: true });
-		if (!user || !user.balance) throw ERRORS_DETAILS.account_does_not_exists();
+		if (!user || !user.balance) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		return NextResponse.json(formatBalance(user.balance));
 	});

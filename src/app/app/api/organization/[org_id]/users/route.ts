@@ -27,7 +27,7 @@ export async function GET(
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
 		const member = parseParams<RegisteredParam>(req.nextUrl.searchParams, RegisteredParamSchema);
-		if (user == null) throw ERRORS_DETAILS.account_does_not_exists();
+		if (user == null) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!permission.members_invite && !user.admin) throw ERRORS_DETAILS.permission_denied();

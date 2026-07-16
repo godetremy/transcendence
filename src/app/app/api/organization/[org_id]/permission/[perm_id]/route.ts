@@ -22,8 +22,8 @@ export async function DELETE(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.organization_manage_permission) throw ERRORS_DETAILS.permission_denied();
@@ -49,8 +49,8 @@ export async function PATCH(
 		const user = await getUserFromSession(session, {});
 		const organization = await getOrganizationById(org_id, {});
 
-		if (!user) throw ERRORS_DETAILS.account_does_not_exists();
-		if (!organization) throw ERRORS_DETAILS.organization_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!organization) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
 		const user_permission = await getUserOrganizationPermission(user, org_id, true);
 		if (!user_permission.organization_manage_permission) throw ERRORS_DETAILS.permission_denied();
