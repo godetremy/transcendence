@@ -115,18 +115,22 @@ export default function Page() {
 				)}
 			</article>
 			<footer className={styles.cta_container}>
-				<motion.button
-					className={styles.cta_button}
-					whileHover={{ scale: 1.02 }}
-					whileTap={{ scale: 0.99 }}
-					onClick={() => {
-						register.data.register == true
-							? mutation.mutate({ register: 'false' })
-							: mutation.mutate({ register: 'true' });
-					}}
-				>
-					{register.data.register === true ? 'Se désinscrire' : "S'inscrire"}
-				</motion.button>
+				{register.data === undefined || register.isLoading ? (
+					<Loader />
+				) : (
+					<motion.button
+						className={styles.cta_button}
+						whileHover={{ scale: 1.02 }}
+						whileTap={{ scale: 0.99 }}
+						onClick={() => {
+							register.data.register == true
+								? mutation.mutate({ register: 'false' })
+								: mutation.mutate({ register: 'true' });
+						}}
+					>
+						{register.data.register === true ? 'Se désinscrire' : "S'inscrire"}
+					</motion.button>
+				)}
 			</footer>
 		</div>
 	);

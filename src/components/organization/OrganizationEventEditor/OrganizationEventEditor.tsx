@@ -12,6 +12,8 @@ import { useDropzone } from 'react-dropzone';
 import styles from './page.module.scss';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { ImageEditor } from '@/utils/image';
+import { useUpload } from '@/contexts/UploadTokenContext';
+import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
 
 export interface OrganizationEventEditor {
 	event: CreateOrUpdateEventType;
@@ -23,6 +25,9 @@ export interface OrganizationEventEditor {
 
 export function OrganizationEventEditor(props: OrganizationEventEditor) {
 	const [showImageEdit, setShowImageEdit] = useState(false);
+	const upload = useUpload();
+	const [uploadImage, setUploadImage] = useState(false);
+	const [uploadProgression, setUploadProgression] = useState(0);
 
 	const [image, setImage] = useState<File | null>(null);
 	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
@@ -47,6 +52,12 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 			})
 			.catch((e) => console.error(e))
 			.finally(() => console.log('End load'));
+		setUploadProgression(0);
+		setUploadImage(true);
+		upload.uploadFiles(image, setUploadProgression).then((file) => {
+			props.setEvent((prev) => ({ ...prev, image: `/images/upload/${file.name}` }));
+			setUploadImage(false);
+		});
 	}, [image]);
 
 	const editorDescribe = useEditor({
@@ -96,7 +107,9 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 						className={styles.primary}
 						onClick={async (e) => {
 							try {
+								console.log(props.event);
 								await props.onSubmit();
+								props.onNew?.();
 							} catch (err: unknown) {
 								console.log(err);
 								openModal({
@@ -113,7 +126,6 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 									],
 								});
 							}
-							//console.log(props.onNew);
 						}}
 					>
 						<Plus />
@@ -126,6 +138,11 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 						className={styles.cover}
 						style={{ backgroundImage: `url(${previewBlob})` }}
 					>
+						{uploadImage && (
+							<div>
+								<CircleLoader progress={uploadProgression} size={64} />
+							</div>
+						)}
 						<input {...getInputProps()} />
 					</label>
 					<label className={styles.title}>
