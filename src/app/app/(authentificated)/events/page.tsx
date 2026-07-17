@@ -86,9 +86,11 @@ export default function Page() {
 										}
 									}}
 									onKeyUp={(e) => {
-										if (e.key === 'Escape') e.currentTarget.blur();
-										setShowSearch(false);
-										setSearch('');
+										if (e.key === 'Escape') {
+											e.currentTarget.blur();
+											setShowSearch(false);
+											setSearch('');
+										}
 									}}
 								/>
 							</motion.div>
