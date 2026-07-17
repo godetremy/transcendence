@@ -1,15 +1,24 @@
 @use '../../../app/supports';
 
+@keyframes skeleton {
+	0% {
+		background-color: #444;
+	}
+	100% {
+		background-color: #555;
+	}
+}
+
 .calendar {
 	background-color: var(--color-primary-white);
 	mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 50 50' fill='%23F00' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20C0 10.5719 0 5.85786 2.92893 2.92893C5.85786 0 10.5719 0 20 0H30C39.4281 0 44.1421 0 47.0711 2.92893C50 5.85786 50 10.5719 50 20V30C50 39.4281 50 44.1421 47.0711 47.0711C44.1421 50 39.4281 50 30 50H20C10.5719 50 5.85786 50 2.92893 47.0711C0 44.1421 0 39.4281 0 30V20Z'/%3E%3C/svg%3E");
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
-	font-family: var(--font-paragraph);
+	font-family: var(--font-paragraph), sans-serif;
 
 	&.skeleton {
-		background-color: var(--color-primary-white);
+		animation: skeleton 1.5s infinite alternate;
 	}
 
 	.month {

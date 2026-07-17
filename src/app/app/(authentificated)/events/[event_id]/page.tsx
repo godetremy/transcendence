@@ -7,12 +7,12 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useMediaQuery } from '@/contexts/MediaQueryProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getEventPublic, getregisterUserToEvent, registerEventMutate } from '@/lib/fetcher/events';
-import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import ReactMarkdown from 'react-markdown';
 import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
 import { toHumanReadablePeriod } from '@/utils/date';
 import remarkGfm from 'remark-gfm';
+import { AnimatePresence } from 'motion/react';
 
 export default function Page() {
 	const { event_id }: { event_id: string } = useParams();
@@ -43,17 +43,21 @@ export default function Page() {
 	const headerBarOpacityTransform = useTransform(scrollY, [headerSize() * 0.7, headerSize()], [0, 1]);
 	const headerBarPointerTransform = useTransform(scrollY, [headerSize() / 2, headerSize()], ['none', 'auto']);
 
-	if (isLoading) return <Loader />;
-	if (isError || data === undefined) return <ErrorState error={error} />;
+	if (isError) return <ErrorState error={error} />;
 
 	return (
 		<div className={styles.main_container}>
 			<motion.header
-				style={{
-					backgroundImage: `url('${data.image}')`,
-					backgroundSize: headerBackgroundSizeTransform,
-					borderBottom: headerBorderTransform,
-				}}
+				style={
+					!data || isLoading
+						? undefined
+						: {
+								backgroundImage: `url('${data.image}')`,
+								backgroundSize: headerBackgroundSizeTransform,
+								borderBottom: headerBorderTransform,
+							}
+				}
+				className={!data ? styles.skeleton : undefined}
 			>
 				<motion.div
 					className={styles.details}
@@ -63,18 +67,25 @@ export default function Page() {
 						filter: headerDetailsFilterTransform,
 					}}
 				>
-					<Calendar date={data.start_at} />
+					<Calendar date={data?.start_at ?? '0'} skeleton={isLoading} />
 					<div className={styles.text_container}>
-						<h1>{data.title}</h1>
-						<div className={styles.tags}>
+						<h1 className={!data ? styles.skeleton : undefined}>
+							{data?.title ?? 'Lorem ipsum dolor si amet'}
+						</h1>
+						<div className={`${styles.tags} ${!data ? styles.skeleton : ''}`}>
 							<MenuButton
 								containerKey={'event_tags'}
 								menu={[{ title: 'Ajouter au calendrier', icon: CalendarPlus, onClick: () => {} }]}
 							>
 								<Clock size={14} />
-								<span>{toHumanReadablePeriod(new Date(data.start_at), new Date(data.end_at))}</span>
+								<span>
+									{toHumanReadablePeriod(
+										new Date(data?.start_at ?? '0'),
+										new Date(data?.end_at ?? '0')
+									)}
+								</span>
 							</MenuButton>
-							{data.location && (
+							{data && data.location && (
 								<MenuButton
 									containerKey={'location_tags'}
 									menu={[
@@ -104,33 +115,38 @@ export default function Page() {
 					className={styles.nav}
 					style={{ opacity: headerBarOpacityTransform, pointerEvents: headerBarPointerTransform }}
 				>
-					<p>{data.title}</p>
+					<p>{data?.title ?? 'Loading...'}</p>
 				</motion.div>
 			</motion.header>
 			<article>
-				{data.description && (
-					<section className={styles.markdown}>
-						<ReactMarkdown remarkPlugins={[remarkGfm]}>{data.description}</ReactMarkdown>
+				{(!data || data.description) && (
+					<section className={`${styles.markdown} ${!data ? styles.skeleton : ''}`}>
+						<ReactMarkdown remarkPlugins={[remarkGfm]}>
+							{data?.description ??
+								'Nisi consequat reprehenderit qui fugiat excepteur amet magna. Irure elit voluptate laboris amet ut. Veniam ut enim ea Lorem veniam consectetur irure quis commodo esse veniam id nulla culpa culpa. Ea dolore ex esse duis occaecat anim voluptate nisi elit reprehenderit cupidatat. Aliquip do labore non reprehenderit veniam dolor est magna ullamco eiusmod mollit ipsum velit. Qui mollit elit sunt. Aliqua pariatur id pariatur do.'}
+						</ReactMarkdown>
 					</section>
 				)}
 			</article>
 			<footer className={styles.cta_container}>
-				{register.data === undefined || register.isLoading ? (
-					<Loader />
-				) : (
-					<motion.button
-						className={styles.cta_button}
-						whileHover={{ scale: 1.02 }}
-						whileTap={{ scale: 0.99 }}
-						onClick={() => {
-							register.data.register == true
-								? mutation.mutate({ register: 'false' })
-								: mutation.mutate({ register: 'true' });
-						}}
-					>
-						{register.data.register === true ? 'Se désinscrire' : "S'inscrire"}
-					</motion.button>
-				)}
+				<AnimatePresence>
+					{register.data && (
+						<motion.button
+							className={`${styles.cta_button} ${register.data.register ? styles.registered : ''}`}
+							initial={{ scale: 0.9, opacity: 0, transition: { type: 'tween', duration: 0.2 } }}
+							animate={{ scale: 1, opacity: 1, transition: { type: 'tween', duration: 0.2 } }}
+							whileHover={{ scale: 1.02 }}
+							whileTap={{ scale: 0.99 }}
+							onClick={
+								register.data.register
+									? () => mutation.mutate({ register: 'false' })
+									: () => mutation.mutate({ register: 'true' })
+							}
+						>
+							{register.data.register ? 'Se désinscrire' : "S'inscrire"}
+						</motion.button>
+					)}
+				</AnimatePresence>
 			</footer>
 		</div>
 	);

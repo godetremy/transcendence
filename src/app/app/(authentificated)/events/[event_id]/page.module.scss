@@ -1,6 +1,24 @@
 @use '../../../../supports';
 @use '../../../../markdown';
 
+@keyframes skeleton {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+@keyframes skeletonColor {
+	0% {
+		color: #444;
+	}
+	100% {
+		color: #888;
+	}
+}
+
 .main_container {
 	& > header {
 		position: sticky;
@@ -23,6 +41,12 @@
 			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
 		}
 
+		&.skeleton {
+			background: linear-gradient(90deg, #444, #666, #444 50%);
+			background-size: 400% 100% !important;
+			animation: skeleton 8s linear infinite;
+		}
+
 		& > .details {
 			width: 100%;
 			max-width: 800px;
@@ -42,6 +66,13 @@
 				& > h1 {
 					font: 700 26px var(--font-paragraph);
 					color: var(--color-primary-white);
+					user-select: none;
+
+					&.skeleton {
+						font-family: var(--font-skeleton), sans-serif;
+						animation: skeletonColor 1.5s ease-in-out alternate infinite;
+						padding-left: 5px;
+					}
 				}
 
 				& > .tags {
@@ -82,6 +113,18 @@
 							scale: 0.98;
 						}
 					}
+
+					&.skeleton {
+						& > button {
+							pointer-events: none;
+
+							& > span {
+								font-family: var(--font-skeleton), sans-serif;
+								animation: skeletonColor 1.5s ease-in-out alternate infinite;
+								user-select: none;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -115,6 +158,14 @@
 
 		& > .markdown {
 			@include markdown.markdown;
+
+			&.skeleton {
+				p {
+					font: 22px var(--font-skeleton);
+					animation: skeletonColor 1.5s ease-in-out alternate infinite;
+					user-select: none;
+				}
+			}
 		}
 	}
 
@@ -137,6 +188,12 @@
 			border: none;
 			font: 600 15px var(--font-paragraph);
 			color: var(--color-primary-white);
+
+			&.registered {
+				background-color: #4448;
+				backdrop-filter: blur(8px);
+				border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+			}
 		}
 	}
 }

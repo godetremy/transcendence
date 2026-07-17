@@ -8,6 +8,7 @@ export interface MenuButtonProps {
 	containerKey: string | number;
 	children?: ReactNode;
 	alignRight?: boolean;
+	className?: string;
 	menu: Array<{
 		icon?: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
 		negative?: boolean;
@@ -16,7 +17,7 @@ export interface MenuButtonProps {
 	}>;
 }
 
-export function MenuButton({ menu, alignRight, children, containerKey }: MenuButtonProps) {
+export function MenuButton({ menu, alignRight, children, containerKey, className }: MenuButtonProps) {
 	const [visibleMenu, setVisibleMenu] = useState(false);
 
 	const closedContainer: TargetAndTransition = {
@@ -48,7 +49,11 @@ export function MenuButton({ menu, alignRight, children, containerKey }: MenuBut
 					setVisibleMenu(!visibleMenu);
 					console.log(containerKey);
 				}}
-				className={children ? undefined : `${styles.menu_button} ${visibleMenu && styles.active}`}
+				className={
+					children
+						? undefined
+						: `${styles.menu_button} ${visibleMenu && styles.active} ${className ? className : ''}`
+				}
 				style={{ anchorName: `--menu_button-${containerKey}` }}
 			>
 				{children ? children : <Ellipsis strokeWidth={1.8} />}

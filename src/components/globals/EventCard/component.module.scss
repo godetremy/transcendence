@@ -62,11 +62,11 @@
 				align-items: center;
 				opacity: 0.6;
 
-				& > svg {
+				svg {
 					flex: 0 0 16px;
 				}
 
-				& > span {
+				span {
 					display: -webkit-box;
 					white-space: nowrap;
 					overflow: hidden;
