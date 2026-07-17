@@ -5,8 +5,7 @@ import { EventCard } from '@/components/globals/EventCard/EventCard';
 import { getEventsPublic } from '@/lib/fetcher/events';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
-import { useState } from 'react';
-import { Loader } from '@/components/globals/Loader/Loader';
+import { Fragment, useState } from 'react';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 
 export default function Page() {
@@ -66,14 +65,30 @@ export default function Page() {
 			</header>
 			<main>
 				{isLoading ? (
-					<Loader />
+					<>
+						<span className={styles.skeleton}>Loading...</span>
+						{['Consectetur enim ullamco', 'eu duis consectetur', 'sint officia qui sint'].map(
+							(title, index) => (
+								<EventCard
+									key={index}
+									id={index.toString()}
+									image={''}
+									start={new Date('0')}
+									end={new Date('0')}
+									title={title}
+									skeleton={true}
+									opacity={0.5 - (0.2 / 3) * index}
+								/>
+							)
+						)}
+					</>
 				) : isError || data === undefined ? (
 					<ErrorState error={error} />
 				) : (
 					data.pages.map((row) =>
-						row.data.map((category) =>
+						row.data.map((category, index) =>
 							category.data.length === 0 ? null : (
-								<div key={category.name} className={styles.category}>
+								<Fragment key={index}>
 									<span>{category.name}</span>
 									{category.data.map((event) => (
 										<EventCard
@@ -90,13 +105,17 @@ export default function Page() {
 											location={event.location ?? 'aucun lieu'}
 										/>
 									))}
-								</div>
+								</Fragment>
 							)
 						)
 					)
 				)}
 				{hasNextPage && !isLoading && (
-					<ShowMoreButton onClick={() => fetchNextPage?.()} className={styles.next_page_button} />
+					<ShowMoreButton
+						onClick={() => fetchNextPage?.()}
+						className={styles.next_page_button}
+						loading={isFetchingNextPage}
+					/>
 				)}
 			</main>
 		</div>

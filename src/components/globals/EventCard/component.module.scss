@@ -1,3 +1,21 @@
+@keyframes skeletonBackground {
+	0% {
+		background-color: #222;
+	}
+	100% {
+		background-color: #252525;
+	}
+}
+
+@keyframes skeletonColor {
+	0% {
+		color: #444;
+	}
+	100% {
+		color: #888;
+	}
+}
+
 .card {
 	position: relative;
 	appearance: none;
@@ -12,6 +30,7 @@
 	border: none;
 	display: flex;
 	align-items: flex-end;
+	animation: skeletonBackground 1s infinite alternate;
 
 	&::after {
 		position: absolute;
@@ -76,10 +95,31 @@
 					font: 500 13px var(--font-paragraph);
 				}
 			}
+
+			&.skeleton {
+				& > h3 {
+					font-family: var(--font-skeleton), sans-serif;
+					padding-left: 5px;
+					animation: skeletonColor 1.5s ease-in-out alternate infinite;
+				}
+
+				& > .tags {
+					& > span {
+						font: 15px var(--font-skeleton);
+						animation: skeletonColor 1.5s ease-in-out alternate infinite;
+						margin-left: 5px;
+						transform: translateY(-1px);
+					}
+				}
+			}
 		}
 
 		& > svg {
 			opacity: 0.4;
 		}
+	}
+
+	&.skeleton {
+		pointer-events: none;
 	}
 }

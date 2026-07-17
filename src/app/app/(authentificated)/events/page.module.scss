@@ -1,5 +1,15 @@
 @use '../../../supports';
 
+@keyframes skeleton {
+	from {
+		color: #222;
+	}
+
+	to {
+		color: #333;
+	}
+}
+
 .page {
 	display: flex;
 	flex-direction: column;
@@ -142,6 +152,12 @@
 			font: 600 14px var(--font-title);
 			letter-spacing: 0.32px;
 			color: rgba(var(--color-rgb-primary-white), 0.6);
+			margin-bottom: -5px;
+
+			&.skeleton {
+				font-family: var(--font-skeleton), sans-serif;
+				animation: skeleton 1s infinite alternate;
+			}
 		}
 	}
 }
