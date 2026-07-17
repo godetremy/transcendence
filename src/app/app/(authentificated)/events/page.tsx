@@ -84,7 +84,8 @@ export default function Page() {
 													? event.image
 													: '/images/demo_event_01.png'
 											}
-											date={event.start_at}
+											start={new Date(event.start_at)}
+											end={new Date(event.end_at)}
 											title={event.title}
 											location={event.location ?? 'aucun lieu'}
 										/>
