@@ -35,9 +35,9 @@
 			gap: 10px;
 			width: 100%;
 			max-width: calc(600px - 60px);
-			padding: 20px;
 			overflow-x: scroll;
 			scrollbar-width: none;
+			padding: 10px 80px 10px 20px;
 
 			& > label {
 				position: relative;
@@ -116,27 +116,64 @@
 		}
 
 		& > .search_container {
-			width: 60px;
+			position: absolute;
+			width: 100%;
+			max-width: 600px;
 			height: 100%;
 			display: flex;
 			align-items: center;
 			justify-content: flex-end;
-			padding-right: 20px;
+			padding: 20px;
+			z-index: 50;
+			pointer-events: none;
+			background: linear-gradient(90deg, rgba(var(--color-rgb-primary-black), 0) calc(100% - 60px), rgba(var(--color-rgb-primary-black), 1) calc(100% - 60px));
 
-			& > button {
-				width: 40px;
-				height: 40px;
+			& > .buttonSearch {
+				position: relative;
+				width: 35px;
+				height: 35px;
 				appearance: none;
 				flex-shrink: 0;
-				border-radius: 50%;
+				border-radius: 50px;
 				background-color: var(--color-primary-black);
 				color: rgba(var(--color-rgb-primary-white), 0.8);
 				border: 1px solid rgba(var(--color-rgb-primary-white), 0.3);
 				display: flex;
 				align-items: center;
-				justify-content: center;
-				transition: 0.1s;
-				padding: 0 1px 1px 0;
+				justify-content: flex-start;
+				padding: 0 1px 1px 8px;
+				overflow: hidden;
+				pointer-events: all;
+			}
+
+			& > .inputContainerSearch {
+				height: 35px;
+				width: 100%;
+				border-radius: 50px;
+				background-color: var(--color-primary-black);
+				color: rgba(var(--color-rgb-primary-white), 0.8);
+				border: 1px solid rgba(var(--color-rgb-primary-white), 0.3);
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				padding: 8px;
+				gap: 10px;
+				overflow: hidden;
+				pointer-events: all;
+
+				& > svg {
+					min-width: 16px;
+				}
+
+				& > input {
+					appearance: none;
+					border: none;
+					outline: none;
+					background-color: transparent;
+					color: var(--color-primary-white);
+					font: 500 15px var(--font-paragraph);
+					flex: 1;
+				}
 			}
 		}
 	}

@@ -7,14 +7,19 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
+import { AnimatePresence, motion } from 'motion/react';
+import { Transition } from 'motion';
 
 export default function Page() {
 	const [selectedTag, setSelectedTag] = useState(0);
 	const [search, setSearch] = useState<string>('');
+	const [showSearch, setShowSearch] = useState(false);
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, error } = useInfiniteQuery(
 		getEventsPublic(null, selectedTag == 2 ? null : new Date().toISOString(), search, selectedTag)
 	);
+
+	const searchTransition: Transition = { type: 'spring', stiffness: 400, damping: 40 };
 
 	return (
 		<div className={styles.page}>
@@ -58,9 +63,46 @@ export default function Page() {
 					</label>
 				</section>
 				<section className={styles.search_container}>
-					<button className={styles.buttonSearch}>
-						<Search size={18} />
-					</button>
+					<AnimatePresence mode={'wait'}>
+						{showSearch ? (
+							<motion.div
+								className={styles.inputContainerSearch}
+								initial={{ width: 35, transition: searchTransition }}
+								animate={{ width: '100%', transition: searchTransition }}
+								exit={{ width: 35, transition: searchTransition }}
+								key={'input'}
+							>
+								<Search size={16} />
+								<input
+									type={'text'}
+									autoFocus
+									placeholder={'Chercher un événements...'}
+									value={search}
+									onChange={(e) => setSearch(e.target.value)}
+									onBlur={() => {
+										if (search.trim().length === 0) {
+											setShowSearch(false);
+											setSearch('');
+										}
+									}}
+									onKeyUp={(e) => {
+										if (e.key === 'Escape') e.currentTarget.blur();
+										setShowSearch(false);
+										setSearch('');
+									}}
+								/>
+							</motion.div>
+						) : (
+							<motion.button
+								key={'button'}
+								className={styles.buttonSearch}
+								whileTap={{ scale: 0.95 }}
+								onClick={() => setShowSearch(true)}
+							>
+								<Search size={16} />
+							</motion.button>
+						)}
+					</AnimatePresence>
 				</section>
 			</header>
 			<main>
