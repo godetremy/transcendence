@@ -1,17 +1,11 @@
 'use client';
 import { NavigationBarHeader } from '@/components/globals/NavigationBarHeader/NavigationBarHeader';
-import styles from './page.module.scss';
-import ListItem from '@/components/globals/ListItem/ListItem';
-import ListContainer from '@/components/globals/ListContainer/ListContainer';
-import { FAB } from '@/components/globals/FAB/FAB';
-import { Plus } from 'lucide-react';
-import Image from 'next/image';
-import { ListSectionTitle } from '@/components/globals/ListSectionTitle/ListSectionTitle';
+import { WipState } from '@/components/globals/WipState/WipState';
 
 function Page() {
 	return (
 		<NavigationBarHeader title={'Développeurs'}>
-			<section className={styles.section}>
+			{/*<section className={styles.section}>
 				<ListSectionTitle>Mes applications</ListSectionTitle>
 
 				<ListContainer>
@@ -33,7 +27,8 @@ function Page() {
 			</section>
 			<FAB>
 				<Plus />
-			</FAB>
+			</FAB>*/}
+			<WipState />
 		</NavigationBarHeader>
 	);
 }
