@@ -6,7 +6,7 @@ import { CalendarPlus, Clock, MapPin, Navigation } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useMediaQuery } from '@/contexts/MediaQueryProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getEventPublic, getregisterUserToEvent, registerEventMutate } from '@/lib/fetcher/events';
+import { getEventPublic, registerEventMutate } from '@/lib/fetcher/events';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import ReactMarkdown from 'react-markdown';
 import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
@@ -18,7 +18,6 @@ export default function Page() {
 	const { event_id }: { event_id: string } = useParams();
 
 	const { data, isLoading, isError, error } = useQuery(getEventPublic(event_id));
-	const register = useQuery(getregisterUserToEvent(event_id as string));
 	const mutation = useMutation(registerEventMutate(event_id as string));
 
 	const { scrollY } = useScroll();
@@ -130,22 +129,20 @@ export default function Page() {
 			</article>
 			<footer className={styles.cta_container}>
 				<AnimatePresence>
-					{register.data && (
-						<motion.button
-							className={`${styles.cta_button} ${register.data.register ? styles.registered : ''}`}
-							initial={{ scale: 0.9, opacity: 0, transition: { type: 'tween', duration: 0.2 } }}
-							animate={{ scale: 1, opacity: 1, transition: { type: 'tween', duration: 0.2 } }}
-							whileHover={{ scale: 1.02 }}
-							whileTap={{ scale: 0.99 }}
-							onClick={
-								register.data.register
-									? () => mutation.mutate({ register: 'false' })
-									: () => mutation.mutate({ register: 'true' })
-							}
-						>
-							{register.data.register ? 'Se désinscrire' : "S'inscrire"}
-						</motion.button>
-					)}
+					<motion.button
+						className={`${styles.cta_button} ${data?.registered ? styles.registered : ''}`}
+						initial={{ scale: 0.9, opacity: 0, transition: { type: 'tween', duration: 0.2 } }}
+						animate={{ scale: 1, opacity: 1, transition: { type: 'tween', duration: 0.2 } }}
+						whileHover={{ scale: 1.02 }}
+						whileTap={{ scale: 0.99 }}
+						onClick={
+							data?.registered
+								? () => mutation.mutate({ register: 'true' })
+								: () => mutation.mutate({ register: 'false' })
+						}
+					>
+						{data?.registered ? 'Se désinscrire' : "S'inscrire"}
+					</motion.button>
 				</AnimatePresence>
 			</footer>
 		</div>

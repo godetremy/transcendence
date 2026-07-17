@@ -7,11 +7,9 @@ import {
 	deleteEventRegistrationsById,
 	getEventRegistrationsById,
 } from '@/database/RegisteredEvent';
-import { decrypt } from '@/lib/session';
-import { RegisteredParamSchema } from '@/schema/RegisteredEventSchema';
-import { RegisteredParam } from '@/types/RegisteredParameter';
+import { getUserFromSession } from '@/database/User';
+import { decrypt, getThrowableSession } from '@/lib/session';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
-import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -21,12 +19,21 @@ export async function GET(
 	return errorHandler(async () => {
 		const { event_id } = await params;
 
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+
 		const event_value = await getEventById(event_id, { organization: true });
 		if (event_value === null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 
 		createViewElasticSearch(event_value.organization_id, event_id);
 
-		return NextResponse.json(formatPublicEvent<{ organization: true }>(event_value));
+		const registered = await getEventRegistrationsById(event_id, user.id, {});
+
+		return NextResponse.json({
+			...formatPublicEvent<{ organization: true }>(event_value),
+			registered,
+		});
 	});
 }
 
@@ -36,7 +43,6 @@ export async function PUT(
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { event_id } = await params;
-		const body = await parseBody<RegisteredParam>(req, RegisteredParamSchema);
 
 		const cookie = req.cookies.get('session');
 		const user_id = (await decrypt(cookie?.value)).user_id;
@@ -46,9 +52,7 @@ export async function PUT(
 
 		const registered = await getEventRegistrationsById(event_id, user_id, {});
 
-		if (body.register == 'true') {
-			if (registered != null) throw ERRORS_DETAILS.event_has_register();
-
+		if (registered == false) {
 			const count = await countEventRegistrationsByFilter({ event_id: event_id });
 			if (event.max_registration != null && count >= event.max_registration)
 				throw ERRORS_DETAILS.event_max_inscription();
@@ -56,8 +60,6 @@ export async function PUT(
 			const value = await createEventRegistrationsById(event_id, user_id, {});
 			if (value == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 		} else {
-			if (registered == null) throw ERRORS_DETAILS.event_does_not_register();
-
 			const value = await deleteEventRegistrationsById(event_id, user_id, {});
 			if (value == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 		}

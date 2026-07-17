@@ -74,3 +74,7 @@ export interface ExportEventType {
 	start_at: string;
 	end_at: string;
 }
+
+export interface PublicRegisterUser<T = object> extends PublicEvent<T> {
+	registered: boolean;
+}

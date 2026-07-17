@@ -17,7 +17,7 @@ export function UserProvider({ children, user: initialUser }: UserProviderProps)
 	const [user, setUser] = useState<User>(initialUser);
 
 	const update = (updatedData: User) => {
-		setUser((prev) => ({...prev, ...updatedData}));
+		setUser((prev) => ({ ...prev, ...updatedData }));
 	};
 
 	return <UserContext.Provider value={{ ...user, update }}>{children}</UserContext.Provider>;
