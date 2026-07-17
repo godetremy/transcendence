@@ -8,7 +8,6 @@ import { useUser } from '@/contexts/UserContext';
 import { useEffect, useRef, useState } from 'react';
 import { User } from '@/types/User';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
-import { patch } from '@/lib/fetcher';
 import { useMutation } from '@tanstack/react-query';
 import { updateUser } from '@/lib/fetcher/user';
 
@@ -21,14 +20,14 @@ function Page() {
 
 	useEffect(() => {
 		const value: UserUpdateParameters = {
-			mail: user.mail,
+			mail: user.mail ?? undefined,
 			first_name: user.first_name ?? undefined,
 			last_name: user.last_name ?? undefined,
-			full_name: user.first_name ?? undefined,
 		};
 
-		timeoutRef.current = setTimeout(() => {
-			mutation.mutateAsync({ user: value }).then((user) => {
+		timeoutRef.current = setTimeout(async () => {
+			await mutation.mutateAsync({ user: value }).then((user) => {
+				console.log(user);
 				userCtx?.update(user);
 			});
 			if (timeoutRef.current !== null) {
@@ -37,7 +36,6 @@ function Page() {
 			}
 		}, 1000);
 
-		patch<UserUpdateParameters>(`/users/${user.id}`, value);
 	}, [user]);
 
 	return (
