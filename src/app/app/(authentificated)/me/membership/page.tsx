@@ -15,21 +15,25 @@ import { Loader } from '@/components/globals/Loader/Loader';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
+import Image from 'next/image';
 
 export default function Page() {
 	const [showReload, setShowReload] = useState<boolean>(false);
 	const userCtx = useUser();
 	const [user] = useState<User>(userCtx!);
 
-	const { data, isLoading, isError, error } = useQuery(getBalance(user.id));
+	const { data: balance, isError: isBalanceError, error } = useQuery(getBalance(user.id));
 
-	const lists = useInfiniteQuery({
-		...getTransactions(user.id, data?.id ?? ''),
-		enabled: !!data?.id,
+	const {
+		data: transations,
+		isLoading: isTransactionLoading,
+		isError: isTransactionError,
+	} = useInfiniteQuery({
+		...getTransactions(user.id, balance?.id ?? ''),
+		enabled: balance?.id !== undefined,
 	});
 
-	if (isLoading || lists.isLoading) return <Loader />;
-	if (isError || data === undefined || lists.isError || lists.data == undefined) return <ErrorState error={error} />;
+	if (isBalanceError || isTransactionError) return <ErrorState error={error} />;
 
 	return (
 		<>
@@ -37,7 +41,10 @@ export default function Page() {
 				<section className={styles.section}>
 					<div className={styles.balance_card}>
 						<span>Mon solde</span>
-						<p>{data.account} Points</p>
+						<p className={balance ? undefined : styles.skeleton}>
+							{balance ? `${balance.account}` : '100'}{' '}
+							<Image src={'/images/coin.svg'} alt={'coins'} width={35} height={35} />
+						</p>
 					</div>
 					<div className={styles.balance_action_container}>
 						<button
@@ -50,11 +57,13 @@ export default function Page() {
 						</button>
 					</div>
 					<span className={styles.listSectionTitle}>Historique</span>
-					{lists.data.pages[0].data.length === 0 ? (
+					{isTransactionLoading || transations === undefined ? (
+						<Loader />
+					) : transations.pages[0].data.length === 0 ? (
 						<EmptyState title="Tu n'as fait aucun achats..." description="Et si tu essayez pour voir ?" />
 					) : (
 						<ListContainer>
-							{lists.data.pages.map((row) =>
+							{transations.pages.map((row) =>
 								row.data.map((transaction, i) => (
 									<ListItem
 										title={transaction.name ?? ''}

@@ -1,5 +1,14 @@
 @use '../../../../supports';
 
+@keyframes skeletonOpacity {
+	from {
+		opacity: 0.3;
+	}
+	to {
+		opacity: 0.7;
+	}
+}
+
 .section {
 	display: flex;
 	justify-content: center;
@@ -38,8 +47,20 @@
 		font: 500 14px var(--font-paragraph);
 		opacity: 0.6;
 	}
+
 	& > p {
+		display: flex;
+		align-items: baseline;
+		gap: 5px;
+
 		font: 600 52px var(--font-paragraph);
+
+		&.skeleton {
+			font-family: var(--font-skeleton), sans-serif;
+			animation: skeletonOpacity 1s infinite alternate;
+		}
+
+
 	}
 }
 
