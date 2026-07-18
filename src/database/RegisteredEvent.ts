@@ -11,16 +11,18 @@ const getEventRegistrationsById = async <T extends Prisma.event_registrationsInc
 	event_id: string,
 	user_id: string,
 	include: T
-): Promise<Prisma.event_registrationsGetPayload<{ include: T }> | null> => {
-	return prisma.event_registrations.findUnique({
-		include: include,
-		where: {
-			user_id_event_id: {
-				event_id: event_id,
-				user_id: user_id,
+): Promise<Boolean> => {
+	return (
+		(await prisma.event_registrations.findUnique({
+			include: include,
+			where: {
+				user_id_event_id: {
+					event_id: event_id,
+					user_id: user_id,
+				},
 			},
-		},
-	});
+		})) !== null
+	);
 };
 
 const createEventRegistrationsById = async <T extends Prisma.event_registrationsInclude>(

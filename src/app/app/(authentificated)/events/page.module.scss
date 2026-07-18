@@ -126,7 +126,11 @@
 			padding: 20px;
 			z-index: 50;
 			pointer-events: none;
-			background: linear-gradient(90deg, rgba(var(--color-rgb-primary-black), 0) calc(100% - 60px), rgba(var(--color-rgb-primary-black), 1) calc(100% - 60px));
+			background: linear-gradient(
+				90deg,
+				rgba(var(--color-rgb-primary-black), 0) calc(100% - 60px),
+				rgba(var(--color-rgb-primary-black), 1) calc(100% - 60px)
+			);
 
 			& > .buttonSearch {
 				position: relative;

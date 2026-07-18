@@ -20,7 +20,7 @@ export interface OrganizationEventEditor {
 	setEvent: Dispatch<SetStateAction<CreateOrUpdateEventType>>;
 	onSubmit: () => Promise<PrivateEvent<object>>;
 	onNew?: () => void;
-	createEvent: Boolean;
+	createEvent: boolean;
 }
 
 export function OrganizationEventEditor(props: OrganizationEventEditor) {

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { CreateOrUpdateEventType } from '@/types/Event';
+import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { useParams, useRouter } from 'next/navigation';
 import { getEvent, updateEventMutate } from '@/lib/fetcher/events';
 import { OrganizationEventEditor } from '@/components/organization/OrganizationEventEditor/OrganizationEventEditor';
@@ -14,9 +14,9 @@ export default function Page() {
 	const orgctx = useOrganizations();
 	const organization = orgctx.getCurrentOrganization()!;
 
-	const { mutate } = useMutation(updateEventMutate(organization.id));
+	const { mutateAsync } = useMutation(updateEventMutate(organization.id));
 
-	const { data, isLoading } = useQuery(getEvent(organization.id, event_id));
+	const { data } = useQuery(getEvent(organization.id, event_id));
 	const [event, setEvent] = useState<CreateOrUpdateEventType>({
 		title: '',
 		subtitle: '',
@@ -43,10 +43,8 @@ export default function Page() {
 		}
 	}, [data]);
 
-	const handleSubmit = () => {
-		if (event) {
-			mutate({ event, event_id });
-		}
+	const handleSubmit = (): Promise<PrivateEvent<object>> => {
+		return mutateAsync({ event, event_id });
 	};
 
 	return (

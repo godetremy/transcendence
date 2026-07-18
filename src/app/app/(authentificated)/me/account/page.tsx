@@ -35,7 +35,6 @@ function Page() {
 				timeoutRef.current = null;
 			}
 		}, 1000);
-
 	}, [user]);
 
 	return (
