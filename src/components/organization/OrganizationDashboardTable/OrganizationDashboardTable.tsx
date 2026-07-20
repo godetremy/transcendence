@@ -16,6 +16,7 @@ import { useScroll, useTransform } from 'framer-motion';
 import { SortButton, SortingOption } from '@/components/globals/SortButton/SortButton';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
+import { FilterButton, FilterType } from '@/components/globals/FilterButton/FilterButton';
 
 export interface OrganizationDashboardTableColumn {
 	id?: string;
@@ -86,9 +87,20 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 						/>
 					</div>
 					<div className={styles.filters_options}>
-						<button>
+						<FilterButton
+							options={props.column
+								.filter((c) => c.sortable ?? true)
+								.map((v) => ({
+									id: v.id ?? v.text.toLowerCase().replace(/\s/g, '_'),
+									title: v.text,
+									type: FilterType.STRING,
+								}))}
+							onChangeFilter={(filter) => {
+								console.log(filter);
+							}}
+						>
 							<Filter size={22} />
-						</button>
+						</FilterButton>
 						<SortButton
 							sortingOptions={props.column
 								.filter((c) => c.sortable ?? true)

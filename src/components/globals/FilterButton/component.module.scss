@@ -1,0 +1,191 @@
+@use '../../../app/supports';
+
+.menu_container {
+	position-anchor: --menu_button;
+	position-area: bottom center;
+	position: fixed;
+	margin-top: 5px;
+	z-index: 100000;
+	width: 500px;
+	background-color: #111;
+	border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+	border-radius: 10px;
+
+	display: flex;
+	flex-direction: column;
+
+	& > .filtering_container {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 10px;
+		max-height: 300px;
+		overflow: scroll;
+		scrollbar-width: none;
+
+		& > .empty_filters {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 80px;
+			text-align: center;
+
+			& > h3 {
+				margin-top: 10px;
+				font: 700 16px var(--font-paragraph);
+			}
+
+			& > p {
+				font: 400 13px var(--font-paragraph);
+				opacity: 0.6;
+			}
+
+			& > svg {
+				margin-top: 10px;
+				opacity: 0.4;
+			}
+		}
+
+		& > .filters {
+			display: flex;
+			gap: 10px;
+			min-height: 38px;
+			align-items: center;
+			color: var(--color-primary-white);
+
+			& > select {
+				color: rgba(var(--color-rgb-primary-white), 0.7);
+				background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNGMkYyRjJBQSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+);
+				background-repeat: no-repeat;
+				background-position: right 5px center;
+				appearance: none;
+				outline: none;
+				border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+				background-color: rgba(var(--color-rgb-primary-white), 0.1);
+				height: 30px;
+				min-width: 30px;
+				border-radius: 5px;
+				padding: 0 40px 0 10px;
+				font: 500 14px var(--font-paragraph);
+				field-sizing: content;
+			}
+
+
+			& > input[type='text'] {
+				appearance: none;
+				outline: none;
+				border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+				background-color: rgba(var(--color-rgb-primary-white), 0.1);
+				height: 30px;
+				border-radius: 5px;
+				padding: 0 10px;
+				flex: 1;
+				font: 500 14px var(--font-paragraph);
+				color: rgba(var(--color-rgb-primary-white), 0.7);
+
+				&:focus {
+					border: 1.5px solid rgba(var(--color-rgb-primary-purple), 1)
+				}
+			}
+		}
+	}
+
+	& > .sorting_footer {
+		display: flex;
+		justify-content: space-between;
+		padding: 10px;
+
+		& > button {
+			appearance: none;
+			border: none;
+			font: 500 14px var(--font-paragraph);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			padding: 5px 10px;
+			height: 35px;
+			border-radius: 10px;
+			transition: 0.1s;
+			background-color: rgba(var(--color-rgb-primary-white), 0.1);
+			color: rgba(var(--color-rgb-primary-white), 0.8);
+
+			&:active {
+				scale: 0.98;
+			}
+		}
+
+
+		& > .apply_button {
+			background-color: rgba(var(--color-rgb-primary-pink), 0.2);
+			color: var(--color-primary-pink);
+
+			&:hover {
+				background-color: rgba(var(--color-rgb-primary-pink), 0.25);
+			}
+		}
+	}
+}
+
+.menu_overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0);
+	z-index: 99999;
+}
+
+@media (max-width: supports.$breakpoints-tablets) {
+	.menu_overlay {
+		background-color: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(5px);
+	}
+
+	.menu_container {
+		bottom: 10px;
+		left: 10px;
+		right: 10px;
+		width: calc(100vw - 20px);
+		position-anchor: unset;
+
+		& > .sorting_container {
+			padding: 20px;
+
+			& > .empty_sorting_options {
+				& > h3 {
+					margin-top: 0;
+					font: 700 20px var(--font-paragraph);
+				}
+
+				& > p {
+					font: 400 14px var(--font-paragraph);
+					opacity: 0.6;
+				}
+
+				& > svg {
+					margin-top: 10px;
+					opacity: 0.4;
+				}
+			}
+		}
+
+		& > .sorting_footer {
+			& > .sorting_options_container {
+				padding: 0 20px;
+				gap: 10px;
+
+				& > button {
+					height: 40px;
+				}
+			}
+
+			& > button {
+				margin: 10px 20px 20px 20px;
+				height: 40px;
+			}
+		}
+	}
+}
