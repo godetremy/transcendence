@@ -9,7 +9,6 @@ import { GlobalQueryClient } from './queryClient';
 import { CreateOrUpdateEventType, PrivateEvent, PublicEvent, PublicRegisterUser } from '@/types/Event';
 import { deletef, get, patch, post, put } from '../fetcher';
 import { PaginationResponse } from '@/types/PaginationResponse';
-import { DateParse } from '@/app/app/api/events/route';
 
 const getEvents = (
 	org_id: string,
@@ -40,14 +39,14 @@ const getEventsPublic = (
 	q: string | null,
 	activeMenu: number | null
 ): UseInfiniteQueryOptions<
-	PaginationResponse<DateParse<{ event_registration: true; users: true }>>,
+	PaginationResponse<PublicEvent<object>>,
 	Error,
-	InfiniteData<PaginationResponse<DateParse<{ event_registration: true; users: true }>>>,
+	InfiniteData<PaginationResponse<PublicEvent<object>>>,
 	QueryKey,
 	number
 > => ({
 	queryFn: ({ pageParam }) =>
-		get<PaginationResponse<DateParse<{ event_registration: true; users: true }>>>(
+		get<PaginationResponse<PublicEvent<object>>>(
 			`/events?page=${pageParam}${from == null ? '' : '&from=' + from}${to == null ? '' : '&to=' + to}${q == null || q.length == 0 ? '' : '&q=' + encodeURI(q.trim())}`
 		),
 	queryKey: ['event', 'public', activeMenu, q],

@@ -130,11 +130,8 @@ export default function Page() {
 					<ErrorState error={error} />
 				) : (
 					data.pages.map((row) =>
-						row.data.map((category, index) =>
-							category.data.length === 0 ? null : (
+						row.data.map((event, index) =>
 								<Fragment key={index}>
-									<span>{category.name}</span>
-									{category.data.map((event) => (
 										<EventCard
 											key={event.id}
 											id={event.id}
@@ -148,9 +145,7 @@ export default function Page() {
 											title={event.title}
 											location={event.location ?? 'aucun lieu'}
 										/>
-									))}
 								</Fragment>
-							)
 						)
 					)
 				)}
