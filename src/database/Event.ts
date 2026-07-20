@@ -42,12 +42,14 @@ const getEventsDashBoard = async <T extends Prisma.eventsInclude>(
 };
 
 const getEventsByFilter = async <T extends Prisma.eventsInclude>(
+	filter: Prisma.eventsWhereInput,
 	include: T,
 	//time?: DateOption,
 	pagination?: PaginationParameters
 ): Promise<Prisma.eventsGetPayload<{ include: T }>[]> => {
 	return prisma.events.findMany({
 		include: include,
+		where: filter,
 		orderBy: {
 			start_at: 'asc',
 		},
