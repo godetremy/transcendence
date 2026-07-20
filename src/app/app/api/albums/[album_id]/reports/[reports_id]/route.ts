@@ -21,7 +21,7 @@ export async function GET(
 		if (album == null) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const report = await getReportById(reports_id, {});
-		if (!report) throw ERRORS_DETAILS.report_does_not_exists();
+		if (!report) throw ERRORS_DETAILS.does_not_exists('Ce signalement');
 
 		return NextResponse.json(PublicFormatPhotoReports(report));
 	});
@@ -36,14 +36,14 @@ export async function PUT(
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 		if (!user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const album = getAlbumById(album_id, {});
-		if (!album) throw ERRORS_DETAILS.album_does_not_exist();
+		if (!album) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const report = await getReportById(reports_id, {});
-		if (!report) throw ERRORS_DETAILS.report_does_not_exist();
+		if (!report) throw ERRORS_DETAILS.does_not_exists('Ce signalement');
 
 		await manageReports(reports_id);
 
@@ -60,14 +60,14 @@ export async function DELETE(
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 		if (!user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		const album = getAlbumById(album_id, {});
-		if (!album) throw ERRORS_DETAILS.album_does_not_exist();
+		if (!album) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const report = await getReportById(reports_id, {});
-		if (!report) throw ERRORS_DETAILS.report_does_not_exist();
+		if (!report) throw ERRORS_DETAILS.does_not_exists('Ce signalement');
 
 		await deleteReports(reports_id, {});
 

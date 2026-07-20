@@ -13,9 +13,9 @@ export async function GET(
 	return errorHandler(async () => {
 		const { id, balance_id } = await params;
 		const session = await getThrowableSession(req);
-		if (session.user_id != id) ERRORS_DETAILS.permission_denied();
+		if (session.user_id != id) throw ERRORS_DETAILS.permission_denied();
 		const user = await getUserById(session.user_id, {});
-		if (!user || user.balance_id != balance_id) ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!user || user.balance_id != balance_id) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 		const number = await countTransaction(balance_id);

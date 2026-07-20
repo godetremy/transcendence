@@ -83,6 +83,11 @@ export type photos_album_reports = Prisma.photos_album_reportsModel
  */
 export type photos_album = Prisma.photos_albumModel
 /**
+ * Model ratelimit_login
+ * 
+ */
+export type ratelimit_login = Prisma.ratelimit_loginModel
+/**
  * Model service_categories
  * 
  */

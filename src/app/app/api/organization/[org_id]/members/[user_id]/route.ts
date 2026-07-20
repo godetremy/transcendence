@@ -80,7 +80,7 @@ export async function DELETE(
 
 		const id = parseUserId(user_id, session);
 		const me = await getUserById(session.user_id, {});
-		if (!me) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!me) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 
 		const me_permission = await getUserOrganizationPermission(me, org_id, true);
 		if (!me_permission.members_manage) throw ERRORS_DETAILS.permission_denied();

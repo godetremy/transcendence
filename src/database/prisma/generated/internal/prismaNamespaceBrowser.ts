@@ -64,6 +64,7 @@ export const ModelName = {
   photos: 'photos',
   photos_album_reports: 'photos_album_reports',
   photos_album: 'photos_album',
+  ratelimit_login: 'ratelimit_login',
   service_categories: 'service_categories',
   services: 'services',
   transaction: 'transaction',
@@ -256,6 +257,17 @@ export const Photos_albumScalarFieldEnum = {
 } as const
 
 export type Photos_albumScalarFieldEnum = (typeof Photos_albumScalarFieldEnum)[keyof typeof Photos_albumScalarFieldEnum]
+
+
+export const Ratelimit_loginScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  ip: 'ip',
+  success: 'success',
+  created_at: 'created_at'
+} as const
+
+export type Ratelimit_loginScalarFieldEnum = (typeof Ratelimit_loginScalarFieldEnum)[keyof typeof Ratelimit_loginScalarFieldEnum]
 
 
 export const Service_categoriesScalarFieldEnum = {
@@ -514,6 +526,15 @@ export const photos_albumOrderByRelevanceFieldEnum = {
 } as const
 
 export type photos_albumOrderByRelevanceFieldEnum = (typeof photos_albumOrderByRelevanceFieldEnum)[keyof typeof photos_albumOrderByRelevanceFieldEnum]
+
+
+export const ratelimit_loginOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  ip: 'ip'
+} as const
+
+export type ratelimit_loginOrderByRelevanceFieldEnum = (typeof ratelimit_loginOrderByRelevanceFieldEnum)[keyof typeof ratelimit_loginOrderByRelevanceFieldEnum]
 
 
 export const service_categoriesOrderByRelevanceFieldEnum = {

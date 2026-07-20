@@ -36,7 +36,7 @@ export async function POST(
 		const session = await getThrowableSession(req);
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 
 		await createReport(album_id, user.id, body.photo_id, body.reason);
 

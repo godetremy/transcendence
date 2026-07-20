@@ -31,7 +31,7 @@ export function POST(req: NextRequest) {
 	return errorHandler(async () => {
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.account_not_found();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 		checkIsUserGlobalAdmin(user);
 
 		const body = await parseBody<CategoryCreateBody>(req, CategoryCreateBodyShema);

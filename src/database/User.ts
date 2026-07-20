@@ -136,6 +136,7 @@ const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.use
 			fortytwo_oauth: true,
 			upload_requests: true,
 			balance: true,
+			event_registrations: true,
 		},
 	});
 };

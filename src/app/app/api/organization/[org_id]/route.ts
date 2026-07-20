@@ -15,11 +15,17 @@ export async function GET(
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { org_id } = await params;
-		const org = await getOrganizationById(org_id, {});
 
+		const org = await getOrganizationById(org_id, {});
 		if (!org) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
-		return NextResponse.json(formatPrivateOrganization<object>(org));
+		const session = await getThrowableSession(req);
+		const user = await getUserFromSession(session, {});
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
+
+		const isMemberOrOwner = user.admin || org.owner_id === user.id;
+		const formatter = isMemberOrOwner ? formatPrivateOrganization : formatPublicOrganization;
+		return NextResponse.json(formatter<object>(org));
 	});
 }
 

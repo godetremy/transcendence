@@ -63,7 +63,7 @@ export async function PATCH(
 		const body = await parseBody<CreateOrUpdateEventType>(req, CreateEventSchema);
 
 		const event_value = await UpdateEvent(body, event_id, {});
-		if (event_value == null) throw ERRORS_DETAILS.event_does_not_exist();
+		if (event_value == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 
 		return NextResponse.json(formatPrivateEvent<object>(event_value));
 	});

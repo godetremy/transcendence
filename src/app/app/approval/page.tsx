@@ -12,6 +12,8 @@ import { AccessMotivation } from '@/app/app/approval/pages/accessMotivation';
 import { Processing } from '@/app/app/approval/pages/processing';
 import { ApprobationResult } from '@/app/app/approval/pages/approbationResult';
 import { useUser } from '@/contexts/UserContext';
+import { logoutUser } from '@/lib/fetcher/user';
+import { useMutation } from '@tanstack/react-query';
 
 export interface ApprovalButton {
 	title: string;
@@ -29,6 +31,8 @@ export default function Page() {
 	const user = useUser();
 	const router = useRouter();
 	const { openModal, closeModal } = useModal();
+
+	const { mutateAsync } = useMutation(logoutUser());
 
 	const [image] = useState(() => {
 		return StudentLoginPagesImages[Math.floor(Math.random() * StudentLoginPagesImages.length)];
@@ -49,9 +53,10 @@ export default function Page() {
 				{
 					text: 'Se déconnecter',
 					negative: true,
-					onClick: () => {
+					onClick: async () => {
 						closeModal();
-						router.push('/app/api/auth/logout');
+						const check = await mutateAsync();
+						if (check.success) router.push('/app/login');
 					},
 				},
 			],

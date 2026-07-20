@@ -9,14 +9,26 @@ import { useEffect, useRef, useState } from 'react';
 import { User } from '@/types/User';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { useMutation } from '@tanstack/react-query';
-import { updateUser } from '@/lib/fetcher/user';
+import { logoutUser, updateUser } from '@/lib/fetcher/user';
+import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
+import { useRouter } from 'next/navigation';
+import ListContainer from '@/components/globals/ListContainer/ListContainer';
 
 function Page() {
 	const userCtx = useUser();
+	const { openModal, closeModal } = useModal();
+	const router = useRouter();
 
 	const [user, setUser] = useState<User>(userCtx!);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const mutation = useMutation(updateUser(user.id));
+
+	const getCsrfTokenFromCookie = (): string | null => {
+		const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]*)/);
+		return match ? decodeURIComponent(match[1]) : null;
+	};
+
+	const { mutateAsync } = useMutation(logoutUser());
 
 	useEffect(() => {
 		const value: UserUpdateParameters = {
@@ -27,7 +39,6 @@ function Page() {
 
 		timeoutRef.current = setTimeout(async () => {
 			await mutation.mutateAsync({ user: value }).then((user) => {
-				console.log(user);
 				userCtx?.update(user);
 			});
 			if (timeoutRef.current !== null) {
@@ -42,7 +53,7 @@ function Page() {
 			<section className={styles.section}>
 				<span className={styles.listSectionTitle}>Informations personnelles</span>
 
-				<div className={styles.list}>
+				<ListContainer>
 					<ListItem
 						title={'Nom'}
 						rightElement={
@@ -74,7 +85,44 @@ function Page() {
 						showChevron={false}
 						last
 					/>
-				</div>
+				</ListContainer>
+				<ListContainer>
+					<ListItem
+						showChevron={false}
+						negative
+						title={'Suppression mon compte'}
+						last
+						onPress={() =>
+							openModal({
+								title: 'Supprimer mon compte ?',
+								message: 'Vous allez supprimer votre compte. Vous ne pourrez plus utiliser ce compte.',
+								buttons: [
+									{
+										text: 'Annuler',
+										onClick: closeModal,
+									},
+									{
+										text: 'Supprimer',
+										negative: true,
+										onClick: async () => {
+											closeModal();
+											const res = await fetch('/app/api/users/me/delete', {
+												method: 'DELETE',
+												headers: {
+													'x-csrf-token': getCsrfTokenFromCookie() ?? '',
+												},
+											});
+											if (res.ok) {
+												const check = await mutateAsync();
+												if (check.success) router.push('/app/login');
+											}
+										},
+									},
+								],
+							})
+						}
+					/>
+				</ListContainer>
 			</section>
 		</NavigationBarHeader>
 	);

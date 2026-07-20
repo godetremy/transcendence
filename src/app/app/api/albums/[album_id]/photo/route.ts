@@ -7,6 +7,7 @@ import { getAlbumById } from '@/database/Album';
 import { getUserById } from '@/database/User';
 import { PublicPhoto } from '@/types/Photo';
 import { uploadPhoto } from '@/database/Photo';
+import { formatPublicPhoto } from '@/database/format/Photo';
 
 export async function POST(
 	req: NextRequest,
@@ -18,13 +19,13 @@ export async function POST(
 		const body = await parseBody<PublicPhoto>(req, UploadPhotoSchema);
 
 		const album = await getAlbumById(album_id, {});
-		if (!album) throw ERRORS_DETAILS.album_does_not_exist();
+		if (!album) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 
-		await uploadPhoto(album_id, user.id, body.path);
+		const photo = await uploadPhoto(album_id, user.id, body.path);
 
-		return NextResponse.json({ success: true });
+		return NextResponse.json(formatPublicPhoto(photo));
 	});
 }

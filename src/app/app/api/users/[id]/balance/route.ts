@@ -15,9 +15,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 	return errorHandler(async () => {
 		const { id } = await params;
 		const session = await getThrowableSession(req);
-		if (session.user_id != id) ERRORS_DETAILS.permission_denied();
+		if (session.user_id != id) throw ERRORS_DETAILS.permission_denied();
 		const user = await getUserById(session.user_id, {});
-		if (!user || !user.balance_id) ERRORS_DETAILS.does_not_exists('Ce compte');
+		if (!user || !user.balance_id) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 
 		const body = await parseBody<SumupCreateCheckouts>(req, SumupCreateCheckoutsSchema);
 		const reference = randomUUID();
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 			merchant_code: process.env.SUMUP_MERCHANT_CODE ?? '',
 			...(body.description && { description: body.description }),
 			redirect_url: `https://${process.env.NEXT_PUBLIC_BASE_URL}/app/me/membership`,
-			return_url: `https://ambulance-eggshell-preamble.ngrok-free.dev/app/api/webhook?u=${session.user_id}`,
+			return_url: `https://${process.env.NEXT_PUBLIC_BASE_URL}/app/api/webhook?u=${session.user_id}`,
 			hosted_checkout: { enabled: true },
 		});
 

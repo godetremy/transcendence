@@ -15,13 +15,13 @@ export async function GET(
 		const session = await getThrowableSession(req);
 
 		const photo = await getPhotoById(photo_id);
-		if (!photo) throw ERRORS_DETAILS.photo_does_not_exist();
+		if (!photo) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const album = await getAlbumById(album_id, {});
-		if (!album) throw ERRORS_DETAILS.album_not_exist();
+		if (!album) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('cet utilisateur');
 
 		return NextResponse.json(formatPublicPhoto(photo));
 	});
@@ -36,13 +36,13 @@ export async function DELETE(
 		const session = await getThrowableSession(req);
 
 		const photo = await getPhotoById(photo_id);
-		if (!photo) throw ERRORS_DETAILS.photo_does_not_exist();
+		if (!photo) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const album = await getAlbumById(album_id, {});
-		if (!album) throw ERRORS_DETAILS.album_not_exist();
+		if (!album) throw ERRORS_DETAILS.does_not_exists('Cet album');
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 		if (!user.admin) throw ERRORS_DETAILS.permission_denied();
 
 		await deletePhoto(photo_id);

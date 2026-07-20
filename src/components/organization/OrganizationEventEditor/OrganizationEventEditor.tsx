@@ -50,8 +50,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 				editor.current?.edit({ brightness: 0, contrast: 0, sharpness: 0 });
 				editor.current?.renderPreview().then((blob) => setPreviewBlob(URL.createObjectURL(blob)));
 			})
-			.catch((e) => console.error(e))
-			.finally(() => console.log('End load'));
+			.catch((e) => console.error(e));
 		setUploadProgression(0);
 		setUploadImage(true);
 		upload.uploadFiles(image, setUploadProgression).then((file) => {
@@ -107,11 +106,9 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 						className={styles.primary}
 						onClick={async (e) => {
 							try {
-								console.log(props.event);
 								await props.onSubmit();
 								props.onNew?.();
 							} catch (err: unknown) {
-								console.log(err);
 								openModal({
 									title: 'Erreur',
 									message: (err as Error).message,

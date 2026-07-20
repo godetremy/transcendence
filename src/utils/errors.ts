@@ -7,6 +7,7 @@ const ERRORS_DETAILS: Record<string, (...args: string[]) => ApiError> = {
 	unsupported_content_type: () => new ApiError(400, 'Unsupported content type.'),
 	file_not_found: () => new ApiError(404, 'This file does not exist.'),
 	already_admin: () => new ApiError(401, 'This user is already admin.'),
+	too_many_attempts: () => new ApiError(429, 'Trop de tentatives depuis cette adresse. Réessayez plus tard.'),
 
 	already_exists: (parameter: string) => new ApiError(400, `Ce ${parameter} existe déjà.`),
 	does_not_exists: (parameter: string) => new ApiError(404, `${parameter} n’existe pas.`),

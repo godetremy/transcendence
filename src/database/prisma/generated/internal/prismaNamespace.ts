@@ -397,6 +397,7 @@ export const ModelName = {
   photos: 'photos',
   photos_album_reports: 'photos_album_reports',
   photos_album: 'photos_album',
+  ratelimit_login: 'ratelimit_login',
   service_categories: 'service_categories',
   services: 'services',
   transaction: 'transaction',
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "balance" | "event_registrations" | "events" | "files" | "fortytwo_oauth" | "memberships" | "organization_followers" | "organization_members" | "organization_permission" | "organizations" | "photos" | "photos_album_reports" | "photos_album" | "service_categories" | "services" | "transaction" | "two_factor_auth" | "upload_request" | "users" | "webauthn_credentials"
+    modelProps: "balance" | "event_registrations" | "events" | "files" | "fortytwo_oauth" | "memberships" | "organization_followers" | "organization_members" | "organization_permission" | "organizations" | "photos" | "photos_album_reports" | "photos_album" | "ratelimit_login" | "service_categories" | "services" | "transaction" | "two_factor_auth" | "upload_request" | "users" | "webauthn_credentials"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1385,6 +1386,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ratelimit_login: {
+      payload: Prisma.$ratelimit_loginPayload<ExtArgs>
+      fields: Prisma.ratelimit_loginFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ratelimit_loginFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ratelimit_loginFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>
+        }
+        findFirst: {
+          args: Prisma.ratelimit_loginFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ratelimit_loginFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>
+        }
+        findMany: {
+          args: Prisma.ratelimit_loginFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>[]
+        }
+        create: {
+          args: Prisma.ratelimit_loginCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>
+        }
+        createMany: {
+          args: Prisma.ratelimit_loginCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ratelimit_loginCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>[]
+        }
+        delete: {
+          args: Prisma.ratelimit_loginDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>
+        }
+        update: {
+          args: Prisma.ratelimit_loginUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>
+        }
+        deleteMany: {
+          args: Prisma.ratelimit_loginDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ratelimit_loginUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ratelimit_loginUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>[]
+        }
+        upsert: {
+          args: Prisma.ratelimit_loginUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ratelimit_loginPayload>
+        }
+        aggregate: {
+          args: Prisma.Ratelimit_loginAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRatelimit_login>
+        }
+        groupBy: {
+          args: Prisma.ratelimit_loginGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Ratelimit_loginGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ratelimit_loginCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Ratelimit_loginCountAggregateOutputType> | number
+        }
+      }
+    }
     service_categories: {
       payload: Prisma.$service_categoriesPayload<ExtArgs>
       fields: Prisma.service_categoriesFieldRefs
@@ -2111,6 +2186,17 @@ export const Photos_albumScalarFieldEnum = {
 export type Photos_albumScalarFieldEnum = (typeof Photos_albumScalarFieldEnum)[keyof typeof Photos_albumScalarFieldEnum]
 
 
+export const Ratelimit_loginScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  ip: 'ip',
+  success: 'success',
+  created_at: 'created_at'
+} as const
+
+export type Ratelimit_loginScalarFieldEnum = (typeof Ratelimit_loginScalarFieldEnum)[keyof typeof Ratelimit_loginScalarFieldEnum]
+
+
 export const Service_categoriesScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2367,6 +2453,15 @@ export const photos_albumOrderByRelevanceFieldEnum = {
 } as const
 
 export type photos_albumOrderByRelevanceFieldEnum = (typeof photos_albumOrderByRelevanceFieldEnum)[keyof typeof photos_albumOrderByRelevanceFieldEnum]
+
+
+export const ratelimit_loginOrderByRelevanceFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  ip: 'ip'
+} as const
+
+export type ratelimit_loginOrderByRelevanceFieldEnum = (typeof ratelimit_loginOrderByRelevanceFieldEnum)[keyof typeof ratelimit_loginOrderByRelevanceFieldEnum]
 
 
 export const service_categoriesOrderByRelevanceFieldEnum = {
@@ -2630,6 +2725,7 @@ export type GlobalOmitConfig = {
   photos?: Prisma.photosOmit
   photos_album_reports?: Prisma.photos_album_reportsOmit
   photos_album?: Prisma.photos_albumOmit
+  ratelimit_login?: Prisma.ratelimit_loginOmit
   service_categories?: Prisma.service_categoriesOmit
   services?: Prisma.servicesOmit
   transaction?: Prisma.transactionOmit

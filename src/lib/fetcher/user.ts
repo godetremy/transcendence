@@ -60,4 +60,12 @@ const getTransactions = (
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
-export { updateUser, updateBalance, getBalance, getTransactions };
+const logoutUser = (): UseMutationOptions<{ success: boolean }, Error, void, void> => ({
+	mutationKey: ['user', 'balance', 'update'],
+	mutationFn: () => post<{ success: boolean }>(`/auth/logout`, {}),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['user'] });
+	},
+});
+
+export { updateUser, updateBalance, getBalance, getTransactions, logoutUser };

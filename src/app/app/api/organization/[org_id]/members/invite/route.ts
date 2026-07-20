@@ -27,12 +27,12 @@ export async function POST(
 		const session = await getThrowableSession(req);
 
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.user_not_found();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 
 		const body = await parseBody<MemberInviteRequestBody>(req, MemberInviteRequestBodySchema);
 
 		const permissions = await getUserOrganizationPermission(user, org_id, true);
-		if (!permissions.members_manage) ERRORS_DETAILS.permission_denied();
+		if (!permissions.members_manage) throw ERRORS_DETAILS.permission_denied();
 
 		if (!(await organizationExistById(org_id))) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 		if (!(await existPermissionInOrganization(body.permission_id, org_id)))

@@ -6,6 +6,7 @@ import { createOrUpdateStudentUser } from '@/database/User';
 import { errorHandler } from '@/utils/errors';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
+import { setCsrfCookie } from '@/lib/csrf';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
 	return errorHandler(async () => {
@@ -22,6 +23,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 			agent: user.agent,
 			agent_verified: user.agent_verified,
 		});
+
+		await setCsrfCookie();
+
 		return redirect('/app/home');
 	});
 }

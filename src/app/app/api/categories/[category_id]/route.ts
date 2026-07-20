@@ -19,7 +19,7 @@ export function GET(req: NextRequest, { params }: { params: Promise<{ category_i
 		const { category_id } = await params;
 
 		const category = await getServiceCategoryById(category_id, {});
-		if (!category) throw ERRORS_DETAILS.category_does_not_exists();
+		if (!category) throw ERRORS_DETAILS.does_not_exists('Cette catégorie');
 
 		return NextResponse.json(formatServiceCategory(category));
 	});
@@ -30,12 +30,12 @@ export function PATCH(req: NextRequest, { params }: { params: Promise<{ category
 		const { category_id } = await params;
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.account_not_found();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 		checkIsUserGlobalAdmin(user);
 
 		const body = await parseBody<CategoryUpdateBody>(req, CategoryUpdateBodyShema);
 
-		if (!(await existServiceCategoryById(category_id))) throw ERRORS_DETAILS.category_does_not_exists();
+		if (!(await existServiceCategoryById(category_id))) throw ERRORS_DETAILS.does_not_exists('Cette catégorie');
 
 		const category = await updateServiceCategory(category_id, body);
 
@@ -48,10 +48,10 @@ export function DELETE(req: NextRequest, { params }: { params: Promise<{ categor
 		const { category_id } = await params;
 		const session = await getThrowableSession(req);
 		const user = await getUserFromSession(session, {});
-		if (!user) throw ERRORS_DETAILS.account_not_found();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 		checkIsUserGlobalAdmin(user);
 
-		if (!(await existServiceCategoryById(category_id))) throw ERRORS_DETAILS.category_does_not_exists();
+		if (!(await existServiceCategoryById(category_id))) throw ERRORS_DETAILS.does_not_exists('Cette catégorie');
 		await deleteServiceCategoryById(category_id);
 
 		return NextResponse.json({ success: true });

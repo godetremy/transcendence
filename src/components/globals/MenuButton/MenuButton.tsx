@@ -47,7 +47,6 @@ export function MenuButton({ menu, alignRight, children, containerKey, className
 			<button
 				onClick={() => {
 					setVisibleMenu(!visibleMenu);
-					console.log(containerKey);
 				}}
 				className={
 					children

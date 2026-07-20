@@ -75,10 +75,10 @@ export async function DELETE(
 		const session = await getThrowableSession(req);
 
 		const event = await getEventByAlbumId(album_id, {});
-		if (!event) throw ERRORS_DETAILS.event_does_not_exist();
+		if (!event) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 
 		const user = await getUserById(session.user_id, {});
-		if (!user) throw ERRORS_DETAILS.user_does_not_exist();
+		if (!user) throw ERRORS_DETAILS.does_not_exists('Cet utilisateur');
 
 		const permission = await getUserOrganizationPermission(user, event.organization_id, true);
 		if (!permission.album_delete) throw ERRORS_DETAILS.permission_denied();

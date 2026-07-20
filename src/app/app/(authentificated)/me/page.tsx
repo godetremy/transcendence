@@ -19,11 +19,15 @@ import {
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
+import { useMutation } from '@tanstack/react-query';
+import { logoutUser } from '@/lib/fetcher/user';
 
 export default function Page() {
 	const router = useRouter();
 	const user = useUser();
 	const { openModal, closeModal } = useModal();
+
+	const { mutateAsync } = useMutation(logoutUser());
 
 	return (
 		<>
@@ -126,9 +130,10 @@ export default function Page() {
 									{
 										text: 'Se déconnecter',
 										negative: true,
-										onClick: () => {
+										onClick: async () => {
 											closeModal();
-											router.push('/app/api/auth/logout');
+											const check = await mutateAsync();
+											if (check.success) router.push('/app/login');
 										},
 									},
 								],
