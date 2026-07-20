@@ -130,28 +130,23 @@ export default function Page() {
 					<ErrorState error={error} />
 				) : (
 					data.pages.map((row) =>
-						row.data.map((category, index) =>
-							category.data.length === 0 ? null : (
-								<Fragment key={index}>
-									<span>{category.name}</span>
-									{category.data.map((event) => (
-										<EventCard
-											key={event.id}
-											id={event.id}
-											image={
-												event.image && event.image !== 'null'
-													? event.image
-													: '/images/demo_event_01.png'
-											}
-											start={new Date(event.start_at)}
-											end={new Date(event.end_at)}
-											title={event.title}
-											location={event.location ?? 'aucun lieu'}
-										/>
-									))}
-								</Fragment>
-							)
-						)
+						row.data.map((event, index) => (
+							<Fragment key={index}>
+								<EventCard
+									key={event.id}
+									id={event.id}
+									image={
+										event.image && event.image !== 'null'
+											? event.image
+											: '/images/demo_event_01.png'
+									}
+									start={new Date(event.start_at)}
+									end={new Date(event.end_at)}
+									title={event.title}
+									location={event.location ?? 'aucun lieu'}
+								/>
+							</Fragment>
+						))
 					)
 				)}
 				{hasNextPage && !isLoading && (
