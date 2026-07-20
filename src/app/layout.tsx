@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Flow_Circular, Montserrat } from 'next/font/google';
 import { ModalProvider } from '@/components/globals/ModalProvider/ModalProvider';
 import QueryProvider from '@/components/globals/QueryProvider/QueryProvider';
+import { ToastProvider } from '@/components/globals/ToastProvider/ToastProvider';
 
 const montserrat = Montserrat({
 	subsets: ['latin'],
@@ -27,7 +28,9 @@ export default function RootLayout({
 		<html lang="fr" className={`${montserrat.className} ${flowCircular.className}`}>
 			<body>
 				<QueryProvider>
-					<ModalProvider>{children}</ModalProvider>
+					<ModalProvider>
+						<ToastProvider>{children}</ToastProvider>
+					</ModalProvider>
 				</QueryProvider>
 			</body>
 		</html>
