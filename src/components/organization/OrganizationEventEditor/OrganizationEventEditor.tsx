@@ -14,6 +14,7 @@ import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { ImageEditor } from '@/utils/image';
 import { useUpload } from '@/contexts/UploadTokenContext';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
+import { ToastType, useToast } from '@/components/globals/ToastProvider/ToastProvider';
 
 export interface OrganizationEventEditor {
 	event: CreateOrUpdateEventType;
@@ -33,6 +34,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
 	const hasLoadedContent = useRef(false);
 	const { openModal } = useModal();
+	const toast = useToast();
 
 	const editor = useRef<ImageEditor | null>(null);
 
@@ -109,19 +111,13 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 								await props.onSubmit();
 								props.onNew?.();
 							} catch (err: unknown) {
-								openModal({
-									title: 'Erreur',
-									message: (err as Error).message,
-									buttons: [
-										{ text: 'Cancel', negative: true },
-										{
-											text: 'Confirm',
-											onClick: (e) => {
-												e.preventClosing();
-											},
-										},
-									],
-								});
+								toast.showToast(
+									{
+										title: 'Erreur',
+										message: (err as Error).message,
+										type: ToastType.ERROR,
+									}
+								)
 							}
 						}}
 					>
