@@ -30,6 +30,6 @@ export interface ElasticSearchUser {
 	mail: string;
 }
 
-export interface AgentRequest extends PublicUser {
-	reason: string | null;
+export interface AgentRequest extends User<object> {
+	agent_reason: string | null;
 }

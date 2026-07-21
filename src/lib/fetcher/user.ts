@@ -5,7 +5,7 @@ import {
 	UseMutationOptions,
 	UseQueryOptions,
 } from '@tanstack/react-query';
-import { User } from '@/types/User';
+import { AgentRequest, User } from '@/types/User';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { get, patch, post } from '@/lib/fetcher';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
@@ -68,4 +68,27 @@ const logoutUser = (): UseMutationOptions<{ success: boolean }, Error, void, voi
 	},
 });
 
-export { updateUser, updateBalance, getBalance, getTransactions, logoutUser };
+const approvalListAgent = (): UseInfiniteQueryOptions<
+	PaginationResponse<AgentRequest>,
+	Error,
+	InfiniteData<PaginationResponse<AgentRequest>>,
+	QueryKey,
+	number
+> => ({
+	queryFn: ({ pageParam }) => get<PaginationResponse<AgentRequest>>(`/users/approval/pending?page=${pageParam}`),
+	queryKey: ['user', 'pending'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
+});
+
+const appovalRequestAgent = (
+	user_id: string
+): UseMutationOptions<{ success: boolean; approved: boolean }, Error, { approve: boolean }, void> => ({
+	mutationFn: ({ approve }) =>
+		patch<{ success: boolean; approved: boolean }>(`/users/approval/${user_id}`, { approve }),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['user', 'pending'] });
+	},
+});
+
+export { updateUser, updateBalance, getBalance, getTransactions, logoutUser, approvalListAgent, appovalRequestAgent };

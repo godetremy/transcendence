@@ -35,8 +35,8 @@ const formatPublicUser = (row: Prisma.usersGetPayload<object>): PublicUser => {
 
 const formatAgentRequest = (row: Prisma.usersGetPayload<object>): AgentRequest => {
 	return {
-		...formatPublicUser(row),
-		reason: row.agent_reason,
+		...formatPrivateUser<object>(row),
+		agent_reason: row.agent_reason,
 	};
 };
 
