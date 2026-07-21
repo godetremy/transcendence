@@ -71,7 +71,6 @@
 				field-sizing: content;
 			}
 
-
 			& > input[type='text'] {
 				appearance: none;
 				outline: none;
@@ -85,7 +84,7 @@
 				color: rgba(var(--color-rgb-primary-white), 0.7);
 
 				&:focus {
-					border: 1.5px solid rgba(var(--color-rgb-primary-purple), 1)
+					border: 1.5px solid rgba(var(--color-rgb-primary-purple), 1);
 				}
 			}
 		}
@@ -115,7 +114,6 @@
 				scale: 0.98;
 			}
 		}
-
 
 		& > .apply_button {
 			background-color: rgba(var(--color-rgb-primary-pink), 0.2);

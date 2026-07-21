@@ -1,0 +1,25 @@
+info:
+  name: Events - Get all events
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BaseURL}}/events?limit=20&page=1&q=test"
+  params:
+    - name: limit
+      value: "20"
+      type: query
+    - name: page
+      value: "1"
+      type: query
+    - name: q
+      value: test
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

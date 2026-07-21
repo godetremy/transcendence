@@ -8,7 +8,7 @@ http:
   url: "{{BaseURL}}/auth/oauth/fortytwo/authorize"
   params:
     - name: code
-      value: test
+      value: "381718"
       type: query
       disabled: true
   auth: inherit

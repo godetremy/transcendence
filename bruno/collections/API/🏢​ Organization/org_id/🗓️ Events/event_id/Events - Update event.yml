@@ -1,0 +1,35 @@
+info:
+  name: Events - Update event
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: "{{BaseURL}}/organization/:org_id/events/:event_id"
+  params:
+    - name: event_id
+      value: 3345f271-686b-4908-bdff-4f4213278ec9
+      type: path
+    - name: org_id
+      value: cc734165-fe1a-439f-8c99-a85cecd19a01
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "title": "test67",
+        "subtitle": "test1",
+        "description": "test2",
+        "max_registration": 50,
+        "location": "chez cedric",
+        "image": "/path/to/image",
+        "start_at": "2020-10-01",
+        "end_at": "2020-10-02"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

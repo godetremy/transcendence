@@ -14,8 +14,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 		const searchParams = req.nextUrl.searchParams;
 
 		const pagination = getPaginationParams(searchParams);
-
-		const query = parseParams<SearchQuery>(req.nextUrl.searchParams, SearchQuerySchema);
+		const query = parseParams<SearchQuery>(searchParams, SearchQuerySchema);
 
 		const searchs = await getEventsOrServicesByElasticSearch(query.q ?? '', pagination.limit, 'events');
 

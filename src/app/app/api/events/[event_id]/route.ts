@@ -43,24 +43,22 @@ export async function PUT(
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { event_id } = await params;
-
-		const cookie = req.cookies.get('session');
-		const user_id = (await decrypt(cookie?.value)).user_id;
+		const session = await getThrowableSession(req);
 
 		const event = await getEventById(event_id, {});
 		if (event == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 
-		const registered = await getEventRegistrationsById(event_id, user_id, {});
+		const registered = await getEventRegistrationsById(event_id, session.user_id, {});
 
 		if (registered == false) {
 			const count = await countEventRegistrationsByFilter({ event_id: event_id });
 			if (event.max_registration != null && count >= event.max_registration)
 				throw ERRORS_DETAILS.event_max_inscription();
 
-			const value = await createEventRegistrationsById(event_id, user_id, {});
+			const value = await createEventRegistrationsById(event_id, session.user_id, {});
 			if (value == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 		} else {
-			const value = await deleteEventRegistrationsById(event_id, user_id, {});
+			const value = await deleteEventRegistrationsById(event_id, session.user_id, {});
 			if (value == null) throw ERRORS_DETAILS.does_not_exists('Cet événement');
 		}
 

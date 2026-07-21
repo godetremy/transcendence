@@ -1,7 +1,0 @@
-info:
-  name: 👍​ Permission
-  type: folder
-  seq: 6
-
-request:
-  auth: inherit

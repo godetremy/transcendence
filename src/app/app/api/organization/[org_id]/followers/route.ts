@@ -21,10 +21,10 @@ export async function GET(
 		const pagination = getPaginationParams(req.nextUrl.searchParams);
 
 		const count = await countOrganizationFollowersByFilter({ organization_id: org_id });
-		const List = await getOrganizationFollowersByFilter({ organization_id: org_id }, { user: true }, pagination);
+		const list = await getOrganizationFollowersByFilter({ organization_id: org_id }, { user: true }, pagination);
 
 		return NextResponse.json(
-			generatePaginationResponse(List.map(formatOrganizationFollowers<object>), count, pagination)
+			generatePaginationResponse(list.map(formatOrganizationFollowers<object>), count, pagination)
 		);
 	});
 }

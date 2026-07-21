@@ -1,0 +1,19 @@
+info:
+  name: Balance - Balance detail
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BaseURL}}/users/:id/balance"
+  params:
+    - name: id
+      value: test
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

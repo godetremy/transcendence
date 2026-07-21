@@ -1,7 +1,7 @@
 info:
   name: Organization - Create
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: POST
@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "name": "bde2",
+        "name": "bde4",
         "description": "bureau des eleves",
         "logo": "",
         "club": true

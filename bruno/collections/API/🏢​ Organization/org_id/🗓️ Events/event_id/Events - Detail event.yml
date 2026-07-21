@@ -1,0 +1,22 @@
+info:
+  name: Events - Detail event
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BaseURL}}/organization/:org_id/events/:event_id"
+  params:
+    - name: event_id
+      value: 40f756b4-5d60-48f8-98e4-3726d93d311c
+      type: path
+    - name: org_id
+      value: cf8d7a3f-d0a2-457c-996b-f282d350d092
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -5,7 +5,14 @@ info:
 
 http:
   method: GET
-  url: "{{BaseURL}}/categories"
+  url: "{{BaseURL}}/categories?limit=20&page=1"
+  params:
+    - name: limit
+      value: "20"
+      type: query
+    - name: page
+      value: "1"
+      type: query
   auth: inherit
 
 settings:

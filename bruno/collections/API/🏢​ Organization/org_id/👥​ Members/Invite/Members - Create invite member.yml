@@ -1,0 +1,26 @@
+info:
+  name: Members - Create invite member
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{BaseURL}}/organization/:org_id/members/invite"
+  params:
+    - name: org_id
+      value: cd7197db-eb46-490c-bcd0-043d48bbd46f
+      type: path
+  body:
+    type: form-urlencoded
+    data:
+      - name: permission_id
+        value: 9a5db507-7d33-47e6-b07c-d151b10a6c12
+      - name: user_id
+        value: test
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

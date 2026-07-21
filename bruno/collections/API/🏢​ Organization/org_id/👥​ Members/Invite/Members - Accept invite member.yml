@@ -1,0 +1,24 @@
+info:
+  name: Members - Accept invite member
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{BaseURL}}/organization/:org_id/members/invite"
+  params:
+    - name: org_id
+      value: cd7197db-eb46-490c-bcd0-043d48bbd46f
+      type: path
+  body:
+    type: form-urlencoded
+    data:
+      - name: accept
+        value: "true"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

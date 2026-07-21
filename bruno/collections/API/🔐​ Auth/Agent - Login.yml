@@ -1,11 +1,14 @@
 info:
   name: Agent - Login
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: POST
   url: "{{BaseURL}}/auth/login"
+  headers:
+    - name: x-forwarded-for
+      value: ""
   body:
     type: form-urlencoded
     data:
