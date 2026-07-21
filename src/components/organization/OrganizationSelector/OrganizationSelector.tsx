@@ -6,7 +6,6 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Loader } from '@/components/globals/Loader/Loader';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
 export function OrganizationPicker() {
@@ -18,9 +17,9 @@ export function OrganizationPicker() {
 	const closedContainer = { opacity: 0, scale: 0.98, translate: '0 -5px' };
 	const openedContainer = { opacity: 1, scale: 1, translate: '0 0px' };
 
-	const currentOrganization = organizationCtx.getCurrentOrganization();
+	const currentOrganization = organizationCtx.currentOrganization;
 
-	if (!currentOrganization) redirect('/app/home');
+	if (!currentOrganization) return null;
 
 	return (
 		<AnimatePresence>

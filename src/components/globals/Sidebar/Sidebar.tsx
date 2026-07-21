@@ -35,7 +35,7 @@ const tabs = [
 	},
 ];
 
-const organizationTabs = [
+const organizationTabDefs = [
 	{
 		icon: House,
 		title: 'Dashboard',
@@ -64,6 +64,12 @@ export default function Sidebar() {
 	const pathname = usePathname();
 	const user = useUser();
 	const organization = useOrganizations();
+
+	const orgBase = `/app/organization/${organization.currentOrganization?.id}`;
+	const organizationTabs = organizationTabDefs.map((tab) => ({
+		...tab,
+		href: `${orgBase}/${tab.href}`,
+	}));
 
 	const transition: Transition = { type: 'spring', stiffness: 300, damping: 25 };
 	const showingContainer = useSpring(0, { stiffness: 400, damping: 40, duration: 0.1 });
@@ -225,9 +231,7 @@ export default function Sidebar() {
 						>
 							{!isMobile && <OrganizationPicker />}
 							{organizationTabs.map((tab, index) => {
-								const active = pathname.startsWith(
-									`/app/organization/${organization.currentOrganization?.id}/${tab.href}`
-								);
+								const active = pathname.startsWith(tab.href);
 
 								return (
 									<MotionLink
