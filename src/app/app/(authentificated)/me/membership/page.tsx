@@ -90,7 +90,7 @@ export default function Page() {
 					)}
 				</section>
 				<Card visible={showReload} requestClose={() => setShowReload(false)}>
-					<SumupReload />
+					<SumupReload close={() => setShowReload(false)} />
 				</Card>
 			</NavigationBarHeader>
 		</>
