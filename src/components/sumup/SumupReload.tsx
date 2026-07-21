@@ -37,29 +37,31 @@ export function SumupReload({ close }: { close: () => void }) {
 							<Minus />
 						</button>
 						<div className={styles.amount_display}>
-							<div className={styles.amount_row}>
-								<input
-									className={styles.input}
-									value={checkout.amount}
-									type="number"
-									min={0}
-									max={100}
-									style={{ width: `${String(checkout.amount).length}ch` }}
-									id="amount"
-									onKeyDown={(e) => {
-										if (e.key === '-' || e.key === 'e') e.preventDefault();
-									}}
-									onChange={(e) => {
-										const value = Number(e.target.value);
-										setCheckout((prev) => ({
-											...prev,
-											amount: Number.isNaN(value) ? 0 : Math.min(100, Math.max(0, value)),
-										}));
-									}}
-								/>
-								<span className={styles.euro}>€</span>
+							<div className={styles.amount_group}>
+								<div className={styles.amount_row}>
+									<input
+										className={styles.input}
+										value={checkout.amount}
+										type="number"
+										min={0}
+										max={100}
+										style={{ width: `${String(checkout.amount).length}ch` }}
+										id="amount"
+										onKeyDown={(e) => {
+											if (e.key === '-' || e.key === 'e') e.preventDefault();
+										}}
+										onChange={(e) => {
+											const value = Number(e.target.value);
+											setCheckout((prev) => ({
+												...prev,
+												amount: Number.isNaN(value) ? 0 : Math.min(100, Math.max(0, value)),
+											}));
+										}}
+									/>
+									<span className={styles.euro}>€</span>
+								</div>
+								<span className={styles.conversion_point}>{checkout.amount * 10} pts</span>
 							</div>
-							<span className={styles.conversion_point}>{checkout.amount * 10} pts</span>
 							<div className={styles.auto_amount}>
 								{autoAmount.map((amount) => (
 									<button
