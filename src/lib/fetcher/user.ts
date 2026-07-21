@@ -13,6 +13,7 @@ import { SumupCreateCheckouts } from '@/types/SumupCreateCheckouts';
 import { BalanceType } from '@/types/Balance';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import { TranscationType } from '@/types/Transaction';
+import { AgentsSignUpParameters } from '@/types/AgentsSignUpParameters';
 
 const updateUser = (user_id: string): UseMutationOptions<User, Error, { user: UserUpdateParameters }, User> => ({
 	mutationKey: ['user', 'update'],
@@ -98,6 +99,13 @@ const deleteUser = (headers: HeadersInit | undefined): UseMutationOptions<{ succ
 	},
 });
 
+const signupAgent = (): UseMutationOptions<{ success: boolean }, Error, { body: AgentsSignUpParameters }, void> => ({
+	mutationFn: ({ body }) => post<{ success: boolean }>(`/auth/signup/`, body),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['user'] });
+	},
+});
+
 export {
 	updateUser,
 	updateBalance,
@@ -107,4 +115,5 @@ export {
 	approvalListAgent,
 	appovalRequestAgent,
 	deleteUser,
+	signupAgent,
 };

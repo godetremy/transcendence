@@ -10,12 +10,16 @@ import { LoginText } from '@/components/login/LoginText/LoginText';
 import { SignupFormSchema } from '@/schema/SignupSchema';
 import { redirect } from 'next/navigation';
 import { LoginForm } from '@/components/login/LoginForm/LoginForm';
+import { useMutation } from '@tanstack/react-query';
+import { signupAgent } from '@/lib/fetcher/user';
 
 export default function Page() {
 	const [error, setError] = useState<string | undefined>(undefined);
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
+
+	const { mutateAsync } = useMutation(signupAgent());
 
 	const signUp = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
@@ -28,20 +32,8 @@ export default function Page() {
 			setError(fields.error.issues[0].message);
 			return;
 		}
-		const message = await fetch('/app/api/auth/signup/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				mail: fields.data.mail,
-				password: fields.data.password,
-				passwordCheck: fields.data.passwordCheck,
-			}),
-		});
-		const body = await message.json();
-		if (message.ok) return redirect('/app/home/');
-		setError(body.message);
+		const check = await mutateAsync({ body: fields.data });
+		if (check.success) return redirect('/app/home/');
 	};
 
 	return (
