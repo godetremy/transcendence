@@ -1,59 +1,31 @@
 import styles from './components.module.scss';
 import { useRef, useState } from 'react';
-import { get } from '@/lib/fetcher';
 import { Loader } from '@/components/globals/Loader/Loader';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
-import { PublicUser } from '@/types/User';
 import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 import ListItem from '@/components/globals/ListItem/ListItem';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { PaginationResponse } from '@/types/PaginationResponse';
 import Image from 'next/image';
-import { inviteOrganizationMembers } from '@/lib/fetcher/organization';
-import { useMutation } from '@tanstack/react-query';
+import { getOrganizationNotMembers, inviteOrganizationMembers } from '@/lib/fetcher/organization';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { CardHeaderPermissionPicker } from '@/components/globals/CardHeaderPermissionPicker/CardHeaderPermissionPicker';
+import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 
 function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 	const organizationCtx = useOrganizations();
 	const organization = organizationCtx.getCurrentOrganization()!;
 
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
 	const [addingMembers, setAddingMembers] = useState(false);
-
 	const [membersSelection, setMembersSelection] = useState<string[]>([]);
-	const [loadingMember, setLoadingMember] = useState(false);
-	const [members, setMembers] = useState<PublicUser[]>([]);
+	const [search, setSearch] = useState('');
 
-	const [hasSearch, setHasSearch] = useState(false);
 	const invites = useMutation(inviteOrganizationMembers(organization.id));
+	const hasSearch = search.trim().length > 0;
 
-	const fetchMembers = (query: string) => {
-		setLoadingMember(true);
-		if (timeoutRef.current !== null) {
-			clearTimeout(timeoutRef.current);
-			timeoutRef.current = null;
-		}
-		if (query.trim().length === 0) {
-			setHasSearch(false);
-			setLoadingMember(false);
-			return;
-		}
-		setHasSearch(true);
-		timeoutRef.current = setTimeout(() => {
-			get<PaginationResponse<PublicUser>>(
-				`/organization/${organization.id}/users?register=false&q=${encodeURI(query.trim())}`
-			)
-				.then((res) => setMembers(res.data))
-				.finally(() => {
-					setLoadingMember(false);
-					if (timeoutRef.current !== null) {
-						clearTimeout(timeoutRef.current);
-						timeoutRef.current = null;
-					}
-				});
-		}, 800);
-	};
+	const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
+		...getOrganizationNotMembers(organization.id, search),
+		enabled: hasSearch,
+	});
 
 	const addMembers = (perm_id: string) => {
 		setAddingMembers(true);
@@ -85,7 +57,7 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 					type={'text'}
 					placeholder={'Rechercher un compte...'}
 					onChange={(e) => {
-						fetchMembers(e.target.value);
+						setSearch(e.target.value);
 					}}
 					disabled={addingMembers}
 				/>
@@ -95,11 +67,11 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 					className={styles.result_container}
 					style={{ pointerEvents: addingMembers ? 'none' : 'auto', opacity: addingMembers ? 0.5 : 1 }}
 				>
-					{loadingMember ? (
+					{isLoading ? (
 						<Loader size={24} />
 					) : (
 						<>
-							{!members || members.length === 0 ? (
+							{!data || data.pages[0].data.length === 0 ? (
 								<EmptyState
 									title={hasSearch ? 'Aucun résultats' : 'Fait une recherche pour commencer'}
 									description={
@@ -108,49 +80,52 @@ function OrganizationAddMemberDialog({ close }: { close: () => void }) {
 								/>
 							) : (
 								<ListContainer>
-									{members.map((member, i) => (
-										<ListItem
-											key={i}
-											title={member.full_name ?? member.id}
-											description={formatDescription(member.created_at)}
-											last={i === members.length - 1}
-											leftElement={
-												<Image
-													src={member.profile_picture}
-													width={40}
-													height={40}
-													alt={`Photo de ${member.full_name ?? member.id}`}
-													className={styles.profilePicture}
-												/>
-											}
-											rightElement={
-												<label
-													htmlFor={`valid_id_${member.id}`}
-													className={styles.checkbox_label}
-												>
-													<input
-														id={`valid_id_${member.id}`}
-														type={'checkbox'}
-														className={styles.checkbox}
-														onChange={(e) => {
-															if (e.currentTarget.checked)
-																setMembersSelection((prev) => [...prev, member.id]);
-															else
-																setMembersSelection((prev) =>
-																	prev.filter((v) => v !== member.id)
-																);
-														}}
-														checked={includeId(member.id)}
+									{data.pages.map((row, j) =>
+										row.data.map((member, i) => (
+											<ListItem
+												key={i}
+												title={member.full_name ?? member.id}
+												description={formatDescription(member.created_at)}
+												last={i == row.data.length - 1 && data.pages.length - 1 === j}
+												leftElement={
+													<Image
+														src={member.profile_picture}
+														width={40}
+														height={40}
+														alt={`Photo de ${member.full_name ?? member.id}`}
+														className={styles.profilePicture}
 													/>
-												</label>
-											}
-											showChevron={false}
-										/>
-									))}
+												}
+												rightElement={
+													<label
+														htmlFor={`valid_id_${member.id}`}
+														className={styles.checkbox_label}
+													>
+														<input
+															id={`valid_id_${member.id}`}
+															type={'checkbox'}
+															className={styles.checkbox}
+															onChange={(e) => {
+																if (e.currentTarget.checked)
+																	setMembersSelection((prev) => [...prev, member.id]);
+																else
+																	setMembersSelection((prev) =>
+																		prev.filter((v) => v !== member.id)
+																	);
+															}}
+															checked={includeId(member.id)}
+														/>
+													</label>
+												}
+												showChevron={false}
+											/>
+										))
+									)}
 								</ListContainer>
 							)}
 						</>
 					)}
+					{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
 				</div>
 			</main>
 		</section>

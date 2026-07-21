@@ -102,7 +102,7 @@ const exportEventMutate = (
 });
 
 const importEventMutate = (org_id: string): UseMutationOptions<Response, Error, { body: FormData }> => ({
-	mutationFn: ({ body }) => post<Response>(`/organization/${org_id}/events/import`, body, false, false),
+	mutationFn: ({ body }) => post<Response>(`/organization/${org_id}/events/import`, body, false),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'event'] });
 	},

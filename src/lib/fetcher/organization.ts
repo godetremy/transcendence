@@ -12,6 +12,7 @@ import {
 } from '@tanstack/react-query';
 import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
 import { CreateOrganizationType, PrivateOrganization } from '@/types/Organization';
+import { PublicUser } from '@/types/User';
 
 const getOrganizations = (): UseInfiniteQueryOptions<
 	PaginationResponse<PrivateOrganization<object>>,
@@ -103,6 +104,25 @@ const getOrganizationPermissions = (
 	queryFn: ({ pageParam = 1 }) =>
 		get<PaginationResponse<OrganizationPermissionDetails>>(`/organization/${org_id}/permission?page=${pageParam}`),
 	queryKey: ['organization', org_id, 'permissions'],
+	initialPageParam: 1,
+	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
+});
+
+const getOrganizationNotMembers = (
+	org_id: string,
+	q: string
+): UseInfiniteQueryOptions<
+	PaginationResponse<PublicUser>,
+	Error,
+	InfiniteData<PaginationResponse<PublicUser>>,
+	QueryKey,
+	number
+> => ({
+	queryFn: ({ pageParam = 1 }) =>
+		get<PaginationResponse<PublicUser>>(
+			`/organization/${org_id}/users?page=${pageParam}&register=false&q=${encodeURI(q.trim())}`
+		),
+	queryKey: ['organization', org_id, 'user', q],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
@@ -244,4 +264,5 @@ export {
 	updateOrganization,
 	getPendingApproveOrganization,
 	approveOrganization,
+	getOrganizationNotMembers,
 };
