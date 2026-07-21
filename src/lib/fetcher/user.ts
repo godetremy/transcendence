@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { AgentRequest, User } from '@/types/User';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
-import { get, patch, post } from '@/lib/fetcher';
+import { deletef, get, patch, post } from '@/lib/fetcher';
 import { GlobalQueryClient } from '@/lib/fetcher/queryClient';
 import { SumupCreateCheckouts } from '@/types/SumupCreateCheckouts';
 import { BalanceType } from '@/types/Balance';
@@ -91,4 +91,20 @@ const appovalRequestAgent = (
 	},
 });
 
-export { updateUser, updateBalance, getBalance, getTransactions, logoutUser, approvalListAgent, appovalRequestAgent };
+const deleteUser = (headers: HeadersInit | undefined): UseMutationOptions<{ success: boolean }, Error, void, void> => ({
+	mutationFn: () => deletef<{ success: boolean }>(`/users/me/delete`, {}, headers),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['user'] });
+	},
+});
+
+export {
+	updateUser,
+	updateBalance,
+	getBalance,
+	getTransactions,
+	logoutUser,
+	approvalListAgent,
+	appovalRequestAgent,
+	deleteUser,
+};

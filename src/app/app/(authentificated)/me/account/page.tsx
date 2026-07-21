@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { User } from '@/types/User';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { useMutation } from '@tanstack/react-query';
-import { logoutUser, updateUser } from '@/lib/fetcher/user';
+import { deleteUser, logoutUser, updateUser } from '@/lib/fetcher/user';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { useRouter } from 'next/navigation';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
@@ -29,6 +29,7 @@ function Page() {
 	};
 
 	const { mutateAsync } = useMutation(logoutUser());
+	const delUser = useMutation(deleteUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	useEffect(() => {
 		const value: UserUpdateParameters = {
@@ -106,13 +107,8 @@ function Page() {
 										negative: true,
 										onClick: async () => {
 											closeModal();
-											const res = await fetch('/app/api/users/me/delete', {
-												method: 'DELETE',
-												headers: {
-													'x-csrf-token': getCsrfTokenFromCookie() ?? '',
-												},
-											});
-											if (res.ok) {
+											const res = await delUser.mutateAsync();
+											if (res.success) {
 												const check = await mutateAsync();
 												if (check.success) router.push('/app/login');
 											}

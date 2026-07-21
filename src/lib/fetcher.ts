@@ -7,10 +7,21 @@ const get = async <T>(route: string): Promise<T> => {
 	return j as T;
 };
 
-const post = async <T>(route: string, body: object, parse: boolean = true, stringify: boolean = true): Promise<T> => {
+const post = async <T>(
+	route: string,
+	body: object,
+	parse: boolean = true,
+	headers: HeadersInit | undefined = undefined,
+	stringify: boolean = true
+): Promise<T> => {
 	const f = await fetch(`/app/api${route}`, {
 		method: 'POST',
-		headers: stringify ? { 'Content-Type': 'application/json' } : {},
+		headers: stringify
+			? {
+					'Content-Type': 'application/json',
+					...headers,
+				}
+			: {},
 		body: stringify ? JSON.stringify(body) : (body as BodyInit),
 	});
 	if (parse == false) return f as T;
@@ -19,11 +30,12 @@ const post = async <T>(route: string, body: object, parse: boolean = true, strin
 	return j as T;
 };
 
-const patch = async <T>(route: string, body: object): Promise<T> => {
+const patch = async <T>(route: string, body: object, headers: HeadersInit | undefined = undefined): Promise<T> => {
 	const f = await fetch(`/app/api${route}`, {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
+			...headers,
 		},
 		body: JSON.stringify(body),
 	});
@@ -32,11 +44,12 @@ const patch = async <T>(route: string, body: object): Promise<T> => {
 	return j as T;
 };
 
-const put = async <T>(route: string, body: object): Promise<T> => {
+const put = async <T>(route: string, body: object, headers: HeadersInit | undefined = undefined): Promise<T> => {
 	const f = await fetch(`/app/api${route}`, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
+			...headers,
 		},
 		body: JSON.stringify(body),
 	});
@@ -45,11 +58,12 @@ const put = async <T>(route: string, body: object): Promise<T> => {
 	return j as T;
 };
 
-const deletef = async <T>(route: string, body: object): Promise<T> => {
+const deletef = async <T>(route: string, body: object, headers: HeadersInit | undefined = undefined): Promise<T> => {
 	const f = await fetch(`/app/api${route}`, {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',
+			...headers,
 		},
 		body: JSON.stringify(body),
 	});
