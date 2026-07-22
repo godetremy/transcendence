@@ -1,6 +1,7 @@
 import { formatOrganizationMembers } from '@/database/format/OrganizationMembers';
 import { countOrganizationMembersByFilter, getOrganizationMembersByFilter } from '@/database/OrganizationMembers';
 import { getUsersByElasticSearch } from '@/database/User';
+import { getThrowableSession } from '@/lib/session';
 import { SearchQuerySchema } from '@/schema/searchQuery';
 import { SearchQuery } from '@/types/searchQuery';
 import { errorHandler } from '@/utils/errors';
@@ -14,8 +15,9 @@ export async function GET(
 ): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { org_id } = await params;
-		const pagination = getPaginationParams(req.nextUrl.searchParams);
+		await getThrowableSession(req);
 
+		const pagination = getPaginationParams(req.nextUrl.searchParams);
 		const parameter = parseParams<SearchQuery>(req.nextUrl.searchParams, SearchQuerySchema);
 		const searchs = await getUsersByElasticSearch(parameter.q ?? '', pagination.limit);
 

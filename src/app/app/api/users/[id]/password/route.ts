@@ -7,16 +7,13 @@ import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
 import { parseBody } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function PATCH(
-	req: NextRequest,
-	{ params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse> {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
 	return errorHandler(async () => {
 		const { id } = await params;
 		const session = await getThrowableSession(req);
-		
+
 		if (session.user_id != id) throw ERRORS_DETAILS.permission_denied();
-		
+
 		const user = await getUserById(session.user_id, {});
 		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
 

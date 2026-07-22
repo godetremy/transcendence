@@ -61,9 +61,8 @@ const getTransactions = (
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });
 
-const logoutUser = (): UseMutationOptions<{ success: boolean }, Error, void, void> => ({
-	mutationKey: ['user', 'balance', 'update'],
-	mutationFn: () => post<{ success: boolean }>(`/auth/logout`, {}),
+const logoutUser = (headers: HeadersInit | undefined): UseMutationOptions<{ success: boolean }, Error, void, void> => ({
+	mutationFn: () => post<{ success: boolean }>(`/auth/logout`, {}, true, headers),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['user'] });
 	},
