@@ -13,6 +13,7 @@ import { deleteUser, logoutUser, updateUser } from '@/lib/fetcher/user';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { useRouter } from 'next/navigation';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
+import { getCsrfTokenFromCookie } from '@/utils/csrf';
 
 function Page() {
 	const userCtx = useUser();
@@ -23,12 +24,7 @@ function Page() {
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const mutation = useMutation(updateUser(user.id));
 
-	const getCsrfTokenFromCookie = (): string | null => {
-		const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]*)/);
-		return match ? decodeURIComponent(match[1]) : null;
-	};
-
-	const { mutateAsync } = useMutation(logoutUser());
+	const { mutateAsync } = useMutation(logoutUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 	const delUser = useMutation(deleteUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	useEffect(() => {

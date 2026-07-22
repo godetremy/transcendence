@@ -21,13 +21,14 @@ import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
 import { useMutation } from '@tanstack/react-query';
 import { logoutUser } from '@/lib/fetcher/user';
+import { getCsrfTokenFromCookie } from '@/utils/csrf';
 
 export default function Page() {
 	const router = useRouter();
 	const user = useUser();
 	const { openModal, closeModal } = useModal();
 
-	const { mutateAsync } = useMutation(logoutUser());
+	const { mutateAsync } = useMutation(logoutUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	return (
 		<>
