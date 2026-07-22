@@ -1,23 +1,8 @@
 'use client';
-import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
-import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
-import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
-import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
-import {
-	deleteServiceMutate,
-	exportServiceMutate,
-	getServices,
-	importServiceMutate,
-	updateServiceMutate,
-} from '@/lib/fetcher/services';
-import { PrivateService } from '@/types/Service';
+import { WipState } from '@/components/globals/WipState/WipState';
 
 export default function Page() {
-	const router = useRouter();
+	/*const router = useRouter();
 	const orgctx = useOrganizations();
 	const modal = useModal();
 	const organization = orgctx.getCurrentOrganization()!;
@@ -142,10 +127,12 @@ export default function Page() {
 				],
 			}))
 		);
-	}, [data, deleteServiceModal]);
+	}, [data, deleteServiceModal]);*/
 
 	return (
 		<>
+			<WipState />
+			{/*
 			<input
 				type="file"
 				ref={fileInputRef}
@@ -180,6 +167,7 @@ export default function Page() {
 				hasNextPage={hasNextPage}
 				onLoadNextPage={fetchNextPage}
 			/>
+			*/}
 		</>
 	);
 }

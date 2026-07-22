@@ -1,11 +1,10 @@
-import { Carousel } from '@/components/carousel/Carousel/Carousel';
-// import styles from '@/app/app/(authentificated)/me/privacy/page.module.scss';
-import styles from './page.module.scss';
-import SectionHeaderTitle from '@/components/globals/SectionHeaderTitle/SectionHeaderTitle';
+import { WipState } from '@/components/globals/WipState/WipState';
 
 export default function Page() {
 	return (
 		<>
+			<WipState/>
+			{/*
 			<div className={styles.carousel}>
 				<Carousel
 					slides={[
@@ -53,6 +52,7 @@ export default function Page() {
 				<SectionHeaderTitle title={'Ajout recents'} href={'/app/services/ajoutRecent'} />
 				<SectionHeaderTitle title={'Bientot'} href={'/app/services/soon'} />
 			</section>
+			*/}
 		</>
 	);
 }
