@@ -22,6 +22,7 @@ export default function Page() {
 	const [showTotpConfiguration, setShowTotpConfiguration] = useState<boolean>(false);
 	const [showTotpDisable, setShowTotpDisable] = useState<boolean>(false);
 	const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
+	const [resetPasswordLoading, setResetPasswordLoading] = useState<boolean>(false);
 
 	const is2faEnabled = () => {
 		return twoFactorAuthDetails?.mail || twoFactorAuthDetails?.totp || twoFactorAuthDetails?.passkey;
@@ -113,7 +114,17 @@ export default function Page() {
 				</section>
 			</article>
 			<Card visible={showChangePassword} requestClose={() => setShowChangePassword(false)}>
-				<ResetPassword />
+				<ResetPassword
+					onClose={() => setShowChangePassword(false)}
+					onAccept={() => {
+						setResetPasswordLoading(true);
+						setTimeout(() => {
+							setResetPasswordLoading(false);
+							setShowChangePassword(false);
+						}, 800);
+					}}
+					loading={resetPasswordLoading}
+				/>
 			</Card>
 			<Card visible={showTotpConfiguration} requestClose={cancelTotpConfiguration}>
 				<TotpConfiguration
