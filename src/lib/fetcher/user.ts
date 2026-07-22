@@ -56,7 +56,7 @@ const getTransactions = (
 > => ({
 	queryFn: ({ pageParam }) =>
 		get<PaginationResponse<TranscationType>>(`/users/${user_id}/balance/${balance_id}?page=${pageParam}`),
-	queryKey: ['user', 'balance'],
+	queryKey: ['user', user_id, 'balance', balance_id],
 	initialPageParam: 1,
 	getNextPageParam: (lastPage) => (lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined),
 });

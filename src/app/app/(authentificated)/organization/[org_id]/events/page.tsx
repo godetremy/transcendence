@@ -5,7 +5,7 @@ import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { deleteEventMutate, exportEventMutate, getEvents, importEventMutate } from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
@@ -13,6 +13,14 @@ import { PrivateEvent } from '@/types/Event';
 import { Calendar } from '@/components/globals/Calendar/Calendar';
 import Image from 'next/image';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
+import { ImportCard, ImportCardTargetField } from '@/components/globals/ImportCard/ImportCard';
+import { ExportCard } from '@/components/globals/ExportCard/ExportCard';
+
+function addDays(date: Date, days: number): Date {
+	const result = new Date(date);
+	result.setDate(result.getDate() + days);
+	return result;
+}
 
 export default function Page() {
 	const router = useRouter();
@@ -23,6 +31,8 @@ export default function Page() {
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [search, setSearch] = useState<string>('');
 	const [generatedParameters, setGeneratedParameters] = useState<string | null>(null);
+	const [showImportCard, setShowImportCard] = useState<boolean>(false);
+	const [showExportCard, setShowExportCard] = useState<boolean>(false);
 
 	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, error } = useInfiniteQuery(
 		getEvents(
@@ -39,50 +49,35 @@ export default function Page() {
 	const exportEventMutation = useMutation(exportEventMutate(organization.id));
 	const importEventMutation = useMutation(importEventMutate(organization.id));
 
-	const fileInputRef = useRef<HTMLInputElement>(null);
+	const importTargetFields: ImportCardTargetField[] = [
+		{ id: 'name', text: 'Nom de l’événement', required: true },
+		{ id: 'date', text: 'Date', required: true },
+		{ id: 'created_at', text: 'Crée le' },
+		{ id: 'created_by', text: 'Crée par' },
+		{ id: 'register', text: 'Inscrits' },
+	];
 
-	function addDays(date: Date, days: number): Date {
-		const result = new Date(date);
-		result.setDate(result.getDate() + days);
-		return result;
-	}
-
-	const handleFileChange = useCallback(
-		async (e: React.ChangeEvent<HTMLInputElement>) => {
-			const file = e.target.files?.[0];
-			if (!file) return;
-
-			const formData = new FormData();
-			formData.append('file', file);
-			formData.append('name', file.name);
-
-			importEventMutation.mutate({ body: formData });
-			e.target.value = '';
+	const exportEvents = useCallback(
+		async (format: string) => {
+			const response = await exportEventMutation.mutateAsync({ type: format, filename: 'events' });
+			try {
+				if (!response.ok) throw 'Invalid file';
+				const blob = await response.blob();
+				const url = window.URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = `events.${format}`;
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+				window.URL.revokeObjectURL(url);
+				setShowExportCard(false);
+			} catch (error) {
+				console.error("Erreur lors de l'export:", error);
+			}
 		},
-		[organization.id]
+		[organization.id, generatedParameters]
 	);
-
-	const openFilePicker = () => {
-		fileInputRef.current?.click();
-	};
-
-	const exportEvents = useCallback(async () => {
-		const response = await exportEventMutation.mutateAsync({ type: 'xlsx', filename: 'events' });
-		try {
-			if (!response.ok) throw 'Invalid file';
-			const blob = await response.blob();
-			const url = window.URL.createObjectURL(blob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = 'events.xlsx';
-			document.body.appendChild(a);
-			a.click();
-			a.remove();
-			window.URL.revokeObjectURL(url);
-		} catch (error) {
-			console.error("Erreur lors de l'export:", error);
-		}
-	}, [organization.id, generatedParameters]);
 
 	const deleteEventModal = async (event: PrivateEvent<object>) => {
 		modal.openModal({
@@ -163,13 +158,6 @@ export default function Page() {
 
 	return (
 		<>
-			<input
-				type="file"
-				ref={fileInputRef}
-				style={{ display: 'none' }}
-				onChange={handleFileChange}
-				accept=".csv,.xlsx,.json"
-			/>
 			<OrganizationDashboardTable
 				header={{
 					title: `Events`,
@@ -184,8 +172,8 @@ export default function Page() {
 					{ text: '', width: 50, sortable: false },
 				]}
 				data={listEvents}
-				onImport={openFilePicker}
-				onExport={exportEvents}
+				onImport={() => setShowImportCard(true)}
+				onExport={() => setShowExportCard(true)}
 				onNew={() => router.push('events/new')}
 				loading={isLoading || isFetchingNextPage}
 				error={error}
@@ -197,6 +185,25 @@ export default function Page() {
 				}}
 				hasNextPage={hasNextPage}
 				onLoadNextPage={fetchNextPage}
+			/>
+			<ImportCard
+				visible={showImportCard}
+				requestClose={() => setShowImportCard(false)}
+				columns={importTargetFields}
+				onImport={(row: Record<string, string>) => {
+					console.log(row);
+					if (row['title'].includes('Axel')) throw new Error('Contenu problématique.');
+					return new Promise((resolve) => {
+						setTimeout(resolve, 1000);
+					});
+				}}
+				loading={importEventMutation.isPending}
+			/>
+			<ExportCard
+				visible={showExportCard}
+				requestClose={() => setShowExportCard(false)}
+				onExport={exportEvents}
+				loading={exportEventMutation.isPending}
 			/>
 		</>
 	);
