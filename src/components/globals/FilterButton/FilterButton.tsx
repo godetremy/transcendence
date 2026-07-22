@@ -31,15 +31,17 @@ export enum FilterType {
 	BOOLEAN = 'boolean',
 }
 
+export interface Filter {
+	id: string;
+	title: string;
+	type: FilterType;
+}
+
 export interface FilterButtonProps extends DetailedHTMLProps<
 	ButtonHTMLAttributes<HTMLButtonElement>,
 	HTMLButtonElement
 > {
-	options: Array<{
-		id: string;
-		title: string;
-		type: FilterType;
-	}>;
+	options: Array<Filter>;
 	onChangeFilter?: (filter: FilterOption[]) => void;
 }
 
@@ -145,7 +147,22 @@ export function FilterButton({ options, onChangeFilter, ...props }: FilterButton
 												</option>
 											))}
 										</select>
-										<input type={'text'} />
+										<input
+											type={'text'}
+											value={item.value}
+											onChange={(e) =>
+												setFilters((prev) => {
+													return prev.map((filter, i) =>
+														i === index
+															? {
+																	...filter,
+																	value: e.currentTarget.value,
+																}
+															: filter
+													);
+												})
+											}
+										/>
 										<MenuButton
 											containerKey={`${item.id}_menu_${index}`}
 											menu={[

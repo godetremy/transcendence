@@ -1,7 +1,7 @@
 'use client';
 import styles from './component.module.scss';
 import { Checkbox } from '@/components/globals/Checkbox/Checkbox';
-import { Search, Filter, ArrowUpDown, Settings2, DownloadCloud, CloudUploadIcon, Plus } from 'lucide-react';
+import { Search, FilterIcon, ArrowUpDown, DownloadCloud, CloudUploadIcon, Plus } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import OrganizationTableHeaderButton from '@/components/organization/OrganizationTableHeaderButton/OrganizationTableHeaderButton';
 import {
@@ -16,7 +16,7 @@ import { useScroll, useTransform } from 'framer-motion';
 import { SortButton, SortingOption } from '@/components/globals/SortButton/SortButton';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
-import { FilterButton, FilterType } from '@/components/globals/FilterButton/FilterButton';
+import { FilterButton, Filter } from '@/components/globals/FilterButton/FilterButton';
 
 export interface OrganizationDashboardTableColumn {
 	id?: string;
@@ -25,10 +25,11 @@ export interface OrganizationDashboardTableColumn {
 	sortable?: boolean;
 }
 
-export interface OrganizationDashboardTable {
+interface OrganizationDashboardTable {
 	header: OrganizationDashboardHeaderProps;
 	column: OrganizationDashboardTableColumn[];
 	data: Array<{ key: string; children: ReactNode[] }>;
+	filters: Array<Filter> | null;
 	error: Error | null;
 	onImport?: () => void;
 	onExport?: () => void;
@@ -42,7 +43,7 @@ export interface OrganizationDashboardTable {
 	onLoadNextPage?: () => void;
 }
 
-export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
+export default function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 	const [selected, setSelected] = useState<number[]>([]);
 	const [internalActiveMenu, setInternalActiveMenu] = useState(0);
 
@@ -87,20 +88,17 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 						/>
 					</div>
 					<div className={styles.filters_options}>
-						<FilterButton
-							options={props.column
-								.filter((c) => c.sortable ?? true)
-								.map((v) => ({
-									id: v.id ?? v.text.toLowerCase().replace(/\s/g, '_'),
-									title: v.text,
-									type: FilterType.STRING,
-								}))}
-							onChangeFilter={(filter) => {
-								console.log(filter);
-							}}
-						>
-							<Filter size={22} />
-						</FilterButton>
+						{props.filters && (
+							<FilterButton
+								options={props.filters}
+								onChangeFilter={(filter) => {
+									console.log(filter);
+								}}
+							>
+								<FilterIcon size={22} />
+							</FilterButton>
+						)}
+
 						<SortButton
 							sortingOptions={props.column
 								.filter((c) => c.sortable ?? true)

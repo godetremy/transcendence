@@ -1,6 +1,6 @@
 'use client';
 import styles from './page.module.scss';
-import { OrganizationDashboardTable } from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
+import OrganizationDashboardTable from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
 import { deleteEventMutate, exportEventMutate, getEvents, importEventMutate } from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
@@ -15,6 +15,7 @@ import Image from 'next/image';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
 import { ImportCard, ImportCardTargetField } from '@/components/globals/ImportCard/ImportCard';
 import { ExportCard } from '@/components/globals/ExportCard/ExportCard';
+import { FilterType } from '@/components/globals/FilterButton/FilterButton';
 
 function addDays(date: Date, days: number): Date {
 	const result = new Date(date);
@@ -170,6 +171,33 @@ export default function Page() {
 					{ id: 'created_by', text: 'Crée par', width: 200 },
 					{ id: 'register', text: 'Inscrits', width: 100, sortable: false },
 					{ text: '', width: 50, sortable: false },
+				]}
+				filters={[
+					{
+						id: 'start_at',
+						title: 'Commence à',
+						type: FilterType.STRING,
+					},
+					{
+						id: 'end_at',
+						title: 'Termine à',
+						type: FilterType.STRING,
+					},
+					{
+						id: 'name',
+						title: "Nom de l'éléments",
+						type: FilterType.STRING,
+					},
+					{
+						id: 'created_at',
+						title: 'Crée le',
+						type: FilterType.STRING,
+					},
+					{
+						id: 'created_by',
+						title: 'Crée par',
+						type: FilterType.STRING,
+					},
 				]}
 				data={listEvents}
 				onImport={() => setShowImportCard(true)}
