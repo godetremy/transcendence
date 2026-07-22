@@ -114,9 +114,9 @@ export function OrganizationDashboardTable(props: OrganizationDashboardTable) {
 						>
 							<ArrowUpDown size={22} />
 						</SortButton>
-						<button>
+						{/*<button>
 							<Settings2 size={22} />
-						</button>
+						</button>*/}
 					</div>
 					<div className={styles.actions_buttons}>
 						{props.onImport && (
