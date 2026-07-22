@@ -9,6 +9,7 @@ import { Fragment, useState } from 'react';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { AnimatePresence, motion } from 'motion/react';
 import { Transition } from 'motion';
+import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
 
 export default function Page() {
 	const [selectedTag, setSelectedTag] = useState(0);
@@ -128,7 +129,7 @@ export default function Page() {
 					</>
 				) : isError || data === undefined ? (
 					<ErrorState error={error} />
-				) : (
+				) : data.pages[0].data.length > 0 ? (
 					data.pages.map((row) =>
 						row.data.map((event, index) => (
 							<Fragment key={index}>
@@ -148,6 +149,8 @@ export default function Page() {
 							</Fragment>
 						))
 					)
+				) : (
+					<EmptyState title={'Aucun résultats'} description={'Essaye avec des mots-clés différents'} />
 				)}
 				{hasNextPage && !isLoading && (
 					<ShowMoreButton
