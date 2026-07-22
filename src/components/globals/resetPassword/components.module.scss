@@ -1,55 +1,47 @@
 @use '../../../app/supports';
 
-.page {
-	flex: 1;
-	position: relative;
+.main_container {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 	gap: 20px;
+	flex: 1;
 
-	.h1 {
-		position: absolute;
-		top: 150px;
-		text-align: center;
-	}
-
-	.stickers {
-		position: absolute;
-		top: 20px;
-		left: 20px;
-	}
 	.inputPassword {
+		flex: 1;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 10px;
+		justify-content: center;
+		gap: 20px;
 	}
 
 	.button {
-		width: fit-content;
-		height: 50px;
-		padding: 10px 30px;
-		background-color: var(--color-primary-purple);
-		color: var(--color-primary-white);
+		appearance: none;
+		border: none;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		font: 500 15px var(--font-paragraph);
+		background-color: var(--color-primary-purple);
+		color: var(--color-primary-white);
+		border-radius: 80px;
+		transition: 0.1s;
+		width: 100%;
+		height: 45px;
+		margin-top: auto;
 		gap: 10px;
-		border-radius: 25px;
-		border: none;
-		font: var(--font-paragraph);
-		font-size: 16px;
-		font-weight: 600;
-		transition: var(--transition-fast);
-
-		&:hover {
-			transform: scale(1.02);
-		}
 
 		&:active {
-			transform: scale(0.96);
+			scale: 0.98;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+
+		& > div {
+			margin: 0 !important;
 		}
 	}
 }

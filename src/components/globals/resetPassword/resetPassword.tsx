@@ -1,14 +1,26 @@
 'use client';
 import styles from './components.module.scss';
-import { Eyes } from '@/components/stickers/Eyes/Eyes';
 import { LoginTextInput } from '@/components/login/LoginTextInput/LoginTextInput';
 import { KeyRound } from 'lucide-react';
+import { CardHeader } from '@/components/globals/CardHeader/CardHeader';
+import { useState } from 'react';
+import { Loader } from '@/components/globals/Loader/Loader';
 
-export function ResetPassword() {
+export interface ResetPasswordProps {
+	onClose: () => void;
+	onAccept?: () => void;
+	loading?: boolean;
+	disabledAccept?: boolean;
+}
+
+export function ResetPassword({ onClose, onAccept, loading, disabledAccept }: ResetPasswordProps) {
+	const [currentPassword, setCurrentPassword] = useState('');
+	const [newPassword, setNewPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+
 	return (
-		<div className={styles.page}>
-			<Eyes className={styles.stickers} width={100} />
-			<h1 className={styles.h1}>Changer mon mot de passe</h1>
+		<section className={styles.main_container}>
+			<CardHeader title={'Changer mon mot de passe'} onClose={onClose} />
 			<div className={styles.inputPassword}>
 				<LoginTextInput
 					name={'password'}
@@ -16,6 +28,8 @@ export function ResetPassword() {
 					icon={<KeyRound />}
 					nameLabel={'Mot de passe actuel'}
 					placeholder={'••••••••••••'}
+					value={currentPassword}
+					onChange={(e) => setCurrentPassword(e.target.value)}
 				/>
 				<LoginTextInput
 					name={'password'}
@@ -23,6 +37,8 @@ export function ResetPassword() {
 					icon={<KeyRound />}
 					nameLabel={'Nouveau mot de passe'}
 					placeholder={'••••••••••••'}
+					value={newPassword}
+					onChange={(e) => setNewPassword(e.target.value)}
 				/>
 				<LoginTextInput
 					name={'password'}
@@ -30,11 +46,19 @@ export function ResetPassword() {
 					icon={<KeyRound />}
 					nameLabel={'Confirmation du nouveau mot de passe'}
 					placeholder={'••••••••••••'}
+					value={confirmPassword}
+					onChange={(e) => setConfirmPassword(e.target.value)}
 				/>
 			</div>
-			<button className={styles.button} type="button">
-				Confirmer
+			<button
+				className={styles.button}
+				type="button"
+				onClick={onAccept}
+				disabled={(loading ?? false) || (disabledAccept ?? false)}
+			>
+				{loading && <Loader size={24} />}
+				{loading ? 'Modification en cours...' : 'Changer le mot de passe'}
 			</button>
-		</div>
+		</section>
 	);
 }
