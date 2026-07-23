@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import { CreateOrganizationType } from '@/types/Organization';
 import { useMutation } from '@tanstack/react-query';
 import { updateOrganization } from '@/lib/fetcher/organization';
+import ListContainer from '@/components/globals/ListContainer/ListContainer';
+import ListItem from '@/components/globals/ListItem/ListItem';
 
 export default function Page() {
 	const organizationCtx = useOrganizations();
@@ -34,6 +36,10 @@ export default function Page() {
 	return (
 		<NavigationBarHeader title={'Mon organisation'}>
 			<OrganizationEditor organization={organization} setOrganization={setOrganization} />
+
+			<ListContainer style={{ margin: '40px auto 0 auto' }}>
+				<ListItem title={'Supprimer cette organisation'} last negative showChevron={false}/>
+			</ListContainer>
 		</NavigationBarHeader>
 	);
 }

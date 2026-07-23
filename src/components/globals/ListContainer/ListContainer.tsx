@@ -1,12 +1,12 @@
 import styles from './component.module.scss';
-import { ReactNode } from 'react';
+import { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
 
-export interface ListContainerProps {
-	children: ReactNode;
-}
-
-function ListContainer({ children }: ListContainerProps) {
-	return <section className={styles.list}>{children}</section>;
+function ListContainer({ children, ...props }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>) {
+	return (
+		<section {...props} className={props.className ?? styles.list}>
+			{children}
+		</section>
+	);
 }
 
 export default ListContainer;
