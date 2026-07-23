@@ -9,6 +9,7 @@ import { AgentRequest } from '@/types/User';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { appovalRequestAgent, approvalListAgent } from '@/lib/fetcher/user';
 import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
+import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 
 function InviteActions({ request }: { request: AgentRequest }) {
 	const { mutateAsync } = useMutation(appovalRequestAgent(request.id));
@@ -36,33 +37,39 @@ function InviteActions({ request }: { request: AgentRequest }) {
 }
 
 export default function Page() {
-	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(approvalListAgent());
+	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, isError, error } =
+		useInfiniteQuery(approvalListAgent());
 
 	return (
 		<NavigationBarHeader title={'Demandes d’accès agents'}>
 			<article className={styles.section}>
 				<span className={styles.listSectionTitle}>Demande en cours</span>
-				{data === undefined || isLoading ? (
-					<EmptyState />
-				) : (
-					<section className={styles.list}>
-						{data.pages.map((row, j) =>
-							row.data.map((agent, i) => (
-								<ListItem
-									key={i}
-									title={agent.full_name ?? agent.id}
-									description={agent.agent_reason ?? "Aucune raison n'as été soumise."}
-									showChevron={false}
-									hoverEffect={false}
-									rightElement={<InviteActions request={agent} />}
-									last={i == row.data.length - 1 && data.pages.length - 1 === j}
-								/>
-							))
+				{isLoading && <Loader />}
+				{data && (
+					<>
+						{data.pages.length === 1 && data.pages[0].data.length === 0 ? (
+							<EmptyState />
+						) : (
+							<section className={styles.list}>
+								{data.pages.map((row, j) =>
+									row.data.map((agent, i) => (
+										<ListItem
+											key={i}
+											title={agent.full_name ?? agent.id}
+											description={agent.agent_reason ?? "Aucune raison n'as été soumise."}
+											showChevron={false}
+											hoverEffect={false}
+											rightElement={<InviteActions request={agent} />}
+											last={i == row.data.length - 1 && data.pages.length - 1 === j}
+										/>
+									))
+								)}
+							</section>
 						)}
-					</section>
+					</>
 				)}
 				{hasNextPage && <ShowMoreButton onClick={() => fetchNextPage()} loading={isFetchingNextPage} />}
-				{isLoading && <Loader />}
+				{isError && <ErrorState error={error} />}
 			</article>
 		</NavigationBarHeader>
 	);
