@@ -13,6 +13,7 @@ import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
 import { toHumanReadablePeriod } from '@/utils/date';
 import remarkGfm from 'remark-gfm';
 import { AnimatePresence } from 'motion/react';
+import Image from 'next/image';
 
 export default function Page() {
 	const { event_id }: { event_id: string } = useParams();
@@ -124,6 +125,21 @@ export default function Page() {
 							{data?.description ??
 								'Nisi consequat reprehenderit qui fugiat excepteur amet magna. Irure elit voluptate laboris amet ut. Veniam ut enim ea Lorem veniam consectetur irure quis commodo esse veniam id nulla culpa culpa. Ea dolore ex esse duis occaecat anim voluptate nisi elit reprehenderit cupidatat. Aliquip do labore non reprehenderit veniam dolor est magna ullamco eiusmod mollit ipsum velit. Qui mollit elit sunt. Aliqua pariatur id pariatur do.'}
 						</ReactMarkdown>
+					</section>
+				)}
+				{data && (
+					<section className={styles.organization}>
+						<Image
+							src={data.organization.logo}
+							alt={`Logo de ${data.organization.name}`}
+							width={50}
+							height={50}
+						/>
+						<span>
+							Proposé par
+							<strong>{data.organization.name}</strong>
+						</span>
+						<button>Suivre</button>
 					</section>
 				)}
 			</article>
