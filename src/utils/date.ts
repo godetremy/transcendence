@@ -3,6 +3,7 @@ import { DateEventParamSchema } from '@/schema/EventSchema';
 import { parseParams } from './parsing';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { PublicEvent } from '@/types/Event';
 
 const DEFAULT_DATEOPTION: DateOption = {
 	from: new Date(Date.now() - 24 * 60 * 60 * 1000).toDateString(),
@@ -45,4 +46,26 @@ const toHumanReadablePeriod = (from: Date, to: Date): string => {
 	return `Du ${from_day} de ${from_hour}h${from_minute} au ${to_day} à ${to_hour}h${to_minute}`;
 };
 
-export { getDateParams, dateToPrisma, DEFAULT_DATEOPTION, toHumanReadablePeriod };
+const toICSDate = (date: Date): string => {
+	return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+};
+
+const eventToICS = (event: PublicEvent) => {
+	const ics = [
+		'BEGIN:VCALENDAR',
+		'VERSION:2.0',
+		'PRODID:-//ft_transcendence//Events//FR',
+		'BEGIN:VEVENT',
+		`DTSTART:${toICSDate(new Date(event.start_at))}`,
+		`DTEND:${toICSDate(new Date(event.end_at))}`,
+		`SUMMARY:${event.title}`,
+		...(event.description ? [`DESCRIPTION:${event.description.replace(/\n/g, '\\n')}`] : []),
+		...(event.location ? [`LOCATION:${event.location}`] : []),
+		`UID:${event.id}@ft_transcendence`,
+		'END:VEVENT',
+		'END:VCALENDAR',
+	].join('\r\n');
+	return new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+};
+
+export { getDateParams, dateToPrisma, DEFAULT_DATEOPTION, toHumanReadablePeriod, toICSDate, eventToICS };

@@ -10,10 +10,12 @@ import { getEventPublic, registerEventMutate } from '@/lib/fetcher/events';
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import ReactMarkdown from 'react-markdown';
 import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
-import { toHumanReadablePeriod } from '@/utils/date';
+import { eventToICS, toHumanReadablePeriod } from '@/utils/date';
 import remarkGfm from 'remark-gfm';
 import { AnimatePresence } from 'motion/react';
 import Image from 'next/image';
+import { downloadBlob } from '@/utils/download';
+import { PublicEvent } from '@/types/Event';
 
 export default function Page() {
 	const { event_id }: { event_id: string } = useParams();
@@ -75,7 +77,17 @@ export default function Page() {
 						<div className={`${styles.tags} ${!data ? styles.skeleton : ''}`}>
 							<MenuButton
 								containerKey={'event_tags'}
-								menu={[{ title: 'Ajouter au calendrier', icon: CalendarPlus, onClick: () => {} }]}
+								menu={[
+									{
+										title: 'Ajouter au calendrier',
+										icon: CalendarPlus,
+										onClick: () => {
+											if (!data) return;
+											const ics = eventToICS(data as PublicEvent<{ organization: true }>);
+											downloadBlob(ics, `${data.title.replace(/[^a-zA-Z0-9]/g, '_')}.ics`);
+										},
+									},
+								]}
 							>
 								<Clock size={14} />
 								<span>
