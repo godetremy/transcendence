@@ -1,68 +1,58 @@
-export interface DatasetsAreaType {
-	fill: boolean;
-	label: string;
-	data: number[];
-	borderColor: string;
-	backgroundColor: string;
+export interface DashboardSeriesStat {
+	cumulative: number[];
+	delta: number[];
 }
 
-export interface DatasetsDoughnutType {
-	borderWidth: number;
-	label: string;
-	data: number[];
-	borderColor: string[];
-	backgroundColor: string[];
+export interface DashboardEventRow {
+	id: string;
+	title: string;
+	start_at: string;
+	registered: number;
+	max_registration: number | null;
+	fill_rate: number | null;
 }
 
-export interface OptionArea {
-	labels: string[];
-	datasets: DatasetsAreaType[];
+export interface DashboardGrowthStat {
+	absolute: number;
+	percent: number;
 }
 
-export interface OptionDoughnut {
-	labels: string[];
-	datasets: DatasetsDoughnutType[];
+export interface DashboardPeakStat {
+	peak_label: string | null;
+	peak_value: number;
 }
 
 export interface DashboardReturnType {
-	area: {
+	period: {
+		from: string;
+		to: string;
+		granularity: 'day' | 'week' | 'month';
+	};
+	series: {
 		labels: string[];
-		list: {
-			label: string;
-			data: number[];
-		}[];
+		views: DashboardSeriesStat;
+		followers: DashboardSeriesStat;
+		events: DashboardEventRow[];
 	};
-	doughnut: {
-		followers: {
-			labels: string[];
-			list: {
-				label: string;
-				data: number[];
-			}[];
-		};
-		register: {
-			labels: string[];
-			list: {
-				label: string;
-				data: number[];
-			}[];
-		};
+	totals: {
+		views: number;
+		followers: number;
+		registrations: number;
+		capacity: number;
+		events_count: number;
 	};
-	totalViews: number;
-	totalFollowers: number;
-	percentageViews: number;
-	percentageFollowers: number;
-}
-
-export interface DashboardValueType {
-	labels: string[];
-	list: {
-		label: string;
-		data: number[];
-	}[];
-}
-
-export interface DashboardFormatType {
-	data: number[];
-	labels: string[];
+	growth: {
+		views: DashboardGrowthStat;
+		followers: DashboardGrowthStat;
+		registrations: DashboardGrowthStat;
+		events: DashboardGrowthStat;
+	};
+	highlights: {
+		views: DashboardPeakStat;
+		followers: DashboardPeakStat;
+	};
+	ratios: {
+		followerToViewRate: number;
+		registrationFillRate: number;
+	};
 }

@@ -162,7 +162,7 @@ export default function Page() {
 			<OrganizationDashboardTable
 				header={{
 					title: `Events`,
-					menu: [{ text: 'À venir' }, { text: 'Dans la semaine' }, { text: 'Passée' }],
+					menu: [{ text: 'À venir' }, { text: 'Dans les 7 prochains jours' }, { text: 'Passée' }],
 				}}
 				column={[
 					{ id: 'date', text: 'Date', width: 70 },

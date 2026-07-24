@@ -24,7 +24,7 @@ export interface PublicOrganization {
 	id: string;
 	name: string;
 	description: string | null;
-	logo: string | null;
+	logo: string;
 	club: boolean;
 	created_at: string;
 	updated_at: string;

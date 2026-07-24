@@ -11,70 +11,177 @@ import { parseParams } from '@/utils/parsing';
 import { getUserOrganizationPermission } from '@/utils/permission';
 import { NextRequest, NextResponse } from 'next/server';
 
-function generateLabelsAndRanges(from: Date, to: Date): { labels: string[]; ranges: { start: Date; end: Date }[] } {
+type Granularity = 'day' | 'week' | 'month';
+
+interface DailyCumulativePoint {
+	cumulative_data: number;
+	update_at: string;
+}
+
+interface Range {
+	start: Date;
+	end: Date;
+}
+
+interface EventRow {
+	id: string;
+	title: string;
+	start_at: string;
+	registered: number;
+	max_registration: number | null;
+	fill_rate: number | null;
+}
+
+interface GrowthStat {
+	absolute: number;
+	percent: number;
+}
+
+interface SeriesStat {
+	cumulative: number[];
+	delta: number[];
+}
+
+interface PeriodMeta {
+	from: string;
+	to: string;
+	granularity: Granularity;
+}
+
+interface PeakStat {
+	peak_label: string | null;
+	peak_value: number;
+}
+
+function pickGranularity(diffDays: number): Granularity {
+	if (diffDays <= 31) return 'day';
+	if (diffDays <= 90) return 'week';
+	return 'month';
+}
+
+function generateLabelsAndRanges(
+	from: Date,
+	to: Date
+): {
+	labels: string[];
+	ranges: Range[];
+	granularity: Granularity;
+} {
 	const diffMs = to.getTime() - from.getTime();
 	const diffDays = diffMs / (1000 * 60 * 60 * 24);
-
-	let stepUnit: 'day' | 'week' | 'month';
-
-	if (diffDays <= 31) {
-		stepUnit = 'day';
-	} else if (diffDays <= 366) {
-		stepUnit = 'week';
-	} else {
-		stepUnit = 'month';
-	}
+	const stepUnit = pickGranularity(diffDays);
 
 	const labels: string[] = [];
-	const ranges: { start: Date; end: Date }[] = [];
-
+	const ranges: Range[] = [];
 	const current = new Date(from);
 
 	while (current <= to) {
 		const start = new Date(current);
-		let end: Date;
+		const end = new Date(current);
 
 		if (stepUnit === 'day') {
-			end = new Date(current);
 			end.setDate(end.getDate() + 1);
-			labels.push(start.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }));
+			labels.push(start.toISOString());
 			current.setDate(current.getDate() + 1);
 		} else if (stepUnit === 'week') {
-			end = new Date(current);
 			end.setDate(end.getDate() + 7);
-			labels.push(`Sem. ${start.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}`);
+			labels.push(start.toISOString());
 			current.setDate(current.getDate() + 7);
 		} else {
-			end = new Date(current);
 			end.setMonth(end.getMonth() + 1);
-			labels.push(start.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }));
+			labels.push(start.toISOString());
 			current.setMonth(current.getMonth() + 1);
 		}
 
 		ranges.push({ start, end });
 	}
 
-	return { labels, ranges };
+	return { labels, ranges, granularity: stepUnit };
 }
 
-function bucketizeData(
-	data: { cumulative_data: number; update_at: string }[],
-	ranges: { start: Date; end: Date }[]
-): number[] {
-	let lastValue_cumulative = 0;
+function cumulativeToDelta(cumulative: number[]): number[] {
+	return cumulative.map((value, index) => (index === 0 ? value : value - cumulative[index - 1]));
+}
 
-	return ranges.map(({ start, end }) => {
-		const itemsInRange = data.filter((item) => {
+function bucketizeCumulative(dailyData: DailyCumulativePoint[], ranges: Range[]): SeriesStat {
+	let lastCumulative = 0;
+	const cumulative = ranges.map(({ start, end }) => {
+		const itemsInRange = dailyData.filter((item) => {
 			const itemDate = new Date(item.update_at);
 			return itemDate >= start && itemDate < end;
 		});
 
 		if (itemsInRange.length > 0) {
-			lastValue_cumulative = itemsInRange[itemsInRange.length - 1].cumulative_data;
+			lastCumulative = itemsInRange[itemsInRange.length - 1].cumulative_data;
 		}
 
-		return lastValue_cumulative;
+		return lastCumulative;
 	});
+
+	return { cumulative, delta: cumulativeToDelta(cumulative) };
+}
+
+function safeRatio(numerator: number, denominator: number): number {
+	return denominator > 0 ? numerator / denominator : 0;
+}
+
+function growthFromCumulative(cumulative: number[]): GrowthStat {
+	if (cumulative.length === 0) return { absolute: 0, percent: 0 };
+	const first = cumulative[0];
+	const last = cumulative[cumulative.length - 1];
+	const absolute = last - first;
+	const percent = first === 0 ? 0 : (absolute / first) * 100;
+	return { absolute, percent };
+}
+
+function growthFromCounts(first: number, last: number): GrowthStat {
+	const absolute = last - first;
+	const percent = first === 0 ? 0 : (absolute / first) * 100;
+	return { absolute, percent };
+}
+
+function peakFromSeries(labels: string[], delta: number[]): PeakStat {
+	if (delta.length === 0) return { peak_label: null, peak_value: 0 };
+	let peakIndex = 0;
+	for (let i = 1; i < delta.length; i++) {
+		if (delta[i] > delta[peakIndex]) peakIndex = i;
+	}
+	return { peak_label: labels[peakIndex] ?? null, peak_value: delta[peakIndex] };
+}
+
+function formatEventRow(
+	row: ReturnType<typeof formatPrivateEvent<{ event_registration: true; organization: true }>>
+): EventRow {
+	return {
+		id: row.id,
+		title: row.title,
+		start_at: row.start_at,
+		registered: row.register_number,
+		max_registration: row.max_registration,
+		fill_rate: row.max_registration == null ? null : safeRatio(row.register_number, row.max_registration),
+	};
+}
+
+function growthFromEventsWithinPeriod(events: EventRow[]): GrowthStat {
+	const registeredSorted = [...events].sort((a, b) => a.start_at.localeCompare(b.start_at));
+	const runningTotal: number[] = [];
+	let acc = 0;
+	for (const event of registeredSorted) {
+		acc += event.registered;
+		runningTotal.push(acc);
+	}
+	return growthFromCumulative(runningTotal);
+}
+
+function mapElasticSearchCumulative(
+	response: Awaited<ReturnType<typeof getDashBoardViewsByElasticSearch>>
+): DailyCumulativePoint[] {
+	return (response?.aggregations?.views_over_time.buckets ?? [])
+		.map((hit) => ({
+			cumulative_data: hit.cumulative_views?.value ?? 0,
+			update_at: hit.key_as_string,
+		}))
+		.filter((row): row is DailyCumulativePoint => row.cumulative_data !== undefined && row.update_at !== undefined);
 }
 
 export async function GET(
@@ -88,60 +195,45 @@ export async function GET(
 		const organization = await getOrganizationById(org_id, {});
 
 		if (!user) throw ERRORS_DETAILS.does_not_exists('Ce compte');
-		if (!organization || organization.verified == false) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
+		if (!organization || !organization.verified) throw ERRORS_DETAILS.does_not_exists('Cette organisation');
 
-		if (user.admin == false && organization.owner_id != user.id) {
+		if (!user.admin && organization.owner_id != user.id) {
 			await getUserOrganizationPermission(user, org_id, true);
 		}
 
 		const date = parseParams<DateOption>(req.nextUrl.searchParams, DateDashBoardParamSchema);
 
-		const followers = await getDashBoardFollowersByElasticSearch(org_id);
-		const elasticSearchFollowers = (followers?.aggregations?.views_over_time.buckets ?? [])
-			.map((hit) => ({
-				cumulative_data: hit.cumulative_views?.value,
-				update_at: hit.key_as_string,
-			}))
-			.filter(
-				(row): row is { cumulative_data: number; data: number; update_at: string } =>
-					row.cumulative_data !== undefined && row.update_at !== undefined
-			);
+		const elasticSearchFollowers = mapElasticSearchCumulative(await getDashBoardFollowersByElasticSearch(org_id));
+		const elasticSearchViews = mapElasticSearchCumulative(await getDashBoardViewsByElasticSearch(org_id));
 
-		const views = await getDashBoardViewsByElasticSearch(org_id);
-		const elasticSearchViews = (views?.aggregations?.views_over_time.buckets ?? [])
-			.map((hit) => ({
-				cumulative_data: hit.cumulative_views?.value,
-				update_at: hit.key_as_string,
-			}))
-			.filter(
-				(row): row is { cumulative_data: number; update_at: string } =>
-					row.cumulative_data !== undefined && row.update_at !== undefined
-			);
+		const events = await getEventsDashBoard(
+			{ organization_id: org_id },
+			{ event_registration: true, organization: true }
+		);
+		const listEvents = events.map(formatPrivateEvent<{ event_registration: true; organization: true }>);
+		const dataEvents = listEvents.map(formatEventRow);
 
-		const events = await getEventsDashBoard({ organization_id: org_id }, { event_registration: true });
-		const listEvents = events.map(formatPrivateEvent<{ event_registration: true }>);
-		const dataEvents = listEvents.map((row) => ({
-			numberRegister: row.register_number,
-			maxRegister: row.max_registration,
-			update_at: row.created_at,
-		}));
-
-		let filteredCountsViews: number[] = [];
-		let filteredCountsFollowers: number[] = [];
 		let labels: string[] = [];
-
-		let filteredEvents: {
-			numberRegister: never;
-			maxRegister: number | null;
-			update_at: string;
-		}[] = [];
+		let granularity: Granularity = 'day';
+		let seriesViews: SeriesStat = { cumulative: [], delta: [] };
+		let seriesFollowers: SeriesStat = { cumulative: [], delta: [] };
+		let filteredEvents: EventRow[] = [];
+		let periodFrom: string;
+		let periodTo: string;
 
 		if (date.from != null && date.to != null) {
 			const fromDate = new Date(date.from);
 			const toDate = new Date(date.to);
+			periodFrom = fromDate.toISOString();
+			periodTo = toDate.toISOString();
 
-			const { labels: generatedLabels, ranges } = generateLabelsAndRanges(fromDate, toDate);
+			const {
+				labels: generatedLabels,
+				ranges,
+				granularity: generatedGranularity,
+			} = generateLabelsAndRanges(fromDate, toDate);
 			labels = generatedLabels;
+			granularity = generatedGranularity;
 
 			const listGraphViews = elasticSearchViews.filter(
 				(item) => item.update_at <= date.to! && item.update_at >= date.from!
@@ -150,84 +242,71 @@ export async function GET(
 				(item) => item.update_at <= date.to! && item.update_at >= date.from!
 			);
 
-			filteredCountsViews = bucketizeData(listGraphViews, ranges);
-			filteredCountsFollowers = bucketizeData(listGraphFollowers, ranges);
-			filteredEvents = dataEvents.filter((item) => item.update_at <= date.to! && item.update_at >= date.from!);
+			seriesViews = bucketizeCumulative(listGraphViews, ranges);
+			seriesFollowers = bucketizeCumulative(listGraphFollowers, ranges);
+			filteredEvents = dataEvents.filter((item) => item.start_at <= date.to! && item.start_at >= date.from!);
 		} else {
 			const allDates = [...elasticSearchViews, ...elasticSearchFollowers].map((d) => new Date(d.update_at));
 			const minDate = allDates.length > 0 ? new Date(Math.min(...allDates.map((d) => d.getTime()))) : new Date();
 			const maxDate = allDates.length > 0 ? new Date(Math.max(...allDates.map((d) => d.getTime()))) : new Date();
+			periodFrom = minDate.toISOString();
+			periodTo = maxDate.toISOString();
 
-			const { labels: generatedLabels, ranges } = generateLabelsAndRanges(minDate, maxDate);
+			const {
+				labels: generatedLabels,
+				ranges,
+				granularity: generatedGranularity,
+			} = generateLabelsAndRanges(minDate, maxDate);
 			labels = generatedLabels;
+			granularity = generatedGranularity;
 
-			filteredCountsViews = bucketizeData(elasticSearchViews, ranges);
-			filteredCountsFollowers = bucketizeData(elasticSearchFollowers, ranges);
+			seriesViews = bucketizeCumulative(elasticSearchViews, ranges);
+			seriesFollowers = bucketizeCumulative(elasticSearchFollowers, ranges);
 			filteredEvents = dataEvents;
 		}
 
-		const totalRegistered = filteredEvents.reduce(
-			(accumulator, currentValue) => accumulator + currentValue.numberRegister,
+		const totalViews = seriesViews.cumulative[seriesViews.cumulative.length - 1] ?? 0;
+		const totalFollowers = seriesFollowers.cumulative[seriesFollowers.cumulative.length - 1] ?? 0;
+		const totalRegistrations = filteredEvents.reduce((accumulator, event) => accumulator + event.registered, 0);
+		const totalCapacity = filteredEvents.reduce(
+			(accumulator, event) => accumulator + (event.max_registration == null ? 0 : event.max_registration),
 			0
 		);
-		const totalPlaceRegister = filteredEvents.reduce(
-			(accumulator, currentValue) =>
-				accumulator + (currentValue.maxRegister == null ? 0 : currentValue.maxRegister),
-			0
-		);
-		const ratioViews =
-			((filteredCountsViews[filteredCountsViews.length - 1] - filteredCountsViews[0]) * 100) /
-			(filteredCountsViews[filteredCountsViews.length - 1] -
-				filteredCountsViews[0] +
-				(filteredCountsFollowers[filteredCountsFollowers.length - 1] - filteredCountsFollowers[0]));
-		const ratioPlaceRegister = (totalPlaceRegister * 100) / (totalPlaceRegister + totalRegistered);
+		const eventsCount = filteredEvents.length;
+
 		return NextResponse.json({
-			area: {
+			period: {
+				from: periodFrom,
+				to: periodTo,
+				granularity,
+			} satisfies PeriodMeta,
+			series: {
 				labels,
-				list: [
-					{
-						label: 'Followers',
-						data: filteredCountsFollowers,
-					},
-					{
-						label: 'Vues',
-						data: filteredCountsViews,
-					},
-				],
+				views: seriesViews,
+				followers: seriesFollowers,
+				events: filteredEvents,
 			},
-			doughnut: {
-				followers: {
-					labels: ['Followers', 'Vues'],
-					list: [
-						{
-							label: 'Vues/Followers',
-							data: [100 - Number(ratioViews.toPrecision(3)), Number(ratioViews.toPrecision(3))],
-						},
-					],
-				},
-				register: {
-					labels: ['inscrit', 'pas-inscrit'],
-					list: [
-						{
-							label: 'inscrit/pas-inscrit',
-							data: [
-								100 - Number(ratioPlaceRegister.toPrecision(3)),
-								Number(ratioPlaceRegister.toPrecision(3)),
-							],
-						},
-					],
-				},
+			totals: {
+				views: totalViews,
+				followers: totalFollowers,
+				registrations: totalRegistrations,
+				capacity: totalCapacity,
+				events_count: eventsCount,
 			},
-			totalViews: filteredCountsViews[filteredCountsViews.length - 1],
-			totalFollowers: filteredCountsFollowers[filteredCountsFollowers.length - 1],
-			percentageViews:
-				filteredCountsViews[0] == 0
-					? filteredCountsViews[filteredCountsViews.length - 1]
-					: filteredCountsViews[filteredCountsViews.length - 1] / filteredCountsViews[0],
-			percentageFollowers:
-				filteredCountsFollowers[0] == 0
-					? filteredCountsFollowers[filteredCountsFollowers.length - 1]
-					: filteredCountsFollowers[filteredCountsFollowers.length - 1] / filteredCountsFollowers[0],
+			growth: {
+				views: growthFromCumulative(seriesViews.cumulative),
+				followers: growthFromCumulative(seriesFollowers.cumulative),
+				registrations: growthFromEventsWithinPeriod(filteredEvents),
+				events: growthFromCounts(0, eventsCount),
+			},
+			highlights: {
+				views: peakFromSeries(labels, seriesViews.delta),
+				followers: peakFromSeries(labels, seriesFollowers.delta),
+			},
+			ratios: {
+				followerToViewRate: safeRatio(totalFollowers, totalViews),
+				registrationFillRate: safeRatio(totalRegistrations, totalCapacity),
+			},
 		});
 	});
 }
