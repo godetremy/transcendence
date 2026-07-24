@@ -2,14 +2,14 @@
 import styles from './page.module.scss';
 import OrganizationDashboardTable from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { deleteEventMutate, exportEventMutate, getEvents, importEventMutate } from '@/lib/fetcher/events';
+import { createEventMutate, deleteEventMutate, exportEventMutate, getEvents, importEventMutate } from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
-import { PrivateEvent } from '@/types/Event';
+import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
 import { Calendar } from '@/components/globals/Calendar/Calendar';
 import Image from 'next/image';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
@@ -32,6 +32,7 @@ export default function Page() {
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [search, setSearch] = useState<string>('');
 	const [generatedParameters, setGeneratedParameters] = useState<string | null>(null);
+	const [generatedParametersFilter, setGeneratedParametersFilter] = useState<string | null>(null);
 	const [showImportCard, setShowImportCard] = useState<boolean>(false);
 	const [showExportCard, setShowExportCard] = useState<boolean>(false);
 
@@ -42,20 +43,24 @@ export default function Page() {
 			activeMenu == 2 ? null : new Date().toISOString(),
 			activeMenu == 0 ? null : activeMenu == 2 ? new Date().toISOString() : addDays(new Date(), 7).toISOString(),
 			search,
-			activeMenu
+			activeMenu,
+			generatedParametersFilter
 		)
 	);
 
 	const deleteEventMutation = useMutation(deleteEventMutate(organization.id));
 	const exportEventMutation = useMutation(exportEventMutate(organization.id));
-	const importEventMutation = useMutation(importEventMutate(organization.id));
+	const createEventMutation = useMutation(createEventMutate(organization.id));
+	//const importEventMutation = useMutation(importEventMutate(organization.id));
 
 	const importTargetFields: ImportCardTargetField[] = [
-		{ id: 'name', text: 'Nom de l’événement', required: true },
-		{ id: 'date', text: 'Date', required: true },
-		{ id: 'created_at', text: 'Crée le' },
-		{ id: 'created_by', text: 'Crée par' },
-		{ id: 'register', text: 'Inscrits' },
+		{ id: 'tilte', text: 'Nom de l’événement', required: true },
+		{ id: 'subtitle', text: 'Sous-titrage'},
+		{ id: 'description', text: 'Description'},
+		{ id: 'start_at', text: 'Commence le', required: true },
+		{ id: 'end_at', text: 'Fini le', required: true },
+		{ id: 'max_registration', text: 'Maximun d\'inscrit' },
+		{ id: 'location', text: 'Localisation' },
 	];
 
 	const exportEvents = useCallback(
@@ -211,6 +216,11 @@ export default function Page() {
 				onChangeSort={(sort) => {
 					setGeneratedParameters(sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(','));
 				}}
+				onChangeFilter={(filter) => {
+					setGeneratedParametersFilter(
+						filter.map((f) => `${f.id} ${f.comparaison} ${f.value}`).join(',') || null
+					);
+				}}
 				hasNextPage={hasNextPage}
 				onLoadNextPage={fetchNextPage}
 			/>
@@ -220,12 +230,23 @@ export default function Page() {
 				columns={importTargetFields}
 				onImport={(row: Record<string, string>) => {
 					console.log(row);
+					const fields: CreateOrUpdateEventType = {
+						title: row.title,
+						subtitle: row.subtitle ?? '',
+						description: row.description ?? '',
+						max_registration: Number(row.max_registration) ?? null,
+						location: row.location ?? null,
+						image: '/path/to/image',
+						start_at: new Date(row.start_at),
+						end_at: new Date(row.end_at)
+					}
+					createEventMutation.mutate({event: fields});
 					if (row['title'].includes('Axel')) throw new Error('Contenu problématique.');
 					return new Promise((resolve) => {
 						setTimeout(resolve, 1000);
 					});
 				}}
-				loading={importEventMutation.isPending}
+				loading={createEventMutation.isPending}
 			/>
 			<ExportCard
 				visible={showExportCard}

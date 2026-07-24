@@ -10,8 +10,8 @@ import {
 	UseMutationOptions,
 	UseQueryOptions,
 } from '@tanstack/react-query';
-import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
-import { CreateOrganizationType, PrivateOrganization } from '@/types/Organization';
+import { OrganizationFollowers, PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
+import { CreateOrganizationType, PrivateOrganization, PublicOrganization } from '@/types/Organization';
 import { PublicUser } from '@/types/User';
 
 const getOrganizations = (): UseInfiniteQueryOptions<
@@ -208,6 +208,15 @@ const deleteOrganizationMember = (
 	},
 });
 
+const deleteOrganization = (
+	org_id: string,
+): UseMutationOptions<PublicOrganization, Error> => ({
+	mutationFn: () => deletef<PublicOrganization>(`/organization/${org_id}`, Object),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id ] });
+	},
+});
+
 const inviteOrganizationMembers = (
 	org_id: string
 ): UseMutationOptions<
@@ -246,6 +255,14 @@ const updateOrganizationPermission = (
 	},
 });
 
+const userFollowOrganization = (): UseMutationOptions<{ success: boolean }, Error, { body: OrganizationFollowers, org_id: string }, void> => ({
+	mutationFn: ({ org_id, body }) => put<{ success: boolean }>(`/organization/${org_id}/followers`, body),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['event', 'public'] });
+	},
+});
+
+
 export {
 	createOrganization,
 	getOrganizationMembers,
@@ -265,4 +282,6 @@ export {
 	getPendingApproveOrganization,
 	approveOrganization,
 	getOrganizationNotMembers,
+	userFollowOrganization,
+	deleteOrganization,
 };

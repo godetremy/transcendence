@@ -190,6 +190,7 @@ export type organization_followersOrderByWithRelationInput = {
 
 export type organization_followersWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  organization_id_user_id?: Prisma.organization_followersOrganization_idUser_idCompoundUniqueInput
   AND?: Prisma.organization_followersWhereInput | Prisma.organization_followersWhereInput[]
   OR?: Prisma.organization_followersWhereInput[]
   NOT?: Prisma.organization_followersWhereInput | Prisma.organization_followersWhereInput[]
@@ -198,7 +199,7 @@ export type organization_followersWhereUniqueInput = Prisma.AtLeast<{
   update_at?: Prisma.DateTimeFilter<"organization_followers"> | Date | string
   user?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationsScalarRelationFilter, Prisma.organizationsWhereInput>
-}, "id">
+}, "id" | "organization_id_user_id">
 
 export type organization_followersOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -271,6 +272,11 @@ export type organization_followersOrderByRelevanceInput = {
   fields: Prisma.organization_followersOrderByRelevanceFieldEnum | Prisma.organization_followersOrderByRelevanceFieldEnum[]
   sort: Prisma.SortOrder
   search: string
+}
+
+export type organization_followersOrganization_idUser_idCompoundUniqueInput = {
+  organization_id: string
+  user_id: string
 }
 
 export type organization_followersCountOrderByAggregateInput = {

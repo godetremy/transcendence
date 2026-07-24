@@ -8,14 +8,85 @@ import { getThrowableSession } from '@/lib/session';
 import { CreateEventSchema } from '@/schema/EventSchema';
 import { SearchQuerySchema } from '@/schema/searchQuery';
 import { CreateOrUpdateEventType } from '@/types/Event';
+import { FilterComparaison, ParsedFilterOption } from '@/types/Filter';
 import { SearchQuery } from '@/types/searchQuery';
 import { dateToPrisma, DEFAULT_DATEOPTION, getDateParams } from '@/utils/date';
 import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+import { getFilterParams } from '@/utils/filter';
 import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
 import { parseBody, parseParams } from '@/utils/parsing';
 import { getUserOrganizationPermission } from '@/utils/permission';
 import { getSortingParams } from '@/utils/sorting';
 import { NextRequest, NextResponse } from 'next/server';
+
+const EVENT_FILTERABLE_FIELDS: Record<
+	string,
+	{ column: keyof Prisma.eventsWhereInput; kind: 'date' | 'string' | 'relation' }
+> = {
+	start_at: { column: 'start_at', kind: 'date' },
+	end_at: { column: 'end_at', kind: 'date' },
+	created_at: { column: 'created_at', kind: 'date' },
+	name: { column: 'title', kind: 'string' },
+	created_by: { column: 'owner', kind: 'relation' },
+};
+
+const buildStringPredicate = (comparaison: FilterComparaison, value: string): Prisma.StringFilter<'events'> => {
+	switch (comparaison) {
+		case FilterComparaison.INCLUDE:
+			return { contains: value, mode: 'insensitive' };
+		case FilterComparaison.EXCLUDE:
+			return { not: { contains: value } };
+		case FilterComparaison.EQUAL:
+			return { equals: value, mode: 'insensitive' };
+		case FilterComparaison.INFERIOR:
+			return { lt: value };
+		case FilterComparaison.INFERIOR_OR_EQUAL:
+			return { lte: value };
+		case FilterComparaison.SUPERIOR:
+			return { gt: value };
+		case FilterComparaison.SUPERIOR_OR_EQUAL:
+			return { gte: value };
+	}
+};
+
+const buildDatePredicate = (comparaison: FilterComparaison, value: string): Prisma.DateTimeFilter<'events'> => {
+	const date = new Date(value);
+	if (isNaN(date.getTime())) throw ERRORS_DETAILS.invalid_parameter(value);
+
+	switch (comparaison) {
+		case FilterComparaison.INFERIOR:
+			return { lt: date };
+		case FilterComparaison.INFERIOR_OR_EQUAL:
+			return { lte: date };
+		case FilterComparaison.EQUAL:
+			return { equals: date };
+		case FilterComparaison.SUPERIOR_OR_EQUAL:
+			return { gte: date };
+		case FilterComparaison.SUPERIOR:
+			return { gt: date };
+		case FilterComparaison.INCLUDE:
+			return { gte: date };
+		case FilterComparaison.EXCLUDE:
+			return { lt: date };
+	}
+};
+
+const buildFilterClause = (row: ParsedFilterOption): Prisma.eventsWhereInput => {
+	const field = EVENT_FILTERABLE_FIELDS[row.id];
+	if (!field) throw ERRORS_DETAILS.invalid_parameter(row.id);
+
+	if (field.kind === 'relation') {
+		return {
+			owner: { full_name: buildStringPredicate(row.comparaison, row.value) } as Prisma.usersWhereInput,
+		};
+	}
+
+	if (field.kind === 'date') {
+		return { [field.column]: buildDatePredicate(row.comparaison, row.value) } as unknown as Prisma.eventsWhereInput;
+	}
+
+	return { [field.column]: buildStringPredicate(row.comparaison, row.value) } as unknown as Prisma.eventsWhereInput;
+};
 
 export async function GET(
 	req: NextRequest,
@@ -38,6 +109,7 @@ export async function GET(
 		const date = getDateParams(searchParams);
 		const sorting = getSortingParams(searchParams);
 		const pagination = getPaginationParams(searchParams);
+		const filterParam = getFilterParams(searchParams);
 
 		const query = parseParams<SearchQuery>(req.nextUrl.searchParams, SearchQuerySchema);
 
@@ -76,6 +148,7 @@ export async function GET(
 							},
 						],
 					}),
+			...(filterParam.length > 0 ? { AND: filterParam.map(buildFilterClause) } : {}),
 		};
 
 		const count = await countEventsByFilter(filter);

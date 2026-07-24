@@ -14,6 +14,7 @@ import { BalanceType } from '@/types/Balance';
 import { PaginationResponse } from '@/types/PaginationResponse';
 import { TranscationType } from '@/types/Transaction';
 import { AgentsSignUpParameters } from '@/types/AgentsSignUpParameters';
+import { ChangePasswordParameters } from '@/types/ChangePasswordParameters';
 
 const updateUser = (user_id: string): UseMutationOptions<User, Error, { user: UserUpdateParameters }, User> => ({
 	mutationKey: ['user', 'update'],
@@ -105,6 +106,13 @@ const signupAgent = (): UseMutationOptions<{ success: boolean }, Error, { body: 
 	},
 });
 
+const newPasswordMutation = (user_id: string, headers: HeadersInit | undefined): UseMutationOptions<{ success: boolean }, Error, { body: ChangePasswordParameters }, void> => ({
+	mutationFn: ({ body }) => patch<{ success: boolean }>(`/users/${user_id}/password/`, body, headers),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['user'] });
+	},
+});
+
 export {
 	updateUser,
 	updateBalance,
@@ -115,4 +123,5 @@ export {
 	appovalRequestAgent,
 	deleteUser,
 	signupAgent,
+	newPasswordMutation,
 };

@@ -16,12 +16,14 @@ import { AnimatePresence } from 'motion/react';
 import Image from 'next/image';
 import { downloadBlob } from '@/utils/download';
 import { PublicEvent } from '@/types/Event';
+import { userFollowOrganization } from '@/lib/fetcher/organization';
 
 export default function Page() {
 	const { event_id }: { event_id: string } = useParams();
 
 	const { data, isLoading, isError, error } = useQuery(getEventPublic(event_id));
 	const mutation = useMutation(registerEventMutate(event_id as string));
+	const follow = useMutation(userFollowOrganization());
 
 	const { scrollY } = useScroll();
 	const isMobile = useMediaQuery('(max-width: 768px)');
@@ -151,7 +153,22 @@ export default function Page() {
 							Proposé par
 							<strong>{data.organization.name}</strong>
 						</span>
-						<button>Suivre</button>
+						<AnimatePresence>
+							<motion.button
+								className={`${styles.cta_button} ${data?.follower ? styles.registered : ''}`}
+								initial={{ scale: 0.9, opacity: 0, transition: { type: 'tween', duration: 0.2 } }}
+								animate={{ scale: 1, opacity: 1, transition: { type: 'tween', duration: 0.2 } }}
+								whileHover={{ scale: 1.02 }}
+								whileTap={{ scale: 0.99 }}
+								onClick={
+									data?.follower
+										? () => follow.mutate({ body: { follow: true }, org_id: data.organization.id })
+										: () => follow.mutate({ body: { follow: false }, org_id: data.organization.id })
+								}
+							>
+								{data?.follower ? 'Se désabonner' : "S'abonner"}
+							</motion.button>
+						</AnimatePresence>
 					</section>
 				)}
 			</article>

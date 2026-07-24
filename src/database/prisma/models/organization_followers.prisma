@@ -7,4 +7,6 @@ model organization_followers {
 
 	user				users			@relation(fields: [user_id], references: [id])
 	organization		organizations	@relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+	@@unique([organization_id, user_id])
 }

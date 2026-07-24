@@ -5,6 +5,11 @@ import { KeyRound } from 'lucide-react';
 import { CardHeader } from '@/components/globals/CardHeader/CardHeader';
 import { useState } from 'react';
 import { Loader } from '@/components/globals/Loader/Loader';
+import { useMutation } from '@tanstack/react-query';
+import { useUser } from '@/contexts/UserContext';
+import { newPasswordMutation } from '@/lib/fetcher/user';
+import { ResetPasswordSchema } from '@/schema/ResetPassword';
+import { getCsrfTokenFromCookie } from '@/utils/csrf';
 
 export interface ResetPasswordProps {
 	onClose: () => void;
@@ -17,6 +22,8 @@ export function ResetPassword({ onClose, onAccept, loading, disabledAccept }: Re
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
+	const user = useUser();
+	const { mutate } = useMutation(newPasswordMutation(user?.id!, { 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	return (
 		<section className={styles.main_container}>
@@ -53,7 +60,19 @@ export function ResetPassword({ onClose, onAccept, loading, disabledAccept }: Re
 			<button
 				className={styles.button}
 				type="button"
-				onClick={onAccept}
+				onClick={ () => {
+
+						const fields = ResetPasswordSchema.safeParse({
+							previewPassword: currentPassword,
+							password: newPassword,
+							passwordCheck: confirmPassword,
+						});
+						if (fields.success) {
+							mutate({ body: { newPassword: confirmPassword, previewPassword: currentPassword } });
+							onClose();
+						}
+					}
+				}
 				disabled={(loading ?? false) || (disabledAccept ?? false)}
 			>
 				{loading && <Loader size={24} />}

@@ -3,39 +3,15 @@ import { ButtonHTMLAttributes, DetailedHTMLProps, useState } from 'react';
 import { AnimatePresence, motion, TargetAndTransition } from 'motion/react';
 import { Plus } from 'lucide-react';
 import { MenuButton } from '@/components/globals/MenuButton/MenuButton';
+import { FilterComparaison, FilterComparaisonOptions, type Filter, type FilterOption } from '@/types/Filter';
 
-export enum FilterComparaison {
-	INFERIOR = '.inf.',
-	INFERIOR_OR_EQUAL = '.infeq.',
-	EQUAL = '.eq.',
-	SUPERIOR_OR_EQUAL = '.supeq.',
-	SUPERIOR = '.sup.',
-	INCLUDE = '.in.',
-	EXCLUDE = '.exclude.',
-}
-
-export const FilterComparaisonOptions: Record<FilterComparaison, string> = {
-	[FilterComparaison.INFERIOR]: '<',
-	[FilterComparaison.INFERIOR_OR_EQUAL]: '<=',
-	[FilterComparaison.EQUAL]: '=',
-	[FilterComparaison.SUPERIOR_OR_EQUAL]: '>=',
-	[FilterComparaison.SUPERIOR]: '>',
-	[FilterComparaison.INCLUDE]: 'contient',
-	[FilterComparaison.EXCLUDE]: 'ne contient pas',
-};
-
-export enum FilterType {
-	STRING = 'string',
-	NUMBER = 'number',
-	DATE = 'date',
-	BOOLEAN = 'boolean',
-}
-
-export interface Filter {
-	id: string;
-	title: string;
-	type: FilterType;
-}
+export {
+	FilterComparaison,
+	FilterType,
+	FilterComparaisonOptions,
+	type Filter,
+	type FilterOption,
+} from '@/types/Filter';
 
 export interface FilterButtonProps extends DetailedHTMLProps<
 	ButtonHTMLAttributes<HTMLButtonElement>,
@@ -44,13 +20,6 @@ export interface FilterButtonProps extends DetailedHTMLProps<
 	options: Array<Filter>;
 	onChangeFilter?: (filter: FilterOption[]) => void;
 }
-
-export type FilterOption = {
-	id: string;
-	title: string;
-	comparaison: FilterComparaison;
-	value: string;
-};
 
 export function FilterButton({ options, onChangeFilter, ...props }: FilterButtonProps) {
 	const [visibleMenu, setVisibleMenu] = useState(false);
@@ -108,16 +77,16 @@ export function FilterButton({ options, onChangeFilter, ...props }: FilterButton
 									<div key={index} className={styles.filters}>
 										<select
 											value={item.id}
-											onChange={(e) =>
-												setFilters((prev) => {
-													const option = options.find((o) => o.id === e.target.value);
-													if (!option) return prev;
-
-													return prev.map((filter, i) =>
+											onChange={(e) => {
+												const selectedId = e.target.value;
+												const option = options.find((o) => o.id === selectedId);
+												if (!option) return;
+												setFilters((prev) =>
+													prev.map((filter, i) =>
 														i === index ? { ...filter, id: option.id } : filter
-													);
-												})
-											}
+													)
+												);
+											}}
 										>
 											{options.map((option) => (
 												<option key={option.id} value={option.id}>
@@ -127,18 +96,14 @@ export function FilterButton({ options, onChangeFilter, ...props }: FilterButton
 										</select>
 										<select
 											value={item.comparaison}
-											onChange={(e) =>
-												setFilters((prev) => {
-													return prev.map((filter, i) =>
-														i === index
-															? {
-																	...filter,
-																	comparaison: e.target.value as FilterComparaison,
-																}
-															: filter
-													);
-												})
-											}
+											onChange={(e) => {
+												const comparaison = e.target.value as FilterComparaison;
+												setFilters((prev) =>
+													prev.map((filter, i) =>
+														i === index ? { ...filter, comparaison } : filter
+													)
+												);
+											}}
 											className={styles.comparaison_select}
 										>
 											{Object.values(FilterComparaison).map((comparaison) => (
@@ -150,18 +115,14 @@ export function FilterButton({ options, onChangeFilter, ...props }: FilterButton
 										<input
 											type={'text'}
 											value={item.value}
-											onChange={(e) =>
-												setFilters((prev) => {
-													return prev.map((filter, i) =>
-														i === index
-															? {
-																	...filter,
-																	value: e.currentTarget.value,
-																}
-															: filter
-													);
-												})
-											}
+											onChange={(e) => {
+												const value = e.currentTarget.value;
+												setFilters((prev) =>
+													prev.map((filter, i) =>
+														i === index ? { ...filter, value } : filter
+													)
+												);
+											}}
 										/>
 										<MenuButton
 											containerKey={`${item.id}_menu_${index}`}

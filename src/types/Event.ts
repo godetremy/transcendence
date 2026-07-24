@@ -77,4 +77,5 @@ export interface ExportEventType {
 
 export interface PublicRegisterUser<T = object> extends PublicEvent<T> {
 	registered: boolean;
+	follower: boolean;
 }
