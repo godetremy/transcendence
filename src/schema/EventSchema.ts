@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 export const CreateEventSchema = z.object({
-	title: z.string().min(5).max(40).trim(),
+	title: z.string().min(1).max(40).trim(),
 	subtitle: z.string().min(0).max(60).trim().nullable(),
 	description: z.string().min(0).max(200).trim().nullable(),
 	max_registration: z.coerce.number().min(0).max(200).nullable(),
