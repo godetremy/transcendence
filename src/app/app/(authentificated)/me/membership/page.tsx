@@ -67,7 +67,7 @@ export default function Page() {
 								row.data.map((transaction, i) => (
 									<ListItem
 										title={transaction.name ?? ''}
-										description={'Débitée le 11/05/2026 - depuis le solde'}
+										description={`${transaction.amount >= 0 ? 'Recharger le ' : 'Débitée le'} ${new Date(transaction.created_at).toLocaleDateString('fr-FR')}`}
 										rightElement={
 											<span
 												className={styles.debit}
