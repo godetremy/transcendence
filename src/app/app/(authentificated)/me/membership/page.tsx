@@ -6,7 +6,7 @@ import ListItem from '@/components/globals/ListItem/ListItem';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Card } from '@/components/globals/Card/Card';
-import { SumupReload } from '@/components/sumup/SumupReload';
+import { CheckoutCard } from '@/components/globals/CheckoutCard/CheckoutCard';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { getBalance, getTransactions } from '@/lib/fetcher/user';
 import { useUser } from '@/contexts/UserContext';
@@ -90,7 +90,7 @@ export default function Page() {
 					)}
 				</section>
 				<Card visible={showReload} requestClose={() => setShowReload(false)}>
-					<SumupReload close={() => setShowReload(false)} />
+					<CheckoutCard close={() => setShowReload(false)} />
 				</Card>
 			</NavigationBarHeader>
 		</>
