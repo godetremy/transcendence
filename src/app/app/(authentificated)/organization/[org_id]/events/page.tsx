@@ -32,6 +32,7 @@ export default function Page() {
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [search, setSearch] = useState<string>('');
 	const [generatedParameters, setGeneratedParameters] = useState<string | null>(null);
+	const [generatedParametersFilter, setGeneratedParametersFilter] = useState<string | null>(null);
 	const [showImportCard, setShowImportCard] = useState<boolean>(false);
 	const [showExportCard, setShowExportCard] = useState<boolean>(false);
 
@@ -42,7 +43,8 @@ export default function Page() {
 			activeMenu == 2 ? null : new Date().toISOString(),
 			activeMenu == 0 ? null : activeMenu == 2 ? new Date().toISOString() : addDays(new Date(), 7).toISOString(),
 			search,
-			activeMenu
+			activeMenu,
+			generatedParametersFilter
 		)
 	);
 
@@ -210,6 +212,11 @@ export default function Page() {
 				onSearch={setSearch}
 				onChangeSort={(sort) => {
 					setGeneratedParameters(sort.map((s) => `${s.id} ${s.ascendant ? 'asc' : 'desc'}`).join(','));
+				}}
+				onChangeFilter={(filter) => {
+					setGeneratedParametersFilter(
+						filter.map((f) => `${f.id} ${f.comparaison} ${f.value}`).join(',') || null
+					);
 				}}
 				hasNextPage={hasNextPage}
 				onLoadNextPage={fetchNextPage}

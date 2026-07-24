@@ -17,6 +17,7 @@ import { SortButton, SortingOption } from '@/components/globals/SortButton/SortB
 import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
 import { ShowMoreButton } from '@/components/globals/ShowMoreButton/ShowMoreButton';
 import { FilterButton, Filter } from '@/components/globals/FilterButton/FilterButton';
+import { FilterOption } from '@/types/Filter';
 
 export interface OrganizationDashboardTableColumn {
 	id?: string;
@@ -39,6 +40,7 @@ interface OrganizationDashboardTable {
 	onActiveMenuChange?: (index: number) => void;
 	onSearch?: (search: string) => void;
 	onChangeSort?: (sort: SortingOption[]) => void;
+	onChangeFilter?: (filter: FilterOption[]) => void;
 	hasNextPage?: boolean;
 	onLoadNextPage?: () => void;
 }
@@ -91,9 +93,7 @@ export default function OrganizationDashboardTable(props: OrganizationDashboardT
 						{props.filters && (
 							<FilterButton
 								options={props.filters}
-								onChangeFilter={(filter) => {
-									console.log(filter);
-								}}
+								onChangeFilter={(filter) => props.onChangeFilter?.(filter)}
 							>
 								<FilterIcon size={22} />
 							</FilterButton>
