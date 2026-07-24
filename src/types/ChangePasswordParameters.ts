@@ -1,3 +1,4 @@
 export interface ChangePasswordParameters {
-	password: string;
+	previewPassword: string;
+	newPassword: string;
 }
