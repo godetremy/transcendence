@@ -2,6 +2,7 @@ import { prisma } from '@/database/prisma/prisma';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { Prisma } from '@/database/prisma/generated/client';
 import { createFollowersElasticSearch, deleteFollowersElasticSearch } from './prisma/elasticSearch';
+import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 
 const countOrganizationFollowersByFilter = async (filter: Prisma.organization_followersWhereInput): Promise<number> => {
 	return prisma.organization_followers.count({
@@ -17,7 +18,27 @@ const getOrganizationFollowersByFilter = async <T extends Prisma.organization_fo
 	return prisma.organization_followers.findMany({
 		where: filter,
 		include: include,
+		...paginationToPrisma(pagination ?? DEFAULT_PAGINATION),
 	});
+};
+
+const getOrganizationFollowerById = async <T extends Prisma.organization_followersInclude>(
+	org_id: string,
+	user_id: string,
+	include: T
+): Promise<Boolean> => {
+	return (
+		(await prisma.organization_followers.findUnique({
+			include: include,
+			where: 
+			{
+				organization_id_user_id: {
+					organization_id: org_id,
+					user_id: user_id,
+				}
+			},
+		})) !== null
+	);
 };
 
 const manageFollow = async (
@@ -26,7 +47,7 @@ const manageFollow = async (
 	id: string
 ): Promise<Prisma.organization_followersGetPayload<Prisma.organization_followersDefaultArgs>> => {
 	const number = await countOrganizationFollowersByFilter({ organization_id: id });
-	if (follow) {
+	if (!follow) {
 		createFollowersElasticSearch(id);
 		return prisma.organization_followers.create({
 			data: {
@@ -37,8 +58,13 @@ const manageFollow = async (
 	}
 	deleteFollowersElasticSearch(id);
 	return prisma.organization_followers.delete({
-		where: { id: user },
+		where: {
+			organization_id_user_id: {
+						organization_id: id,
+						user_id: user,
+			}
+		},
 	});
 };
 
-export { countOrganizationFollowersByFilter, getOrganizationFollowersByFilter, manageFollow };
+export { countOrganizationFollowersByFilter, getOrganizationFollowersByFilter, manageFollow, getOrganizationFollowerById };

@@ -1,5 +1,6 @@
 import { getEventById } from '@/database/Event';
 import { formatPublicEvent } from '@/database/format/Event';
+import { getOrganizationFollowerById } from '@/database/OrganizationFollowers';
 import { createViewElasticSearch } from '@/database/prisma/elasticSearch';
 import {
 	countEventRegistrationsByFilter,
@@ -29,10 +30,12 @@ export async function GET(
 		createViewElasticSearch(event_value.organization_id, event_id);
 
 		const registered = await getEventRegistrationsById(event_id, user.id, {});
+		const follower = await getOrganizationFollowerById(event_value.organization_id, user.id, {});
 
 		return NextResponse.json({
 			...formatPublicEvent<{ organization: true }>(event_value),
 			registered,
+			follower,
 		});
 	});
 }

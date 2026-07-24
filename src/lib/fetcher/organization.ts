@@ -10,7 +10,7 @@ import {
 	UseMutationOptions,
 	UseQueryOptions,
 } from '@tanstack/react-query';
-import { PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
+import { OrganizationFollowers, PublicOrganizationFollowers } from '@/types/OrganizationFollowers';
 import { CreateOrganizationType, PrivateOrganization } from '@/types/Organization';
 import { PublicUser } from '@/types/User';
 
@@ -246,6 +246,14 @@ const updateOrganizationPermission = (
 	},
 });
 
+const userFollowOrganization = (): UseMutationOptions<{ success: boolean }, Error, { body: OrganizationFollowers, org_id: string }, void> => ({
+	mutationFn: ({ org_id, body }) => put<{ success: boolean }>(`/organization/${org_id}/followers`, body),
+	onSuccess: () => {
+		GlobalQueryClient.invalidateQueries({ queryKey: ['event', 'public'] });
+	},
+});
+
+
 export {
 	createOrganization,
 	getOrganizationMembers,
@@ -265,4 +273,5 @@ export {
 	getPendingApproveOrganization,
 	approveOrganization,
 	getOrganizationNotMembers,
+	userFollowOrganization,
 };

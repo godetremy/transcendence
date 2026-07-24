@@ -14,6 +14,7 @@ import { ApprobationResult } from '@/app/app/approval/pages/approbationResult';
 import { useUser } from '@/contexts/UserContext';
 import { logoutUser } from '@/lib/fetcher/user';
 import { useMutation } from '@tanstack/react-query';
+import { getCsrfTokenFromCookie } from '@/utils/csrf';
 
 export interface ApprovalButton {
 	title: string;
@@ -32,7 +33,7 @@ export default function Page() {
 	const router = useRouter();
 	const { openModal, closeModal } = useModal();
 
-	const { mutateAsync } = useMutation(logoutUser());
+	const { mutateAsync } = useMutation(logoutUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	const [image] = useState(() => {
 		return StudentLoginPagesImages[Math.floor(Math.random() * StudentLoginPagesImages.length)];
