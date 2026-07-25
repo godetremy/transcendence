@@ -2,15 +2,12 @@ import { InputDatePicker } from '@/components/globals/DatePicker/DatePicker';
 import { ImageEditorCard } from '@/components/globals/ImageEditor/ImageEditorCard';
 import { Toggle } from '@/components/globals/Toggle/Toggle';
 import { CreateOrUpdateEventType, PrivateEvent } from '@/types/Event';
-import { Markdown } from '@tiptap/markdown';
-import { EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import { CalendarFold, ChevronLeft, MapPin, Minus, Plus, ScanEye, Users2 } from 'lucide-react';
+import { RichEditor } from '@/components/globals/RichEditor/RichEditor';
+import { CalendarFold, ChevronLeft, MapPin, Minus, Plus, Save, Users2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styles from './page.module.scss';
-import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { ImageEditor } from '@/utils/image';
 import { useUpload } from '@/contexts/UploadTokenContext';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
@@ -32,8 +29,6 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 
 	const [image, setImage] = useState<File | null>(null);
 	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
-	const hasLoadedContent = useRef(false);
-	const { openModal } = useModal();
 	const toast = useToast();
 
 	const editor = useRef<ImageEditor | null>(null);
@@ -42,6 +37,11 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 		editor.current = new ImageEditor();
 		return () => editor.current?.destroy();
 	}, []);
+
+	useEffect(() => {
+		if (!previewBlob) return;
+		editor.current?.renderPreview().then((blob) => setPreviewBlob(URL.createObjectURL(blob)));
+	}, [showImageEdit]);
 
 	useEffect(() => {
 		if (!image) return;
@@ -53,39 +53,45 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 				editor.current?.renderPreview().then((blob) => setPreviewBlob(URL.createObjectURL(blob)));
 			})
 			.catch((e) => console.error(e));
-		setUploadProgression(0);
-		setUploadImage(true);
-		upload.uploadFiles(image, setUploadProgression).then((file) => {
-			props.setEvent((prev) => ({ ...prev, image: `/images/upload/${file.name}` }));
-			setUploadImage(false);
-		});
 	}, [image]);
 
-	const editorDescribe = useEditor({
-		extensions: [StarterKit, Markdown],
-		content: '',
-		contentType: 'markdown',
-		onUpdate: ({ editor }) => {
-			queueMicrotask(() => {
-				props.setEvent((prev) => ({ ...prev, description: editor.getMarkdown() }));
+	const publishEvent = async () => {
+		try {
+			setUploadProgression(0);
+			setUploadImage(true);
+			const renderImage = await editor.current?.render();
+			if (!renderImage) {
+				toast.showToast({
+					title: 'Erreur',
+					message: "Impossible de rendre l'image.",
+					type: ToastType.ERROR,
+				});
+				return;
+			}
+			const file = await upload.uploadFiles(renderImage, setUploadProgression);
+			props.setEvent((prev) => ({ ...prev, image: `/images/upload/${file.name}` }));
+			setUploadImage(false);
+			await props.onSubmit();
+			props.onNew?.();
+		} catch (err: unknown) {
+			toast.showToast({
+				title: 'Erreur',
+				message: (err as Error).message,
+				type: ToastType.ERROR,
 			});
-		},
-	});
-
-	useEffect(() => {
-		if (editorDescribe && props.event.description && !hasLoadedContent.current) {
-			editorDescribe.commands.setContent(props.event.description, { emitUpdate: false });
-			hasLoadedContent.current = true;
 		}
-	}, [editorDescribe, props.event.description]);
+	};
 
-	const { getRootProps, getInputProps } = useDropzone({
+	const {
+		getRootProps,
+		getInputProps,
+		open: openImagePicker,
+	} = useDropzone({
 		onDrop: (acceptedFiles) => {
 			setImage(acceptedFiles[0]);
 		},
 		maxFiles: 1,
 		noClick: true,
-		//disabled: props.disabled,
 		accept: {
 			'image/jpeg': ['.jpeg', '.jpg'],
 			'image/png': ['.png'],
@@ -96,34 +102,16 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 		<article className={styles.main_container}>
 			<section className={styles.edit_section}>
 				<nav>
-					<button className={styles.icon} onClick={() => props.onNew?.()}>
-						<ChevronLeft style={{ marginRight: 1.5 }} />
-					</button>
-					<span>{props.createEvent ? `Nouvelle` : `Edition d'`} événement</span>
-					<button>
-						<ScanEye />
-						Prévisualiser
-					</button>
-					<button
-						className={styles.primary}
-						onClick={async (e) => {
-							try {
-								await props.onSubmit();
-								props.onNew?.();
-							} catch (err: unknown) {
-								toast.showToast(
-									{
-										title: 'Erreur',
-										message: (err as Error).message,
-										type: ToastType.ERROR,
-									}
-								)
-							}
-						}}
-					>
-						<Plus />
-						{props.createEvent ? `Ajouter` : `Editer`}
-					</button>
+					<div>
+						<button className={styles.icon} onClick={() => props.onNew?.()}>
+							<ChevronLeft style={{ marginRight: 1.5 }} />
+						</button>
+						<span>{props.createEvent ? 'Nouvelle ' : "Edition de l'"}événement</span>
+						<button className={styles.primary} onClick={publishEvent}>
+							{props.createEvent ? <Plus /> : <Save />}
+							{props.createEvent ? `Ajouter` : `Enregistrer les modifications`}
+						</button>
+					</div>
 				</nav>
 				<div className={styles.main_content}>
 					<label
@@ -133,30 +121,43 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 					>
 						{uploadImage && (
 							<div>
-								<CircleLoader progress={uploadProgression} size={64} />
+								<CircleLoader progress={uploadProgression} size={32} />
+								Upload en cours...
 							</div>
 						)}
 						<input {...getInputProps()} />
 					</label>
 					<label className={styles.title}>
-						<div className={styles.titles_container}>
-							<input
-								type="text"
-								placeholder={"Nom de l'événement"}
-								className={styles.title_input}
-								value={props.event.title}
-								onChange={(e) => props.setEvent((prev) => ({ ...prev, title: e.target.value }))}
-								autoFocus
-							/>
-							<input
-								type="text"
-								placeholder={"Sous-titre de l'événement"}
-								className={styles.subtitle_input}
-								value={props.event.subtitle ?? ''}
-								onChange={(e) => props.setEvent((prev) => ({ ...prev, subtitle: e.target.value }))}
-							/>
+						<div className={styles.container}>
+							<div className={styles.titles_container}>
+								<input
+									type="text"
+									placeholder={"Nom de l'événement"}
+									className={styles.title_input}
+									value={props.event.title}
+									onChange={(e) => props.setEvent((prev) => ({ ...prev, title: e.target.value }))}
+									autoFocus
+								/>
+								<input
+									type="text"
+									placeholder={"Sous-titre de l'événement"}
+									className={styles.subtitle_input}
+									value={props.event.subtitle ?? ''}
+									onChange={(e) => props.setEvent((prev) => ({ ...prev, subtitle: e.target.value }))}
+								/>
+							</div>
+							<button
+								onClick={() => {
+									if (!previewBlob) {
+										openImagePicker();
+										return;
+									}
+									setShowImageEdit(true);
+								}}
+							>
+								{previewBlob ? "Modifer le rendu de l'image" : 'Importer une image'}
+							</button>
 						</div>
-						<button onClick={() => setShowImageEdit(true)}>Modifer le rendu de l&#39;image</button>
 					</label>
 					<div className={styles.date_picker}>
 						<CalendarFold size={22} />
@@ -245,16 +246,16 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 							</AnimatePresence>
 						</div>
 					</div>
-					<div className={styles.editor_toolbar}></div>
-					<EditorContent
-						editor={editorDescribe}
-						className={styles.editor_container}
-						placeholder={'Entre ta description ici. (psst... On supporte le markdown)'}
-					/>
+					<div className={styles.editor_toolbar}>
+						<RichEditor
+							content={props.event.description ?? ''}
+							onContentChange={(markdown) =>
+								props.setEvent((prev) => ({ ...prev, description: markdown }))
+							}
+							placeholder="Entre ta description ici. (psst... On supporte le markdown)"
+						/>
+					</div>
 				</div>
-			</section>
-			<section className={styles.preview_section}>
-				<h3>Preview coming soon...</h3>
 			</section>
 			{image && <ImageEditorCard editor={editor} visible={showImageEdit} setVisible={setShowImageEdit} />}
 		</article>
