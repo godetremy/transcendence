@@ -56,7 +56,7 @@ export function RichEditor({ content, onContentChange, placeholder }: RichEditor
 
 	useEffect(() => {
 		if (editor && content && !hasLoadedContent.current) {
-			editor.commands.setContent(content, { emitUpdate: false });
+			editor.commands.setContent(content, { emitUpdate: false, contentType: 'markdown' });
 			hasLoadedContent.current = true;
 		}
 	}, [editor, content]);
