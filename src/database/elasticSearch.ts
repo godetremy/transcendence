@@ -9,7 +9,7 @@ const getEventsOrServicesByElasticSearch = async (
 ): Promise<SearchResponse<ElasticSearchEventOrService> | null> => {
 	const check = await esclient.indices.exists({ index: index });
 
-	if (check == false) return null;
+	if (!check) return null;
 
 	return await esclient.search<ElasticSearchEventOrService>({
 		index: index,

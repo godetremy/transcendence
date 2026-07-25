@@ -6,6 +6,8 @@ const getDashBoardViewsByElasticSearch = async (
 	organization_id: string,
 	id?: string
 ): Promise<SearchResponse<ViewDocument, ViewsOverTimeAggregations> | null> => {
+	if (!(await esclient.indices.exists({ index: 'views' }))) return null;
+
 	const views = await esclient.search<{ timestamp: string }>({
 		index: 'views',
 		size: 1,
@@ -64,6 +66,8 @@ const getDashBoardViewsByElasticSearch = async (
 const getDashBoardFollowersByElasticSearch = async (
 	organization_id: string
 ): Promise<SearchResponse<FollowersDocument, ViewsOverTimeAggregations> | null> => {
+	if (!(await esclient.indices.exists({ index: 'followers' }))) return null;
+
 	const followers = await esclient.search<{ timestamp: string }>({
 		index: 'followers',
 		size: 1,

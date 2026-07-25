@@ -50,7 +50,9 @@ export function MenuButton({ menu, alignRight, children, containerKey, className
 				}}
 				className={
 					children
-						? undefined
+						? className
+							? className
+							: undefined
 						: `${styles.menu_button} ${visibleMenu && styles.active} ${className ? className : ''}`
 				}
 				style={{ anchorName: `--menu_button-${containerKey}` }}
@@ -100,7 +102,7 @@ export function MenuButton({ menu, alignRight, children, containerKey, className
 						</>
 					)}
 				</AnimatePresence>,
-				document.body
+				document && document.body
 			)}
 		</>
 	);
