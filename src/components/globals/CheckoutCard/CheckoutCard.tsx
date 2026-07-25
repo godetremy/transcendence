@@ -18,7 +18,6 @@ export function CheckoutCard({ close }: { close: () => void }) {
 	const [user] = useState<User>(userCtx!);
 	const [checkout, setCheckout] = useState<SumupCreateCheckouts>({
 		amount: 10,
-		description: 'rechargement du solde',
 	});
 	const { mutateAsync: proceedToCheckout, isPending } = useMutation(updateBalance(user?.id ?? ''));
 
