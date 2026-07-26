@@ -13,11 +13,11 @@ BASE_COMPOSE			= $(DOCKER_FOLDER)/$(DOCKER_FILE)
 MONITORING_COMPOSE		= $(DOCKER_FOLDER)/monitoring/docker-compose.yml
 NODE_COMPOSE			= $(DOCKER_FOLDER)/node/docker-compose.yml
 
-COMPOSE_DEV				= -f $(BASE_COMPOSE) -f $(DEV_FOLDER)/$(DOCKER_FILE) -f $(MONITORING_COMPOSE) --env-file $(DEV_FOLDER)/$(SECRET_FOLDER)/.env
+COMPOSE_DEV				= -f $(BASE_COMPOSE) -f $(DEV_FOLDER)/$(DOCKER_FILE) --env-file $(DEV_FOLDER)/$(SECRET_FOLDER)/.env
 COMPOSE_STAGING			= -f $(BASE_COMPOSE) -f $(STAGING_FOLDER)/$(DOCKER_FILE) -f $(NODE_COMPOSE) -f $(MONITORING_COMPOSE) --env-file $(STAGING_FOLDER)/$(SECRET_FOLDER)/.env
 COMPOSE_PROD			= -f $(BASE_COMPOSE) -f $(PROD_FOLDER)/$(DOCKER_FILE) -f $(NODE_COMPOSE) -f $(MONITORING_COMPOSE) --env-file $(PROD_FOLDER)/$(SECRET_FOLDER)/.env
 
-init-dev: env certs
+init-dev: env
 	npm i
 	make dev
 	make database
@@ -25,9 +25,6 @@ init-dev: env certs
 
 env:
 	@bash $(SCRIPTS_FOLDER)/generate_environnement.sh
-
-certs:
-	@bash $(SCRIPTS_FOLDER)/generate_certificates.sh
 
 database:
 	@bash $(SCRIPTS_FOLDER)/database_init.sh
@@ -69,4 +66,4 @@ fclean: clean-dev clean-staging clean-prod
 	@echo "Pruning Docker system, images, and volumes..."
 	@docker system prune -a --volumes -f
 
-.PHONY: init-dev env certs database dev staging prod down-dev clean-dev down-staging clean-staging down-prod clean-prod fclean
+.PHONY: init-dev env database dev staging prod down-dev clean-dev down-staging clean-staging down-prod clean-prod fclean
