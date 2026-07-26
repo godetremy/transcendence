@@ -1,6 +1,10 @@
 name: BDE-dev
 
 services:
+
+    nginx-cert-setup:
+        volumes:
+        - ./development/certificates:/certificates
     nginx:
         volumes:
             - ./development/certificates:/etc/nginx/certificates
@@ -26,15 +30,6 @@ services:
     elasticsearch:
         ports:
             - '127.0.0.1:9200:9200'
-        env_file:
-            - ./development/secrets/.env
-    kibana:
-        env_file:
-            - ./development/secrets/.env
-    logstash:
-        env_file:
-            - ./development/secrets/.env
-    filebeat:
         env_file:
             - ./development/secrets/.env
     seaweed-master:

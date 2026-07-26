@@ -47,6 +47,73 @@ services:
             interval: 10s
             timeout: 5s
             retries: 10
+    
+    kibana:
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+        image: docker.elastic.co/kibana/kibana:9.4.4
+        volumes:
+            - certs:/usr/share/kibana/config/certs
+            - ./services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+            - kibana_data:/usr/share/kibana/data
+        ports:
+            - '5601:5601'
+        networks:
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    logstash:
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+            kibana:
+                condition: service_healthy
+        image: docker.elastic.co/logstash/logstash:9.0.0
+        volumes:
+            - certs:/usr/share/logstash/certs
+            - logstash_data:/usr/share/logstash/data
+            - './logstash_ingest_data/:/usr/share/logstash/ingest_data/'
+            - './services/logstash/logstash.conf:/usr/share/logstash/config/logstash.conf'
+        environment:
+            XPACK_MONITORING_ENABLED: 'false'
+        networks:
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'curl -s -f http://localhost:9600 || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    filebeat:
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+            kibana:
+                condition: service_healthy
+        image: docker.elastic.co/beats/filebeat:9.4.4
+        user: root
+        volumes:
+            - certs:/usr/share/filebeat/certs
+            - filebeat_data:/usr/share/filebeat/data
+            - './filebeat_ingest_data/:/usr/share/filebeat/ingest_data/'
+            - ./services/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+            - /var/lib/docker/containers:/var/lib/docker/containers
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'filebeat test output']
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
 networks:
     monitoring:
@@ -54,4 +121,12 @@ networks:
 
 volumes:
     prometheus_data:
+        driver: local
     grafana_data:
+        driver: local
+    kibana_data:
+        driver: local
+    filebeat_data:
+        driver: local
+    logstash_data:
+        driver: local

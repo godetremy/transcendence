@@ -34,10 +34,9 @@ PRODUCTION_SESSION_SECRET=$(read_password "Which secret do you want to use for y
 SUMUP_API_KEY=$(read_with_prompt "Enter your Sumup key");
 SUMUP_MERCHANT_CODE=$(read_with_prompt "Enter your Sumup marchant code");
 
-ES_USERNAME=$(read_with_prompt "Enter your elastic search username");
 
 export ELASTIC_PASSWORD="$ELASTIC_PASSWORD"
-export ELASTIC_USER="$ES_USERNAME"
+export ELASTIC_USER="elastic"
 export ENCRYPTION_KEY="$ENCRYPTION_KEY"
 
 echo
@@ -52,7 +51,7 @@ OAUTH_42_SECRET=$FORTYTWO_CLIENT_SECRET
 POSTGRES_USER=$POSTGRES_USER
 POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
-ELASTIC_USERNAME=$ES_USERNAME
+ELASTIC_USERNAME=elastic
 ELASTIC_PASSWORD=$ELASTIC_PASSWORD
 KIBANA_PASSWORD=$KIBANA_PASSWORD
 ENCRYPTION_KEY=$ENCRYPTION_KEY
@@ -108,7 +107,7 @@ SESSION_SECRET=$PRODUCTION_SESSION_SECRET
 MONITORING_ENV_CONTENT="
 DATA_SOURCE_NAME=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
 
-ES_USERNAME=$ES_USERNAME
+ES_USERNAME=elastic
 ES_PASSWORD=$ELASTIC_PASSWORD
 
 GF_SECURITY_ADMIN_USER=$GRAFANA_ADMIN_USER
@@ -134,8 +133,9 @@ mkdir -p "$MONITORING_PATH/$DOCKER_SECRETS_PATH"
 printf "%s" "$MONITORING_ENV_CONTENT" > "$MONITORING_ENV"
 print_done "generated monitoring environment"
 
-envsubst < ./docker/services/filebeat/filebeat.yml.template > ./docker/services/filebeat/filebeat.yml
+envsubst < ./docker/services/filebeat/filebeat.yml.template | sudo tee ./docker/services/filebeat/filebeat.yml > /dev/null
 
-sudo chown root:root ./docker/services/filebeat/filebeat.yml && sudo chmod 644 ./docker/services/filebeat/filebeat.yml
+sudo chown root:root ./docker/services/filebeat/filebeat.yml
+sudo chmod 644 ./docker/services/filebeat/filebeat.yml
 
 envsubst < ./docker/services/kibana/kibana.yml.template > ./docker/services/kibana/kibana.yml
