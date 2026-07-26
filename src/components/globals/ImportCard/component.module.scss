@@ -180,7 +180,7 @@
 		p {
 			position: absolute;
 			font: 500 14px var(--font-paragraph);
-			letter-spacing: .5px;
+			letter-spacing: 0.5px;
 			text-align: center;
 
 			span {
@@ -190,7 +190,7 @@
 			}
 
 			&::before {
-				content: "";
+				content: '';
 				position: absolute;
 				bottom: 15px;
 				left: -5px;

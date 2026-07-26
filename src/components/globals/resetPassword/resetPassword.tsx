@@ -60,19 +60,17 @@ export function ResetPassword({ onClose, onAccept, loading, disabledAccept }: Re
 			<button
 				className={styles.button}
 				type="button"
-				onClick={ () => {
-
-						const fields = ResetPasswordSchema.safeParse({
-							previewPassword: currentPassword,
-							password: newPassword,
-							passwordCheck: confirmPassword,
-						});
-						if (fields.success) {
-							mutate({ body: { newPassword: confirmPassword, previewPassword: currentPassword } });
-							onClose();
-						}
+				onClick={() => {
+					const fields = ResetPasswordSchema.safeParse({
+						previewPassword: currentPassword,
+						password: newPassword,
+						passwordCheck: confirmPassword,
+					});
+					if (fields.success) {
+						mutate({ body: { newPassword: confirmPassword, previewPassword: currentPassword } });
+						onClose();
 					}
-				}
+				}}
 				disabled={(loading ?? false) || (disabledAccept ?? false)}
 			>
 				{loading && <Loader size={24} />}

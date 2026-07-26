@@ -36,6 +36,10 @@ SUMUP_MERCHANT_CODE=$(read_with_prompt "Enter your Sumup marchant code");
 
 ES_USERNAME=$(read_with_prompt "Enter your elastic search username");
 
+export ELASTIC_PASSWORD="$ELASTIC_PASSWORD"
+export ELASTIC_USER="$ES_USERNAME"
+export ENCRYPTION_KEY="$ENCRYPTION_KEY"
+
 echo
 source ./docker/scripts/request_forty_two_api.sh
 echo
@@ -78,7 +82,7 @@ SESSION_SECRET=$DEVELOPMENT_SESSION_SECRET
 POSTGRES_HOST=localhost
 DATABASE_PORT=5431
 ELASTICSEARCH_URL=https://localhost:9200
-NODE_EXTRA_CA_CERTS=docker/services/elasticsearch/certs/ca/ca.crt
+NODE_EXTRA_CA_CERTS=certs/ca.crt
 "
 
 STAGING_ENV_CONTENT="
@@ -129,3 +133,9 @@ print_done "generated production environment"
 mkdir -p "$MONITORING_PATH/$DOCKER_SECRETS_PATH"
 printf "%s" "$MONITORING_ENV_CONTENT" > "$MONITORING_ENV"
 print_done "generated monitoring environment"
+
+envsubst < ./docker/services/filebeat/filebeat.yml.template > ./docker/services/filebeat/filebeat.yml
+
+sudo chown root:root ./docker/services/filebeat/filebeat.yml && sudo chmod 644 ./docker/services/filebeat/filebeat.yml
+
+envsubst < ./docker/services/kibana/kibana.yml.template > ./docker/services/kibana/kibana.yml

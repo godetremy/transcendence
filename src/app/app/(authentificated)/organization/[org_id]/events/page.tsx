@@ -2,7 +2,13 @@
 import styles from './page.module.scss';
 import OrganizationDashboardTable from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import { createEventMutate, deleteEventMutate, exportEventMutate, getEvents, importEventMutate } from '@/lib/fetcher/events';
+import {
+	createEventMutate,
+	deleteEventMutate,
+	exportEventMutate,
+	getEvents,
+	importEventMutate,
+} from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
@@ -55,11 +61,11 @@ export default function Page() {
 
 	const importTargetFields: ImportCardTargetField[] = [
 		{ id: 'tilte', text: 'Nom de l’événement', required: true },
-		{ id: 'subtitle', text: 'Sous-titrage'},
-		{ id: 'description', text: 'Description'},
+		{ id: 'subtitle', text: 'Sous-titrage' },
+		{ id: 'description', text: 'Description' },
 		{ id: 'start_at', text: 'Commence le', required: true },
 		{ id: 'end_at', text: 'Fini le', required: true },
-		{ id: 'max_registration', text: 'Maximun d\'inscrit' },
+		{ id: 'max_registration', text: "Maximun d'inscrit" },
 		{ id: 'location', text: 'Localisation' },
 	];
 
@@ -238,9 +244,9 @@ export default function Page() {
 						location: row.location ?? null,
 						image: '/path/to/image',
 						start_at: new Date(row.start_at),
-						end_at: new Date(row.end_at)
-					}
-					createEventMutation.mutate({event: fields});
+						end_at: new Date(row.end_at),
+					};
+					createEventMutation.mutate({ event: fields });
 					if (row['title'].includes('Axel')) throw new Error('Contenu problématique.');
 					return new Promise((resolve) => {
 						setTimeout(resolve, 1000);

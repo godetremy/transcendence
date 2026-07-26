@@ -12,7 +12,7 @@ export const esclient = new Client({
 		username: `${process.env.ELASTIC_USERNAME}`,
 	},
 	tls: {
-		ca: fs.readFileSync(path.join(process.cwd(), 'docker/services/elasticsearch/certs/ca/ca.crt')),
+		ca: fs.readFileSync(path.join(process.cwd(), 'certs/ca.crt')),
 		rejectUnauthorized: true,
 	},
 });

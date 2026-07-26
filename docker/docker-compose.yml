@@ -1,117 +1,15 @@
 name: BDE
 
 services:
-    dicebear:
-        image: dicebear/api:4
-        environment:
-            WEBP_SIZE_MAX: 512
-        networks:
-            - app
-        restart: always
-        tmpfs:
-            - /run
-            - /tmp
-
-    elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
-        volumes:
-            - ./services/elasticsearch/certs:/usr/share/elasticsearch/config/certs
-            - elasticsearch_data:/usr/share/elasticsearch/data
-            - ./services/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-            - ./services/elasticsearch/entrypoint.sh:/usr/share/elasticsearch/config/entrypoint.sh
-        environment:
-            ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-        networks:
-            - app
-        entrypoint: ['bash', '/usr/share/elasticsearch/config/entrypoint.sh']
-        restart: on-failure
-        healthcheck:
-            test:
-                [
-                    'CMD-SHELL',
-                    "test -f /tmp/kibana-system-password-set && curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
-                ]
-            interval: 10s
-            timeout: 10s
-            retries: 120
-
-    kibana:
-        image: docker.elastic.co/kibana/kibana:8.15.3
-        depends_on:
-            elasticsearch:
-                condition: service_healthy
-        volumes:
-            - ./services/elasticsearch/certs:/usr/share/kibana/config/certs
-            - ./services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-            - kibanadata:/usr/share/kibana/data
-        networks:
-            - app
-        restart: on-failure
-        healthcheck:
-            test: ['CMD-SHELL', "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'"]
-            interval: 10s
-            timeout: 10s
-            retries: 120
-
-    logstash:
-        image: docker.elastic.co/logstash/logstash:8.15.3
-        depends_on:
-            elasticsearch:
-                condition: service_healthy
-            postgres:
-                condition: service_healthy
-        volumes:
-            - ./services/elasticsearch/certs:/certs
-            - ./services/logstash/events.conf:/usr/share/logstash/config/events.conf
-            - ./services/logstash/events-mapping.json:/usr/share/logstash/config/events-mapping.json
-            - ./services/logstash/entrypoint.sh:/usr/share/logstash/config/entrypoint.sh
-            - ./services/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
-            - ./services/logstash/logs.conf:/usr/share/logstash/config/logs.conf
-            - ./services/logstash/logs-ilm-policy.json:/usr/share/logstash/config/logs-ilm-policy.json
-            - ./services/logstash/logs-template.json:/usr/share/logstash/config/logs-template.json
-        environment:
-            XPACK_MONITORING_ENABLED: 'false'
-        networks:
-            - app
-        entrypoint: ['bash', '/usr/share/logstash/config/entrypoint.sh']
-        restart: on-failure
-        user: '1000:0'
-
-    filebeat:
-        image: docker.elastic.co/beats/filebeat:8.15.3
-        user: root
-        command: ['--strict.perms=false']
-        volumes:
-            - ./services/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
-            - ./services/elasticsearch/certs:/certs
-            - /var/lib/docker/containers:/var/lib/docker/containers
-            - /var/run/docker.sock:/var/run/docker.sock
-            - filebeat_data:/usr/share/filebeat/data
-        depends_on:
-            - logstash
-        networks:
-            - app
-        restart: unless-stopped
-
-    kibana-setup:
-        image: curlimages/curl:8.11.1
-        depends_on:
-            kibana:
-                condition: service_healthy
-        volumes:
-            - ./services/kibana/logs-dashboard.ndjson:/import/logs-dashboard.ndjson
-            - ./services/kibana/entrypoint.sh:/import/entrypoint.sh
-        environment:
-            ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-        entrypoint: ['sh', '/import/entrypoint.sh']
-        networks:
-            - app
-        restart: on-failure
-
     nginx:
         image: nginx:stable-alpine
         depends_on:
-            - seaweed-filer
+            seaweed-filer:
+                condition: service_healthy
+            postgres:
+                condition: service_healthy
+            dicebear:
+                condition: service_healthy
         volumes:
             - ./services/nginx/nginx.conf:/etc/nginx/templates/default.conf.template
         networks:
@@ -119,6 +17,12 @@ services:
             - monitoring
         extra_hosts:
             - 'host.docker.internal:host-gateway'
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1:8081/stub_status || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
     postgres:
         image: postgres:15-alpine
@@ -126,9 +30,189 @@ services:
             - postgres_data:/var/lib/postgresql/data
         networks:
             - app
-        restart: always
+        restart: on-failure
         healthcheck:
             test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    dicebear:
+        image: dicebear/api:4
+        environment:
+            WEBP_SIZE_MAX: 512
+        networks:
+            - app
+        restart: on-failure
+        tmpfs:
+            - /run
+            - /tmp
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'node -e "require(''http'').get(''http://localhost:3000/10.x/pixel-art/svg'', (r) => { console.log(''Status:'', r.statusCode); process.exit(0) }).on(''error'', (e) => { console.log(''Error:'', e.message); process.exit(1) })"',
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    setup:
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.4.4
+        volumes:
+            - certs:/usr/share/elasticsearch/config/certs
+            - ./../certs:/host-certs
+        user: '0'
+        networks:
+            - monitoring
+        command: >
+            bash -c '
+            if [ x${ELASTIC_PASSWORD} == x ]; then
+                echo "Set the ELASTIC_PASSWORD environment variable in the .env file";
+                exit 1;
+            elif [ x${KIBANA_PASSWORD} == x ]; then
+                echo "Set the KIBANA_PASSWORD environment variable in the .env file";
+                exit 1;
+            fi;
+            if [ ! -f config/certs/ca.zip ]; then
+                echo "Creating CA";
+                bin/elasticsearch-certutil ca --silent --pem -out config/certs/ca.zip;
+                unzip config/certs/ca.zip -d config/certs;
+            fi;
+            if [ ! -f config/certs/certs.zip ]; then
+                echo "Creating certs";
+                echo -ne \
+                "instances:\n"\
+                "  - name: elasticsearch\n"\
+                "    dns:\n"\
+                "      - elasticsearch\n"\
+                "      - elasticsearch\n"\
+                "      - localhost\n"\
+                "    ip:\n"\
+                "      - 127.0.0.1\n"\
+                "  - name: kibana\n"\
+                "    dns:\n"\
+                "      - kibana\n"\
+                "      - localhost\n"\
+                "    ip:\n"\
+                "      - 127.0.0.1\n"\
+                > config/certs/instances.yml;
+                bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key;
+                unzip config/certs/certs.zip -d config/certs;
+            fi;
+            echo "Setting file permissions";
+            chown -R root:root config/certs;
+            find . -type d -exec chmod 750 \{\} \;;
+            find . -type f -exec chmod 640 \{\} \;;
+            echo "Waiting for Elasticsearch availability";
+            until curl -s --cacert config/certs/ca/ca.crt https://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+            echo "Setting kibana_system password";
+            until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://elasticsearch:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+            cp config/certs/ca/ca.crt /host-certs/ca.crt;
+            chmod 644 /host-certs/ca.crt;
+            echo "All done!";
+            '
+        healthcheck:
+            test: ['CMD-SHELL', '[ -f config/certs/elasticsearch/elasticsearch.crt ]']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    elasticsearch:
+        depends_on:
+            setup:
+                condition: service_healthy
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.4.4
+        volumes:
+            - certs:/usr/share/elasticsearch/config/certs
+            - elasticsearch_data:/usr/share/elasticsearch/data
+            - ./services/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        environment:
+            ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+        networks:
+            - app
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', "curl -sk https://localhost:9200 -o /dev/null -w '%{http_code}' | grep -qE '200|401'"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    kibana:
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+        image: docker.elastic.co/kibana/kibana:9.4.4
+        volumes:
+            - certs:/usr/share/kibana/config/certs
+            - ./services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+            - kibana_data:/usr/share/kibana/data
+        ports:
+            - '5601:5601'
+        networks:
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    logstash:
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+            kibana:
+                condition: service_healthy
+        image: docker.elastic.co/logstash/logstash:9.0.0
+        volumes:
+            - certs:/usr/share/logstash/certs
+            - logstash_data:/usr/share/logstash/data
+            - './logstash_ingest_data/:/usr/share/logstash/ingest_data/'
+            - './services/logstash/logstash.conf:/usr/share/logstash/config/logstash.conf'
+        environment:
+            XPACK_MONITORING_ENABLED: 'false'
+        networks:
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'curl -s -f http://localhost:9600 || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    filebeat:
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+            kibana:
+                condition: service_healthy
+        image: docker.elastic.co/beats/filebeat:9.4.4
+        user: root
+        volumes:
+            - certs:/usr/share/filebeat/certs
+            - filebeat_data:/usr/share/filebeat/data
+            - './filebeat_ingest_data/:/usr/share/filebeat/ingest_data/'
+            - ./services/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+            - /var/lib/docker/containers:/var/lib/docker/containers
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'filebeat test output']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    seaweed-master:
+        image: chrislusf/seaweedfs:3.80
+        networks:
+            - seaweed
+        command: 'master -ip=seaweed-master -port=9333 -ip.bind=0.0.0.0'
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '-O', '-', 'http://seaweed-master:9333/cluster/status']
             interval: 10s
             timeout: 5s
             retries: 5
@@ -136,33 +220,50 @@ services:
     seaweed-filer:
         image: chrislusf/seaweedfs:3.80
         depends_on:
-            - seaweed-master
+            seaweed-master:
+                condition: service_healthy
         networks:
             - app
-        command: 'filer -master=seaweed-master:9333'
-
-    seaweed-master:
-        image: chrislusf/seaweedfs:3.80
-        networks:
-            - app
-        command: 'master -ip=seaweed-master -port=9333'
+            - seaweed
+        command: 'filer -master=seaweed-master:9333 -ip.bind=0.0.0.0'
+        healthcheck:
+            test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://seaweed-filer:8888/']
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
     seaweed-volume:
         image: chrislusf/seaweedfs:3.80
         depends_on:
-            - seaweed-master
+            seaweed-master:
+                condition: service_healthy
         networks:
-            - app
+            - seaweed
         command: 'volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080'
+        healthcheck:
+            test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://seaweed-volume:8080/status']
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
 networks:
     app:
         driver: bridge
     monitoring:
         driver: bridge
+    seaweed:
+        driver: bridge
 
 volumes:
     postgres_data:
+        driver: local
     elasticsearch_data:
-    kibanadata:
+        driver: local
+    kibana_data:
+        driver: local
     filebeat_data:
+        driver: local
+    logstash_data:
+        driver: local
+    certs:
+        driver: local

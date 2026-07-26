@@ -20,7 +20,7 @@ export default function Page() {
 	const [organization, setOrganization] = useState(org! as CreateOrganizationType);
 	const mutation = useMutation(updateOrganization(org?.id ?? ''));
 	const deleteOrg = useMutation(deleteOrganization(org?.id ?? ''));
-	
+
 	const { openModal, closeModal } = useModal();
 
 	useEffect(() => {
@@ -44,28 +44,34 @@ export default function Page() {
 			<OrganizationEditor organization={organization} setOrganization={setOrganization} />
 
 			<ListContainer style={{ margin: '40px auto 0 auto' }}>
-				<ListItem title={'Supprimer cette organisation'} last negative showChevron={false} onPress={ () =>
-					openModal({
-						title: 'Voulez-vous vraiment supprimer cette organization ?',
-						message:
-							'Vous allez supprimer cette organisation, vous ne pourrez plus récupérer les informations, êtes-vous sûr ?',
-						buttons: [
-							{
-								text: 'Annuler',
-								onClick: closeModal,
-							},
-							{
-								text: 'Supprimer',
-								negative: true,
-								onClick: async () => {
-									closeModal();
-									const check = await deleteOrg.mutateAsync();
-									if (check) router.push('/app/home');
+				<ListItem
+					title={'Supprimer cette organisation'}
+					last
+					negative
+					showChevron={false}
+					onPress={() =>
+						openModal({
+							title: 'Voulez-vous vraiment supprimer cette organization ?',
+							message:
+								'Vous allez supprimer cette organisation, vous ne pourrez plus récupérer les informations, êtes-vous sûr ?',
+							buttons: [
+								{
+									text: 'Annuler',
+									onClick: closeModal,
 								},
-							},
-						],
-					})
-				}/>
+								{
+									text: 'Supprimer',
+									negative: true,
+									onClick: async () => {
+										closeModal();
+										const check = await deleteOrg.mutateAsync();
+										if (check) router.push('/app/home');
+									},
+								},
+							],
+						})
+					}
+				/>
 			</ListContainer>
 		</NavigationBarHeader>
 	);

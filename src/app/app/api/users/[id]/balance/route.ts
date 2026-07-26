@@ -26,7 +26,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 			checkout_reference: reference,
 			currency: 'EUR',
 			merchant_code: process.env.SUMUP_MERCHANT_CODE ?? '',
-			description: "Rechargement du solde",
+			description: 'Rechargement du solde',
 			redirect_url: `https://${process.env.NEXT_PUBLIC_BASE_URL}/app/me/membership`,
 			return_url: `https://${process.env.NEXT_PUBLIC_BASE_URL}/app/api/webhook?u=${session.user_id}`,
 			hosted_checkout: { enabled: true },

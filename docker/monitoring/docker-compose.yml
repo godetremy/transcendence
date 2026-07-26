@@ -10,52 +10,11 @@ services:
             - monitoring
         restart: unless-stopped
         privileged: true
-
-    node-exporter:
-        image: quay.io/prometheus/node-exporter:v1.8.2
-        volumes:
-            - /:/host
-        networks:
-            - monitoring
-        command:
-            - '--path.rootfs=/host'
-        restart: unless-stopped
-        pid: host
-
-    postgres-exporter:
-        image: quay.io/prometheuscommunity/postgres-exporter:v0.16.0
-        env_file:
-            - ./monitoring/secrets/.env
-        networks:
-            - monitoring
-            - app
-        restart: unless-stopped
-
-    elasticsearch-exporter:
-        image: quay.io/prometheuscommunity/elasticsearch-exporter:v1.7.0
-        volumes:
-            - ./services/elasticsearch/certs:/certs
-        env_file:
-            - ./monitoring/secrets/.env
-        networks:
-            - monitoring
-            - app
-        command:
-            - '--es.uri=https://elasticsearch:9200'
-            - '--es.ca=/certs/ca/ca.crt'
-            - '--es.all'
-            - '--es.indices'
-        restart: unless-stopped
-        user: '1000:0'
-
-    nginx-exporter:
-        image: nginx/nginx-prometheus-exporter:1.4.0
-        networks:
-            - monitoring
-            - app
-        command:
-            - '--nginx.scrape-uri=http://nginx:8081/stub_status'
-        restart: unless-stopped
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:8080/healthz']
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
     prometheus:
         image: prom/prometheus:v3.1.0
@@ -66,6 +25,11 @@ services:
         networks:
             - monitoring
         restart: unless-stopped
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:9090/-/healthy']
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
     grafana:
         image: grafana/grafana:11.4.0
@@ -78,6 +42,11 @@ services:
         networks:
             - monitoring
         restart: unless-stopped
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:3000/api/health']
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
 networks:
     monitoring:

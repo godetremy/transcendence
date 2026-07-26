@@ -106,7 +106,10 @@ const signupAgent = (): UseMutationOptions<{ success: boolean }, Error, { body: 
 	},
 });
 
-const newPasswordMutation = (user_id: string, headers: HeadersInit | undefined): UseMutationOptions<{ success: boolean }, Error, { body: ChangePasswordParameters }, void> => ({
+const newPasswordMutation = (
+	user_id: string,
+	headers: HeadersInit | undefined
+): UseMutationOptions<{ success: boolean }, Error, { body: ChangePasswordParameters }, void> => ({
 	mutationFn: ({ body }) => patch<{ success: boolean }>(`/users/${user_id}/password/`, body, headers),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['user'] });

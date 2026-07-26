@@ -1,17 +1,12 @@
 name: BDE-dev
 
 services:
-    elasticsearch:
-        ports:
-            - '127.0.0.1:9200:9200'
-        env_file:
-            - ./development/secrets/.env
     nginx:
         volumes:
             - ./development/certificates:/etc/nginx/certificates
         ports:
-            - '127.0.0.1:80:80'
-            - '127.0.0.1:443:443'
+            - '80:80'
+            - '443:443'
         env_file:
             - ./development/secrets/.env
         environment:
@@ -28,24 +23,26 @@ services:
             - ./development/secrets/.env
         ports:
             - '127.0.0.1:$DATABASE_PORT:5432'
-        restart: on-failure
-
-    seaweed-filer:
+    elasticsearch:
         ports:
-            - '127.0.0.1:8888:8888'
-
-    seaweed-master:
-        ports:
-            - '127.0.0.1:9333:9333'
-
-    seaweed-volume:
-        ports:
-            - '127.0.0.1:8080:8080'
-
+            - '127.0.0.1:9200:9200'
+        env_file:
+            - ./development/secrets/.env
     kibana:
         env_file:
             - ./development/secrets/.env
-
     logstash:
         env_file:
             - ./development/secrets/.env
+    filebeat:
+        env_file:
+            - ./development/secrets/.env
+    seaweed-master:
+        ports:
+            - '127.0.0.1:9333:9333'
+    seaweed-filer:
+        ports:
+            - '127.0.0.1:8888:8888'
+    seaweed-volume:
+        ports:
+            - '127.0.0.1:8080:8080'

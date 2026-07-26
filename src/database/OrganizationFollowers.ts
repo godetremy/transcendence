@@ -30,12 +30,11 @@ const getOrganizationFollowerById = async <T extends Prisma.organization_followe
 	return (
 		(await prisma.organization_followers.findUnique({
 			include: include,
-			where: 
-			{
+			where: {
 				organization_id_user_id: {
 					organization_id: org_id,
 					user_id: user_id,
-				}
+				},
 			},
 		})) !== null
 	);
@@ -60,11 +59,16 @@ const manageFollow = async (
 	return prisma.organization_followers.delete({
 		where: {
 			organization_id_user_id: {
-						organization_id: id,
-						user_id: user,
-			}
+				organization_id: id,
+				user_id: user,
+			},
 		},
 	});
 };
 
-export { countOrganizationFollowersByFilter, getOrganizationFollowersByFilter, manageFollow, getOrganizationFollowerById };
+export {
+	countOrganizationFollowersByFilter,
+	getOrganizationFollowersByFilter,
+	manageFollow,
+	getOrganizationFollowerById,
+};

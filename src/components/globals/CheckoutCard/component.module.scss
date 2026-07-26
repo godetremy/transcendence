@@ -62,7 +62,7 @@
 				width: 60px;
 				height: 60px;
 				border-radius: 50%;
-				background-color: rgba(var(--color-rgb-primary-white), 0.0);
+				background-color: rgba(var(--color-rgb-primary-white), 0);
 				border: none;
 				color: var(--color-primary-white);
 				display: flex;
@@ -89,7 +89,6 @@
 			gap: 16px;
 			width: 100%;
 			padding: 20px 120px;
-
 
 			& > button {
 				height: 40px;
