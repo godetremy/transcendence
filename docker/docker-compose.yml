@@ -197,11 +197,10 @@ services:
     
     uptime-kuma:
         image: louislam/uptime-kuma:1
-        container_name: uptime-kuma
         volumes:
             - uptime-kuma-data:/app/data
         ports:
-            - "3003:3001"
+            - "3033:3001"
         networks:
             - app
         restart: on-failure

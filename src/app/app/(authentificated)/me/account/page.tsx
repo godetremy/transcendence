@@ -41,8 +41,7 @@ function Page() {
 		}
 
 		timeoutRef.current = setTimeout(async () => {
-			const updatedUser = await mutation.mutateAsync({ user: value });
-			userCtx?.update(updatedUser);
+			mutation.mutate({ user: value });
 			timeoutRef.current = null;
 		}, 1000);
 
@@ -52,7 +51,7 @@ function Page() {
 				timeoutRef.current = null;
 			}
 		};
-	}, [user, mutation, userCtx]);
+	}, [user, mutation]);
 
 	return (
 		<NavigationBarHeader title={'Mon compte'}>
