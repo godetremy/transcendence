@@ -42,8 +42,6 @@ export function MenuButton({ menu, alignRight, children, containerKey, className
 		return () => document.removeEventListener('scroll', onScroll);
 	});
 
-	if (typeof document === 'undefined') return null;
-
 	return (
 		<>
 			<button
@@ -61,51 +59,52 @@ export function MenuButton({ menu, alignRight, children, containerKey, className
 			>
 				{children ? children : <Ellipsis strokeWidth={1.8} />}
 			</button>
-			{createPortal(
-				<AnimatePresence>
-					{visibleMenu && (
-						<>
-							<motion.div
-								className={styles.menu_overlay}
-								onClick={() => setVisibleMenu(false)}
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								exit={{ opacity: 0, pointerEvents: 'none' }}
-							/>
+			{typeof document !== 'undefined' &&
+				createPortal(
+					<AnimatePresence>
+						{visibleMenu && (
+							<>
+								<motion.div
+									className={styles.menu_overlay}
+									onClick={() => setVisibleMenu(false)}
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0, pointerEvents: 'none' }}
+								/>
 
-							<motion.div
-								className={styles.menu_container}
-								key="container"
-								initial={closedContainer}
-								animate={openedContainer}
-								exit={closedContainer}
-								style={{
-									positionAnchor: `--menu_button-${containerKey}`,
-									positionArea: alignRight ? 'bottom span-left' : 'bottom span-right',
-								}}
-							>
-								{menu.map((item, index) => (
-									<button
-										key={index}
-										onClick={() => {
-											setVisibleMenu(false);
-											item.onClick?.();
-										}}
-										className={item.negative ? styles.negative : undefined}
-									>
-										<div className={styles.icon}>
-											{item.icon && <item.icon size={18} color={'currentColor'} />}
-										</div>
+								<motion.div
+									className={styles.menu_container}
+									key="container"
+									initial={closedContainer}
+									animate={openedContainer}
+									exit={closedContainer}
+									style={{
+										positionAnchor: `--menu_button-${containerKey}`,
+										positionArea: alignRight ? 'bottom span-left' : 'bottom span-right',
+									}}
+								>
+									{menu.map((item, index) => (
+										<button
+											key={index}
+											onClick={() => {
+												setVisibleMenu(false);
+												item.onClick?.();
+											}}
+											className={item.negative ? styles.negative : undefined}
+										>
+											<div className={styles.icon}>
+												{item.icon && <item.icon size={18} color={'currentColor'} />}
+											</div>
 
-										<span>{item.title}</span>
-									</button>
-								))}
-							</motion.div>
-						</>
-					)}
-				</AnimatePresence>,
-				document && document.body
-			)}
+											<span>{item.title}</span>
+										</button>
+									))}
+								</motion.div>
+							</>
+						)}
+					</AnimatePresence>,
+					document && document.body
+				)}
 		</>
 	);
 }
