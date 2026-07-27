@@ -21,6 +21,17 @@ export interface OrganizationEventEditor {
 	createEvent: boolean;
 }
 
+const fieldLabels: Record<string, string> = {
+	title: 'Nom',
+	subtitle: 'Sous-titre',
+	description: 'Description',
+	location: 'Lieu',
+	max_registration: "Nombre d'inscriptions",
+	image: 'Image',
+	start_at: 'Date de début',
+	end_at: 'Date de fin',
+};
+
 export function OrganizationEventEditor(props: OrganizationEventEditor) {
 	const [showImageEdit, setShowImageEdit] = useState(false);
 	const upload = useUpload();
@@ -72,11 +83,24 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 			props.setEvent((prev) => ({ ...prev, image: `/images/upload/${file.name}` }));
 			setUploadImage(false);
 			await props.onSubmit();
+			toast.showToast({
+				title: 'Succès',
+				message: props.createEvent ? 'Événement créé avec succès.' : 'Événement mis à jour avec succès.',
+				type: ToastType.SUCCESS,
+			});
 			props.onNew?.();
 		} catch (err: unknown) {
+			const message = (err as Error).message;
+			const match = message.match(/'([^']+)'/);
+			const fieldKey = match?.[1];
+			const displayMessage =
+				fieldKey && fieldLabels[fieldKey]
+					? message.replace(`'${fieldKey}'`, `'${fieldLabels[fieldKey]}'`)
+					: message;
+
 			toast.showToast({
 				title: 'Erreur',
-				message: (err as Error).message,
+				message: displayMessage,
 				type: ToastType.ERROR,
 			});
 		}
