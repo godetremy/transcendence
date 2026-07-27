@@ -14,6 +14,133 @@ This project is a website for the association BDE 42 Angoulême. This website is
 
 ## 🚀 Getting started
 
+
+### 📁 Project Structure
+
+```
+docker/
+├── docker-compose.yml          # Base shared configuration
+├── development/
+│   ├── docker-compose.yml
+│   └── secrets/.env
+├── staging/
+│   ├── docker-compose.yml
+│   └── secrets/.env
+├── production/
+│   ├── docker-compose.yml
+│   └── secrets/.env
+├── monitoring/
+│   └── docker-compose.yml       # Prometheus, Grafana, ELK, exporters...
+├── node/
+│   └── docker-compose.yml
+└── scripts/
+    ├── generate_environnement.sh
+    ├── generate_monitoring.sh
+    └── database_init.sh
+```
+
+Each environment (dev, staging, prod) combines the base compose file (docker-compose.yml) with an environment-specific file, and for staging/prod, with the monitoring stack.
+
+### ⚙️ Installation
+#### 1. Clone the repository
+```
+git clone <repo-url>
+cd <repo-name>
+```
+#### 2. Initialize an environment
+Depending on the environment you want, simply run one of the following commands. Each one automatically generates the .env files, installs npm dependencies, starts the Docker containers, and initializes the database.
+
+#### Development
+```
+make init-dev
+```
+This command:
+
+- Generates environment files (make env)
+- Installs dependencies (npm i)
+- Starts the dev containers (make dev)
+- Initializes the database (make database)
+- Starts the dev server (npm run dev)
+
+#### Staging
+```
+make init-staging
+```
+Generates the environment, installs dependencies, starts the staging containers (with monitoring), and initializes the database.
+
+#### Production
+```
+make init-prod
+```
+Generates the environment, installs dependencies, starts the production containers (with monitoring), and initializes the database.
+
+⚠️ Warning: these commands run npm i and start Docker containers. Make sure you have the necessary permissions and that the required ports are free.
+
+## 🔧 Available Commands
+
+#### Configuration generation
+
+| Command | Description |
+|---|---|
+| `make env` | Generates environment files via `generate_environnement.sh` |
+| `make monitoring` | Generates the monitoring configuration via `generate_monitoring.sh` |
+| `make database` | Initializes the database via `database_init.sh` |
+
+
+
+
+#### Environment management
+Copier le tableau
+
+| Command | Description |
+|---|---|
+| `make dev` | Starts the development containers (build + detached) |
+| `make down-dev` | Stops the development containers |
+| `make clean-dev` | Stops and removes dev volumes (⚠️ destructive, requires confirmation) |
+| `make staging` | Starts the staging containers (build + detached) |
+| `make down-staging` | Stops the staging containers |
+| `make clean-staging` | Stops and removes staging volumes (⚠️ destructive, requires confirmation) |
+| `make prod` | Starts the production containers (build + detached) |
+| `make down-prod` | Stops the production containers |
+| `make clean-prod` | Stops and removes production volumes (⚠️ destructive, requires confirmation) |
+
+
+
+
+#### Command
+
+| Command | Description |
+|---|---|
+| `make fclean` | Cleans **all** environments (dev, staging, prod) and prunes the Docker system (unused images, volumes, and build cache) |
+
+
+
+
+⚠️ make fclean is destructive: it removes all volumes from every environment as well as all unused Docker images and volumes on the machine (docker system prune -a --volumes -f). Use with caution, especially in production.
+
+### 🌍 Environments
+
+| Environment | Combined Compose Files | Monitoring |
+|---|---|---|
+| **Development** | `docker-compose.yml` + `development/docker-compose.yml` | ❌ |
+| **Staging** | `docker-compose.yml` + `staging/docker-compose.yml` + `monitoring/docker-compose.yml` | ✅ |
+| **Production** | `docker-compose.yml` + `production/docker-compose.yml` + `monitoring/docker-compose.yml` | ✅ |
+
+
+
+Each environment uses its own .env file located at docker/<env>/secrets/.env.
+
+## 🔍 Monitoring Stack (staging & prod)
+The monitoring stack includes:
+
+- Prometheus — metrics collection
+- Grafana — dashboard visualization
+- cAdvisor — container metrics
+- Elasticsearch / Kibana / Logstash / Filebeat — log aggregation and visualization
+- Exporters — nginx, postgres, elasticsearch
+
+📌 Note: make sure to properly configure your .env files before launching staging/production environments, especially database credentials and secrets used by the monitoring stack (Grafana, Postgres exporter, Elasticsearch exporter).
+
 ## 👥 Team
 
 | Member | Role                           | Responsibilities |
