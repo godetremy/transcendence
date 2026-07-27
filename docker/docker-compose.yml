@@ -201,7 +201,7 @@ services:
         volumes:
             - uptime-kuma-data:/app/data
         ports:
-            - "3002:3001"
+            - "3003:3001"
         networks:
             - app
         restart: on-failure
