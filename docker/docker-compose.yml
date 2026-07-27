@@ -194,21 +194,6 @@ services:
             interval: 10s
             timeout: 5s
             retries: 5
-    
-    uptime-kuma:
-        image: louislam/uptime-kuma:1
-        volumes:
-            - uptime-kuma-data:/app/data
-        ports:
-            - "3033:3001"
-        networks:
-            - app
-        restart: on-failure
-        healthcheck:
-            test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3001"]
-            interval: 10s
-            timeout: 5s
-            retries: 10
 
     backup:
         image: postgres:16-alpine
