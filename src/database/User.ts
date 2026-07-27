@@ -3,9 +3,13 @@ import { prisma } from '@/database/prisma/prisma';
 import { FortyTwoCursusUserDetails } from '@/types/fortytwo/FortyTwoCursusUserDetails';
 import { FortyTwoOauthToken } from '@/types/fortytwo/FortyTwoOauthToken';
 import * as bcrypt from 'bcrypt';
-import { JWTSessionPayload } from '@/types/session/SessionPayload';
+import { SessionPayload } from '@/types/session/SessionPayload';
 import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
+import { UserUpdateParameters } from '@/types/UserUpdateParameters';
+import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
+import { getESClient } from './prisma/elasticSearch';
+import { ElasticSearchUser } from '@/types/User';
 
 const createStudentUser = async (
 	me: FortyTwoCursusUserDetails,
@@ -27,13 +31,18 @@ const createStudentUser = async (
 			membership: {
 				create: {},
 			},
+			balance: {
+				create: {},
+			},
 		},
 	});
 };
 
 const createAgentsUser = async (
 	mail: string,
-	password: string
+	password: string,
+	admin: boolean = false,
+	agent_verified: boolean | null = null
 ): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.create({
 		data: {
@@ -45,6 +54,8 @@ const createAgentsUser = async (
 			fortytwo_oauth_id: null,
 			memberships_id: null,
 			agent: true,
+			admin,
+			agent_verified: agent_verified,
 		},
 	});
 };
@@ -73,6 +84,7 @@ const createOrUpdateStudentUser = async (
 		create: {
 			...user_body,
 			fortytwo_oauth: { create: { ...token_body } },
+			balance: { create: {} },
 		},
 		update: {
 			...user_body,
@@ -106,12 +118,25 @@ const updateUserPassword = async (
 	});
 };
 
+const updateUserAdminStatus = async (
+	id: string,
+	admin: boolean
+): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
+	return prisma.users.update({
+		where: { id },
+		data: { admin },
+	});
+};
+
 const deleteUser = async (id: string): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
 	return prisma.users.delete({
 		where: { id: id },
 		include: {
 			membership: true,
 			fortytwo_oauth: true,
+			upload_requests: true,
+			balance: true,
+			event_registrations: true,
 		},
 	});
 };
@@ -127,7 +152,7 @@ const getUserById = async <T extends Prisma.usersInclude>(
 };
 
 const getUserFromSession = async <T extends Prisma.usersInclude>(
-	session: JWTSessionPayload,
+	session: SessionPayload,
 	include: T
 ): Promise<Prisma.usersGetPayload<{ include: T }> | null> => {
 	return getUserById(session.user_id, include);
@@ -155,6 +180,47 @@ const getUsersByFilter = async <T extends Prisma.usersInclude>(
 	});
 };
 
+const getUsersByElasticSearch = async (q: string, limit: number): Promise<SearchResponse<ElasticSearchUser>> => {
+	const esclient = getESClient();
+	return await esclient.search<ElasticSearchUser>({
+		index: 'users',
+		query: {
+			bool: {
+				should: [
+					{
+						multi_match: {
+							query: q,
+							fields: ['full_name', 'mail'],
+							type: 'phrase_prefix',
+						},
+					},
+					{
+						multi_match: {
+							query: q,
+							fields: ['full_name', 'mail'],
+							fuzziness: 'AUTO',
+						},
+					},
+				],
+				minimum_should_match: 1,
+			},
+		},
+		size: limit,
+	});
+};
+
+const getUsersByFilterAndSearch = async <T extends Prisma.usersInclude>(
+	filter: Prisma.usersWhereInput,
+	include: T,
+	pagination?: PaginationParameters
+): Promise<Prisma.usersGetPayload<{ include: T }>[]> => {
+	return prisma.users.findMany({
+		where: filter,
+		include: include,
+		...(pagination ? { ...paginationToPrisma(pagination) } : {}),
+	});
+};
+
 const countUsersByFilter = async (filter: Prisma.usersWhereInput): Promise<number> => {
 	return prisma.users.count({
 		where: filter,
@@ -169,12 +235,30 @@ const existUserByMail = async (mail: string): Promise<boolean> => {
 	return (await getUserByMail(mail, {})) !== null;
 };
 
+const updateUserData = async (
+	user_id: string,
+	body: UserUpdateParameters
+): Promise<Prisma.usersGetPayload<Prisma.usersDefaultArgs>> => {
+	return prisma.users.update({
+		where: { id: user_id },
+		data: {
+			...(body.mail && { mail: body.mail }),
+			...(body.first_name && { first_name: body.first_name }),
+			...(body.last_name && { last_name: body.last_name }),
+			...(body.full_name && { full_name: body.full_name }),
+			...(body.agent_reason && { agent_reason: body.agent_reason }),
+			...(body.profile_picture && { profile_picture: body.profile_picture }),
+		},
+	});
+};
+
 export {
 	createStudentUser,
 	createAgentsUser,
 	createOrUpdateStudentUser,
 	updateUserApproval,
 	updateUserPassword,
+	updateUserAdminStatus,
 	deleteUser,
 	getUserById,
 	getUserFromSession,
@@ -183,4 +267,7 @@ export {
 	countUsersByFilter,
 	existUserById,
 	existUserByMail,
+	getUsersByFilterAndSearch,
+	updateUserData,
+	getUsersByElasticSearch,
 };

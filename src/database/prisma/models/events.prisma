@@ -1,0 +1,27 @@
+model events {
+	id								String						@id			@default(uuid())
+
+	organization_id					String
+	owner_id						String
+	photos_album_id					String?						@unique
+
+	image							String
+	title							String
+	subtitle						String?
+	description						String?
+
+	max_registration				Int?
+	location						String?
+
+	start_at						DateTime
+	end_at							DateTime
+
+
+	created_at						DateTime					@default(now())
+	update_at						DateTime					@updatedAt
+
+	owner							users						@relation(fields: [owner_id], references: [id], onDelete: Cascade)
+	organization					organizations				@relation(fields: [organization_id], references: [id], onDelete: Cascade)
+	photos_album					photos_album?				@relation(fields: [photos_album_id], references: [id], onDelete: Cascade)
+	event_registration				event_registrations[]
+}

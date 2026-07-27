@@ -1,12 +1,12 @@
 'use client';
 import styles from './components.module.scss';
 import { ChevronLeft } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export interface NavigationBarHeaderProps {
 	title: string;
-	children?: React.ReactNode;
+	children?: ReactNode;
 }
 
 export function NavigationBarHeader(props: NavigationBarHeaderProps) {

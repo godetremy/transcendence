@@ -3,39 +3,37 @@
 import { NavigationBarHeader } from '@/components/globals/NavigationBarHeader/NavigationBarHeader';
 import styles from './page.module.scss';
 import ListItem from '@/components/globals/ListItem/ListItem';
-import { ArrowUpRight, Plus } from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { Card } from '@/components/globals/Card/Card';
+import { CheckoutCard } from '@/components/globals/CheckoutCard/CheckoutCard';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { getBalance, getTransactions } from '@/lib/fetcher/user';
+import { useUser } from '@/contexts/UserContext';
+import { User } from '@/types/User';
+import { Loader } from '@/components/globals/Loader/Loader';
+import { ErrorState } from '@/components/globals/ErrorState/ErrorState';
+import { EmptyState } from '@/components/globals/EmptyState/EmptyState';
+import ListContainer from '@/components/globals/ListContainer/ListContainer';
+import Image from 'next/image';
 
 export default function Page() {
-	const [balanceHistory, setBalanceHistory] = useState<
-		{ title: string; history: { name: string; cost: number }[] }[]
-	>([]);
+	const [showReload, setShowReload] = useState<boolean>(false);
+	const userCtx = useUser();
+	const [user] = useState<User>(userCtx!);
 
-	function generateRandomMonth() {
-		const credits = [];
+	const { data: balance, isError: isBalanceError, error } = useQuery(getBalance(user.id));
 
-		for (let i = 0; i < Math.random(); i++) {
-			const cost = Math.floor(5 - Math.random() * 10) + 1;
-			credits.push({
-				name: cost < 0 ? 'Adhesion mensuelle' : 'Rechargement de solde',
-				cost,
-			});
-		}
+	const {
+		data: transations,
+		isLoading: isTransactionLoading,
+		isError: isTransactionError,
+	} = useInfiniteQuery({
+		...getTransactions(user.id, balance?.id ?? ''),
+		enabled: balance?.id !== undefined,
+	});
 
-		return credits;
-	}
-
-	useEffect(() => {
-		const balanceHistory: { title: string; history: { name: string; cost: number }[] }[] = [];
-		for (let i = 0; i < 10; i++) {
-			balanceHistory.push({
-				title: `Mai 2026`,
-				history: generateRandomMonth(),
-			});
-		}
-		// eslint-disable-next-line react-hooks/set-state-in-effect
-		setBalanceHistory(balanceHistory);
-	}, []);
+	if (isBalanceError || isTransactionError) return <ErrorState error={error} />;
 
 	return (
 		<>
@@ -43,45 +41,57 @@ export default function Page() {
 				<section className={styles.section}>
 					<div className={styles.balance_card}>
 						<span>Mon solde</span>
-						<p>42,67€</p>
+						<p className={balance ? undefined : styles.skeleton}>
+							{balance ? `${balance.account}` : '100'}{' '}
+							<Image src={'/images/coin.svg'} alt={'coins'} width={35} height={35} />
+						</p>
 					</div>
 					<div className={styles.balance_action_container}>
-						<button className={styles.primary}>
+						<button
+							className={styles.primary}
+							onClick={async () => {
+								setShowReload(true);
+							}}
+						>
 							<Plus /> Recharge
-						</button>
-						<button className={styles.secondary}>
-							<ArrowUpRight /> Virement
 						</button>
 					</div>
 					<span className={styles.listSectionTitle}>Historique</span>
-					{balanceHistory.map((balance, i) => (
-						<Fragment key={i}>
-							<span className={styles.listSectionSubtitle}>{balance.title}</span>
-							<div className={styles.list}>
-								{balance.history.map((item, j) => (
+					{isTransactionLoading || transations === undefined ? (
+						<Loader />
+					) : transations.pages[0].data.length === 0 ? (
+						<EmptyState title="Tu n'as fait aucun achats..." description="Et si tu essayez pour voir ?" />
+					) : (
+						<ListContainer>
+							{transations.pages.map((row) =>
+								row.data.map((transaction, i) => (
 									<ListItem
-										title={item.name}
-										description={'Débitée le 11/05/2026 - depuis le solde'}
+										title={transaction.name ?? ''}
+										description={`${transaction.amount >= 0 ? 'Recharger le ' : 'Débitée le'} ${new Date(transaction.created_at).toLocaleDateString('fr-FR')}`}
 										rightElement={
 											<span
 												className={styles.debit}
 												style={{
-													color: item.cost >= 0 ? '#99FFBA' : '#FE5356',
-													backgroundColor: item.cost >= 0 ? '#99FFBA20' : '#FE535620',
+													color: transaction.amount >= 0 ? '#99FFBA' : '#FE5356',
+													backgroundColor:
+														transaction.amount >= 0 ? '#99FFBA20' : '#FE535620',
 												}}
 											>
-												{`${item.cost >= 0 ? '+' : ''}${item.cost.toFixed(2)}€`}
+												{`${transaction.amount >= 0 ? '+' : ''}${transaction.amount.toFixed(2)}€`}
 											</span>
 										}
 										showChevron={false}
-										last={j === balance.history.length - 1}
-										key={j}
+										last={i === row.data.length - 1}
+										key={i}
 									/>
-								))}
-							</div>
-						</Fragment>
-					))}
+								))
+							)}
+						</ListContainer>
+					)}
 				</section>
+				<Card visible={showReload} requestClose={() => setShowReload(false)}>
+					<CheckoutCard close={() => setShowReload(false)} />
+				</Card>
 			</NavigationBarHeader>
 		</>
 	);

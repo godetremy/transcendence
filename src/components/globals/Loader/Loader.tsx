@@ -19,6 +19,10 @@ export function Loader({ size, dark }: { size?: number; dark?: boolean }) {
 			}}
 			width={size ?? 40}
 			height={size ?? 40}
+			style={{
+				minWidth: size ?? 40,
+				minHeight: size ?? 40,
+			}}
 		/>
 	);
 }

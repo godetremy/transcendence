@@ -1,0 +1,114 @@
+.editor_container {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+
+	& > .file_input {
+		position: relative;
+		width: 200px;
+		height: 200px;
+		border: 8px dashed rgba(var(--color-rgb-primary-white), 0.2);
+		border-radius: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 20px;
+		transition: 0.2s cubic-bezier(0.15, 0, 0, 1.2);
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: -8;
+			background-image: var(--preview-image);
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+			border-radius: 40px;
+			overflow: hidden;
+			transition: 0.2s cubic-bezier(0.15, 0, 0, 1.2);
+		}
+
+		& > svg {
+			opacity: 0.4;
+			transition: 0.2s cubic-bezier(0.15, 0, 0, 1.2);
+		}
+
+		& > div {
+			position: absolute;
+			inset: -8;
+			z-index: 10;
+			background-color: #0008;
+			border-radius: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		&.active {
+			border: 8px dashed rgba(var(--color-rgb-primary-purple), 1);
+			& > svg {
+				opacity: 1;
+				scale: 1.1;
+			}
+		}
+
+		&:active {
+			scale: 0.95;
+			& > svg {
+				scale: 0.9;
+			}
+		}
+	}
+
+	& > input[type='file'] {
+		display: none;
+	}
+
+	& > input[type='text'] {
+		appearance: none;
+		border: none;
+		background-color: transparent;
+		outline: none;
+		text-align: center;
+		width: 100%;
+		font: 600 32px var(--font-paragraph);
+		color: var(--color-primary-white);
+
+		&::placeholder {
+			color: var(--color-primary-white);
+			opacity: 0.4;
+		}
+	}
+
+	& > textarea {
+		appearance: none;
+		border: none;
+		background-color: transparent;
+		outline: none;
+		text-align: center;
+		width: 100%;
+		font: 600 16px var(--font-paragraph);
+		color: var(--color-primary-white);
+		opacity: 0.4;
+		field-sizing: content;
+		max-height: 150px;
+	}
+
+	.club_toggle {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font: 600 14px var(--font-paragraph);
+		color: rgba(var(--color-rgb-primary-white), 0.6);
+		margin-top: 10px;
+	}
+
+	.error {
+		color: #fe8484;
+		font: 500 14px var(--font-paragraph);
+		margin-top: 15px;
+	}
+}

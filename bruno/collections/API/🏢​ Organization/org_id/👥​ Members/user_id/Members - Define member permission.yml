@@ -1,0 +1,27 @@
+info:
+  name: Members - Define member permission
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{BaseURL}}/organization/:org_id/members/:user_id"
+  params:
+    - name: user_id
+      value: test
+      type: path
+    - name: org_id
+      value: test
+      type: path
+  body:
+    type: form-urlencoded
+    data:
+      - name: permissions
+        value: test
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

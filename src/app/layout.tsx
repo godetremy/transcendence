@@ -1,11 +1,17 @@
 import './globals.scss';
 import type { Metadata } from 'next';
-import { Montserrat } from 'next/font/google';
+import { Flow_Circular, Montserrat } from 'next/font/google';
 import { ModalProvider } from '@/components/globals/ModalProvider/ModalProvider';
+import QueryProvider from '@/components/globals/QueryProvider/QueryProvider';
+import { ToastProvider } from '@/components/globals/ToastProvider/ToastProvider';
 
 const montserrat = Montserrat({
 	subsets: ['latin'],
 	display: 'swap',
+});
+
+const flowCircular = Flow_Circular({
+	weight: ['400'],
 });
 
 export const metadata: Metadata = {
@@ -19,9 +25,13 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="fr" className={`${montserrat.className}`}>
+		<html lang="fr" className={`${montserrat.className} ${flowCircular.className}`}>
 			<body>
-				<ModalProvider>{children}</ModalProvider>
+				<QueryProvider>
+					<ModalProvider>
+						<ToastProvider>{children}</ToastProvider>
+					</ModalProvider>
+				</QueryProvider>
 			</body>
 		</html>
 	);

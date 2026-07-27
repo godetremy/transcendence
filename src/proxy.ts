@@ -1,9 +1,21 @@
-import { decrypt } from '@/lib/session';
-import { SessionPayload } from '@/types/session/SessionPayload';
-import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
+import { getSession } from '@/lib/session';
 import { NextRequest, NextResponse } from 'next/server';
+import { existsSync } from 'node:fs';
+import path from 'path';
 
-const ignorePath = ['/app/api/auth/'];
+const ignorePath = ['/app/api/auth/', '/app/api/webhook'];
+const ignorePathApprove = [
+	'/app/api/users/approval',
+	'/app/approval',
+	'/app/api/users/me',
+	'/app/api/auth/refresh',
+	'/app/api/auth/logout',
+];
+
+function checkFirstInitialization(url: string) {
+	const uri = path.resolve(process.cwd(), '.init_done');
+	return !existsSync(uri) && !url.startsWith('/setup') && !url.startsWith('/app/api');
+}
 
 function isPathIgnored(path: string): boolean {
 	if (!path.startsWith('/app')) return true;
@@ -13,16 +25,11 @@ function isPathIgnored(path: string): boolean {
 	return false;
 }
 
-async function getSession(cookie: RequestCookie | undefined): Promise<SessionPayload | null> {
-	try {
-		if (cookie === undefined) return null;
-		const session = await decrypt(cookie.value);
-		if (Date.now() / 1000 >= session.exp) return null;
-		return session;
-	} catch (err: unknown) {
-		console.error(err);
-		return null;
+function isPathIgnoredApprove(path: string): boolean {
+	for (const ignored of ignorePathApprove) {
+		if (path.startsWith(ignored)) return true;
 	}
+	return false;
 }
 
 export default async function proxy(req: NextRequest) {
@@ -30,7 +37,9 @@ export default async function proxy(req: NextRequest) {
 		return NextResponse.next();
 	}
 
-	const session = await getSession(req.cookies.get('session'));
+	if (checkFirstInitialization(req.nextUrl.pathname)) return NextResponse.redirect(new URL('/setup', req.nextUrl));
+
+	const session = await getSession(req);
 
 	if (req.nextUrl.pathname === '/app') {
 		if (session !== null) return NextResponse.redirect(new URL('/app/home', req.nextUrl));
@@ -47,13 +56,10 @@ export default async function proxy(req: NextRequest) {
 		return NextResponse.redirect(new URL('/app/login', req.nextUrl));
 	}
 
-	if (
-		session.agent &&
-		(session.agent_verified === null || !session.agent_verified) &&
-		!req.nextUrl.pathname.startsWith('/app/agents/approval') &&
-		!req.nextUrl.pathname.startsWith('/app/api')
-	)
-		return NextResponse.redirect(new URL('/app/agents/approval', req.nextUrl));
+	if (session.agent && (session.agent_verified === null || !session.agent_verified)) {
+		if (isPathIgnoredApprove(req.nextUrl.pathname)) return NextResponse.next();
+		return NextResponse.redirect(new URL('/app/approval', req.nextUrl));
+	}
 
 	return NextResponse.next();
 }

@@ -13,6 +13,7 @@ import { Card } from '@/components/globals/Card/Card';
 import { TotpConfiguration } from '@/components/2fa/TotpConfiguration/TotpConfiguration';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { TotpDisable } from '@/components/2fa/TotpDisable/TotpDisable';
+import { ResetPassword } from '@/components/globals/resetPassword/resetPassword';
 
 export default function Page() {
 	const { openModal, closeModal } = useModal();
@@ -20,6 +21,8 @@ export default function Page() {
 	const [twoFactorAuthDetails, setTwoFactorAuthDetails] = useState<TwoFactorAuth | undefined>(undefined);
 	const [showTotpConfiguration, setShowTotpConfiguration] = useState<boolean>(false);
 	const [showTotpDisable, setShowTotpDisable] = useState<boolean>(false);
+	const [showChangePassword, setShowChangePassword] = useState<boolean>(false);
+	const [resetPasswordLoading, setResetPasswordLoading] = useState<boolean>(false);
 
 	const is2faEnabled = () => {
 		return twoFactorAuthDetails?.mail || twoFactorAuthDetails?.totp || twoFactorAuthDetails?.passkey;
@@ -107,10 +110,22 @@ export default function Page() {
 				)}
 				<span className={styles.listSectionTitle}>Mot de passe</span>
 				<section className={styles.list}>
-					<ListItem title={'Changer le mot de passe'} last />
+					<ListItem title={'Changer le mot de passe'} onPress={() => setShowChangePassword(true)} last />
 				</section>
 			</article>
-
+			<Card visible={showChangePassword} requestClose={() => setShowChangePassword(false)}>
+				<ResetPassword
+					onClose={() => setShowChangePassword(false)}
+					onAccept={() => {
+						setResetPasswordLoading(true);
+						setTimeout(() => {
+							setResetPasswordLoading(false);
+							setShowChangePassword(false);
+						}, 800);
+					}}
+					loading={resetPasswordLoading}
+				/>
+			</Card>
 			<Card visible={showTotpConfiguration} requestClose={cancelTotpConfiguration}>
 				<TotpConfiguration
 					requestClose={cancelTotpConfiguration}

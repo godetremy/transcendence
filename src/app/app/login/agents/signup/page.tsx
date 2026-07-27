@@ -10,12 +10,18 @@ import { LoginText } from '@/components/login/LoginText/LoginText';
 import { SignupFormSchema } from '@/schema/SignupSchema';
 import { redirect } from 'next/navigation';
 import { LoginForm } from '@/components/login/LoginForm/LoginForm';
+import { useMutation } from '@tanstack/react-query';
+import { signupAgent } from '@/lib/fetcher/user';
+import { useToast, ToastType } from '@/components/globals/ToastProvider/ToastProvider';
 
 export default function Page() {
 	const [error, setError] = useState<string | undefined>(undefined);
 	const [image] = useState(() => {
 		return StaffLoginPagesImages[Math.floor(Math.random() * StaffLoginPagesImages.length)];
 	});
+
+	const { mutateAsync } = useMutation(signupAgent());
+	const toast = useToast();
 
 	const signUp = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
@@ -28,20 +34,30 @@ export default function Page() {
 			setError(fields.error.issues[0].message);
 			return;
 		}
-		const message = await fetch('/app/api/auth/signup/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				mail: fields.data.mail,
-				password: fields.data.password,
-				passwordCheck: fields.data.passwordCheck,
-			}),
-		});
-		const body = await message.json();
-		if (message.ok) return redirect('/app/home/');
-		setError(body.message);
+
+		try {
+			const check = await mutateAsync({ body: fields.data });
+
+			if (!check.success) {
+				throw new Error("L'inscription a échoué");
+			}
+
+			toast.showToast({
+				title: 'Succès',
+				message: 'Votre compte a été créé avec succès.',
+				type: ToastType.SUCCESS,
+			});
+
+			return redirect('/app/home/');
+		} catch (error) {
+			console.error("Erreur lors de l'inscription :", error);
+
+			toast.showToast({
+				title: 'Erreur',
+				message: 'Impossible de créer votre compte.',
+				type: ToastType.ERROR,
+			});
+		}
 	};
 
 	return (

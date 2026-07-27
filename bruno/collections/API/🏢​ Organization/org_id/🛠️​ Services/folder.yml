@@ -1,0 +1,7 @@
+info:
+  name: 🛠️​ Services
+  type: folder
+  seq: 11
+
+request:
+  auth: inherit

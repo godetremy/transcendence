@@ -1,17 +1,17 @@
-import Lottie from 'react-lottie';
+import Lottie from 'lottie-react';
 import animation from './animation.json';
 
-export function EmojiSunglasses({ size }: { size?: number }) {
+export default function EmojiSunglasses({ size }: { size?: number }) {
 	return (
 		<Lottie
-			options={{
-				loop: true,
-				autoplay: true,
-				animationData: animation,
+			animationData={animation}
+			loop={true}
+			autoplay={true}
+			style={{
+				width: size ?? 130,
+				height: size ?? 130,
+				margin: -14,
 			}}
-			width={size ?? 130}
-			height={size ?? 130}
-			style={{ margin: -14 }}
 		/>
 	);
 }

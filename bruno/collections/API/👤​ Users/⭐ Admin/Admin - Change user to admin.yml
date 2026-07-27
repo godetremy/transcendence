@@ -1,0 +1,20 @@
+info:
+  name: Admin - Change user to admin
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{BaseURL}}/users/admin"
+  body:
+    type: form-urlencoded
+    data:
+      - name: mail
+        value: test@test.fr
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

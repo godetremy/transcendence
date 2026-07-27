@@ -1,0 +1,25 @@
+info:
+  name: Agent - Set approval
+  type: http
+  seq: 2
+
+http:
+  method: PATCH
+  url: "{{BaseURL}}/users/approval/:id"
+  params:
+    - name: id
+      value: 0a359046-3e74-43ba-8764-6a9333d424fa
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "approve": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

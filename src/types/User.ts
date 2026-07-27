@@ -1,6 +1,6 @@
 import { Membership } from './Membership';
 
-export interface User {
+export interface User<T = object> {
 	id: string;
 	mail: string;
 	first_name: string | null;
@@ -9,8 +9,8 @@ export interface User {
 	profile_picture: string;
 	agent: boolean;
 	agent_reason: string | null;
-	memberships_id: string | null;
-	membership: Membership | null;
+	membership: T extends { membership: unknown } ? Membership : never;
+	admin?: boolean;
 }
 
 export interface PublicUser {
@@ -18,6 +18,18 @@ export interface PublicUser {
 	first_name: string | null;
 	last_name: string | null;
 	full_name: string | null;
-	profile_picture: string | null;
+	profile_picture: string;
 	agent: boolean;
+	created_at: string;
+	updated_at: string;
+	is_member: boolean;
+}
+
+export interface ElasticSearchUser {
+	full_name: string;
+	mail: string;
+}
+
+export interface AgentRequest extends User<object> {
+	agent_reason: string | null;
 }

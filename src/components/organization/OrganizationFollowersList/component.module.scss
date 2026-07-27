@@ -1,0 +1,9 @@
+@use '../../../app/supports';
+
+.profilePicture {
+	border: 1px solid var(--color-border-dark);
+	border-radius: 100%;
+	object-fit: cover;
+	aspect-ratio: 1;
+	flex: 1;
+}

@@ -1,0 +1,41 @@
+.card {
+	background-color: rgba(var(--color-rgb-primary-white), 0.1);
+	border-radius: 10px;
+	overflow: hidden;
+	border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+
+	& > .value_container {
+		background-color: rgba(var(--color-rgb-primary-white), 0.05);
+		padding: 15px;
+		height: 100px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 3px;
+
+		& > span {
+			font: 500 14px var(--font-paragraph);
+			opacity: 0.6;
+		}
+
+		& > p {
+			font: 600 26px var(--font-paragraph);
+		}
+	}
+
+	& > .progression_container {
+		padding: 10px 15px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		& > svg {
+			opacity: 0.6;
+		}
+
+		& > span {
+			font: 400 14px var(--font-paragraph);
+			color: rgba(var(--color-rgb-primary-white), 0.6);
+		}
+	}
+}

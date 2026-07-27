@@ -11,6 +11,10 @@ import { WhoAreYou } from '@/app/app/approval/pages/whoAreYou';
 import { AccessMotivation } from '@/app/app/approval/pages/accessMotivation';
 import { Processing } from '@/app/app/approval/pages/processing';
 import { ApprobationResult } from '@/app/app/approval/pages/approbationResult';
+import { useUser } from '@/contexts/UserContext';
+import { logoutUser } from '@/lib/fetcher/user';
+import { useMutation } from '@tanstack/react-query';
+import { getCsrfTokenFromCookie } from '@/utils/csrf';
 
 export interface ApprovalButton {
 	title: string;
@@ -25,14 +29,18 @@ export interface ApprovalPage {
 }
 
 export default function Page() {
+	const user = useUser();
 	const router = useRouter();
 	const { openModal, closeModal } = useModal();
+
+	const { mutateAsync } = useMutation(logoutUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	const [image] = useState(() => {
 		return StudentLoginPagesImages[Math.floor(Math.random() * StudentLoginPagesImages.length)];
 	});
-	const [page, setPage] = useState(0);
+	const [page, setPage] = useState(user?.agent_reason !== null ? 3 : user?.full_name !== null ? 2 : 0);
 	const [loading, setLoading] = useState(false);
+	const [approved, setApproved] = useState(false);
 
 	const logout = () => {
 		openModal({
@@ -46,9 +54,10 @@ export default function Page() {
 				{
 					text: 'Se déconnecter',
 					negative: true,
-					onClick: () => {
+					onClick: async () => {
 						closeModal();
-						router.push('/app/api/auth/logout');
+						const check = await mutateAsync();
+						if (check.success) router.push('/app/login');
 					},
 				},
 			],
@@ -63,8 +72,11 @@ export default function Page() {
 		ApprobationRequired(logout, nextPage),
 		WhoAreYou(logout, nextPage, loading, setLoading),
 		AccessMotivation(logout, nextPage, loading, setLoading),
-		Processing(logout, nextPage),
-		ApprobationResult(true, logout, nextPage),
+		Processing(logout, (approved) => {
+			setApproved(approved);
+			setPage(4);
+		}),
+		ApprobationResult(approved, logout, setLoading),
 	];
 
 	return (

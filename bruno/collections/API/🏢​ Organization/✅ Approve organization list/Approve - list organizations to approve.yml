@@ -1,0 +1,22 @@
+info:
+  name: Approve - list organizations to approve
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BaseURL}}/organization/approve?limit=20&page=1"
+  params:
+    - name: limit
+      value: "20"
+      type: query
+    - name: page
+      value: "1"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -29,8 +29,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Fortytwo_oauths
- * const fortytwo_oauths = await prisma.fortytwo_oauth.findMany()
+ * // Fetch zero or more Balances
+ * const balances = await prisma.balance.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,6 +39,26 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model balance
+ * 
+ */
+export type balance = Prisma.balanceModel
+/**
+ * Model event_registrations
+ * 
+ */
+export type event_registrations = Prisma.event_registrationsModel
+/**
+ * Model events
+ * 
+ */
+export type events = Prisma.eventsModel
+/**
+ * Model files
+ * 
+ */
+export type files = Prisma.filesModel
 /**
  * Model fortytwo_oauth
  * 
@@ -50,10 +70,70 @@ export type fortytwo_oauth = Prisma.fortytwo_oauthModel
  */
 export type memberships = Prisma.membershipsModel
 /**
+ * Model organization_followers
+ * 
+ */
+export type organization_followers = Prisma.organization_followersModel
+/**
+ * Model organization_members
+ * 
+ */
+export type organization_members = Prisma.organization_membersModel
+/**
+ * Model organization_permission
+ * 
+ */
+export type organization_permission = Prisma.organization_permissionModel
+/**
+ * Model organizations
+ * 
+ */
+export type organizations = Prisma.organizationsModel
+/**
+ * Model photos
+ * 
+ */
+export type photos = Prisma.photosModel
+/**
+ * Model photos_album_reports
+ * 
+ */
+export type photos_album_reports = Prisma.photos_album_reportsModel
+/**
+ * Model photos_album
+ * 
+ */
+export type photos_album = Prisma.photos_albumModel
+/**
+ * Model ratelimit_login
+ * 
+ */
+export type ratelimit_login = Prisma.ratelimit_loginModel
+/**
+ * Model service_categories
+ * 
+ */
+export type service_categories = Prisma.service_categoriesModel
+/**
+ * Model services
+ * 
+ */
+export type services = Prisma.servicesModel
+/**
+ * Model transaction
+ * 
+ */
+export type transaction = Prisma.transactionModel
+/**
  * Model two_factor_auth
  * 
  */
 export type two_factor_auth = Prisma.two_factor_authModel
+/**
+ * Model upload_request
+ * 
+ */
+export type upload_request = Prisma.upload_requestModel
 /**
  * Model users
  * 
@@ -64,23 +144,3 @@ export type users = Prisma.usersModel
  * 
  */
 export type webauthn_credentials = Prisma.webauthn_credentialsModel
-/**
- * Model registered_event
- * 
- */
-export type registered_event = Prisma.registered_eventModel
-/**
- * Model image_album
- * 
- */
-export type image_album = Prisma.image_albumModel
-/**
- * Model image_report
- * 
- */
-export type image_report = Prisma.image_reportModel
-/**
- * Model event
- * 
- */
-export type event = Prisma.eventModel

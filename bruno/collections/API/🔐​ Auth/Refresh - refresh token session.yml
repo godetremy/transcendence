@@ -1,0 +1,15 @@
+info:
+  name: Refresh - refresh token session
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{BaseURL}}/auth/logout"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

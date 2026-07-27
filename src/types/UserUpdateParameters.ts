@@ -3,6 +3,6 @@ export interface UserUpdateParameters {
 	first_name?: string;
 	last_name?: string;
 	full_name?: string;
-	reason?: string;
+	agent_reason?: string;
 	profile_picture?: string;
 }

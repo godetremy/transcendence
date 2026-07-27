@@ -3,15 +3,34 @@ import styles from './page.module.scss';
 import { useUser } from '@/contexts/UserContext';
 import { ProfileBanner } from '@/components/profile/ProfileBanner/ProfileBanner';
 import ListItem from '@/components/globals/ListItem/ListItem';
-import { BadgeDollarSign, BookOpenText, FileLock, GitCommitVerticalIcon, Lock, LogOut, User2 } from 'lucide-react';
+import { useToast, ToastType } from '@/components/globals/ToastProvider/ToastProvider';
+import {
+	BadgeDollarSign,
+	BookOpenText,
+	Building2,
+	Code,
+	FileLock,
+	GitCommitVerticalIcon,
+	KeyRound,
+	Lock,
+	LogOut,
+	User2,
+	Vote,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
+import { useMutation } from '@tanstack/react-query';
+import { logoutUser } from '@/lib/fetcher/user';
+import { getCsrfTokenFromCookie } from '@/utils/csrf';
 
 export default function Page() {
 	const router = useRouter();
 	const user = useUser();
 	const { openModal, closeModal } = useModal();
+	const toast = useToast();
+
+	const { mutateAsync } = useMutation(logoutUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	return (
 		<>
@@ -42,8 +61,37 @@ export default function Page() {
 						title={'Ton adhesion'}
 						description={'Gère ton adhesion au BDE'}
 						onPress={() => router.push('/app/me/membership')}
-						last
 					/>
+					<ListItem
+						icon={Building2}
+						title={'Organisation'}
+						description={'Gère tes organisations'}
+						onPress={() => router.push('/app/me/organization')}
+					/>
+					<ListItem
+						icon={Code}
+						title={'Développeurs'}
+						description={'Gère tes applications et clés API'}
+						onPress={() => router.push('/app/me/api')}
+						last={!user?.admin}
+					/>
+					{user?.admin && (
+						<>
+							<ListItem
+								icon={Vote}
+								title={'Demandes d’accès agents'}
+								description={'Gère les demandes de création des comptes agents'}
+								onPress={() => router.push('/app/me/agents')}
+							/>
+							<ListItem
+								icon={KeyRound}
+								title={'Administrateurs'}
+								description={'Gère les membres administrateurs'}
+								onPress={() => router.push('/app/me/administration')}
+								last
+							/>
+						</>
+					)}
 				</div>
 				<div className={styles.list}>
 					<ListItem
@@ -85,9 +133,37 @@ export default function Page() {
 									{
 										text: 'Se déconnecter',
 										negative: true,
-										onClick: () => {
+										onClick: async () => {
 											closeModal();
-											router.push('/app/api/auth/logout');
+
+											try {
+												const check = await mutateAsync();
+
+												if (!check.success) {
+													toast.showToast({
+														title: 'Erreur',
+														message: 'Impossible de vous déconnecter.',
+														type: ToastType.ERROR,
+													});
+													return;
+												}
+
+												toast.showToast({
+													title: 'Succès',
+													message: 'Vous avez été déconnecté avec succès.',
+													type: ToastType.SUCCESS,
+												});
+
+												router.push('/app/login');
+											} catch (error) {
+												console.error('Erreur lors de la déconnexion :', error);
+
+												toast.showToast({
+													title: 'Erreur',
+													message: 'Impossible de vous déconnecter.',
+													type: ToastType.ERROR,
+												});
+											}
 										},
 									},
 								],

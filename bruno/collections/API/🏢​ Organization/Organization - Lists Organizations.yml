@@ -1,0 +1,22 @@
+info:
+  name: Organization - Lists Organizations
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{BaseURL}}/organization?page=1&limit=10"
+  params:
+    - name: page
+      value: "1"
+      type: query
+    - name: limit
+      value: "10"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

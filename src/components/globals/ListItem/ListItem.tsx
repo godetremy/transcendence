@@ -1,5 +1,5 @@
 import styles from './component.module.scss';
-import { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
 import { ChevronRight, LucideProps } from 'lucide-react';
 
 export interface ListItemProps {
@@ -9,8 +9,11 @@ export interface ListItemProps {
 	showChevron?: boolean;
 	last?: boolean;
 	negative?: boolean;
+	hoverEffect?: boolean;
 	onPress?: () => void;
-	rightElement?: React.ReactNode;
+	leftElement?: ReactNode;
+	rightElement?: ReactNode;
+	disabled?: boolean;
 }
 
 function ListItem({
@@ -20,21 +23,26 @@ function ListItem({
 	showChevron = true,
 	last = false,
 	negative = false,
+	hoverEffect = true,
 	onPress,
+	leftElement,
 	rightElement,
+	disabled = false,
 }: ListItemProps) {
 	return (
 		<button
-			className={`${styles.listItem} ${negative ? styles.negative : ''}`}
+			className={`${styles.listItem} ${hoverEffect ? styles.hoverable : ''} ${negative ? styles.negative : ''}`}
 			style={{
-				height: description ? '60px' : '50px',
+				minHeight: description ? '60px' : '50px',
 				borderBottom: last ? 'none' : '1px solid var(--color-border-dark)',
 			}}
 			onClick={onPress}
+			disabled={disabled}
 		>
-			{Icon && (
+			{(leftElement || Icon) && (
 				<div className={styles.left}>
-					<Icon width={24} height={24} color={'currentColor'} />
+					{leftElement && leftElement}
+					{Icon && <Icon width={24} height={24} color={'currentColor'} />}
 				</div>
 			)}
 			<div className={styles.main}>

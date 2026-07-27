@@ -1,0 +1,18 @@
+model photos_album_reports {
+	id						String					@id		@default(uuid())
+
+	album_id				String
+	user_id					String
+	photo_id				String?
+
+	reason					String?
+
+	resolved				Boolean					@default(false)
+
+	created_at				DateTime				@default(now())
+	updated_at				DateTime				@updatedAt
+
+	album					photos_album			@relation(fields: [album_id], references: [id], onDelete: Cascade)
+	user					users					@relation(fields: [user_id], references: [id])
+	photo					photos?					@relation(fields: [photo_id], references: [id])
+}

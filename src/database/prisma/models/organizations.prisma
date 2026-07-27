@@ -1,0 +1,19 @@
+model organizations {
+    id String @id @default(uuid())
+
+    owner_id    String
+    name        String
+    description String?
+    logo        String?
+    club        Boolean @default(false)
+    verified    Boolean @default(false)
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    organization_members    organization_members[]
+    organization_followers  organization_followers[]
+    events                  events[]
+    services                services[]
+    organization_permission organization_permission[]
+}

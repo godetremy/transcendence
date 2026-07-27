@@ -1,0 +1,85 @@
+name: BDE-production
+
+services:
+    nginx-cert-setup:
+        volumes:
+        - ./production/certificates:/certificates
+    nginx:
+        depends_on:
+            node:
+                condition: service_healthy
+        volumes:
+            - ./production/certificates:/etc/nginx/certificates
+            - ./services/nginx/nginx.conf:/etc/nginx/templates/default.conf.template
+        ports:
+            - '80:80'
+            - '443:443'
+        env_file:
+            - ./production/secrets/.env
+        environment:
+            NODE_UPSTREAM: node:3000
+
+    postgres:
+        env_file:
+            - ./production/secrets/.env
+        ports:
+            - '$DATABASE_PORT_DOCKER:5432'
+    elasticsearch:
+        ports:
+            - '9200:9200'
+        env_file:
+            - ./production/secrets/.env
+    seaweed-master:
+        ports:
+            - '9333:9333'
+    seaweed-filer:
+        ports:
+            - '8888:8888'
+    seaweed-volume:
+        ports:
+            - '8080:8080'
+
+    kibana:
+        env_file:
+            - ./production/secrets/.env
+
+    logstash:
+        env_file:
+            - ./production/secrets/.env
+
+    node:
+        depends_on:
+            postgres:
+                condition: service_healthy
+            elasticsearch:
+                condition: service_healthy
+        build:
+            context: ../
+            dockerfile: docker/services/node/production/Dockerfile
+            args:
+                NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+                NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+        env_file:
+            - ./production/secrets/.env
+        environment:
+            RUNNING_IN_DOCKER: "true"
+            APP_ENV: production
+            ELASTICSEARCH_URL: https://elasticsearch:9200
+            NODE_EXTRA_CA_CERTS: /certs/ca.crt
+        volumes:
+            - ./certs/ca.crt:/certs/ca.crt
+        networks:
+            - app
+        ports:
+            - '3001:3000'
+        restart: on-failure
+        command: sh -c "cd /app/ && npx prisma generate && npx prisma migrate deploy && HOSTNAME=0.0.0.0 node server.js"
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -qO- http://node:3000 || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+    backup:
+        env_file:
+            - ./production/secrets/.env
+

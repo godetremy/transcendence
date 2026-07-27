@@ -7,7 +7,7 @@
 	top: -50vh;
 	left: -50vw;
 	padding: 50vh calc(50vw + 20px);
-	z-index: 10000;
+	z-index: 1000000;
 	background-color: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(10px);
 	display: flex;
@@ -33,6 +33,74 @@
 			opacity: 0.6;
 		}
 
+		.input_container {
+			position: relative;
+			margin-top: 15px;
+			display: flex;
+			flex-direction: column;
+
+			& > span {
+				font: 500 13px var(--font-paragraph);
+				color: rgba(var(--color-rgb-primary-white), 0.6);
+				margin-bottom: 5px;
+				margin-left: 8px;
+			}
+
+			& > input {
+				height: 40px;
+				padding: 0 15px;
+				border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+				border-radius: 8px;
+				background-color: rgba(var(--color-rgb-primary-white), 0.05);
+				color: rgba(var(--color-rgb-primary-white), 0.7);
+				font: 500 14px var(--font-paragraph);
+				outline: none;
+				transition: 0.1s;
+
+				&:focus {
+					border: 2px solid rgba(var(--color-rgb-primary-purple), 1);
+				}
+			}
+
+			& > .suggestions_container {
+				position: absolute;
+				top: 66px;
+				left: 0;
+				width: 100%;
+				background-color: #1c1c1c;
+				border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+				display: none;
+				flex-direction: column;
+				padding: 8px;
+				border-radius: 8px;
+				max-height: 200px;
+				overflow-y: scroll;
+				z-index: 1000;
+
+				button {
+					appearance: none;
+					height: 35px;
+					border: none;
+					border-radius: 4px;
+					display: flex;
+					align-items: center;
+					padding: 0 15px;
+					flex-shrink: 0;
+					background-color: rgba(var(--color-rgb-primary-white), 0);
+					color: rgba(var(--color-rgb-primary-white), 0.7);
+					font: 500 14px var(--font-paragraph);
+
+					&:hover {
+						background-color: rgba(var(--color-rgb-primary-white), 0.05);
+					}
+				}
+			}
+
+			&:focus-within .suggestions_container {
+				display: flex;
+			}
+		}
+
 		.buttons {
 			width: 100%;
 			display: flex;
@@ -55,6 +123,10 @@
 					background: rgba(254, 132, 132, 0.1);
 					color: #fe8484;
 				}
+
+				&:active {
+					scale: 0.96;
+				}
 			}
 		}
 	}
@@ -67,9 +139,6 @@
 				button {
 					&:hover {
 						background-color: rgba(var(--color-rgb-primary-white), 0.1);
-					}
-					&:active {
-						scale: 0.96;
 					}
 
 					&.negative {

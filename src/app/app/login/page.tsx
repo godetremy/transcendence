@@ -31,7 +31,7 @@ export default function Page() {
 				</Link>
 			</div>
 
-			<Sublinks links={[{ text: 'Vous êtes un agents extérieur ?', href: '/app/login/agents' }]} />
+			<Sublinks links={[{ text: 'Vous êtes un agent extérieur ?', href: '/app/login/agents' }]} />
 		</LoginTemplate>
 	);
 }

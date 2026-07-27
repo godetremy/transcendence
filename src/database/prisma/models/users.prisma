@@ -8,10 +8,11 @@ model users {
 	first_name					String?
 	last_name					String?
 	full_name					String?
-	profile_picture				String			@default("/images/default_user.png")
+	profile_picture				String?
 
 	fortytwo_user_id			Int?			@unique
 	fortytwo_oauth_id			String?			@unique
+	balance_id					String?			@unique
 
     memberships_id				String?      	@unique
 
@@ -19,18 +20,21 @@ model users {
     agent_verified				Boolean?
     agent_reason				String?
 
+	admin						Boolean			@default(false)
+
 	created_at					DateTime		@default(now())
 	updated_at					DateTime		@updatedAt
 
-	/* --- WILL BE MOVED LATER - IGNORE FOR NOW --- */
-	events           event[]
-	image_album      image_album[]
-	registered_event registered_event[]
-	image_report     image_report[]
-	/* -------------------------------------------- */
-
-	fortytwo_oauth				fortytwo_oauth?			@relation(fields: [fortytwo_oauth_id], references: [id])
-	membership					memberships?			@relation(fields: [memberships_id], references: [id])
-	two_factor_auth				two_factor_auth?		@relation(fields: [two_factor_auth_id], references: [id])
+	balance						balance?				@relation(fields: [balance_id], references: [id], onDelete: Cascade)
+	fortytwo_oauth				fortytwo_oauth?			@relation(fields: [fortytwo_oauth_id], references: [id], onDelete: Cascade)
+	membership					memberships?			@relation(fields: [memberships_id], references: [id], onDelete: Cascade)
+	two_factor_auth				two_factor_auth?		@relation(fields: [two_factor_auth_id], references: [id], onDelete: Cascade)
 	webauthn_credential			webauthn_credentials?
+	organization_members		organization_members[]
+	organization_followers		organization_followers[]
+	event_registrations			event_registrations[]
+	photos						photos[]
+	photos_album_reports		photos_album_reports[]
+	upload_requests				upload_request[]
+	events						events[]
 }

@@ -1,0 +1,141 @@
+@use '../../../app/supports';
+
+.sidebar {
+	width: 300px;
+	height: 100vh;
+	background-color: var(--color-primary-black);
+	border-right: 1px solid var(--color-border-dark);
+	position: fixed;
+	top: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	z-index: 10000;
+	transition: 0.3s cubic-bezier(0.5, 0, 0, 1);
+	overflow: hidden;
+
+	header {
+		padding: 15px;
+		display: flex;
+	}
+
+	& > a {
+		position: relative;
+		background-color: #000;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 15px;
+		width: 300px;
+		color: rgba(var(--color-rgb-primary-white), 0.5);
+		font: 500 15px var(--font-paragraph);
+		transition: 0.1s;
+		overflow: hidden;
+
+		& > svg {
+			color: var(--color-primary-white);
+			opacity: 0.5;
+		}
+
+		&:hover {
+			background-color: #111;
+		}
+
+		&:active {
+			scale: 0.98;
+		}
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			width: 0;
+			background-color: var(--color-primary-purple);
+			transition: 0.1s;
+		}
+	}
+
+	& > a.active {
+		background-color: #151515;
+		color: rgba(var(--color-rgb-primary-white), 0.8);
+
+		& > svg {
+			opacity: 0.8;
+		}
+
+		&::before {
+			width: 3px;
+		}
+	}
+
+	&.hidden {
+		width: 50px;
+	}
+}
+
+.sidebar_button {
+	width: 40px;
+	height: 40px;
+	z-index: 100000;
+	transition: 0.25s cubic-bezier(0.5, 0, 0, 1);
+	//display: none;
+	align-items: center;
+	justify-content: center;
+	background: #0009;
+	border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+	backdrop-filter: blur(10px);
+	border-radius: 10px;
+	color: var(--color-primary-white);
+
+	& > svg {
+		transition: 0.3s;
+		opacity: 0.5;
+	}
+
+	&:active {
+		scale: 0.9;
+	}
+}
+
+@media (max-width: supports.$breakpoints-laptop) {
+	.backdrop {
+		position: fixed;
+		inset: 0;
+		background-color: #0005;
+		backdrop-filter: blur(10px);
+		z-index: 10000;
+		transition: 0.3s;
+	}
+
+	.backdrop.hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.sidebar {
+		& > header {
+			margin-right: 50px;
+		}
+	}
+
+	.sidebar.hidden {
+		transform: translateX(-100%);
+	}
+
+	.sidebar_button {
+		display: flex;
+		background: #0000;
+		border: 1px solid rgba(var(--color-rgb-primary-white), 0);
+	}
+
+	.sidebar_button.hidden {
+		background-color: #0009;
+		border: 1px solid rgba(var(--color-rgb-primary-white), 0.2);
+
+		& > svg {
+			opacity: 0.7;
+		}
+	}
+}
