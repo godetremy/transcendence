@@ -14,8 +14,10 @@ services:
             -keyout /certificates/certificate.key.pem
             -out /certificates/certificate.pem
             -subj '/C=FR/ST=IDF/L=Paris/O=BDE/CN=localhost';
-            fi
+            fi &&
+            sleep 10
             "
+
     nginx:
         image: nginx:stable-alpine
         depends_on:
@@ -131,10 +133,10 @@ services:
             echo "All done!";
             '
         healthcheck:
-            test: ['CMD-SHELL', '[ -f config/certs/elasticsearch/elasticsearch.crt ]']
-            interval: 10s
+            test: ["CMD-SHELL", "[ -f config/certs/ca/ca.crt ]"]
+            interval: 5s
             timeout: 5s
-            retries: 10
+            retries: 20
 
     elasticsearch:
         depends_on:

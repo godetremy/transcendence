@@ -54,7 +54,7 @@ services:
                 condition: service_healthy
         build:
             context: ../
-            dockerfile: docker/services/node/Dockerfile
+            dockerfile: docker/services/node/staging/Dockerfile
             args:
                 NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
                 NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}

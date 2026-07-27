@@ -7,6 +7,13 @@ import { $eventsPayload, $servicesPayload, $usersPayload } from './generated/mod
 
 let esclient: Client | null = null;
 
+const caPath = process.env.NODE_EXTRA_CA_CERTS;
+let ca: Buffer | undefined;
+
+if (caPath && fs.existsSync(caPath)) {
+  ca = fs.readFileSync(caPath);
+}
+
 export function getESClient(): Client {
     if (!esclient) {
         esclient = new Client({
@@ -16,7 +23,7 @@ export function getESClient(): Client {
                 username: `${process.env.ELASTIC_USERNAME}`,
             },
             tls: {
-                ca: fs.readFileSync(path.join(process.cwd(), 'certs/ca.crt')),
+                ca: ca,
                 rejectUnauthorized: true,
             },
         });
