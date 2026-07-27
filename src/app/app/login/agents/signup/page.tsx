@@ -12,6 +12,7 @@ import { redirect } from 'next/navigation';
 import { LoginForm } from '@/components/login/LoginForm/LoginForm';
 import { useMutation } from '@tanstack/react-query';
 import { signupAgent } from '@/lib/fetcher/user';
+import { useToast, ToastType } from '@/components/globals/ToastProvider/ToastProvider';
 
 export default function Page() {
 	const [error, setError] = useState<string | undefined>(undefined);
@@ -20,6 +21,7 @@ export default function Page() {
 	});
 
 	const { mutateAsync } = useMutation(signupAgent());
+	const toast = useToast();
 
 	const signUp = async (form: FormData) => {
 		const fields = SignupFormSchema.safeParse({
@@ -32,8 +34,30 @@ export default function Page() {
 			setError(fields.error.issues[0].message);
 			return;
 		}
-		const check = await mutateAsync({ body: fields.data });
-		if (check.success) return redirect('/app/home/');
+
+		try {
+			const check = await mutateAsync({ body: fields.data });
+
+			if (!check.success) {
+				throw new Error("L'inscription a échoué");
+			}
+
+			toast.showToast({
+				title: 'Succès',
+				message: 'Votre compte a été créé avec succès.',
+				type: ToastType.SUCCESS,
+			});
+
+			return redirect('/app/home/');
+		} catch (error) {
+			console.error("Erreur lors de l'inscription :", error);
+
+			toast.showToast({
+				title: 'Erreur',
+				message: 'Impossible de créer votre compte.',
+				type: ToastType.ERROR,
+			});
+		}
 	};
 
 	return (

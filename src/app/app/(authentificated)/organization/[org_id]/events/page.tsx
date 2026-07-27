@@ -2,13 +2,7 @@
 import styles from './page.module.scss';
 import OrganizationDashboardTable from '@/components/organization/OrganizationDashboardTable/OrganizationDashboardTable';
 import { useOrganizations } from '@/contexts/OrganizationsContext';
-import {
-	createEventMutate,
-	deleteEventMutate,
-	exportEventMutate,
-	getEvents,
-	importEventMutate,
-} from '@/lib/fetcher/events';
+import { createEventMutate, deleteEventMutate, exportEventMutate, getEvents } from '@/lib/fetcher/events';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
@@ -22,6 +16,7 @@ import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
 import { ImportCard, ImportCardTargetField } from '@/components/globals/ImportCard/ImportCard';
 import { ExportCard } from '@/components/globals/ExportCard/ExportCard';
 import { FilterType } from '@/components/globals/FilterButton/FilterButton';
+import { useToast, ToastType } from '@/components/globals/ToastProvider/ToastProvider';
 
 function addDays(date: Date, days: number): Date {
 	const result = new Date(date);
@@ -34,6 +29,7 @@ export default function Page() {
 	const orgctx = useOrganizations();
 	const modal = useModal();
 	const organization = orgctx.getCurrentOrganization()!;
+	const toast = useToast();
 
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 	const [search, setSearch] = useState<string>('');
@@ -83,9 +79,19 @@ export default function Page() {
 				a.click();
 				a.remove();
 				window.URL.revokeObjectURL(url);
+				toast.showToast({
+					title: 'Succès',
+					message: 'Les événements ont été exportés avec succès.',
+					type: ToastType.SUCCESS,
+				});
 				setShowExportCard(false);
 			} catch (error) {
 				console.error("Erreur lors de l'export:", error);
+				toast.showToast({
+					title: 'Erreur',
+					message: "Impossible d'exporter les événements.",
+					type: ToastType.ERROR,
+				});
 			}
 		},
 		[organization.id, generatedParameters]
@@ -166,7 +172,7 @@ export default function Page() {
 				],
 			}))
 		);
-	}, [data, deleteEventModal]);
+	}, [data, deleteEventModal, router]);
 
 	return (
 		<>
