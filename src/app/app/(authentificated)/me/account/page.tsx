@@ -14,11 +14,13 @@ import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { useRouter } from 'next/navigation';
 import ListContainer from '@/components/globals/ListContainer/ListContainer';
 import { getCsrfTokenFromCookie } from '@/utils/csrf';
+import { useToast, ToastType } from '@/components/globals/ToastProvider/ToastProvider';
 
 function Page() {
 	const userCtx = useUser();
 	const { openModal, closeModal } = useModal();
 	const router = useRouter();
+	const toast = useToast();
 
 	const [user, setUser] = useState<User>(userCtx!);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -34,16 +36,23 @@ function Page() {
 			last_name: user.last_name ?? undefined,
 		};
 
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
+
 		timeoutRef.current = setTimeout(async () => {
-			await mutation.mutateAsync({ user: value }).then((user) => {
-				userCtx?.update(user);
-			});
-			if (timeoutRef.current !== null) {
+			const updatedUser = await mutation.mutateAsync({ user: value });
+			userCtx?.update(updatedUser);
+			timeoutRef.current = null;
+		}, 1000);
+
+		return () => {
+			if (timeoutRef.current) {
 				clearTimeout(timeoutRef.current);
 				timeoutRef.current = null;
 			}
-		}, 1000);
-	}, [user]);
+		};
+	}, [user, mutation, userCtx]);
 
 	return (
 		<NavigationBarHeader title={'Mon compte'}>
@@ -103,10 +112,45 @@ function Page() {
 										negative: true,
 										onClick: async () => {
 											closeModal();
-											const res = await delUser.mutateAsync();
-											if (res.success) {
+
+											try {
+												const res = await delUser.mutateAsync();
+
+												if (!res.success) {
+													toast.showToast({
+														title: 'Erreur',
+														message: 'Impossible de supprimer votre compte.',
+														type: ToastType.ERROR,
+													});
+													return;
+												}
+
 												const check = await mutateAsync();
-												if (check.success) router.push('/app/login');
+
+												if (!check.success) {
+													toast.showToast({
+														title: 'Erreur',
+														message: 'Impossible de vous déconnecter.',
+														type: ToastType.ERROR,
+													});
+													return;
+												}
+
+												toast.showToast({
+													title: 'Succès',
+													message: 'Votre compte a été supprimé avec succès.',
+													type: ToastType.SUCCESS,
+												});
+
+												router.push('/app/login');
+											} catch (error) {
+												console.error('Erreur lors de la suppression du compte :', error);
+
+												toast.showToast({
+													title: 'Erreur',
+													message: 'Impossible de supprimer votre compte.',
+													type: ToastType.ERROR,
+												});
 											}
 										},
 									},

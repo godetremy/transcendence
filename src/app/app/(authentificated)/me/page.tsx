@@ -3,6 +3,7 @@ import styles from './page.module.scss';
 import { useUser } from '@/contexts/UserContext';
 import { ProfileBanner } from '@/components/profile/ProfileBanner/ProfileBanner';
 import ListItem from '@/components/globals/ListItem/ListItem';
+import { useToast, ToastType } from '@/components/globals/ToastProvider/ToastProvider';
 import {
 	BadgeDollarSign,
 	BookOpenText,
@@ -27,6 +28,7 @@ export default function Page() {
 	const router = useRouter();
 	const user = useUser();
 	const { openModal, closeModal } = useModal();
+	const toast = useToast();
 
 	const { mutateAsync } = useMutation(logoutUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
@@ -133,8 +135,35 @@ export default function Page() {
 										negative: true,
 										onClick: async () => {
 											closeModal();
-											const check = await mutateAsync();
-											if (check.success) router.push('/app/login');
+
+											try {
+												const check = await mutateAsync();
+
+												if (!check.success) {
+													toast.showToast({
+														title: 'Erreur',
+														message: 'Impossible de vous déconnecter.',
+														type: ToastType.ERROR,
+													});
+													return;
+												}
+
+												toast.showToast({
+													title: 'Succès',
+													message: 'Vous avez été déconnecté avec succès.',
+													type: ToastType.SUCCESS,
+												});
+
+												router.push('/app/login');
+											} catch (error) {
+												console.error('Erreur lors de la déconnexion :', error);
+
+												toast.showToast({
+													title: 'Erreur',
+													message: 'Impossible de vous déconnecter.',
+													type: ToastType.ERROR,
+												});
+											}
 										},
 									},
 								],
