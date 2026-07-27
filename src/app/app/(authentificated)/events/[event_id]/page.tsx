@@ -47,6 +47,8 @@ export default function Page() {
 	const headerBarOpacityTransform = useTransform(scrollY, [headerSize() * 0.7, headerSize()], [0, 1]);
 	const headerBarPointerTransform = useTransform(scrollY, [headerSize() / 2, headerSize()], ['none', 'auto']);
 
+	const FALLBACK_DATE = '2024-01-01T12:00:00Z';
+
 	if (isError) return <ErrorState error={error} />;
 
 	return (
@@ -71,7 +73,7 @@ export default function Page() {
 						filter: headerDetailsFilterTransform,
 					}}
 				>
-					<Calendar date={data?.start_at ?? '0'} skeleton={isLoading} />
+					<Calendar date={data?.start_at ?? FALLBACK_DATE} skeleton={isLoading} />
 					<div className={styles.text_container}>
 						<h1 className={!data ? styles.skeleton : undefined}>
 							{data?.title ?? 'Lorem ipsum dolor si amet'}
@@ -94,8 +96,8 @@ export default function Page() {
 								<Clock size={14} />
 								<span>
 									{toHumanReadablePeriod(
-										new Date(data?.start_at ?? '0'),
-										new Date(data?.end_at ?? '0')
+										new Date(data?.start_at ?? FALLBACK_DATE),
+										new Date(data?.end_at ?? FALLBACK_DATE)
 									)}
 								</span>
 							</MenuButton>
