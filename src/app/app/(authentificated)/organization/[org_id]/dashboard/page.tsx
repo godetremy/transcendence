@@ -78,10 +78,13 @@ export default function Page() {
 	const organizationctx = useOrganizations();
 	const [activeMenu, setActiveMenu] = useState<number>(0);
 
-	const org = organizationctx.getCurrentOrganization()!;
+	const org = organizationctx.getCurrentOrganization();
 	const [data, setData] = useState<DashboardReturnType>();
 
-	const { data: events, isLoading: isLoadingEvents } = useInfiniteQuery(getEvents(org.id, null, null, null, null, 1));
+	const { data: events, isLoading: isLoadingEvents } = useInfiniteQuery(
+		getEvents(org?.id ?? '', null, null, null, null, 1),
+		{ enabled: !!org?.id }
+	);
 
 	function addDays(date: Date, days: number): Date {
 		const result = new Date(date);
@@ -161,6 +164,8 @@ export default function Page() {
 	}
 
 	useEffect(() => {
+		if (!org?.id) return;
+
 		const fetchDashboard = async () => {
 			try {
 				const [startWeek, endWeek] = getWeek();
@@ -186,7 +191,7 @@ export default function Page() {
 				});
 
 				const response = await get<DashboardReturnType>(
-					`/organization/${org.id}/dashboard?${params.toString()}`
+					`/organization/${org!.id}/dashboard?${params.toString()}`
 				);
 				setData(response);
 			} catch (error) {
@@ -195,7 +200,7 @@ export default function Page() {
 		};
 
 		fetchDashboard();
-	}, [org.id, activeMenu]);
+	}, [org?.id, activeMenu]);
 
 	return (
 		<>
