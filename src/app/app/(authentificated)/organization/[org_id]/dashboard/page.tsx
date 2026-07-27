@@ -82,8 +82,7 @@ export default function Page() {
 	const [data, setData] = useState<DashboardReturnType>();
 
 	const { data: events, isLoading: isLoadingEvents } = useInfiniteQuery(
-		getEvents(org?.id ?? '', null, null, null, null, 1),
-		{ enabled: !!org?.id }
+		getEvents(org?.id ?? '', null, null, null, null, 1)
 	);
 
 	function addDays(date: Date, days: number): Date {
