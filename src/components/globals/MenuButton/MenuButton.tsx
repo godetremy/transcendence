@@ -42,6 +42,8 @@ export function MenuButton({ menu, alignRight, children, containerKey, className
 		return () => document.removeEventListener('scroll', onScroll);
 	});
 
+	if (typeof document === 'undefined') return null;
+
 	return (
 		<>
 			<button
