@@ -25,7 +25,7 @@ export default function Page() {
 		end_at: new Date(),
 	});
 
-	const handleSubmit = (): Promise<PrivateEvent<object>> => {
+	const handleSubmit = (event: CreateOrUpdateEventType): Promise<PrivateEvent<object>> => {
 		return createEvent.mutateAsync({ event });
 	};
 

@@ -16,7 +16,7 @@ import { ToastType, useToast } from '@/components/globals/ToastProvider/ToastPro
 export interface OrganizationEventEditor {
 	event: CreateOrUpdateEventType;
 	setEvent: Dispatch<SetStateAction<CreateOrUpdateEventType>>;
-	onSubmit: () => Promise<PrivateEvent<object>>;
+	onSubmit: (event: CreateOrUpdateEventType) => Promise<PrivateEvent<object>>;
 	onNew?: () => void;
 	createEvent: boolean;
 }
@@ -69,9 +69,10 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 				return;
 			}
 			const file = await upload.uploadFiles(renderImage, setUploadProgression);
-			props.setEvent((prev) => ({ ...prev, image: `/images/upload/${file.name}` }));
+			const new_event = { ...props.event, image: `/images/upload/${file.name}` }
+			props.setEvent(new_event);
 			setUploadImage(false);
-			await props.onSubmit();
+			await props.onSubmit(new_event);
 			props.onNew?.();
 		} catch (err: unknown) {
 			toast.showToast({

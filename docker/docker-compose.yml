@@ -14,8 +14,7 @@ services:
             -keyout /certificates/certificate.key.pem
             -out /certificates/certificate.pem
             -subj '/C=FR/ST=IDF/L=Paris/O=BDE/CN=localhost';
-            fi &&
-            sleep 10
+            fi
             "
 
     nginx:
@@ -29,9 +28,6 @@ services:
                 condition: service_healthy
             nginx-cert-setup:
                 condition: service_completed_successfully
-        volumes:
-            - ./docker/services/nginx/certificates:/etc/nginx/certificates:ro
-            - ./services/nginx/nginx.conf:/etc/nginx/templates/default.conf.template
         networks:
             - app
             - monitoring

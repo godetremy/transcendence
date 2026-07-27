@@ -4,10 +4,11 @@ services:
 
     nginx-cert-setup:
         volumes:
-        - ./development/certificates:/certificates
+            - ./development/certificates:/certificates
     nginx:
         volumes:
             - ./development/certificates:/etc/nginx/certificates
+            - ./services/nginx/dev/nginx.conf:/etc/nginx/templates/default.conf.template
         ports:
             - '80:80'
             - '443:443'
