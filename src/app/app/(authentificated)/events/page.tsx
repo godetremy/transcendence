@@ -118,8 +118,8 @@ export default function Page() {
 									key={index}
 									id={index.toString()}
 									image={''}
-									start={new Date('0')}
-									end={new Date('0')}
+									start={new Date('2024-01-01T12:00:00Z')}
+									end={new Date('2024-01-01T12:00:00Z')}
 									title={title}
 									skeleton={true}
 									opacity={0.5 - (0.2 / 3) * index}
