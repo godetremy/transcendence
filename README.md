@@ -16,6 +16,14 @@ This project is a website for the association BDE 42 Angoulême. This website is
 
 ## 👥 Team
 
+| Member | Role                           | Responsibilities |
+|--------|--------------------------------|-----------------|
+| [Rémy Godet](https://profile.intra.42.fr/users/rgodet) | **Product Manager, Tech Lead** | Project vision, frontend architecture, UI/UX design, component library, SCSS design system, auth proxy, profile & settings pages |
+| [Amaury Blanchet](https://profile.intra.42.fr/users/amblanch) | **Product Owner**              | Backend API, Prisma schema, database design, events/organizations CRUD, permissions, search, data import/export |
+| [Manuarii Degache](https://profile.intra.42.fr/users/mdegache) | **Developer**                  | Authentication flows, agent signup/approval, forgot password, email service, member invites, photo albums & reports |
+| [Timothy Cybak](https://profile.intra.42.fr/users/tcybak) | **Developer**                  | Frontend UI components (Carousel, Calendar, EventPreview), PWA, Sumup payment modal |
+| [Aubin de Boose](https://profile.intra.42.fr/users/adeboose) | **Developer**                     | Docker infrastructure, Nginx, ELK stack, Prometheus/Grafana, CI/CD, health checks |
+
 ## 🗂️ Project Management
 
 ### Organization
@@ -38,6 +46,54 @@ There were no formal meetings — all discussions happened in person at 42.
 - All commits must follow [Conventional Commits](https://www.conventionalcommits.org/)
 
 ## ⚡️ Technical Stack
+
+### Frontend
+
+| Technology | Purpose | Justification |
+|------------|---------|---------------|
+| [React 19](https://react.dev) | UI library | Latest stable version with concurrent features |
+| [Next.js 16](https://nextjs.org) | Full-stack framework | Industry standard for React apps, monorepo-friendly with App Router |
+| [TanStack Query](https://tanstack.com/query) | Server state management | Eliminates double fetches, provides caching, optimistic updates, and state synchronization |
+| [TypeScript 5](https://www.typescriptlang.org) | Type safety | Strict mode enabled, catches bugs at compile time |
+| [Sass](https://sass-lang.com) | Styling | SCSS modules for scoped, maintainable styles |
+| [TipTap](https://tiptap.dev) | Rich text editor | Markdown-capable WYSIWYG editor for event/service descriptions |
+| [Lucide React](https://lucide.dev) | Icons | Lightweight, tree-shakeable icon library |
+| [Motion](https://motion.dev) | Animations | Declarative animation library for React |
+| [Chart.js](https://www.chartjs.org) | Data visualization | Organization dashboards and statistics |
+
+### Backend
+
+| Technology | Purpose | Justification |
+|------------|---------|---------------|
+| [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | REST API | Co-located with frontend, simpler to maintain than a separate backend |
+| [Prisma 7](https://www.prisma.io) | ORM | Type-safe database access, chosen for team familiarity |
+| [PostgreSQL](https://www.postgresql.org) | Database | Relational model fits the data (users, organizations, events, permissions) |
+| [bcrypt](https://www.npmjs.com/package/bcrypt) | Password hashing | Industry-standard hashing algorithm |
+| [jose](https://github.com/panva/jose) | JWT handling | Secure token signing and verification |
+| [Nodemailer](https://nodemailer.com) | Email service | Password reset and verification emails |
+| [otplib](https://github.com/yeojz/otplib) | TOTP 2FA | Time-based one-time password generation for two-factor auth |
+
+### Infrastructure
+
+| Technology | Purpose | Justification |
+|------------|---------|---------------|
+| [PostgreSQL](https://www.postgresql.org) | Primary database | Relational integrity for users, orgs, events, and permissions |
+| [Nginx](https://nginx.org) | Reverse proxy | Used in both dev and production environments |
+| [Docker](https://www.docker.com) | Containerization | Consistent environments across dev, staging, and production |
+| [ELK Stack](https://www.elastic.co/elastic-stack) | Logging & monitoring | **Required by subject** — centralized log management |
+| [Prometheus + Grafana](https://prometheus.io) | Metrics & dashboards | **Required by subject** — infrastructure monitoring |
+| [Sumup SDK](https://developer.sumup.com) | Payments | Payment provider used by the BDE association |
+| [Elasticsearch](https://www.elastic.co/elasticsearch) | Search engine | Full-text search for events and organizations |
+
+### Developer Experience
+
+| Technology | Purpose |
+|------------|---------|
+| [ESLint](https://eslint.org) | Code linting with Next.js + TypeScript + Prettier rules |
+| [Prettier](https://prettier.io) | Code formatting enforced on all PRs |
+| [Husky](https://typicode.github.io/husky/) | Git hooks for commit linting |
+| [Commitlint](https://commitlint.js.org) | Conventional Commits enforcement |
+| [Bruno](https://usebruno.com) | API testing and documentation |
 
 ## 🗄️ Database Schema
 
@@ -307,7 +363,152 @@ erDiagram
 
 ## ✨Features List
 
+### Authentication & User Management
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Email/Password Login | Amaury, Rémy | Traditional login with email and password, rate limiting on failed attempts |
+| OAuth 42 Login | Manuarii, Rémy | Remote authentication via 42's OAuth 2.0 with automatic account creation |
+| Agent Signup | Manuarii | Registration flow for BDE agents with admin approval required before access |
+| Logout | Amaury, Rémy | Session destruction with CSRF token cleanup |
+| Forgot Password | Manuarii, Rémy | Email-based password reset with time-limited tokens and code verification |
+| Change Password | Amaury | Authenticated password change with current password verification |
+| Profile & Account Settings | Rémy | User profile page with editable name, email, and profile picture |
+| Agent Approval | Rémy, Amaury | Admin dashboard to review, approve, or reject pending agent registrations |
+
+### Two-Factor Authentication
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| TOTP 2FA | Rémy | Time-based one-time password setup with QR code generation and recovery codes |
+
+### Organization System
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Create/Edit/Delete Organization | Amaury | Full CRUD for organizations with owner, name, description, logo, and club flag |
+| Follow/Unfollow Organization | Amaury | Public users can follow organizations to stay updated |
+| Invite Members | Manuarii | Organization owners/admins can invite users via email with role assignment |
+| Approve/Reject Members | Manuarii | Membership approval workflow with optional admin review |
+| Member Permissions | Amaury | Granular permission system with 15 boolean flags per role (event/service/album CRUD, member management) |
+| Organization Approval | Amaury | Admin validation system for new organizations before they become public |
+
+### Events
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Create/Edit/Delete Event | Amaury | Full event CRUD with title, description, dates, location, max registration, and image |
+| Subscribe/Unsubscribe | Amaury | Event registration with capacity limits and attendee management |
+| Calendar View | Rémy | Interactive calendar component for browsing events by date |
+| Event Image Upload | Rémy | Image upload to database for event cover photos |
+
+### Services
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Create/Edit/Delete Service | Amaury | Full service CRUD with registration links, edition tracking, and time-based availability |
+| Service Categories | Rémy | Categorized service browsing with icons and background images |
+
+### Photo Albums
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Photo Albums | Manuarii | Album creation linked to events and services with external link support |
+| Upload Photos | Rémy | Photo upload to albums with authorization checks |
+| Report Photos | Manuarii | Photo reporting system with reason tracking and admin resolution workflow |
+
+### Search & Analytics
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Full-Text Search | Amaury | PostgreSQL full-text search across events and organizations with filters, sorting, and pagination |
+| Organization Dashboard | Rémy, Amaury | Analytics dashboard with Chart.js data visualization for member stats, events, and activity |
+
+### Data Management
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Data Import/Export | Rémy, Amaury | CSV/Excel import and export for organization members and events using PapaParse and SheetJS |
+
+### Payment
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Sumup Payment | Amaury, Timothy, Rémy | Payment integration via Sumup SDK used by the BDE association with modal UI |
+| Balance/Wallet | Amaury, Rémy | User balance system with transaction history and payment tracking |
+
+### Policies
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Privacy & Terms Pages | Rémy | Static policy pages with responsive layout and consistent styling |
+
+### Design System
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Custom Design System | Rémy | 10+ reusable components (Sidebar, OrganizationDashboardTable, MembershipCard, Toast, Carousel, Calendar, EventPreview, SectionHeaderTitle, ModificationText, Sumup) with SCSS modules, consistent color palette, and typography |
+
+### Progressive Web App
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| PWA | Timothy | Progressive Web App with manifest, icons, and service worker for offline support and installability |
+
+### Email
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| Email Service | Manuarii, Rémy | Nodemailer-based email system for password reset and verification with reusable utility |
+
+### Developer Experience
+
+| Feature | Implemented by | Description |
+|---------|---------------|-------------|
+| API Testing | Manuarii, Amaury | Comprehensive Bruno API collection covering all endpoints with examples and environment configs |
+| Docker Health Checks | Amaury | Automated health checks for all services with recovery procedures |
+
+### Infrastructure
+
+| Feature | Implemented by | Description |
+|---------|----------------|-------------|
+| Docker Dev/Prod | Amaury, Aubin  | Multi-environment Docker Compose setup with separate configs for development, staging, and production |
+| Nginx Reverse Proxy | Amaury, Rémy   | Nginx config with subdomain routing, SSL termination, and default_server blocks for both dev and prod |
+| ELK Stack | Amaury, Aubin  | Elasticsearch + Logstash + Kibana with index templates, ILM policies, certs, and Kibana dashboards |
+| Prometheus + Grafana | Amaury, Aubin  | Metrics collection and pre-built dashboards for infrastructure monitoring |
+| CI/CD | Rémy           | GitHub Actions workflows for formatting checks, commitlint, and automated builds |
+
 ## ☑️ Modules
+
+**Total: 22 points** (6 Major × 2pts + 10 Minor × 1pt)
+
+### Major Modules (2 pts each)
+
+| Module | Implemented by | Description |
+|--------|---------------|-------------|
+| **Framework (Frontend + Backend)** | Rémy | [Next.js 16](https://nextjs.org) with App Router for both frontend UI and backend API routes in a single codebase |
+| **Advanced Permissions System** | Amaury, Manuarii | Granular permission model with 15 boolean flags per role (event/service/album CRUD, member management, org settings) stored in `organization_permission` |
+| **Organization System** | Amaury, Rémy | Full organization model with owners, members, followers, invitation flow, approval system, and per-org events/services |
+| **ELK Stack** | Amaury, Aubin | Elasticsearch + Logstash + Kibana for centralized log management with index templates, ILM policies, and Kibana dashboards |
+| **Prometheus + Grafana** | Amaury, Aubin | Metrics collection and visualization for infrastructure monitoring with pre-built dashboards |
+| **Advanced Analytics Dashboard** | Rémy | Organization-level dashboards with [Chart.js](https://www.chartjs.org) for data visualization (members, events, activity) |
+
+### Minor Modules (1 pt each)
+
+| Module | Implemented by   | Description |
+|--------|------------------|-------------|
+| **ORM** | Amaury           | [Prisma 7](https://www.prisma.io) with 21 models, type-safe queries, migrations, and PostgreSQL adapter |
+| **SSR** | Rémy             | Server-side rendering via Next.js App Router for improved performance and SEO on public pages |
+| **PWA** | Timothy          | Progressive Web App with manifest, service worker, and installable experience on mobile/desktop |
+| **Custom Design System** | Rémy, Timothy    | 10+ reusable components (Sidebar, OrganizationDashboardTable, MembershipCard, Toast, Carousel, Calendar, EventPreview, SectionHeaderTitle, ModificationText, Sumup) with SCSS modules and consistent color palette |
+| **Advanced Search** | Amaury, Rémy     | Full-text search with filters, sorting, and pagination for events and organizations using PostgreSQL `fullTextSearchPostgres` |
+| **Browser Support** | Rémy, Timothy    | Cross-browser compatibility built in from the start (Chrome, Firefox, Safari, Edge) |
+| **OAuth 2.0** | Amaury, Manuarii | 42 OAuth remote authentication with proxy routing, token management, and automatic account creation |
+| **2FA System** | Rémy             | Complete two-factor authentication with TOTP ([otplib](https://github.com/yeojz/otplib)), email fallback, and WebAuthn credential support |
+| **Health Check System** | Amaury           | Docker health checks for all services with automated recovery and status monitoring |
+| **Data Export/Import** | Amaury, Rémy     | CSV/Excel import and export for organization members and event data using [PapaParse](https://www.papaparse.com) and [SheetJS](https://www.npmjs.com/package/xlsx) |
+
+
 
 ## 🤡 Individual Contributions
 
@@ -321,7 +522,7 @@ erDiagram
 
 ### [Rémy Godet](https://profile.intra.42.fr/users/rgodet) — Product Owner
 
-**266 commits** · 13 PRs merged
+**323 commits**
 
 Rémy acted as Product Owner and lead frontend developer. He drove the project vision, managed the overall architecture, and delivered the majority of the UI:
 - **Frontend architecture:** layout, routing, home page, login flows, profile, privacy & terms pages
@@ -332,7 +533,7 @@ Rémy acted as Product Owner and lead frontend developer. He drove the project v
 
 ### [Amaury Blanchet](https://profile.intra.42.fr/users/amblanch) — Tech Lead
 
-**223 commits** · 5 PRs merged
+**265 commits**
 
 Amaury served as Tech Lead, owning the backend and data layer of the application:
 - **Backend API:** events CRUD, organization CRUD, user routes, agent approval, search & filtering
@@ -343,7 +544,7 @@ Amaury served as Tech Lead, owning the backend and data layer of the application
 
 ### [Manuarii Degache](https://profile.intra.42.fr/users/mdegache) — Developer
 
-**44 commits** · 2 PRs merged
+**56 commits**
 
 Manuarii focused on authentication flows and user-facing features:
 - **Auth system:** agent signup, forgot-password flow with email verification, password reset
@@ -354,7 +555,7 @@ Manuarii focused on authentication flows and user-facing features:
 
 ### [Timothy Cybak](https://profile.intra.42.fr/users/tcybak) — Developer
 
-**54 commits**
+**51 commits**
 
 Timothy specialized in frontend UI components and user experience:
 - **UI components:** Carousel, Calendar, EventPreview, SectionHeaderTitle, ModificationText
@@ -365,7 +566,7 @@ Timothy specialized in frontend UI components and user experience:
 
 ### [Aubin de Boose](https://profile.intra.42.fr/users/adeboose) — DevOps
 
-**47 commits**
+**10 commits**
 
 Aubin owned the entire infrastructure and deployment pipeline:
 - **Docker:** dev/prod Docker Compose files, Dockerfiles for Node, Nginx, Elasticsearch
@@ -376,3 +577,42 @@ Aubin owned the entire infrastructure and deployment pipeline:
 - **Reverse proxy:** Nginx config with subdomain routing, default_server blocks
 
 ## 📚 Resources
+
+### Documentation
+
+- [Next.js 16 Documentation](https://nextjs.org/docs) — Full-stack React framework
+- [React 19 Documentation](https://react.dev) — UI library
+- [Prisma 7 Documentation](https://www.prisma.io/docs) — TypeScript ORM for PostgreSQL
+- [TanStack Query Documentation](https://tanstack.com/query) — Server state management for React
+- [TipTap Documentation](https://tiptap.dev/docs) — Extensible rich text editor for React
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/) — Relational database
+- [Nginx Documentation](https://nginx.org/en/docs/) — Reverse proxy and web server
+- [Docker Documentation](https://docs.docker.com) — Containerization platform
+- [Elasticsearch Documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) — Search and analytics engine
+- [Kibana Documentation](https://www.elastic.co/guide/en/kibana/current/index.html) — Data visualization for Elasticsearch
+- [Prometheus Documentation](https://prometheus.io/docs/) — Monitoring and alerting toolkit
+- [Grafana Documentation](https://grafana.com/docs/) — Analytics and interactive visualization
+- [Sumup Developer Documentation](https://developer.sumup.com) — Payment integration API
+- [PapaParse Documentation](https://www.papaparse.com/docs) — CSV parser for JavaScript
+- [SheetJS Documentation](https://docs.sheetjs.com) — Spreadsheet data library
+- [Lucide React](https://lucide.dev/icons) — Icon library
+- [Motion for React](https://motion.dev/docs/react-quick-start) — Animation library
+- [Chart.js Documentation](https://www.chartjs.org/docs/) — Data visualization library
+- [Bruno API Client](https://docs.usebruno.com) — API testing and documentation
+
+### Tools & References
+
+- [Conventional Commits](https://www.conventionalcommits.org) — Commit message specification
+- [Linear](https://linear.app) — Project management
+- [GitHub Actions](https://docs.github.com/en/actions) — CI/CD workflows
+- [Husky](https://typicode.github.io/husky/) — Git hooks
+- [ESLint](https://eslint.org) — JavaScript linting
+- [Prettier](https://prettier.io) — Code formatting
+
+### AI Usage
+
+AI was used during the project in the following ways:
+
+- **Aubin de Boosere** used **Claude Code** (Anthropic) to generate 100% of his contributions, primarily on the Docker infrastructure, ELK stack configuration, and monitoring setup. All 10 of his commits were AI-generated. The resulting code quality required significant rework by other team members.
+- **Rémy Godet** and **Amaury Blanchet** used **OpenCode** (opencode.ai) as an AI coding assistant for documentation writing and code generation tasks. All AI-generated commits were reviewed by the users.
+- **General usage**: AI tools were occasionally used for debugging and code completion, but the core architecture, feature development, and design decisions were made by the team.
