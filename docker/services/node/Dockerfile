@@ -41,6 +41,8 @@ RUN npm install --save-dev dotenv
 COPY --from=builder --chown=nextjs:nodejs /app/src/database/prisma/ ./src/database/prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 
+RUN chown -R nextjs:nodejs /app
+
 USER nextjs
 
 EXPOSE 3000
