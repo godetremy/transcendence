@@ -196,6 +196,36 @@ services:
             interval: 10s
             timeout: 5s
             retries: 5
+    
+    uptime-kuma:
+        image: louislam/uptime-kuma:1
+        container_name: uptime-kuma
+        volumes:
+            - uptime-kuma-data:/app/data
+        ports:
+            - "3002:3001"
+        networks:
+            - app
+        restart: on-failure
+
+    backup:
+        image: postgres:16-alpine
+        volumes:
+        - ./scripts/backup.sh:/backup.sh
+        - ./backups:/backups
+        entrypoint: >
+            sh -c "
+                apk add --no-cache dcron &&
+                echo '0 2 * * * /backup.sh' > /etc/crontabs/root &&
+                crond -f -l 2
+                "
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'pgrep crond || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
 
 networks:
     app:
@@ -211,4 +241,6 @@ volumes:
     elasticsearch_data:
         driver: local
     certs:
+        driver: local
+    uptime-kuma-data:
         driver: local

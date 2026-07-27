@@ -5,7 +5,7 @@ import {
 	createEventElasticSearch,
 	createServiceElasticSearch,
 	createUsersElasticSearch,
-	esclient,
+	getESClient,
 } from './elasticSearch';
 
 const pool = new Pool({
@@ -18,6 +18,7 @@ const globalForPrisma = global as unknown as { prisma: ReturnType<typeof createP
 
 function createPrismaClient() {
 	const client = new PrismaClient({ adapter });
+	const esclient = getESClient();
 
 	return client.$extends({
 		query: {

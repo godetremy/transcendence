@@ -26,18 +26,21 @@ services:
         env_file:
             - ./development/secrets/.env
         ports:
-            - '127.0.0.1:$DATABASE_PORT:5432'
+            - '$DATABASE_PORT:5432'
     elasticsearch:
         ports:
-            - '127.0.0.1:9200:9200'
+            - '9200:9200'
         env_file:
             - ./development/secrets/.env
     seaweed-master:
         ports:
-            - '127.0.0.1:9333:9333'
+            - '9333:9333'
     seaweed-filer:
         ports:
-            - '127.0.0.1:8888:8888'
+            - '8888:8888'
     seaweed-volume:
         ports:
-            - '127.0.0.1:8080:8080'
+            - '8080:8080'
+    backup:
+        env_file:
+            - ./staging/secrets/.env

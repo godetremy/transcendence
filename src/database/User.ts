@@ -8,7 +8,7 @@ import { PaginationParameters } from '@/types/PaginationParameters';
 import { DEFAULT_PAGINATION, paginationToPrisma } from '@/utils/pagination';
 import { UserUpdateParameters } from '@/types/UserUpdateParameters';
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
-import { esclient } from './prisma/elasticSearch';
+import { getESClient } from './prisma/elasticSearch';
 import { ElasticSearchUser } from '@/types/User';
 
 const createStudentUser = async (
@@ -181,6 +181,7 @@ const getUsersByFilter = async <T extends Prisma.usersInclude>(
 };
 
 const getUsersByElasticSearch = async (q: string, limit: number): Promise<SearchResponse<ElasticSearchUser>> => {
+	const esclient = getESClient();
 	return await esclient.search<ElasticSearchUser>({
 		index: 'users',
 		query: {

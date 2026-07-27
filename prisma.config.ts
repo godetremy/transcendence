@@ -1,7 +1,11 @@
 import { config } from 'dotenv';
 import { defineConfig } from '@prisma/config';
 
-config({ path: 'docker/development/secrets/.env' });
+
+if (!process.env.RUNNING_IN_DOCKER) {
+	const env = process.env.APP_ENV ?? 'development';
+    config({ path: `docker/${env}/secrets/.env` });
+}
 
 export default defineConfig({
 	schema: 'src/database/prisma/',

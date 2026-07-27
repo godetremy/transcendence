@@ -56,7 +56,7 @@ const exportServiceMutate = (
 });
 
 const importServiceMutate = (org_id: string): UseMutationOptions<Response, Error, { body: FormData }> => ({
-	mutationFn: ({ body }) => post<Response>(`/organization/${org_id}/services/import`, body, false, false),
+	mutationFn: ({ body }) => post<Response>(`/organization/${org_id}/services/import`, body, false, undefined, false),
 	onSuccess: () => {
 		GlobalQueryClient.invalidateQueries({ queryKey: ['organization', org_id, 'service'] });
 	},

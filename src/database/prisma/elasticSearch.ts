@@ -5,19 +5,27 @@ import fs from 'fs';
 import path from 'path';
 import { $eventsPayload, $servicesPayload, $usersPayload } from './generated/models';
 
-export const esclient = new Client({
-	node: process.env.ELASTICSEARCH_URL,
-	auth: {
-		password: `${process.env.ELASTIC_PASSWORD}`,
-		username: `${process.env.ELASTIC_USERNAME}`,
-	},
-	tls: {
-		ca: fs.readFileSync(path.join(process.cwd(), 'certs/ca.crt')),
-		rejectUnauthorized: true,
-	},
-});
+let esclient: Client | null = null;
+
+export function getESClient(): Client {
+    if (!esclient) {
+        esclient = new Client({
+            node: process.env.ELASTICSEARCH_URL!,
+            auth: {
+                password: `${process.env.ELASTIC_PASSWORD}`,
+                username: `${process.env.ELASTIC_USERNAME}`,
+            },
+            tls: {
+                ca: fs.readFileSync(path.join(process.cwd(), 'certs/ca.crt')),
+                rejectUnauthorized: true,
+            },
+        });
+    }
+    return esclient;
+}
 
 const createViewElasticSearch = async (organization_id: string, id: string): Promise<IndexResponse> => {
+	const esclient = getESClient();
 	return esclient.index({
 		index: 'views',
 		document: {
@@ -29,6 +37,7 @@ const createViewElasticSearch = async (organization_id: string, id: string): Pro
 };
 
 const createFollowersElasticSearch = async (organization_id: string): Promise<IndexResponse> => {
+	const esclient = getESClient();
 	return esclient.index({
 		index: 'followers',
 		document: {
@@ -39,6 +48,7 @@ const createFollowersElasticSearch = async (organization_id: string): Promise<In
 };
 
 const deleteFollowersElasticSearch = async (organization_id: string): Promise<DeleteByQueryResponse> => {
+	const esclient = getESClient();
 	return esclient.deleteByQuery({
 		index: 'followers',
 		query: {
@@ -50,6 +60,7 @@ const deleteFollowersElasticSearch = async (organization_id: string): Promise<De
 const createUsersElasticSearch = async (
 	result: PayloadToResult<$usersPayload<DefaultArgs>, RenameAndNestPayloadKeys<$usersPayload<DefaultArgs>>>
 ) => {
+	const esclient = getESClient();
 	if (result?.id) {
 		await esclient.index({
 			index: 'users',
@@ -65,6 +76,7 @@ const createUsersElasticSearch = async (
 const createEventElasticSearch = async (
 	result: PayloadToResult<$eventsPayload<DefaultArgs>, RenameAndNestPayloadKeys<$eventsPayload<DefaultArgs>>>
 ) => {
+	const esclient = getESClient();
 	if (result?.id) {
 		await esclient.index({
 			index: 'events',
@@ -83,6 +95,7 @@ const createEventElasticSearch = async (
 const createServiceElasticSearch = async (
 	result: PayloadToResult<$servicesPayload<DefaultArgs>, RenameAndNestPayloadKeys<$servicesPayload<DefaultArgs>>>
 ) => {
+	const esclient = getESClient();
 	if (result?.id) {
 		await esclient.index({
 			index: 'services',

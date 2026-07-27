@@ -1,5 +1,5 @@
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
-import { esclient } from './prisma/elasticSearch';
+import { getESClient } from './prisma/elasticSearch';
 import { ElasticSearchEventOrService } from '@/types/ElasticSearchType';
 
 const getEventsOrServicesByElasticSearch = async (
@@ -7,6 +7,7 @@ const getEventsOrServicesByElasticSearch = async (
 	limit: number,
 	index: string
 ): Promise<SearchResponse<ElasticSearchEventOrService> | null> => {
+	const esclient = getESClient();
 	const check = await esclient.indices.exists({ index: index });
 
 	if (!check) return null;

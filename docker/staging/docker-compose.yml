@@ -1,11 +1,42 @@
 name: BDE-staging
 
 services:
-    elasticsearch:
+    nginx-cert-setup:
+        volumes:
+        - ./staging/certificates:/certificates
+    nginx:
+        depends_on:
+            node:
+                condition: service_healthy
+        volumes:
+            - ./staging/certificates:/etc/nginx/certificates
         ports:
-            - '127.0.0.1:9200:9200'
+            - '80:80'
+            - '443:443'
         env_file:
             - ./staging/secrets/.env
+        environment:
+            NODE_UPSTREAM: node:3000
+
+    postgres:
+        env_file:
+            - ./staging/secrets/.env
+        ports:
+            - '$DATABASE_PORT_DOCKER:5432'
+    elasticsearch:
+        ports:
+            - '9200:9200'
+        env_file:
+            - ./staging/secrets/.env
+    seaweed-master:
+        ports:
+            - '9333:9333'
+    seaweed-filer:
+        ports:
+            - '8888:8888'
+    seaweed-volume:
+        ports:
+            - '8080:8080'
 
     kibana:
         env_file:
@@ -15,23 +46,39 @@ services:
         env_file:
             - ./staging/secrets/.env
 
-    nginx:
+    node:
         depends_on:
-            - node
-        volumes:
-            - ./staging/certificates:/etc/nginx/certificates
+            postgres:
+                condition: service_healthy
+            elasticsearch:
+                condition: service_healthy
+        build:
+            context: ../
+            dockerfile: docker/services/node/Dockerfile
+            args:
+                NEXT_PUBLIC_OAUTH_42_CLIENTID: ${NEXT_PUBLIC_OAUTH_42_CLIENTID}
+                NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
         env_file:
             - ./staging/secrets/.env
         environment:
-            NODE_UPSTREAM: node:3000
+            RUNNING_IN_DOCKER: "true"
+            APP_ENV: staging
+            ELASTICSEARCH_URL: https://elasticsearch:9200
+            NODE_EXTRA_CA_CERTS: /certs/ca.crt
+        volumes:
+            - ./certs/ca.crt:/certs/ca.crt
+        networks:
+            - app
         ports:
-            - '80:80'
-            - '443:443'
-
-    node:
+            - '3001:3000'
+        restart: on-failure
+        command: sh -c "cd /app/ && npx prisma generate && npx prisma migrate deploy && HOSTNAME=0.0.0.0 node server.js"
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -qO- http://node:3000 || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+    backup:
         env_file:
             - ./staging/secrets/.env
 
-    postgres:
-        env_file:
-            - ./staging/secrets/.env

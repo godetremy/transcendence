@@ -1,56 +1,50 @@
-ARG NODE_VERSION=24.13.0-slim
-FROM node:${NODE_VERSION} AS dependencies
+FROM node:20-alpine AS base
+
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
-RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=cache,target=/usr/local/share/.cache/yarn \
-    --mount=type=cache,target=/root/.local/share/pnpm/store \
-  if [ -f package-lock.json ]; then \
-    npm ci --no-audit --no-fund; \
-  elif [ -f yarn.lock ]; then \
-    corepack enable yarn && yarn install --frozen-lockfile --production=false; \
-  elif [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm install --frozen-lockfile; \
-  else \
-    echo "No lockfile found." && exit 1; \
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i; \
+  else echo "Lockfile not found." && exit 1; \
   fi
 
-FROM node:${NODE_VERSION} AS builder
+FROM base AS builder
 WORKDIR /app
-COPY --from=dependencies /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ENV NODE_ENV=production
 
-ARG NEXT_PUBLIC_OAUTH_42_CLIENTID
-ARG NEXT_PUBLIC_BASE_URL
-ENV NEXT_PUBLIC_OAUTH_42_CLIENTID=$NEXT_PUBLIC_OAUTH_42_CLIENTID
-ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
+COPY docker/staging/secrets/.env .env
+RUN npm run build
 
-RUN if [ -f package-lock.json ]; then \
-    npm run build; \
-  elif [ -f yarn.lock ]; then \
-    corepack enable yarn && yarn build; \
-  elif [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm build; \
-  else \
-    echo "No lockfile found." && exit 1; \
-  fi
-
-FROM node:${NODE_VERSION} AS runner
+FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV=production
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 
-COPY --from=builder --chown=node:node /app/public ./public
+ENV NODE_ENV=staging
 
-RUN mkdir .next
-RUN chown node:node .next
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
 
-COPY --from=builder --chown=node:node /app/.next/standalone ./
-COPY --from=builder --chown=node:node /app/.next/static ./.next/static
-USER node
+COPY --from=builder /app/public ./public
+
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@elastic ./node_modules/@elastic
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@sumup ./node_modules/@sumup
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+RUN npm install --save-dev dotenv
+
+COPY --from=builder --chown=nextjs:nodejs /app/src/database/prisma/ ./src/database/prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
+
+USER nextjs
+
 EXPOSE 3000
+
+ENV PORT=3000
 
 CMD ["node", "server.js"]

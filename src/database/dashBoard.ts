@@ -1,11 +1,12 @@
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
-import { esclient } from './prisma/elasticSearch';
+import { getESClient } from './prisma/elasticSearch';
 import { FollowersDocument, ViewDocument, ViewsOverTimeAggregations } from '@/types/ElasticSearch';
 
 const getDashBoardViewsByElasticSearch = async (
 	organization_id: string,
 	id?: string
 ): Promise<SearchResponse<ViewDocument, ViewsOverTimeAggregations> | null> => {
+	const esclient = getESClient();
 	if (!(await esclient.indices.exists({ index: 'views' }))) return null;
 
 	const views = await esclient.search<{ timestamp: string }>({
@@ -66,6 +67,7 @@ const getDashBoardViewsByElasticSearch = async (
 const getDashBoardFollowersByElasticSearch = async (
 	organization_id: string
 ): Promise<SearchResponse<FollowersDocument, ViewsOverTimeAggregations> | null> => {
+	const esclient = getESClient();
 	if (!(await esclient.indices.exists({ index: 'followers' }))) return null;
 
 	const followers = await esclient.search<{ timestamp: string }>({

@@ -81,7 +81,7 @@ export default function Page() {
 	const org = organizationctx.getCurrentOrganization()!;
 	const [data, setData] = useState<DashboardReturnType>();
 
-	const { data: events, isLoading: isLoadingEvents } = useInfiniteQuery(getEvents(org.id, null, null, null, null, 1));
+	const { data: events, isLoading: isLoadingEvents } = useInfiniteQuery(getEvents(org.id, null, null, null, null, 1, null));
 
 	function addDays(date: Date, days: number): Date {
 		const result = new Date(date);
