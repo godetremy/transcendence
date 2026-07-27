@@ -1,0 +1,41 @@
+info:
+  name: Services - Update service
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: "{{BaseURL}}/organization/:org_id/services/:service_id"
+  params:
+    - name: service_id
+      value: 4f7b6bd5-f0e4-4a27-baa5-85ef7b7ea186
+      type: path
+    - name: org_id
+      value: ed3b7ec9-2aaa-4a4f-984d-3d0baf0bf7ee
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "category_id": "cadc57db-04e2-4a49-9e78-c8834d25e708",
+        "title": "soirée de cedric",
+        "subtitle": "Cedric",
+        "description": "Test cedric",
+        "image": "path/to/image",
+        "edition": 10,
+        "registration_required": true,
+        "registration_details": "test",
+        "registration_link": "https:/test.com",
+        "source_link": "https:/cedric.scam.fr",
+        "location": "chez cedric",
+        "start_at": "2010-10-10",
+        "end_at": "2010-10-10",
+        "registration_full": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

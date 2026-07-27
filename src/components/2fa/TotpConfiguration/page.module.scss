@@ -1,0 +1,157 @@
+.main_container {
+	padding: 10px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.progress_indicator_container {
+	display: flex;
+	gap: 10px;
+
+	.bar {
+		position: relative;
+		height: 5px;
+		flex: 1;
+		background-color: rgba(var(--color-rgb-primary-white), 0.2);
+		border-radius: 8px;
+		backdrop-filter: blur(2px);
+		overflow: hidden;
+	}
+
+	.bar::after {
+		content: '';
+		background-color: var(--color-primary-white);
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 0;
+		transition: 0.3s;
+		opacity: 0;
+		border-radius: 8px;
+	}
+
+	.bar.active::after {
+		width: 100%;
+		opacity: 1;
+	}
+}
+
+.pages_container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+
+	.page {
+		flex: 1;
+		position: absolute;
+		inset: 0;
+		transition: 0.3s;
+		display: flex;
+	}
+
+	.page.hidden {
+		opacity: 0;
+		filter: blur(10px);
+		scale: 0.98;
+		pointer-events: none;
+	}
+}
+
+.button {
+	appearance: none;
+	background-color: transparent;
+	color: rgba(var(--color-rgb-primary-white), 0.7);
+	border: none;
+	padding: 0 20px;
+	height: 50px;
+	font: 600 15px var(--font-paragraph);
+	border-radius: 25px;
+	transition: 0.1s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+
+	& > div {
+		margin: 0 !important;
+	}
+
+	&:active {
+		scale: 0.95;
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+}
+
+.button.primary {
+	background-color: var(--color-primary-purple);
+	color: var(--color-primary-white);
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.qr_container {
+	appearance: none;
+	padding: 20px;
+	border-radius: 20px;
+	background-color: #fff;
+	margin: auto;
+	width: 260px;
+	height: 260px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	transition: 0.2s;
+	color: var(--color-primary-black);
+
+	& > svg {
+		transition: 0.2s;
+	}
+
+	& > p {
+		position: absolute;
+		font: 600 17px var(--font-paragraph);
+		scale: 0.8;
+		filter: blur(5px);
+		opacity: 0;
+		transition: 0.2s;
+	}
+
+	&:hover {
+		scale: 1.05;
+
+		& > svg {
+			filter: blur(5px);
+			opacity: 0.2;
+		}
+
+		& > p {
+			scale: 1;
+			filter: blur(0px);
+			opacity: 1;
+		}
+	}
+}
+
+.code_container {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+
+	& > p {
+		color: #fe8484;
+		font: 500 14px var(--font-paragraph);
+	}
+}

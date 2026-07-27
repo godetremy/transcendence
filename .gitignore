@@ -44,4 +44,8 @@ next-env.d.ts
 # prisma
 /src/generated/prisma
 
-imageStore/
+.init_done
+
+*.crt
+*.key
+*.srl

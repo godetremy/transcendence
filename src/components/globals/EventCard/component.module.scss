@@ -1,0 +1,125 @@
+@keyframes skeletonBackground {
+	0% {
+		background-color: #222;
+	}
+	100% {
+		background-color: #252525;
+	}
+}
+
+@keyframes skeletonColor {
+	0% {
+		color: #444;
+	}
+	100% {
+		color: #888;
+	}
+}
+
+.card {
+	position: relative;
+	appearance: none;
+	background-color: transparent;
+	width: 100%;
+	aspect-ratio: 3;
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	border-radius: 16px;
+	transition: 0.2s;
+	border: none;
+	display: flex;
+	align-items: flex-end;
+	animation: skeletonBackground 1s infinite alternate;
+
+	&::after {
+		position: absolute;
+		inset: 0;
+		content: '';
+		border-radius: 16px;
+		border: 1px solid rgba(var(--color-rgb-primary-white), 0.1);
+	}
+
+	&:hover {
+		background-size: 105%;
+	}
+
+	&:active {
+		scale: 0.98;
+	}
+
+	& > .details {
+		background: linear-gradient(
+			rgba(var(--color-rgb-primary-black), 0),
+			rgba(var(--color-rgb-primary-black), 0.8),
+			rgba(var(--color-rgb-primary-black), 1)
+		);
+		border-radius: 0 0 16px 16px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		color: var(--color-primary-white);
+		text-align: left;
+		padding: 10px;
+		width: 100%;
+		overflow: hidden;
+
+		& > .text {
+			flex: 1;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+			gap: 3px;
+
+			& > h3 {
+				font: 600 18px var(--font-paragraph);
+			}
+
+			& > .tags {
+				display: flex;
+				gap: 5px;
+				align-items: center;
+				opacity: 0.6;
+
+				svg {
+					flex: 0 0 16px;
+				}
+
+				span {
+					display: -webkit-box;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					-webkit-line-clamp: 1;
+					-webkit-box-orient: vertical;
+					font: 500 13px var(--font-paragraph);
+				}
+			}
+
+			&.skeleton {
+				& > h3 {
+					font-family: var(--font-skeleton), sans-serif;
+					padding-left: 5px;
+					animation: skeletonColor 1.5s ease-in-out alternate infinite;
+				}
+
+				& > .tags {
+					& > span {
+						font: 15px var(--font-skeleton);
+						animation: skeletonColor 1.5s ease-in-out alternate infinite;
+						margin-left: 5px;
+						transform: translateY(-1px);
+					}
+				}
+			}
+		}
+
+		& > svg {
+			opacity: 0.4;
+		}
+	}
+
+	&.skeleton {
+		pointer-events: none;
+	}
+}

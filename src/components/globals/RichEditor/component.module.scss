@@ -1,0 +1,131 @@
+@use '../../../app/supports';
+@use '../../../app/markdown';
+
+.rich_container {
+	display: flex;
+	flex-direction: column;
+
+	.toolbar {
+		position: sticky;
+		top: 0;
+		padding: 60px 20px 0 20px;
+		margin-top: -60px;
+		height: 120px;
+		background-color: var(--color-primary-black);
+		border-bottom: 1px solid var(--color-border-dark);
+		z-index: 2;
+		display: flex;
+		justify-content: center;
+
+		.tools_container {
+			width: 100%;
+			max-width: 1200px;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			overflow-x: auto;
+		}
+
+		.heading_dropdown {
+			appearance: none;
+			background-color: transparent;
+			border: 1px solid var(--color-border-dark);
+			color: rgba(var(--color-rgb-primary-white), 0.8);
+			border-radius: 8px;
+			width: 200px;
+			height: 35px;
+			display: flex;
+			align-items: center;
+			padding: 0 10px;
+			font: 500 14px var(--font-paragraph);
+			gap: 5px;
+
+			svg {
+				color: var(--color-primary-white);
+				opacity: 0.8;
+			}
+
+			& > :last-child {
+				margin-left: auto;
+			}
+		}
+
+		.toolbar_button {
+			appearance: none;
+			width: 35px;
+			height: 35px;
+			border-radius: 8px;
+			border: 1px solid var(--color-border-dark);
+			background-color: rgba(var(--color-rgb-primary-black), 0.5);
+			color: rgba(var(--color-rgb-primary-white), 0.6);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+			padding: 0 8px;
+			cursor: pointer;
+			transition: var(--transition-fast);
+
+			&:hover {
+				background-color: rgba(var(--color-rgb-primary-white), 0.08);
+			}
+
+			&:active {
+				& > * {
+					transform: scale(0.95);
+				}
+			}
+
+			&.active {
+				background-color: rgba(var(--color-rgb-primary-white), 0.15);
+				border-color: var(--color-primary-purple);
+				color: var(--color-primary-white);
+
+				svg {
+					opacity: 1;
+				}
+			}
+
+			&.disabled {
+				opacity: 0.3;
+				cursor: not-allowed;
+
+				&:active {
+					transform: none;
+				}
+			}
+		}
+
+		.group {
+			display: flex;
+			align-items: center;
+			border: 1px solid var(--color-border-dark);
+			border-radius: 8px;
+			overflow: hidden;
+
+			& > button {
+				border: none;
+				border-radius: 0;
+				width: 34px;
+				height: 34px;
+			}
+		}
+
+		.spacer {
+			margin-left: auto;
+		}
+	}
+
+	.editor {
+		@include markdown.markdown;
+		width: 100%;
+		max-width: 1200px;
+		align-self: center;
+		padding: 20px;
+
+		& > * {
+			outline: none;
+		}
+	}
+}

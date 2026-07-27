@@ -1,0 +1,21 @@
+.datepicker {
+	border: none;
+	background-color: transparent;
+	color: var(--color-primary-white);
+	font: 500 15px var(--font-paragraph);
+	outline: none;
+	width: fit-content;
+	border-bottom: 1px solid rgba(var(--color-rgb-primary-white), 0.3);
+	padding: 5px 8px;
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.popper {
+	z-index: 10000 !important;
+}
+
+.time_container {
+	background-color: transparent !important;
+}

@@ -1,152 +1,74 @@
-import { EventFormatting } from '@/database/event/createEvent';
-import { prisma } from '@/database/prisma/prisma';
-import { decrypt } from '@/lib/session';
-import { CreateEventSchema, SearchEventSchema } from '@/schema/EventForm';
+import { getEventsOrServicesByElasticSearch } from '@/database/elasticSearch';
+import { countEventsByFilter, getEventsByFilter } from '@/database/Event';
+import { formatPublicEvent } from '@/database/format/Event';
+import { Prisma } from '@/database/prisma/generated/client';
+import { SearchQuerySchema } from '@/schema/searchQuery';
+import { SearchQuery } from '@/types/searchQuery';
+import { errorHandler, ERRORS_DETAILS } from '@/utils/errors';
+import { generatePaginationResponse, getPaginationParams } from '@/utils/pagination';
+import { parseParams } from '@/utils/parsing';
 import { NextRequest, NextResponse } from 'next/server';
+import { getThrowableSession } from '@/lib/session';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-	try {
-		const cookie = req.cookies.get('session');
-		const session = await decrypt(cookie?.value);
+	return errorHandler(async () => {
+		const searchParams = req.nextUrl.searchParams;
 
-		const fields = SearchEventSchema.safeParse({
-			from: req.nextUrl.searchParams.get('from'),
-			to: req.nextUrl.searchParams.get('to'),
-			limit: req.nextUrl.searchParams.get('limit'),
-			search: req.nextUrl.searchParams.get('search'),
-			club: req.nextUrl.searchParams.get('club'),
-			subscribe: req.nextUrl.searchParams.get('subscribe'),
-			page: req.nextUrl.searchParams.get('page'),
-		});
+		const pagination = getPaginationParams(searchParams);
+		const query = parseParams<SearchQuery>(searchParams, SearchQuerySchema);
 
-		if (!fields.success) {
-			console.log(fields);
-			return new NextResponse(fields.error.message[0], {
-				status: 401,
-			});
-		}
-		if (fields.data.limit == null) fields.data.limit = 20;
-		else fields.data.limit > 0 && fields.data.limit <= 20 ? {} : (fields.data.limit = 20);
+		const registered = searchParams.has('registered');
+		const club = searchParams.has('club');
+		const past = searchParams.has('past');
 
-		const value = await prisma.event.findMany({
-			take: fields.data.limit,
-			include: {
-				author: {
-					include: { memberships: true },
-				},
-				registered: true,
-				image_album: true,
-			},
-			where: {
-				start_at: {
-					gte: fields.data.from,
-				},
-				end_at: {
-					lte: fields.data.to,
-				},
-				registered: {
-					...(fields.data.subscribe ? { user_id: session.user_id } : {}),
-				},
-				author: {
-					...(fields.data.club ? { full_name: fields.data.club } : {}),
-				},
-			},
-			orderBy: {
-				_relevance: {
-					fields: ['title'],
-					search: fields.data.search ? fields.data.search?.trim().split(/\s+/).join(' & ') : '',
-					sort: 'desc',
-				},
-			},
-			skip: fields.data.page == null ? 0 : fields.data.page * fields.data.limit,
-		});
+		const user = await getThrowableSession(req);
+		if (!user) throw ERRORS_DETAILS.user_does_not_exists();
 
-		const events = await Promise.all(value.map(EventFormatting));
-		return NextResponse.json(events);
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to get list event.', {
-			status: 500,
-		});
-	}
-}
+		const searchs = await getEventsOrServicesByElasticSearch(query.q ?? '', pagination.limit, 'events');
 
-export async function DELETE(req: NextRequest): Promise<NextResponse> {
-	try {
-		const cookie = req.cookies.get('session');
-		await decrypt(cookie?.value);
+		let elasticSearchEvents: {
+			org_id: string | undefined;
+			id: string | undefined;
+			title: string | undefined;
+			subtitle: string | undefined;
+			description: string | undefined;
+		}[] = [];
 
-		const body = await req.json();
-
-		if (body.id == null)
-			return new NextResponse('Error, id not found.', {
-				status: 404,
-			});
-
-		await prisma.event.delete({
-			where: {
-				id: body.id,
-			},
-			include: {
-				registered: true,
-				image_album: true,
-			},
-		});
-
-		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to delete event.', {
-			status: 500,
-		});
-	}
-}
-
-export async function POST(req: NextRequest): Promise<NextResponse> {
-	try {
-		const cookie = req.cookies.get('session');
-		const session = await decrypt(cookie?.value);
-
-		const body = await req.json();
-
-		const fields = CreateEventSchema.safeParse({
-			title: body.title,
-			description: body.description,
-			start_at: body.start_at,
-			end_at: body.end_at,
-			max_inscription: body.max_inscription,
-		});
-		if (!fields.success) {
-			console.error(fields.error.issues[0].message);
-			return new NextResponse(fields.error.issues[0].message, {
-				status: 401,
-			});
+		if (searchs) {
+			elasticSearchEvents = searchs.hits.hits.map((hit) => ({
+				org_id: hit._source?.organization_id,
+				id: hit._source?.id,
+				title: hit._source?.title,
+				...(registered ? { event_registration: { some: { user_id: user.user_id } } } : {}),
+				...(club ? { organization: { club: true } } : {}),
+				...(past ? { start_at: { lt: new Date() } } : {}),
+				subtitle: hit._source?.subtitle,
+				description: hit._source?.description,
+			}));
 		}
 
-		await prisma.event.create({
-			data: {
-				author_id: session.user_id,
-				title: fields.data.title,
-				description: fields.data.description,
-				max_inscription: fields.data.max_inscription,
-				start_at: fields.data.start_at,
-				end_at: fields.data.end_at,
-			},
-			include: {
-				author: {
-					include: {
-						memberships: true,
-					},
-				},
-				registered: true,
-			},
-		});
+		const filter: Prisma.eventsWhereInput = {
+			...(query.q == null
+				? {}
+				: {
+						OR: [
+							{
+								title: {
+									in: elasticSearchEvents
+										.map((u) => u.title)
+										.filter((title): title is string => !!title),
+								},
+							},
+						],
+					}),
+			...(registered ? { event_registration: { some: { user_id: user.user_id } } } : {}),
+			...(club ? { organization: { club: true } } : {}),
+			...(past ? { start_at: { lt: new Date() } } : {}),
+		};
 
-		return NextResponse.json({ success: true });
-	} catch (error: unknown) {
-		console.error(error);
-		return new NextResponse('Error, failed to create event.', {
-			status: 500,
-		});
-	}
+		const count = await countEventsByFilter(filter);
+		const value = await getEventsByFilter(filter, {}, pagination);
+
+		return NextResponse.json(generatePaginationResponse(value.map(formatPublicEvent<object>), count, pagination));
+	});
 }

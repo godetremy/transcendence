@@ -1,0 +1,31 @@
+info:
+  name: Agent - Login
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{BaseURL}}/auth/login"
+  headers:
+    - name: x-forwarded-for
+      value: ""
+  body:
+    type: form-urlencoded
+    data:
+      - name: mail
+        value: test@free.fr
+      - name: password
+        value: test.123
+      - name: method
+        value: totp
+        disabled: true
+      - name: code
+        value: "959608"
+        disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

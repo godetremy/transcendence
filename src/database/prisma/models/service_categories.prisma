@@ -1,0 +1,14 @@
+model service_categories {
+	id						String			@id		@default(uuid())
+
+	name					String
+	description				String?
+
+	icon					String?
+	background_image		String?
+
+	created_at				DateTime		@default(now())
+	updated_at				DateTime		@updatedAt
+
+	services				services[]
+}

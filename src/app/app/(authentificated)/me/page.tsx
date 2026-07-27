@@ -2,16 +2,35 @@
 import styles from './page.module.scss';
 import { useUser } from '@/contexts/UserContext';
 import { ProfileBanner } from '@/components/profile/ProfileBanner/ProfileBanner';
-import { ListItem } from '@/components/globals/ListItem/ListItem';
-import { BadgeDollarSign, BookOpenText, FileLock, GitCommitVerticalIcon, Lock, LogOut, User2 } from 'lucide-react';
+import ListItem from '@/components/globals/ListItem/ListItem';
+import { useToast, ToastType } from '@/components/globals/ToastProvider/ToastProvider';
+import {
+	BadgeDollarSign,
+	BookOpenText,
+	Building2,
+	Code,
+	FileLock,
+	GitCommitVerticalIcon,
+	KeyRound,
+	Lock,
+	LogOut,
+	User2,
+	Vote,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/components/globals/ModalProvider/ModalProvider';
 import { MembershipButton } from '@/components/membership/MembershipButton/MembershipButton';
+import { useMutation } from '@tanstack/react-query';
+import { logoutUser } from '@/lib/fetcher/user';
+import { getCsrfTokenFromCookie } from '@/utils/csrf';
 
 export default function Page() {
 	const router = useRouter();
 	const user = useUser();
 	const { openModal, closeModal } = useModal();
+	const toast = useToast();
+
+	const { mutateAsync } = useMutation(logoutUser({ 'x-csrf-token': getCsrfTokenFromCookie() ?? '' }));
 
 	return (
 		<>
@@ -21,23 +40,59 @@ export default function Page() {
 				mail={user?.mail ?? 'Recharge la page pour te reconnecter'}
 				subscribed={false}
 			/>
-			<MembershipButton className={styles.card_button} />
 			<section className={styles.section}>
+				<MembershipButton className={styles.card_button} />
+
 				<div className={styles.list}>
-					<ListItem icon={User2} title={'Mon compte'} description={'Mail, mot de passe'} />
+					<ListItem
+						icon={User2}
+						title={'Mon compte'}
+						description={'Mail, mot de passe'}
+						onPress={() => router.push('/app/me/account')}
+					/>
 					<ListItem
 						icon={Lock}
 						title={'Confidentialité & sécurité'}
 						description={'Mot de passe et télémétrie'}
+						onPress={() => router.push('/app/me/privacy')}
 					/>
 					<ListItem
 						icon={BadgeDollarSign}
 						title={'Ton adhesion'}
 						description={'Gère ton adhesion au BDE'}
-						last
+						onPress={() => router.push('/app/me/membership')}
 					/>
+					<ListItem
+						icon={Building2}
+						title={'Organisation'}
+						description={'Gère tes organisations'}
+						onPress={() => router.push('/app/me/organization')}
+					/>
+					<ListItem
+						icon={Code}
+						title={'Développeurs'}
+						description={'Gère tes applications et clés API'}
+						onPress={() => router.push('/app/me/api')}
+						last={!user?.admin}
+					/>
+					{user?.admin && (
+						<>
+							<ListItem
+								icon={Vote}
+								title={'Demandes d’accès agents'}
+								description={'Gère les demandes de création des comptes agents'}
+								onPress={() => router.push('/app/me/agents')}
+							/>
+							<ListItem
+								icon={KeyRound}
+								title={'Administrateurs'}
+								description={'Gère les membres administrateurs'}
+								onPress={() => router.push('/app/me/administration')}
+								last
+							/>
+						</>
+					)}
 				</div>
-
 				<div className={styles.list}>
 					<ListItem
 						icon={GitCommitVerticalIcon}
@@ -58,7 +113,6 @@ export default function Page() {
 						onPress={() => router.push('/privacy')}
 					/>
 				</div>
-
 				<div className={styles.list}>
 					<ListItem
 						icon={LogOut}
@@ -79,7 +133,38 @@ export default function Page() {
 									{
 										text: 'Se déconnecter',
 										negative: true,
-										onClick: () => router.push('/app/api/auth/logout'),
+										onClick: async () => {
+											closeModal();
+
+											try {
+												const check = await mutateAsync();
+
+												if (!check.success) {
+													toast.showToast({
+														title: 'Erreur',
+														message: 'Impossible de vous déconnecter.',
+														type: ToastType.ERROR,
+													});
+													return;
+												}
+
+												toast.showToast({
+													title: 'Succès',
+													message: 'Vous avez été déconnecté avec succès.',
+													type: ToastType.SUCCESS,
+												});
+
+												router.push('/app/login');
+											} catch (error) {
+												console.error('Erreur lors de la déconnexion :', error);
+
+												toast.showToast({
+													title: 'Erreur',
+													message: 'Impossible de vous déconnecter.',
+													type: ToastType.ERROR,
+												});
+											}
+										},
 									},
 								],
 							});

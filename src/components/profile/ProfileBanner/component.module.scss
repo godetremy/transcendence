@@ -6,6 +6,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	background-size: cover;
 
 	.overlay {
 		position: absolute;
@@ -31,6 +32,7 @@
 			margin-bottom: 15px;
 			border-radius: 50%;
 			border: 1px solid var(--color-border-dark);
+			object-fit: cover;
 		}
 
 		h1 {

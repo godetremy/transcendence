@@ -1,0 +1,7 @@
+info:
+  name: ✅ Approve organization list
+  type: folder
+  seq: 4
+
+request:
+  auth: inherit

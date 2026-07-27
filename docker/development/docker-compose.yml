@@ -1,0 +1,47 @@
+name: BDE-dev
+
+services:
+
+    nginx-cert-setup:
+        volumes:
+            - ./development/certificates:/certificates
+    nginx:
+        volumes:
+            - ./development/certificates:/etc/nginx/certificates
+            - ./services/nginx/dev/nginx.conf:/etc/nginx/templates/default.conf.template
+        ports:
+            - '80:80'
+            - '443:443'
+        env_file:
+            - ./development/secrets/.env
+        environment:
+            NODE_UPSTREAM: host.docker.internal:3000
+        develop:
+            watch:
+                - action: sync+exec
+                  path: ./services/nginx/nginx.conf
+                  target: /etc/nginx/templates/default.conf.template
+                  exec:
+                      command: /bin/sh -c "envsubst '$$NEXT_PUBLIC_BASE_URL $$NODE_UPSTREAM' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -s reload"
+    postgres:
+        env_file:
+            - ./development/secrets/.env
+        ports:
+            - '$DATABASE_PORT:5432'
+    elasticsearch:
+        ports:
+            - '9200:9200'
+        env_file:
+            - ./development/secrets/.env
+    seaweed-master:
+        ports:
+            - '9333:9333'
+    seaweed-filer:
+        ports:
+            - '8888:8888'
+    seaweed-volume:
+        ports:
+            - '8080:8080'
+    backup:
+        env_file:
+            - ./staging/secrets/.env

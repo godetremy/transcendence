@@ -1,0 +1,13 @@
+.container {
+	padding-top: 30px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 30px;
+}
+
+.error {
+	color: #fe8484;
+	font: 500 14px var(--font-paragraph);
+	margin-top: -20px;
+}

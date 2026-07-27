@@ -1,0 +1,249 @@
+name: BDE
+
+services:
+
+    nginx-cert-setup:
+        image: alpine:latest
+        networks:
+            - app
+        command: >-
+            sh -c "
+            if [ ! -f /certificates/certificate.pem ]; then
+            apk add --no-cache openssl &&
+            openssl req -x509 -nodes -days 365 -newkey rsa:2048
+            -keyout /certificates/certificate.key.pem
+            -out /certificates/certificate.pem
+            -subj '/C=FR/ST=IDF/L=Paris/O=BDE/CN=localhost';
+            fi
+            "
+
+    nginx:
+        image: nginx:stable-alpine
+        depends_on:
+            seaweed-filer:
+                condition: service_healthy
+            postgres:
+                condition: service_healthy
+            dicebear:
+                condition: service_healthy
+            nginx-cert-setup:
+                condition: service_completed_successfully
+        networks:
+            - app
+            - monitoring
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1:8081/stub_status || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    postgres:
+        image: postgres:15-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - app
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    dicebear:
+        image: dicebear/api:4
+        environment:
+            WEBP_SIZE_MAX: 512
+        networks:
+            - app
+        restart: on-failure
+        tmpfs:
+            - /run
+            - /tmp
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'node -e "require(''http'').get(''http://localhost:3000/10.x/pixel-art/svg'', (r) => { console.log(''Status:'', r.statusCode); process.exit(0) }).on(''error'', (e) => { console.log(''Error:'', e.message); process.exit(1) })"',
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    setup:
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.4.4
+        volumes:
+            - certs:/usr/share/elasticsearch/config/certs
+            - ./../certs:/host-certs
+        user: '0'
+        networks:
+            - monitoring
+        command: >
+            bash -c '
+            if [ x${ELASTIC_PASSWORD} == x ]; then
+                echo "Set the ELASTIC_PASSWORD environment variable in the .env file";
+                exit 1;
+            elif [ x${KIBANA_PASSWORD} == x ]; then
+                echo "Set the KIBANA_PASSWORD environment variable in the .env file";
+                exit 1;
+            fi;
+            if [ ! -f config/certs/ca.zip ]; then
+                echo "Creating CA";
+                bin/elasticsearch-certutil ca --silent --pem -out config/certs/ca.zip;
+                unzip config/certs/ca.zip -d config/certs;
+            fi;
+            if [ ! -f config/certs/certs.zip ]; then
+                echo "Creating certs";
+                echo -ne \
+                "instances:\n"\
+                "  - name: elasticsearch\n"\
+                "    dns:\n"\
+                "      - elasticsearch\n"\
+                "      - elasticsearch\n"\
+                "      - localhost\n"\
+                "    ip:\n"\
+                "      - 127.0.0.1\n"\
+                "  - name: kibana\n"\
+                "    dns:\n"\
+                "      - kibana\n"\
+                "      - localhost\n"\
+                "    ip:\n"\
+                "      - 127.0.0.1\n"\
+                > config/certs/instances.yml;
+                bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key;
+                unzip config/certs/certs.zip -d config/certs;
+            fi;
+            echo "Setting file permissions";
+            chown -R root:root config/certs;
+            find . -type d -exec chmod 750 \{\} \;;
+            find . -type f -exec chmod 640 \{\} \;;
+            echo "Waiting for Elasticsearch availability";
+            until curl -s --cacert config/certs/ca/ca.crt https://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+            echo "Setting kibana_system password";
+            until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://elasticsearch:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+            cp config/certs/ca/ca.crt /host-certs/ca.crt;
+            chmod 644 /host-certs/ca.crt;
+            echo "All done!";
+            '
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f config/certs/ca/ca.crt ]"]
+            interval: 5s
+            timeout: 5s
+            retries: 20
+
+    elasticsearch:
+        depends_on:
+            setup:
+                condition: service_healthy
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.4.4
+        volumes:
+            - certs:/usr/share/elasticsearch/config/certs
+            - elasticsearch_data:/usr/share/elasticsearch/data
+            - ./services/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        environment:
+            ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+        networks:
+            - app
+            - monitoring
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', "curl -sk https://localhost:9200 -o /dev/null -w '%{http_code}' | grep -qE '200|401'"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    seaweed-master:
+        image: chrislusf/seaweedfs:3.80
+        networks:
+            - seaweed
+        command: 'master -ip=seaweed-master -port=9333 -ip.bind=0.0.0.0'
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '-O', '-', 'http://seaweed-master:9333/cluster/status']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    seaweed-filer:
+        image: chrislusf/seaweedfs:3.80
+        depends_on:
+            seaweed-master:
+                condition: service_healthy
+        networks:
+            - app
+            - seaweed
+        command: 'filer -master=seaweed-master:9333 -ip.bind=0.0.0.0'
+        healthcheck:
+            test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://seaweed-filer:8888/']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    seaweed-volume:
+        image: chrislusf/seaweedfs:3.80
+        depends_on:
+            seaweed-master:
+                condition: service_healthy
+        networks:
+            - seaweed
+        command: 'volume -mserver=seaweed-master:9333 -ip=seaweed-volume -port=8080'
+        healthcheck:
+            test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://seaweed-volume:8080/status']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+    
+    uptime-kuma:
+        image: louislam/uptime-kuma:1
+        container_name: uptime-kuma
+        volumes:
+            - uptime-kuma-data:/app/data
+        ports:
+            - "3002:3001"
+        networks:
+            - app
+        restart: on-failure
+        healthcheck:
+            test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3001"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    backup:
+        image: postgres:16-alpine
+        volumes:
+        - ./scripts/backup.sh:/backup.sh
+        - ./backups:/backups
+        entrypoint: >
+            sh -c "
+                apk add --no-cache dcron &&
+                echo '0 2 * * * /backup.sh' > /etc/crontabs/root &&
+                crond -f -l 2
+                "
+        restart: on-failure
+        healthcheck:
+            test: ['CMD-SHELL', 'pgrep crond || exit 1']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+
+networks:
+    app:
+        driver: bridge
+    monitoring:
+        driver: bridge
+    seaweed:
+        driver: bridge
+
+volumes:
+    postgres_data:
+        driver: local
+    elasticsearch_data:
+        driver: local
+    certs:
+        driver: local
+    uptime-kuma-data:
+        driver: local

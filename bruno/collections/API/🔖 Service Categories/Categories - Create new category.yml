@@ -1,0 +1,26 @@
+info:
+  name: Categories - Create new category
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{BaseURL}}/categories"
+  body:
+    type: form-urlencoded
+    data:
+      - name: name
+        value: other
+      - name: description
+        value: Prend soins de ta santé
+      - name: icon
+        value: /images/demo_profile.jpg
+      - name: background_image
+        value: /images/demo_profile.jpg
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

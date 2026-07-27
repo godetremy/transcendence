@@ -45,8 +45,8 @@ function CardDemo(props: { color: string; image: string; className?: string }) {
 					fill="black"
 				/>
 				<path
-					fill-rule="evenodd"
-					clip-rule="evenodd"
+					fillRule="evenodd"
+					clipRule="evenodd"
 					d="M20.2041 83.0107C21.2128 83.113 22 83.9643 22 85V89L21.9893 89.2041C21.887 90.2128 21.0357 91 20 91H16C14.8954 91 14 90.1046 14 89V85C14 83.8954 14.8954 83 16 83H20L20.2041 83.0107ZM16 84C15.4477 84 15 84.4477 15 85V89C15 89.5523 15.4477 90 16 90H20C20.5523 90 21 89.5523 21 89V85C21 84.4477 20.5523 84 20 84H16Z"
 					fill="black"
 				/>
@@ -111,8 +111,8 @@ function CardDemo(props: { color: string; image: string; className?: string }) {
 					fill="black"
 				/>
 				<path
-					fill-rule="evenodd"
-					clip-rule="evenodd"
+					fillRule="evenodd"
+					clipRule="evenodd"
 					d="M20.2041 56.0107C21.2128 56.113 22 56.9643 22 58V62L21.9893 62.2041C21.887 63.2128 21.0357 64 20 64H16C14.8954 64 14 63.1046 14 62V58C14 56.8954 14.8954 56 16 56H20L20.2041 56.0107ZM16 57C15.4477 57 15 57.4477 15 58V62C15 62.5523 15.4477 63 16 63H20C20.5523 63 21 62.5523 21 62V58C21 57.4477 20.5523 57 20 57H16Z"
 					fill="black"
 				/>
@@ -121,8 +121,8 @@ function CardDemo(props: { color: string; image: string; className?: string }) {
 					fill="black"
 				/>
 				<path
-					fill-rule="evenodd"
-					clip-rule="evenodd"
+					fillRule="evenodd"
+					clipRule="evenodd"
 					d="M47.2041 56.0107C48.2128 56.113 49 56.9643 49 58V62L48.9893 62.2041C48.887 63.2128 48.0357 64 47 64H43C41.8954 64 41 63.1046 41 62V58C41 56.8954 41.8954 56 43 56H47L47.2041 56.0107ZM43 57C42.4477 57 42 57.4477 42 58V62C42 62.5523 42.4477 63 43 63H47C47.5523 63 48 62.5523 48 62V58C48 57.4477 47.5523 57 47 57H43Z"
 					fill="black"
 				/>
@@ -153,7 +153,7 @@ function CardDemo(props: { color: string; image: string; className?: string }) {
 					gradientUnits="userSpaceOnUse"
 				>
 					<stop />
-					<stop offset="1" stop-color="white" />
+					<stop offset="1" stopColor="white" />
 				</linearGradient>
 				<pattern id="avatar" width="1" height="1">
 					<image href={props.image} width="25" height="25" />

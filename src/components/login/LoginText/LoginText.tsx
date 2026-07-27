@@ -1,17 +1,19 @@
-import './component.scss';
-import { Eyes } from '@/components/stickers/eyes/Eyes';
+import styles from './component.module.scss';
+import { Eyes } from '@/components/stickers/Eyes/Eyes';
+import { ReactNode } from 'react';
 
 export interface LoginTextProps {
+	stickers?: ReactNode;
 	title: string;
 	description: string;
 }
 
 export function LoginText(props: LoginTextProps) {
 	return (
-		<div className={'titles'}>
-			<Eyes className={'stickers'} />
+		<div className={styles.titles}>
+			{props.stickers ? props.stickers : <Eyes className={styles.stickers} />}
 
-			<div className={'text'}>
+			<div className={styles.text}>
 				<h1>{props.title}</h1>
 				<p>{props.description}</p>
 			</div>

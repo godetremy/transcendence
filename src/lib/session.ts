@@ -1,18 +1,26 @@
 import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { SessionPayload, JWTSessionPayload } from '@/types/session/SessionPayload';
+import { cookies } from 'next/headers';
+import { NextRequest } from 'next/server';
+import { ERRORS_DETAILS } from '@/utils/errors';
 
 const encodedKey = new TextEncoder().encode(process.env.SESSION_SECRET);
 
-export async function encrypt(payload: JWTSessionPayload): Promise<string> {
+interface CreatedSessionPayload {
+	body: string;
+	expirationDate: number;
+}
+
+const encrypt = async (payload: JWTSessionPayload): Promise<string> => {
 	return new SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
 		.setIssuedAt()
 		.setExpirationTime(payload.exp)
 		.sign(encodedKey);
-}
+};
 
-export async function decrypt(session: string | undefined = ''): Promise<JWTSessionPayload> {
+const decrypt = async (session: string | undefined = ''): Promise<JWTSessionPayload> => {
 	const { payload } = await jwtVerify(session, encodedKey, {
 		algorithms: ['HS256'],
 	});
@@ -20,9 +28,9 @@ export async function decrypt(session: string | undefined = ''): Promise<JWTSess
 		throw new Error('Error, session cookie is not set');
 	}
 	return payload as JWTSessionPayload;
-}
+};
 
-export async function createSession(payload: SessionPayload): Promise<{ body: string; expirationDate: number }> {
+const createSession = async (payload: SessionPayload): Promise<CreatedSessionPayload> => {
 	const expirationDate = Date.now() + 2 * 60 * 60 * 1000;
 	const body = await encrypt({
 		exp: expirationDate,
@@ -31,4 +39,73 @@ export async function createSession(payload: SessionPayload): Promise<{ body: st
 		...payload,
 	});
 	return { body, expirationDate };
-}
+};
+
+const setSession = async (session: CreatedSessionPayload): Promise<void> => {
+	const cookieStore = await cookies();
+
+	cookieStore.set('session', session.body, {
+		httpOnly: true,
+		secure: true,
+		expires: session.expirationDate,
+		sameSite: 'lax',
+		path: '/',
+	});
+};
+
+const unsetSession = async (): Promise<void> => {
+	const cookieStore = await cookies();
+	const sessionCookie = cookieStore.get('session');
+
+	if (!sessionCookie) return;
+
+	cookieStore.set('session', sessionCookie.value, {
+		httpOnly: true,
+		secure: true,
+		expires: Date.now(),
+		sameSite: 'lax',
+		path: '/',
+	});
+};
+
+const createAndSetSession = async (payload: SessionPayload): Promise<void> => {
+	await setSession(await createSession(payload));
+};
+
+const getSession = async (req: NextRequest): Promise<SessionPayload | null> => {
+	try {
+		const cookie = req.cookies.get('session');
+		if (cookie === undefined) return null;
+		const session = await decrypt(cookie.value);
+		if (Date.now() / 1000 >= session.exp) return null;
+		return session;
+	} catch (err: unknown) {
+		console.error(err);
+		return null;
+	}
+};
+
+const getThrowableSession = async (req: NextRequest): Promise<SessionPayload> => {
+	const session = await getSession(req);
+	if (!session) throw ERRORS_DETAILS.session_expired();
+	return session;
+};
+
+const parseUserId = (id: string, session: SessionPayload): { id: string; is_me: boolean } => {
+	if (id === 'me') {
+		return { id: session.user_id, is_me: true };
+	}
+	return { id: id, is_me: session.user_id === id };
+};
+
+export {
+	encrypt,
+	decrypt,
+	createSession,
+	setSession,
+	unsetSession,
+	createAndSetSession,
+	getSession,
+	getThrowableSession,
+	parseUserId,
+};

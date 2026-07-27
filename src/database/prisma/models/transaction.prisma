@@ -1,0 +1,11 @@
+model transaction {
+	id				String		@id	@default(uuid())
+	balance_id		String
+	
+	created_at		DateTime	@default(now())
+	amount			Int
+	name			String?
+	status			Boolean?
+
+	balance		balance		@relation(fields: [balance_id], references: [id],  onDelete: Cascade)
+}

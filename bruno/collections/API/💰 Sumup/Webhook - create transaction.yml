@@ -1,0 +1,27 @@
+info:
+  name: Webhook - create transaction
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BaseURL}}/webhook"
+  headers:
+    - name: x-payload-signature
+      value: ""
+  body:
+    type: form-urlencoded
+    data:
+      - name: id
+        value: test
+      - name: status
+        value: test
+      - name: event_type
+        value: test
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
