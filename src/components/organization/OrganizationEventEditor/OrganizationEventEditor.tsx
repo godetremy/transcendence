@@ -12,6 +12,8 @@ import { ImageEditor } from '@/utils/image';
 import { useUpload } from '@/contexts/UploadTokenContext';
 import { CircleLoader } from '@/components/globals/CircleLoader/CircleLoader';
 import { ToastType, useToast } from '@/components/globals/ToastProvider/ToastProvider';
+import { useUser } from '@/contexts/UserContext';
+import { logToElasticsearch } from '@/lib/logging';
 
 export interface OrganizationEventEditor {
 	event: CreateOrUpdateEventType;
@@ -41,6 +43,7 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 	const [image, setImage] = useState<File | null>(null);
 	const [previewBlob, setPreviewBlob] = useState<string | null>(null);
 	const toast = useToast();
+	const user = useUser();
 
 	const editor = useRef<ImageEditor | null>(null);
 
@@ -80,14 +83,28 @@ export function OrganizationEventEditor(props: OrganizationEventEditor) {
 				return;
 			}
 			const file = await upload.uploadFiles(renderImage, setUploadProgression);
-			const new_event = { ...props.event, image: `/images/upload/${file.name}` }
+			const new_event = { ...props.event, image: `/images/upload/${file.name}` };
 			props.setEvent(new_event);
 			setUploadImage(false);
-			await props.onSubmit(new_event);
+			const createdEvent = await props.onSubmit(new_event);
+			const action = props.createEvent ? ('EVENT_CREATED' as const) : ('EVENT_UPDATED' as const);
+			const message = props.createEvent ? 'Événement créé avec succès.' : 'Événement mis à jour avec succès.';
 			toast.showToast({
 				title: 'Succès',
-				message: props.createEvent ? 'Événement créé avec succès.' : 'Événement mis à jour avec succès.',
+				message,
 				type: ToastType.SUCCESS,
+			});
+			void logToElasticsearch({
+				level: 'SUCCESS',
+				action,
+				message,
+				source: 'OrganizationEventEditor',
+				metadata: {
+					event_id: createdEvent.id,
+					event_title: new_event.title,
+					user_id: user?.id,
+					created: props.createEvent,
+				},
 			});
 			props.onNew?.();
 		} catch (err: unknown) {

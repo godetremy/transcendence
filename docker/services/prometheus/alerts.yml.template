@@ -1,0 +1,34 @@
+groups:
+    - name: infra
+      rules:
+          - alert: InstanceDown
+            expr: up == 0
+            for: 1m
+            labels:
+                severity: critical
+            annotations:
+                summary: 'Cible {{ $labels.job }} injoignable'
+
+          - alert: PostgresDown
+            expr: pg_up == 0
+            for: 1m
+            labels:
+                severity: critical
+            annotations:
+                summary: 'PostgreSQL injoignable'
+
+          - alert: NginxDown
+            expr: nginx_up == 0
+            for: 1m
+            labels:
+                severity: critical
+            annotations:
+                summary: 'nginx injoignable (stub_status)'
+
+          - alert: HostHighCpu
+            expr: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > ${ALERT_CPU_HIGH_THRESHOLD}
+            for: 5m
+            labels:
+                severity: warning
+            annotations:
+                summary: 'CPU hote au-dessus de ${ALERT_CPU_HIGH_THRESHOLD}% depuis 5 min'

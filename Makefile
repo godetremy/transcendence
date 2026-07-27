@@ -36,6 +36,9 @@ init-prod: env
 env:
 	@bash $(SCRIPTS_FOLDER)/generate_environnement.sh
 
+monitoring:
+	@bash $(SCRIPTS_FOLDER)/generate_monitoring.sh
+
 database:
 	@bash $(SCRIPTS_FOLDER)/database_init.sh
 
@@ -76,4 +79,4 @@ fclean: clean-dev clean-staging clean-prod
 	@echo "Pruning Docker system, images, and volumes..."
 	@docker system prune -a --volumes -f
 
-.PHONY: init-dev init-staging init-prod env database dev staging prod down-dev clean-dev down-staging clean-staging down-prod clean-prod fclean
+.PHONY: init-dev init-staging init-prod env monitoring database dev staging prod down-dev clean-dev down-staging clean-staging down-prod clean-prod fclean

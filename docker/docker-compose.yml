@@ -205,6 +205,11 @@ services:
         networks:
             - app
         restart: on-failure
+        healthcheck:
+            test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3001"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
     backup:
         image: postgres:16-alpine

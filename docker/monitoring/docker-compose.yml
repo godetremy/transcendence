@@ -117,6 +117,37 @@ services:
             timeout: 5s
             retries: 5
 
+    postgres-exporter:
+        image: prometheuscommunity/postgres-exporter:latest
+        env_file:
+            - ./monitoring/secrets/.env
+        networks:
+            - app
+            - monitoring
+        restart: unless-stopped
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:9187/metrics']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    elasticsearch-exporter:
+        image: prometheuscommunity/elasticsearch-exporter:latest
+        env_file:
+            - ./monitoring/secrets/.env
+        environment:
+            ES_URI: https://elasticsearch:9200
+            ES_SSL_SKIP_VERIFY: 'true'
+        networks:
+            - app
+            - monitoring
+        restart: unless-stopped
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:9114/metrics']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
 networks:
     monitoring:
         driver: bridge
